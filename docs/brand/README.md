@@ -12,6 +12,11 @@ Tagline: *Meet P.U.L.S.A.R., your personal health companion in space.*
 ## Presenting the journey
 
 After the film, choose **Follow the crew journey**; **Skip film** opens it directly.
+Use the **EN / ES** selector at the top right to switch the entire presentation,
+including the opening captions, player controls, accessibility labels and journey.
+Spanish is the default; the browser remembers the last selection when storage is
+available. Open with `?lang=en` or `?lang=es` to select a language explicitly.
+Switching language preserves playback position and the selected journey step.
 Chapter navigation follows the fictional engineer Alex through the problem, an interactive
 Notice → Check → Support walkthrough, the system design, and the prototype's scope.
 The walkthrough uses illustrative inputs and copy, not a live camera, reaction-time test, or rules engine.
@@ -24,15 +29,15 @@ design intentions, without implying measured accuracy or spaceflight validation.
 
 ## GitHub Pages
 
-The public presentation is hosted separately in
+The presentation was previously hosted separately in
 [`alejandrogiga/pulsar-presentation`](https://github.com/alejandrogiga/pulsar-presentation)
-at <https://alejandrogiga.github.io/pulsar-presentation/>. That repository contains
-only the standalone page, published as `index.html`, and hosting documentation.
+at <https://alejandrogiga.github.io/pulsar-presentation/>. At the owner's request,
+Pages was disabled and the hosting repository made private. It contains only
+the standalone page, published as `index.html`, and hosting documentation.
 
-To publish an update, copy this directory's `pulsar-intro.html` to `index.html`
-in the hosting repository and push to its `main` branch. Pages deploys that
-branch automatically. This project remains the source of the presentation;
-the hosting repository does not publish the rest of the project.
+Keep updates local unless publication is explicitly requested again. This project
+remains the source of the presentation; the hosting repository does not contain
+the rest of the project. The original project repository is still public.
 
 ## Palette
 
