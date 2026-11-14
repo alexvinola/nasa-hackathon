@@ -15,4 +15,6 @@ Fatigue model (goal G2, ``make model``):
 - ``rldd``              the UTA-RLDD videos: discovery, extraction and the table of 60 s windows
 - ``fatigue_model``     logistic regression, subject-grouped validation and metrics
 - ``fatigue_pipeline``  the end-to-end run behind ``data/pipeline.py``; ``fatigue_report`` writes the report
+- ``drozy``             DROZY (validation only): the shipped model against PVT reaction times and KSS, never cached
+- ``fatigue_validation`` the correlations behind it (per recording, within subject, pooled)
 """

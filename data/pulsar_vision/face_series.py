@@ -9,7 +9,8 @@ Frames are sampled BY TIME, from the container's own timestamps: a frame is proc
 target period (1/15 s, minus a 10 % tolerance for timestamp jitter) has passed since the last processed
 one. A constant 30 fps video gives every second frame, as the YawDD extractor does; phone videos with a
 variable frame rate, or slower than 15 fps, keep their real times. Every later computation uses those
-times, never a frame count.
+times, never a frame count. A dataset that measured its own frame times (DROZY) passes them in
+(``frame_times_ms``, ``DatasetClock``) and they replace the container's.
 
 Phone videos carry a rotation flag. OpenCV applies it while decoding (``CAP_PROP_ORIENTATION_AUTO``); the
 flag and the head roll measured on the result are kept in ``meta`` so a sideways video shows up in the
@@ -149,6 +150,37 @@ class FrameClock:
         return time_ms
 
 
+class DatasetClock:
+    """Frame times measured by the dataset itself, one per decoded frame, in milliseconds.
+
+    For recordings whose container timestamps are not the real ones (DROZY dropped frames while
+    recording, so its mp4 plays them at a nominal rate). Same interface as ``FrameClock``: frame ``i``
+    of the decode gets ``times_ms[i]``. A video with more frames than times, or times that do not
+    increase, is an error, never a guess; ``check_complete`` catches a video with fewer frames.
+    """
+
+    fallbacks = 0  # never: every time is the dataset's
+
+    def __init__(self, times_ms) -> None:
+        self.times_ms = np.asarray(times_ms, dtype=np.float64)
+        if self.times_ms.ndim != 1 or not len(self.times_ms):
+            raise ValueError("no frame times")
+        if not np.all(np.isfinite(self.times_ms)) or np.any(np.diff(self.times_ms) <= 0):
+            raise ValueError("frame times must be finite and strictly increasing")
+        self.used = 0
+
+    def time_ms(self, container_ms: float) -> float:
+        if self.used >= len(self.times_ms):
+            raise OSError(f"the video has more frames than the {len(self.times_ms)} frame times given")
+        time_ms = float(self.times_ms[self.used])
+        self.used += 1
+        return time_ms
+
+    def check_complete(self) -> None:
+        if self.used != len(self.times_ms):
+            raise OSError(f"the video has {self.used} frames but {len(self.times_ms)} frame times were given")
+
+
 def installed_version(package: str) -> str | None:
     try:
         return metadata.version(package)
@@ -181,8 +213,15 @@ def cache_signature(model_sha256: str, source_size_bytes: int | None = None, tar
     return signature
 
 
-def extract_face_series(video_path: Path, model_bytes: bytes, target_fps: float = landmarks.TARGET_FPS) -> FaceSeries:
-    """Run FaceLandmarker over one video and return its per-frame series."""
+def extract_face_series(
+    video_path: Path, model_bytes: bytes, target_fps: float = landmarks.TARGET_FPS, frame_times_ms=None
+) -> FaceSeries:
+    """Run FaceLandmarker over one video and return its per-frame series.
+
+    ``frame_times_ms``: the real time of every frame of the video when the dataset measured it
+    (``DatasetClock``); sampling, MediaPipe's timestamps and every later computation then use those
+    times instead of the container's. ``None`` (RLDD, YawDD): the container's own timestamps.
+    """
     import cv2
     import mediapipe as mp
     from mediapipe.tasks import python as mp_python
@@ -198,7 +237,7 @@ def extract_face_series(video_path: Path, model_bytes: bytes, target_fps: float 
         reported_frames = int(capture.get(cv2.CAP_PROP_FRAME_COUNT))
         orientation_meta = float(capture.get(cv2.CAP_PROP_ORIENTATION_META))
         orientation_auto = bool(capture.get(cv2.CAP_PROP_ORIENTATION_AUTO))
-        clock = FrameClock(source_fps)
+        clock = FrameClock(source_fps) if frame_times_ms is None else DatasetClock(frame_times_ms)
 
         options = vision.FaceLandmarkerOptions(
             base_options=mp_python.BaseOptions(model_asset_buffer=model_bytes),
@@ -260,6 +299,8 @@ def extract_face_series(video_path: Path, model_bytes: bytes, target_fps: float 
                         shapes.append(None)
                         matrices.append(missing_matrix)
                 index += 1
+        if isinstance(clock, DatasetClock):
+            clock.check_complete()
     finally:
         capture.release()
 
@@ -277,6 +318,7 @@ def extract_face_series(video_path: Path, model_bytes: bytes, target_fps: float 
         "reported_frames": reported_frames,
         "frames_read": frames_read,
         "timestamp_fallbacks": clock.fallbacks,
+        "frame_times": "container" if frame_times_ms is None else "dataset",
         "processed_frames": n,
         "blendshape_names": names,
         "mediapipe_seconds": mediapipe_seconds,

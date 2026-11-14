@@ -540,18 +540,28 @@ def video_windows(video: RlddVideo, signals: Signals, closed_by_method: Mapping[
             for name in ff.FEATURE_NAMES:
                 row[column(method, name)] = features[name] if features is not None else np.nan
 
-        # What the browser shows today at the last frame of this window.
-        window_closed = blendshape_closed[frames]
-        seen = ~np.isnan(window_closed)
-        perclos = float((window_closed[seen] > 0.5).mean()) if seen.any() else float("nan")
-        yawns_last_minute = int(((counted_yawns >= start) & (counted_yawns < end)).sum())
-        nose = signals.nose_y[: frames.stop]
-        nose = nose[~np.isnan(nose)][-ff.BROWSER_NOSE_SAMPLES :]
-        row["baseline_perclos"] = perclos
-        row["baseline_yawns"] = yawns_last_minute
-        row["baseline_score"] = ff.browser_baseline_score(perclos, yawns_last_minute, nose)
+        row.update(browser_baseline(signals, frames, start, counted_yawns, blendshape_closed))
         rows.append(row)
     return rows
+
+
+def browser_baseline(signals: Signals, frames: slice, start: float, counted_yawns: np.ndarray, blendshape_closed: np.ndarray) -> dict:
+    """What the browser shows today at the last frame of the window ``frames`` (which starts at ``start``).
+
+    ``counted_yawns`` are the times ``yawn_count_times`` gives for the whole recording and
+    ``blendshape_closed`` its closed series; both are computed once per recording.
+    """
+    window_closed = blendshape_closed[frames]
+    seen = ~np.isnan(window_closed)
+    perclos = float((window_closed[seen] > 0.5).mean()) if seen.any() else float("nan")
+    yawns_last_minute = int(((counted_yawns >= start) & (counted_yawns < start + ff.WINDOW_S)).sum())
+    nose = signals.nose_y[: frames.stop]
+    nose = nose[~np.isnan(nose)][-ff.BROWSER_NOSE_SAMPLES :]
+    return {
+        "baseline_perclos": perclos,
+        "baseline_yawns": yawns_last_minute,
+        "baseline_score": ff.browser_baseline_score(perclos, yawns_last_minute, nose),
+    }
 
 
 def subject_ear_calibration(alert_signals: Signals) -> ff.EarCalibration | None:
