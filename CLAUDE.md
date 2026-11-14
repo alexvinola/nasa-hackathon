@@ -18,7 +18,8 @@ Three people, three verticals, one contract and one weekend. Everything in the r
 
 ## Verticals and folder ownership
 
-Start the session with `SYNAPSE_VERTICAL=FS1|FS2|FS3|ALL claude`; the `guard_paths.py` hook denies writes to another vertical.
+Start the session with `SYNAPSE_VERTICAL=FS1|FS2|FS3|ALL claude` (PowerShell: `$env:SYNAPSE_VERTICAL='FS1'; claude`);
+the `guard_paths.py` hook denies writes to another vertical. Hooks run through `uv`, so they work the same on macOS and Windows.
 
 | Vertical | Writes to | Goals |
 |---|---|---|

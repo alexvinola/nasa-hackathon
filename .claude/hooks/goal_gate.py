@@ -9,6 +9,7 @@
 
 import json
 import os
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -20,8 +21,16 @@ TIMEOUT_S = 540
 
 
 def say(payload: dict) -> None:
-    print(json.dumps(payload, ensure_ascii=False))
+    # ASCII-escaped on purpose: on Windows stdout is cp1252 and check output often has non-ASCII marks.
+    print(json.dumps(payload))
     sys.exit(0)
+
+
+def read_goal(path: Path) -> str:
+    """Goal id from .synapse/active-goal, tolerating the BOM / UTF-16 that PowerShell's `>` writes."""
+    raw = path.read_bytes()
+    encoding = "utf-16" if raw[:2] in (b"\xff\xfe", b"\xfe\xff") else "utf-8-sig"
+    return raw.decode(encoding, errors="replace").strip()
 
 
 def main() -> None:
@@ -29,7 +38,10 @@ def main() -> None:
     active = STATE / "active-goal"
     if os.environ.get("SYNAPSE_GATE") == "off" or not active.exists():
         return
-    goal = active.read_text().strip()
+    goal = read_goal(active)
+    if not re.fullmatch(r"G\d+", goal):
+        say({"systemMessage": f".synapse/active-goal holds {goal!r}, not a goal id like G4; the gate did not run. "
+                              "Rewrite the file with just the id."})
     attempts_file = STATE / f"attempts-{goal}"
 
     if (STATE / "blocked").exists():
@@ -38,8 +50,12 @@ def main() -> None:
 
     try:
         result = subprocess.run(["make", "-s", f"check-{goal}"], cwd=ROOT, capture_output=True, text=True,
-                                timeout=TIMEOUT_S)
+                                encoding="utf-8", errors="replace", timeout=TIMEOUT_S)
         ok, output = result.returncode == 0, result.stdout + result.stderr
+    except FileNotFoundError:
+        # Not something the agent can fix by working on the goal: say it loudly instead of looping.
+        say({"systemMessage": f"{goal}: `make` is not installed or not on PATH, so the gate cannot run "
+                              f"check-{goal}. Install it (Windows: `scoop install make` or `choco install make`)."})
     except subprocess.TimeoutExpired:
         ok, output = False, f"make check-{goal} took longer than {TIMEOUT_S} s"
 

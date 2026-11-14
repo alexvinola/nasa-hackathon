@@ -4,12 +4,12 @@
     "PreToolUse": [
       {
         "matcher": "Edit|Write|MultiEdit|NotebookEdit",
-        "hooks": [{ "type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/guard_paths.py\"", "timeout": 10 }]
+        "hooks": [{ "type": "command", "command": "uv run --no-project --quiet python \"$CLAUDE_PROJECT_DIR/.claude/hooks/guard_paths.py\"", "timeout": 10 }]
       }
     ],
     "Stop": [
       {
-        "hooks": [{ "type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/goal_gate.py\"", "timeout": 600 }]
+        "hooks": [{ "type": "command", "command": "uv run --no-project --quiet python \"$CLAUDE_PROJECT_DIR/.claude/hooks/goal_gate.py\"", "timeout": 600 }]
       }
     ]
   }
