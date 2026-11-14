@@ -182,6 +182,58 @@ def drozy_section(dz: dict, rldd_score: dict) -> list[str]:
     return out
 
 
+SIGNAL_TITLE = {"perclos": "PERCLOS", "browser_formula": "browser formula", "model_fatigue_score": "model fatigueScore"}
+
+
+def thresholds_section(th: dict) -> list[str]:
+    """Where a threshold would sit on each camera signal and what it would cost: every number from ``thresholds``."""
+    lines = ["## Where a threshold would sit\n"]
+    lines.append(
+        "The rules engine decides with thresholds on PERCLOS and on `fatigueScore`; both are team placeholders. This section does not "
+        f"choose them: it shows what each cut costs. {th['how']}\n"
+    )
+    rows = []
+    for name, points in th["signals"].items():
+        for point in points:
+            fold = point["out_of_fold"]
+            alert, drowsy = fold["alert_per_subject"], fold["drowsy_per_subject"]
+            rows.append([
+                SIGNAL_TITLE.get(name, name),
+                pct(point["false_alarm_rate"], 0),
+                num(point["cut"]),
+                " / ".join(pct(fold["windows"][state]) for state in STATES),
+                f"{pct(alert['median'])} ({pct(alert['min'])} to {pct(alert['max'])})",
+                f"{pct(drowsy['median'])} ({pct(drowsy['min'])} to {pct(drowsy['max'])}), {drowsy['subjects_with_any']} of {drowsy['subjects']}",
+            ])
+    lines.append(
+        table(
+            ["signal", "alert windows allowed to fire", "cut (fires above it)", "windows firing out of fold (alert / low / drowsy)",
+             "per person, alert windows firing: median (range)", "per person, drowsy windows firing: median (range), people with any"],
+            rows,
+        )
+        + "\n"
+    )
+    if th["engine_rules"]:
+        lines.append("**The thresholds the engine applies today**, on the same windows:\n")
+        rows = []
+        for entry in th["engine_rules"].values():
+            rule, drowsy = entry["rule"], entry["drowsy_per_subject"]
+            rows.append([
+                f"`{rule['id']}` ({rule['status']})",
+                SIGNAL_TITLE.get(entry["signal"], entry["signal"]),
+                f"{rule['operator']} {num(rule['threshold'], 2)}",
+                str(entry["windows_firing"]),
+                " / ".join(pct(entry["windows"][state]) for state in STATES),
+                f"{drowsy['subjects_with_any']} of {drowsy['subjects']}",
+            ])
+        lines.append(
+            table(["rule", "compared with", "fires when", "windows firing", "share firing (alert / low / drowsy)", "people whose drowsy video fires at all"], rows)
+            + "\n"
+        )
+    lines.append("\n".join(f"- {text}" for text in th["limits"]) + "\n")
+    return lines
+
+
 def render(metrics: dict, model: dict) -> str:
     chosen = metrics["chosen"]
     name = chosen["configuration"]
@@ -532,6 +584,10 @@ def render(metrics: dict, model: dict) -> str:
     # ------------------------------------------------------------------ DROZY
     if dz:
         parts += drozy_section(dz, score)
+
+    # ------------------------------------------------------------------ thresholds
+    if metrics.get("thresholds"):
+        parts += thresholds_section(metrics["thresholds"])
 
     # ------------------------------------------------------------------ final model
     add("## The model the browser gets\n")

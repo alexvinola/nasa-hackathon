@@ -41,7 +41,7 @@ import numpy as np
 import pandas as pd
 from threadpoolctl import threadpool_limits
 
-from . import drozy, fatigue_features as ff, fatigue_model as fm, fatigue_report, landmarks, rldd
+from . import drozy, fatigue_features as ff, fatigue_model as fm, fatigue_report, fatigue_thresholds, landmarks, rldd
 from .detector import YawnParams
 
 DATA_DIR = Path(__file__).resolve().parents[1]
@@ -51,6 +51,7 @@ DEFAULT_CACHE = DATA_DIR / "features" / "rldd"
 DEFAULT_OUT = DATA_DIR / "out"
 DEFAULT_MODEL_FILE = DATA_DIR / "fatigue_model.json"
 DEFAULT_LANDMARKER = REPO_DIR / "frontend" / "public" / "mediapipe" / "face_landmarker.task"
+RULES_FILE = REPO_DIR / "backend" / "assets" / "rules.json"  # read only: the thresholds the engine applies today
 YAWN_PARAMS_FILE = DATA_DIR / "out" / "yawn_params.json"
 
 SOURCE_ID = "uta-rldd"  # key in shared/sources.json
@@ -134,6 +135,13 @@ def load_yawn_params(path: Path) -> tuple[YawnParams, dict]:
 
 
 # --------------------------------------------------------------------------- datasets
+
+
+def engine_camera_rules(rules_file: Path) -> dict[str, dict]:
+    """The rules engine's thresholds on the camera signals; empty when the backend's rules file is not there."""
+    if not rules_file.is_file():
+        return {}
+    return fatigue_thresholds.engine_rules(json.loads(rules_file.read_text(encoding="utf-8"))["rules"])
 
 
 def feature_columns(method: str, normalisation: str) -> list[str]:
@@ -786,6 +794,18 @@ def run(args: argparse.Namespace) -> int:
         "feature_statistics": {
             name: feature_statistics(evaluated, feature_columns(*name.split("/"))) for name in configurations
         },
+        "thresholds": fatigue_thresholds.report(
+            classes,
+            groups,
+            {
+                "perclos": evaluated[rldd.column(ff.BLENDSHAPE, "perclos")].to_numpy(dtype=np.float64),
+                "browser_formula": baseline_score,
+                "model_fatigue_score": score,
+            },
+            outer,
+            engine_camera_rules(RULES_FILE),
+            {"biometrics.perclos": ["perclos"], "biometrics.fatigueScore": ["browser_formula", "model_fatigue_score"]},
+        ),
         "final_model": {
             "file": "data/fatigue_model.json" if model_file == DEFAULT_MODEL_FILE else str(model_file),
             "C": final["C"],

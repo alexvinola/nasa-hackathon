@@ -123,6 +123,19 @@ def test_metrics_have_what_the_goal_asks_for(run):
     assert len(metrics["per_subject"]) == 4 and len(metrics["videos"]) == 12
 
 
+def test_the_thresholds_block_covers_the_three_signals_and_the_engine_rules(run):
+    thresholds = load(run, "metrics.json")["thresholds"]
+    assert set(thresholds["signals"]) == {"perclos", "browser_formula", "model_fatigue_score"}
+    for points in thresholds["signals"].values():
+        for point in points:
+            assert point["all_subjects"]["alert"] <= point["false_alarm_rate"] + 1e-9
+            assert point["out_of_fold"]["drowsy_per_subject"]["subjects"] == 4
+    assert set(thresholds["engine_rules"]) == {
+        "perclos-high on perclos", "fatigue-score-high on browser_formula", "fatigue-score-high on model_fatigue_score"
+    }
+    assert "## Where a threshold would sit" in (run["out"] / "fatigue_report.md").read_text(encoding="utf-8")
+
+
 def test_no_subject_is_in_both_train_and_test(run):
     folds = load(run, "metrics.json")["folds"]
     assert len(folds) == 4
