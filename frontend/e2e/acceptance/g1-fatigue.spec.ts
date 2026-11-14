@@ -9,7 +9,7 @@
  */
 import { existsSync } from "node:fs";
 import { resolve } from "node:path";
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type Page, type PlaywrightWorkerArgs } from "@playwright/test";
 
 const ROOT = resolve(__dirname, "../../..");
 const FIXTURE = (name: string) => resolve(ROOT, "data/fixtures", name);
@@ -32,6 +32,18 @@ function recordReadings() {
       readings.push({ at: performance.now(), fatigueScore: value.fatigueScore });
     },
   });
+}
+
+/** Opens the HUD in a Chromium whose fake camera plays `fixture`; each fixture needs its own browser. */
+async function withCamera<T>(playwright: PlaywrightWorkerArgs["playwright"], baseURL: string | undefined, fixture: string, run: (page: Page) => Promise<T>) {
+  const browser = await playwright.chromium.launch({
+    args: ["--use-fake-ui-for-media-stream", "--use-fake-device-for-media-stream", `--use-file-for-fake-video-capture=${FIXTURE(fixture)}`],
+  });
+  try {
+    return await run(await browser.newPage({ baseURL }));
+  } finally {
+    await browser.close();
+  }
 }
 
 async function watch(page: Page, seconds: number) {
@@ -57,38 +69,23 @@ for (const name of ["eyes_closed.y4m", "alert.y4m"]) {
   });
 }
 
-test.describe("eyes closed", () => {
-  test.use({
-    launchOptions: {
-      args: ["--use-fake-ui-for-media-stream", "--use-fake-device-for-media-stream", `--use-file-for-fake-video-capture=${FIXTURE("eyes_closed.y4m")}`],
-    },
-  });
-
-  test("fatigueScore goes over 0.7 in under 5 s, at 15 fps or more", async ({ page }) => {
-    const readings = await watch(page, 6);
-    const over = readings.find((r) => r.score > 0.7);
-    const rate = fps(readings);
-    console.log(`eyes_closed: first reading over 0.7 at ${over ? over.t.toFixed(2) : "never"} s, ${rate.toFixed(1)} readings/s`);
-    expect(over, "fatigueScore never went over 0.7").toBeDefined();
-    expect(over!.t).toBeLessThan(5);
-    expect(rate).toBeGreaterThanOrEqual(FPS * JITTER);
-  });
+test("eyes closed: fatigueScore goes over 0.7 in under 5 s, at 15 fps or more", async ({ playwright, baseURL }) => {
+  const readings = await withCamera(playwright, baseURL, "eyes_closed.y4m", (page) => watch(page, 6));
+  const over = readings.find((r) => r.score > 0.7);
+  const rate = fps(readings);
+  console.log(`eyes_closed: first reading over 0.7 at ${over ? over.t.toFixed(2) : "never"} s, ${rate.toFixed(1)} readings/s`);
+  expect(over, "fatigueScore never went over 0.7").toBeDefined();
+  expect(over!.t).toBeLessThan(5);
+  expect(rate).toBeGreaterThanOrEqual(FPS * JITTER);
 });
 
-test.describe("alert", () => {
-  test.use({
-    launchOptions: {
-      args: ["--use-fake-ui-for-media-stream", "--use-fake-device-for-media-stream", `--use-file-for-fake-video-capture=${FIXTURE("alert.y4m")}`],
-    },
-  });
-
-  test("fatigueScore stays under 0.4 for 10 s, at 15 fps or more", async ({ page }) => {
-    const readings = await watch(page, 10.5); // half a second of slack so the last reading lands past 10 s
-    const worst = Math.max(...readings.map((r) => r.score));
-    const rate = fps(readings);
-    console.log(`alert: highest fatigueScore ${worst.toFixed(3)} over ${readings.at(-1)!.t.toFixed(1)} s, ${rate.toFixed(1)} readings/s`);
-    expect(readings.at(-1)!.t).toBeGreaterThanOrEqual(10);
-    expect(worst).toBeLessThan(0.4);
-    expect(rate).toBeGreaterThanOrEqual(FPS * JITTER);
-  });
+test("alert: fatigueScore stays under 0.4 for 10 s, at 15 fps or more", async ({ playwright, baseURL }) => {
+  // Half a second of slack so the last reading lands past 10 s.
+  const readings = await withCamera(playwright, baseURL, "alert.y4m", (page) => watch(page, 10.5));
+  const worst = Math.max(...readings.map((r) => r.score));
+  const rate = fps(readings);
+  console.log(`alert: highest fatigueScore ${worst.toFixed(3)} over ${readings.at(-1)!.t.toFixed(1)} s, ${rate.toFixed(1)} readings/s`);
+  expect(readings.at(-1)!.t).toBeGreaterThanOrEqual(10);
+  expect(worst).toBeLessThan(0.4);
+  expect(rate).toBeGreaterThanOrEqual(FPS * JITTER);
 });
