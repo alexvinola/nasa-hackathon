@@ -41,7 +41,8 @@ export const useTelemetry = create<TelemetryState>()((set, get) => {
     rulebook: null,
     selfReportIsExample: false,
     setTelemetry: (telemetry) => {
-      set({ selfReportIsExample: false });
+      // A different contract: the last verdict was not about it. (Camera readings keep theirs; a new one is under 2 s away.)
+      set({ selfReportIsExample: false, decision: null });
       send(telemetry);
     },
     setBiometrics: (biometrics) => {
@@ -54,7 +55,7 @@ export const useTelemetry = create<TelemetryState>()((set, get) => {
       loading = true;
       fetchRulebook()
         .then((rulebook) => set({ rulebook }))
-        .catch(() => undefined) // backend down: asked again with the next reading
+        .catch(() => undefined) // backend down: the twin asks again
         .finally(() => (loading = false));
     },
   };

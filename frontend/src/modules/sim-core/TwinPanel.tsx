@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { Biometrics } from "@/modules/vision-hud/faceWorker";
 import { BodyTwin } from "./BodyTwin";
 import { GuidePanel } from "./GuidePanel";
@@ -8,6 +8,7 @@ import { GUIDES, formatReading, readingOf, statusOf, zoneStatus, type IndicatorS
 import { useTelemetry } from "./telemetryStore";
 
 const EVERY_MS = 2000; // how often a camera reading goes to the store, and from there to the engine
+const RETRY_MS = 5000; // how often the engine is asked for its rules while it has not listed them
 const SYSTEMS = ["NERVOUS", "CARDIOVASCULAR", "RESPIRATORY", "MUSCULOSKELETAL", "METABOLIC", "IMMUNE"];
 
 /**
@@ -20,9 +21,17 @@ export function TwinPanel({ biometrics }: { biometrics: Biometrics | null }) {
   const [selected, setSelected] = useState<string | null>(null);
   const [open, setOpen] = useState(true);
 
-  useEffect(() => loadRulebook(), [loadRulebook]);
+  const close = useCallback(() => setSelected(null), []);
 
-  // The camera's numbers change four times a second; the engine is asked every two seconds.
+  useEffect(() => {
+    if (rulebook) return;
+    loadRulebook();
+    const id = setInterval(loadRulebook, RETRY_MS);
+    return () => clearInterval(id);
+  }, [rulebook, loadRulebook]);
+
+  // shortcut: the twin asks the engine on its own, next to the verdict panel's loop (useVerdict); one store should
+  // feed both once the sliders (G6) land. The camera's numbers change four times a second; it asks every two seconds.
   const sent = useRef(0);
   useEffect(() => {
     if (!biometrics || Date.now() - sent.current < EVERY_MS) return;
@@ -77,7 +86,7 @@ export function TwinPanel({ biometrics }: { biometrics: Biometrics | null }) {
             status={statuses[guide.signal]}
             example={selfReportIsExample && guide.signal.startsWith("selfReport.")}
             rulebook={rulebook}
-            onClose={() => setSelected(null)}
+            onClose={close}
           />
         </div>
       )}

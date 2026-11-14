@@ -15,20 +15,20 @@
         "Read the two numbers: the higher one is systolic, the lower one is diastolic.",
         "Write down both numbers and the time."
       ],
-      "why": "NASA's Human Research Program lists the Risk of Cardiovascular Adaptations among the risks of human spaceflight, and blood pressure is one of the two readings PULSAR files under it. With the hazard Distance from Earth there is no clinic to go to: a log of readings taken the same way each time is what the crew and the flight surgeon have to work with.",
+      "why": "NASA's Human Research Program lists the Risk of Cardiovascular Adaptations among the risks of human spaceflight, and blood pressure is one of the two readings PULSAR files under it. The challenge reminds us that astronauts are not doctors: a reading taken the same way each time and written down is something the crew can hand to the flight surgeon.",
       "whenAbnormal": {
         "ruleIds": [],
         "countermeasureIds": [],
         "note": "PULSAR does not judge this value yet: tell the crew medical officer. Give them the reading, the time and how you feel."
       },
-      "sources": ["hrp-risks", "hrp-hazards", "challenge-video"],
+      "sources": ["hrp-risks", "challenge-video"],
       "assumption": "The steps are team wording for a generic automatic monitor, not clinical guidance from a source."
     },
     {
       "signal": "biometrics.heartRateBpm",
       "label": "Heart rate",
       "unit": "bpm",
-      "method": "By hand, with a timer. PULSAR's camera estimate of heart rate is experimental.",
+      "method": "By hand, with a timer. PULSAR does not read heart rate from the camera yet.",
       "how": [
         "Hold still in a secure position and rest for a few minutes.",
         "Place two fingertips, not the thumb, on the inside of your wrist below the base of the thumb.",
