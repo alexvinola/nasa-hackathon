@@ -84,8 +84,12 @@
       "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3197786",
       "findings": [
         "3-minute PVT-B",
-        "Lapse threshold lowered from 500 ms to 355 ms",
-        "Inter-stimulus interval 1-4 s per the paper (secondary sources differ: check the original)"
+        "Lapse threshold lowered from 500 ms to 355 ms, chosen so that PVT-B lapse frequency matched the 10-minute PVT; measured on the handheld PVT-192 device",
+        "Inter-stimulus interval 1-4 s, including 1 s of reaction-time feedback (Section 2.2, checked against the original on 2026-11-14)",
+        "A response with no stimulus or a reaction under 100 ms is a false start; 30 s without a response counts as a lapse with a 30 s reaction time",
+        "Metrics are response speed (1/RT), lapses, fastest and slowest 10% and a performance score; a mean reaction time in ms is not one of them",
+        "A 3-minute test sampled 62.3 stimuli on average; lapse frequency was 5.3% across the study",
+        "Only Methods and part of Results were read verbatim; Discussion and Conclusions are unverified"
       ]
     },
     "fmcsa-1998-perclos": {
