@@ -125,9 +125,12 @@ function score(now: number): Biometrics {
   const yawnsPerMin = yawns.length; // the window is one minute
   const spread = Math.sqrt(mean(noseY.map((y) => (y - mean(noseY)) ** 2)));
   const postureStability = clamp01(1 - spread * 12);
-  // 0.6 PERCLOS + 0.25 yawns (4 a minute saturates) + 0.15 head instability
+  // 0.6 PERCLOS + 0.25 yawns (4 a minute saturates) + 0.15 head instability. Team assumption. These weights are the
+  // "browser formula" measured on RLDD and DROZY (data/out/fatigue_report.md), so they stay as measured.
   const overMinute = clamp01(0.6 * perclos + 0.25 * Math.min(1, yawnsPerMin / 4) + 0.15 * (1 - postureStability));
-  const fatigueScore = Math.max(overMinute, closure.score(now / 1000)); // asleep now outweighs the minute's average
+  // Eyes held closed must cross 0.7 on their own within 5 s (goals/G1-camera-fatigue.md): the minute's formula
+  // cannot, so the held closure does (0.7 after about 3 s). Asleep now outweighs the minute's average.
+  const fatigueScore = Math.max(overMinute, closure.score(now / 1000));
   return {
     heartRateBpm: null, // rPPG is a stretch goal (SCOPE-fatigue.md)
     heartRateConfidence: 0,
