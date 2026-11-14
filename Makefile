@@ -2,6 +2,14 @@
 # check passes; there is no other status. `make goals` prints the scoreboard.
 
 SHELL := /bin/bash
+# Windows: outside Git Bash, make falls back to cmd.exe and every recipe breaks, so point it at Git Bash.
+# Override with `make GIT_BASH=C:/path/to/bash.exe ...` if Git lives somewhere else (no spaces in the path).
+ifeq ($(OS),Windows_NT)
+GIT_BASH ?= $(firstword $(wildcard C:/Progra~1/Git/bin/bash.exe $(subst \,/,$(LOCALAPPDATA))/Programs/Git/bin/bash.exe))
+ifneq ($(GIT_BASH),)
+SHELL := $(GIT_BASH)
+endif
+endif
 .SHELLFLAGS := -eu -o pipefail -c
 .PHONY: goals contract sources model start prefetch $(addprefix check-G,0 1 2 3 4 5 6 7 8)
 
