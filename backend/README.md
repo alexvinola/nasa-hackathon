@@ -1,7 +1,8 @@
 # PULSAR backend
 
 FastAPI on localhost. The **rules engine decides** (status, escalation, affected systems, HRP risk,
-countermeasure); the voice pipeline (G5, not implemented yet) will only phrase that decision. Not a medical device.
+countermeasure); the implemented local voice pipeline only phrases that decision. Source presence does not
+prove G5's offline/latency acceptance. Not a medical device.
 
 ## Run
 
@@ -10,7 +11,9 @@ cd backend
 uv sync                          # Python 3.12, deps from uv.lock
 uv run uvicorn main:app          # http://127.0.0.1:8000, docs at /docs
 uv run pytest -q                 # unit + acceptance tests
-make check-G4                    # from the repo root: G4's acceptance check
+cd ..
+make check-G4                    # G4's exact acceptance check
+make check-G5                    # voice acceptance: local models/prerequisites required
 ```
 
 ## Endpoints
@@ -22,6 +25,7 @@ make check-G4                    # from the repo root: G4's acceptance check
 | GET | `/rules/policy` | How triggered rules combine into one decision. |
 | GET | `/countermeasures`, `/countermeasures/{id}` | Short steps for each countermeasure. |
 | GET | `/health` | Liveness probe. |
+| POST | `/voice/advise` | `{telemetry, question?}` in; engine `decision`, `say`, `source`, `violations` out. 422 for invalid telemetry; 503 when the phrasing model is unavailable. |
 
 ## Layout
 
@@ -32,12 +36,17 @@ pulsar/settings.py          paths; PULSAR_SHARED_DIR, PULSAR_RULES_FILE, PULSAR_
 pulsar/shared.py            reads shared/: schema enums, source ids, official HRP names (never copied)
 pulsar/contract.py          JSON Schema validation of the telemetry and of the decision
 pulsar/rules/               rules engine: models, loader (checks against shared/), engine (policy), api
-pulsar/voice/               G5 boundary only: pipeline docstring and config (PULSAR_LLM_MODEL, PULSAR_OLLAMA_URL)
+pulsar/voice/               local voice pipeline, phrasing API and configuration
 assets/rules.json           the rules and the aggregation policy (data, shown to the judges)
 assets/countermeasures.json the steps each rule points to
 tests/acceptance/           protected: the goal checks (do not edit to make them pass)
 tests/unit/                 our own tests of the policy, the loader and the API
 ```
+
+See [implementation status](../docs/IMPLEMENTATION.md) for missing goals and
+[the harness guide](../docs/HARNESS.md) for agent routing and exact checks.
+Download/cache models during preparation, then verify with connectivity disabled;
+mocked tests are not evidence of offline model readiness.
 
 ## Where the rules live
 

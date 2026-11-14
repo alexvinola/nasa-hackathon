@@ -28,8 +28,9 @@ export const HIGH_RADIATION = 6.2;
 /**
  * Simulated readings for a tiredness between 0 and 1, at second `t` (only the pulse depends on time). Nothing here
  * is measured: it exists so the whole chain (readings, rules engine, alarm, what PULSAR says) can run and be shown
- * without a camera or a heart-rate sensor. The engine's drowsiness rule (PERCLOS at or above 0.30) holds from a
- * tiredness of 0.55 and its exhaustion rule (fatigue score at or above 0.70) from 0.85.
+ * without a camera or a heart-rate sensor. The engine's drowsiness rule (PERCLOS at or above 0.11) holds from a
+ * tiredness of about 0.54 and its exhaustion rule (fatigue score at or above 0.70) from 0.85. Rested PERCLOS is
+ * 0.03, the mean of the alert windows of RLDD (data/out/fatigue_report.md).
  */
 export function simVitals(tired: number, t: number): Biometrics {
   // No jitter on the two signals the engine has rules for: hovering around a threshold would flip the verdict
@@ -38,7 +39,7 @@ export function simVitals(tired: number, t: number): Biometrics {
     heartRateBpm: Math.round(66 + tired * 12 + Math.sin(t * 0.35) * 3),
     heartRateConfidence: 0, // the contract's way of saying "do not trust this as a measurement"
     fatigueScore: unit(0.15 + tired * 0.65),
-    perclos: unit(0.12 + tired * 0.33),
+    perclos: unit(0.03 + tired * 0.15),
     yawnsPerMin: Math.round(tired * 3),
     postureStability: unit(0.94 - tired * 0.2),
     armAsymmetry: 0.08,

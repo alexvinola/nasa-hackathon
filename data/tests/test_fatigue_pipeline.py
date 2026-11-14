@@ -6,11 +6,13 @@ same bytes when it runs again.
 """
 
 import json
+import shutil
 
 import numpy as np
 import pytest
 
-from pulsar_vision import face_series, fatigue_features as ff, fatigue_pipeline, landmarks, mouth, rldd
+from drozy_layout import synthetic_tests
+from pulsar_vision import drozy, face_series, fatigue_features as ff, fatigue_pipeline, landmarks, mouth, rldd
 
 FPS = 15.0
 SECONDS = 240
@@ -76,7 +78,7 @@ def synthetic_series(subject: int, state: int, rng: np.random.Generator, blendsh
     return face_series.FaceSeries(np.arange(n, dtype=np.int32) * 2, np.arange(n) / FPS, xyz, blend, matrix, meta)
 
 
-def run_pipeline(root, blendshapes_see_it: bool = True) -> dict:
+def run_pipeline(root, blendshapes_see_it: bool = True, drozy_root=None) -> dict:
     cache = root / "cache"
     rng = np.random.default_rng(7)
     names = []
@@ -89,6 +91,7 @@ def run_pipeline(root, blendshapes_see_it: bool = True) -> dict:
     landmarker.write_bytes(LANDMARKER_BYTES)
     out = root / "out"
     argv = ["--root", str(root / "no-raw-videos-here"), "--cache", str(cache), "--landmarker", str(landmarker), "--out", str(out), "--bootstrap", "40"]
+    argv += ["--drozy-root", str(drozy_root or root / "no-drozy-here")]  # never the real DROZY: it would take minutes
     assert fatigue_pipeline.main(argv) == 0
     return {"out": out, "argv": argv}
 
@@ -118,6 +121,19 @@ def test_metrics_have_what_the_goal_asks_for(run):
     assert metrics["baseline"]["score"]["auc_alert_vs_drowsy"] is not None
     assert metrics["video_level"]["model"]["videos"] == 12
     assert len(metrics["per_subject"]) == 4 and len(metrics["videos"]) == 12
+
+
+def test_the_thresholds_block_covers_the_three_signals_and_the_engine_rules(run):
+    thresholds = load(run, "metrics.json")["thresholds"]
+    assert set(thresholds["signals"]) == {"perclos", "browser_formula", "model_fatigue_score"}
+    for points in thresholds["signals"].values():
+        for point in points:
+            assert point["all_subjects"]["alert"] <= point["false_alarm_rate"] + 1e-9
+            assert point["out_of_fold"]["drowsy_per_subject"]["subjects"] == 4
+    assert set(thresholds["engine_rules"]) == {
+        "perclos-high on perclos", "fatigue-score-high on browser_formula", "fatigue-score-high on model_fatigue_score"
+    }
+    assert "## Where a threshold would sit" in (run["out"] / "fatigue_report.md").read_text(encoding="utf-8")
 
 
 def test_no_subject_is_in_both_train_and_test(run):
@@ -184,8 +200,102 @@ def test_a_missing_dataset_is_an_error_not_an_empty_model(tmp_path):
     landmarker = tmp_path / "face_landmarker.task"
     landmarker.write_bytes(LANDMARKER_BYTES)
     argv = ["--root", str(tmp_path / "nothing"), "--cache", str(tmp_path / "empty"), "--landmarker", str(landmarker), "--out", str(tmp_path / "out")]
-    assert fatigue_pipeline.main(argv) == 1
+    assert fatigue_pipeline.main(argv + ["--drozy-root", str(tmp_path / "no-drozy")]) == 1
     assert not (tmp_path / "out").exists()
+
+
+# --------------------------------------------------------------------------- DROZY
+
+LEVELS = {"1-1": 0.0, "1-2": 0.6, "1-3": 1.0, "2-1": 0.2, "2-2": 0.9, "3-1": 0.4, "3-3": 0.7}
+
+
+@pytest.fixture
+def fake_drozy(tmp_path, monkeypatch):
+    """A DROZY folder with made-up files, and extraction replaced by synthetic windows (no video, no MediaPipe)."""
+    root = tmp_path / "DROZY"
+    tests, windows, covered = synthetic_tests(root, LEVELS)
+
+    def extract(found, landmarker, yawn_params, workers, log):
+        assert [t.name for t in found] == [t.name for t in tests]
+        return windows, covered, [], {"wall_seconds": 1.0, "mediapipe_seconds": 0.5, "workers": workers}
+
+    monkeypatch.setattr(drozy, "extract_windows", extract)
+    return root
+
+
+def drozy_only(run, tmp_path, drozy_root, out_name="validated"):
+    """The run fixture's outputs copied to a fresh folder, then `make model` there with no RLDD at all."""
+    out = tmp_path / out_name
+    shutil.copytree(run["out"], out)
+    argv = ["--root", str(tmp_path / "no-rldd"), "--cache", str(tmp_path / "no-cache"), "--landmarker", run["argv"][run["argv"].index("--landmarker") + 1]]
+    argv += ["--out", str(out), "--drozy-root", str(drozy_root)]
+    return out, argv
+
+
+def test_without_rldd_the_existing_model_is_validated_on_drozy_and_left_unchanged(run, tmp_path, fake_drozy):
+    out, argv = drozy_only(run, tmp_path, fake_drozy)
+    model_before = (out / "fatigue_model.json").read_bytes()
+    metrics_before = json.loads((out / "metrics.json").read_text(encoding="utf-8"))
+    assert fatigue_pipeline.main(argv) == 0
+    assert (out / "fatigue_model.json").read_bytes() == model_before
+    metrics = json.loads((out / "metrics.json").read_text(encoding="utf-8"))
+    changed = {"pvt_correlation", "pvt_correlation_note", "drozy_validation"}
+    assert {k: v for k, v in metrics.items() if k not in changed} == {k: v for k, v in metrics_before.items() if k not in changed}
+    assert list(metrics)[: len(metrics_before)] == list(metrics_before)  # same keys, same order; the block goes last
+    block = metrics["drozy_validation"]
+    assert isinstance(metrics["pvt_correlation"], float) and metrics["pvt_correlation"] == block["headline"]["value"]
+    assert block["dataset"]["tests_scored"] == len(LEVELS) and block["model"]["refit_on_drozy"] is False
+    report = (out / "fatigue_report.md").read_text(encoding="utf-8")
+    assert "## Reaction time and sleepiness on DROZY (held out)" in report and "Massoz" in report and "not registered" in report
+    assert "## The shipped model out of fold" in report  # the RLDD part is still there
+    assert "PVT.** Not measured" not in report and "no PVT was measured" not in report
+    again = {name: (out / name).read_bytes() for name in ("metrics.json", "fatigue_report.md")}
+    assert fatigue_pipeline.main(argv) == 0
+    assert {name: (out / name).read_bytes() for name in again} == again
+
+
+def test_a_full_run_with_drozy_writes_what_the_drozy_only_run_writes(run, tmp_path, fake_drozy):
+    full = run_pipeline(tmp_path / "full", drozy_root=fake_drozy)
+    out, argv = drozy_only(run, tmp_path, fake_drozy)
+    assert fatigue_pipeline.main(argv) == 0
+    for name in ("metrics.json", "fatigue_report.md", "fatigue_model.json"):
+        # With --out, metrics.json records where the model file went: the only difference allowed.
+        written = (full["out"] / name).read_bytes().replace(str(full["out"]).encode(), str(run["out"]).encode())
+        assert written == (out / name).read_bytes(), name
+
+
+def test_without_either_dataset_nothing_is_written_and_the_run_fails(run, tmp_path):
+    out, argv = drozy_only(run, tmp_path, tmp_path / "no-drozy")
+    before = {p.name: p.read_bytes() for p in out.iterdir() if p.is_file()}
+    assert fatigue_pipeline.main(argv) == 1
+    assert {p.name: p.read_bytes() for p in out.iterdir() if p.is_file()} == before
+
+
+def test_drozy_alone_with_no_model_to_validate_fails_and_writes_nothing(tmp_path, fake_drozy):
+    landmarker = tmp_path / "face_landmarker.task"
+    landmarker.write_bytes(LANDMARKER_BYTES)
+    argv = ["--root", str(tmp_path / "nothing"), "--cache", str(tmp_path / "empty"), "--landmarker", str(landmarker)]
+    assert fatigue_pipeline.main(argv + ["--out", str(tmp_path / "out"), "--drozy-root", str(fake_drozy)]) == 1
+    assert not (tmp_path / "out").exists()
+
+
+def test_smoke_outputs_or_mismatched_metrics_are_not_validated(run, tmp_path, fake_drozy):
+    for name, change in (("smoke", lambda m: m.update(limit=3)), ("other", lambda m: m.update(auc=0.123))):
+        out, argv = drozy_only(run, tmp_path, fake_drozy, out_name=name)
+        metrics = json.loads((out / "metrics.json").read_text(encoding="utf-8"))
+        change(metrics)
+        (out / "metrics.json").write_text(json.dumps(metrics), encoding="utf-8")
+        before = {p.name: p.read_bytes() for p in out.iterdir() if p.is_file()}
+        assert fatigue_pipeline.main(argv) == 1
+        assert {p.name: p.read_bytes() for p in out.iterdir() if p.is_file()} == before
+
+
+def test_no_drozy_and_smoke_runs_leave_pvt_null(tmp_path, fake_drozy):
+    full = run_pipeline(tmp_path / "skip", drozy_root=fake_drozy)
+    assert json.loads((full["out"] / "metrics.json").read_text(encoding="utf-8"))["pvt_correlation"] is not None
+    assert fatigue_pipeline.main(full["argv"] + ["--no-drozy"]) == 0
+    metrics = json.loads((full["out"] / "metrics.json").read_text(encoding="utf-8"))
+    assert metrics["pvt_correlation"] is None and "drozy_validation" not in metrics
 
 
 def test_the_calibration_sensitivity_is_measured_on_windows_outside_every_first_two_minutes(run):

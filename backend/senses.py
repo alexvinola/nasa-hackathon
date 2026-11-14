@@ -11,6 +11,7 @@ import json
 import os
 import re
 import threading
+import time
 import urllib.error
 import urllib.request
 import wave
@@ -20,6 +21,8 @@ from pathlib import Path
 from fastapi import APIRouter, Depends, HTTPException, Request, Response
 from fastapi.concurrency import run_in_threadpool
 from pydantic import BaseModel, Field
+
+from pulsar import debug
 
 LOCAL = re.compile(r"(https?://)?(localhost|127\.0\.0\.1)(:\d+)?")
 
@@ -118,9 +121,14 @@ def chat_message(messages: list[dict], **extra) -> dict:
     request = urllib.request.Request(
         f"{OLLAMA_URL}/api/chat", data=json.dumps(payload).encode(), headers={"Content-Type": "application/json"}
     )
+    started = time.perf_counter()
     try:
         with urllib.request.urlopen(request, timeout=120) as response:
-            return json.load(response)["message"]
+            message = json.load(response)["message"]
+        tools = ", ".join(call.get("function", {}).get("name", "?") for call in message.get("tool_calls") or [])
+        said = message.get("content", "").strip() or (f"calls {tools}" if tools else "(empty)")
+        debug.record("gemma", f"{round((time.perf_counter() - started) * 1000)} ms → {said}")
+        return message
     except urllib.error.HTTPError as error:  # e.g. the model has not been pulled
         raise HTTPException(502, f"Ollama refused the request: {error.read().decode(errors='replace')}") from error
     except (urllib.error.URLError, TimeoutError) as error:
@@ -163,7 +171,9 @@ class Say(BaseModel):
 async def speech_to_text(request: Request) -> dict[str, str]:
     """Body: an audio file (wav, webm/opus, mp3...). Returns its transcript."""
     audio = await read_body(request, MAX_AUDIO, "audio")
-    return {"text": await run_in_threadpool(transcribe, audio)}
+    text = await run_in_threadpool(transcribe, audio)
+    debug.record("voice", f"heard: {text or '(nothing)'}")
+    return {"text": text}
 
 
 @router.post("/tts")

@@ -21,6 +21,7 @@ import { useFaceMetrics } from "@/modules/vision-hud/useFaceMetrics";
 import { FaceOverlay } from "@/modules/vision-hud/FaceOverlay";
 import type { Biometrics, FaceFrame } from "@/modules/vision-hud/faceWorker";
 import { DebugPanel } from "@/modules/sim-core/DebugPanel";
+import { LogPanel } from "@/modules/sim-core/LogPanel";
 import { useSimVitals, type SimMode } from "@/modules/sim-core/useSimVitals";
 import { direct, frameBase64, type Direction, type Spot } from "@/modules/voice-ai/pulsarApi";
 
@@ -283,6 +284,7 @@ export function Hud() {
           }}
         />
         <DebugPanel mode={simMode} onMode={setSimMode} sound={sound} onSound={setSound} />
+        <LogPanel />
       </div>
       {state === "live" && <FaceOverlay frameRef={faceFrame} videoRef={videoRef} problem={faceProblem} />}
       {state !== "live" && (

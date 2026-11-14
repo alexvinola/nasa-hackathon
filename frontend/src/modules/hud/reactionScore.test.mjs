@@ -1,28 +1,28 @@
 // Run: node --test frontend/src/modules/hud/reactionScore.test.mjs
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { score } from "./reactionScore.ts";
+import { TRIALS, score } from "./reactionScore.ts";
 
 const fast = (n) => Array(n).fill(250);
 
-test("ten good reactions pass", () => {
-  assert.deepEqual(score(fast(10)), { good: 10, meanMs: 250, passed: true });
+test("the test is three stimuli", () => {
+  assert.equal(TRIALS, 3);
 });
 
-test("one miss of ten is still 90 %: pass", () => {
-  assert.equal(score([...fast(9), null]).passed, true);
+test("three good reactions pass", () => {
+  assert.deepEqual(score(fast(3)), { good: 3, meanMs: 250, passed: true });
 });
 
-test("two misses of ten fail", () => {
-  assert.equal(score([...fast(8), null, null]).passed, false);
+test("one miss of three is below 90 %: fail", () => {
+  assert.equal(score([...fast(2), null]).passed, false);
 });
 
 test("a lapse (355 ms) and an anticipation (under 100 ms) are not good reactions", () => {
-  assert.deepEqual(score([...fast(8), 355, 99]), { good: 8, meanMs: 250, passed: false });
-  assert.equal(score([...fast(9), 354]).good, 10);
+  assert.deepEqual(score([250, 355, 99]), { good: 1, meanMs: 250, passed: false });
+  assert.equal(score([...fast(2), 354]).good, 3);
 });
 
 test("an unfinished test never passes", () => {
-  assert.equal(score(fast(9)).passed, false);
+  assert.equal(score(fast(2)).passed, false);
   assert.deepEqual(score([]), { good: 0, meanMs: null, passed: false });
 });

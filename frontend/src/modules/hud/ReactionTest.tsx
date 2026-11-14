@@ -10,8 +10,8 @@ type Phase = "ready" | "wait" | "go" | "done";
 const NEEDED = Math.ceil(TRIALS * PASS_RATIO);
 
 /**
- * The reaction check an alarm asks for before it stops, on the whole screen with PULSAR in front: react to ten
- * stimuli with ENTER or a click. Passing it acknowledges the alarm; failing it tells the astronaut what to do
+ * The reaction check an alarm asks for before it stops, on the whole screen with PULSAR in front: react to three
+ * stimuli with ENTER or a click. ESC leaves it at any point, with the alarm still ringing unless it was passed. Passing it acknowledges the alarm; failing it tells the astronaut what to do
  * instead. It never changes the engine's verdict. PULSAR's lines here are the test's own instructions and results,
  * not health advice: that still comes only from the rules engine (`steps`).
  */
@@ -68,6 +68,7 @@ export function ReactionTest({
     else restart();
   };
   useHotkey("enter", react);
+  useHotkey("escape", onClose);
 
   const last = reactions.at(-1);
   const failed = phase === "done" && !result.passed;
@@ -107,7 +108,7 @@ export function ReactionTest({
             Necesitas {NEEDED} de {TRIALS} para detener la alarma.
           </p>
           <button type="button" onClick={onClose} className="text-sm text-shell/70 underline">
-            CANCELAR · LA ALARMA SIGUE SONANDO
+            SALIR (ESC) · LA ALARMA SIGUE SONANDO
           </button>
         </>
       ) : result.passed ? (
@@ -118,7 +119,7 @@ export function ReactionTest({
               {result.good} / {TRIALS} REACCIONES BUENAS · MEDIA {result.meanMs} ms
             </p>
             <button type="button" onClick={onClose} className="mt-8 border-2 border-pulse px-8 py-3 text-lg font-bold">
-              CERRAR (ENTER)
+              CERRAR (ENTER O ESC)
             </button>
           </div>
         </div>
@@ -143,6 +144,9 @@ export function ReactionTest({
             </button>
             <button type="button" onClick={restart} className="mt-3 w-full border-2 border-shell/40 px-3 py-3 text-lg text-shell">
               REINTENTAR (ENTER)
+            </button>
+            <button type="button" onClick={onClose} className="mt-3 text-sm text-shell/70 underline">
+              SALIR (ESC) · LA ALARMA SIGUE SONANDO
             </button>
           </div>
         </div>

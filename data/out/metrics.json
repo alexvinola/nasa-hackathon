@@ -26,8 +26,8 @@
     ]
   ],
   "confusion_matrix_note": "rows: true state, columns: predicted state, in the order of `labels`; counts of 60 s windows",
-  "pvt_correlation": null,
-  "pvt_correlation_note": "DROZY (video with PVT reaction times) is not downloaded, so the score has not been compared with any reaction time.",
+  "pvt_correlation": 0.319691,
+  "pvt_correlation_note": "Spearman correlation, over the 36 DROZY tests (one point per test), between the shipped model's mean fatigueScore and the test's mean PVT reaction time; positive = the score rises as reactions slow down. Nothing is fitted on DROZY. Details and baselines in `drozy_validation`. DROZY: Massoz, Langohr, François & Verly (2016), The ULg Multimodality Drowsiness Database (called DROZY) and Examples of Use, WACV 2016.",
   "folds": [
     {
       "fold": 0,
@@ -3578,6 +3578,332 @@
       }
     }
   },
+  "thresholds": {
+    "false_alarm_rates": [
+      0.05,
+      0.1
+    ],
+    "how": "A window fires when its value is above the cut. The cut for a rate is the smallest alert value with at most that share of alert windows above it. `out_of_fold` scores every subject with the cut from the other subjects' alert windows.",
+    "signals": {
+      "perclos": [
+        {
+          "false_alarm_rate": 0.05,
+          "cut": 0.111111,
+          "fires_when": "value > cut",
+          "all_subjects": {
+            "alert": 0.049666,
+            "low_vigilance": 0.138369,
+            "drowsy": 0.246269
+          },
+          "out_of_fold": {
+            "cut_range": [
+              0.082011,
+              0.114483
+            ],
+            "windows": {
+              "alert": 0.069723,
+              "low_vigilance": 0.154076,
+              "drowsy": 0.24403
+            },
+            "alert_per_subject": {
+              "subjects": 24,
+              "median": 0.0,
+              "min": 0.0,
+              "max": 0.982456,
+              "subjects_with_any": 3
+            },
+            "drowsy_per_subject": {
+              "subjects": 24,
+              "median": 0.054545,
+              "min": 0.0,
+              "max": 1.0,
+              "subjects_with_any": 12
+            }
+          }
+        },
+        {
+          "false_alarm_rate": 0.1,
+          "cut": 0.0821,
+          "fires_when": "value > cut",
+          "all_subjects": {
+            "alert": 0.099331,
+            "low_vigilance": 0.207928,
+            "drowsy": 0.350746
+          },
+          "out_of_fold": {
+            "cut_range": [
+              0.066741,
+              0.083799
+            ],
+            "windows": {
+              "alert": 0.12703,
+              "low_vigilance": 0.216156,
+              "drowsy": 0.35597
+            },
+            "alert_per_subject": {
+              "subjects": 24,
+              "median": 0.0,
+              "min": 0.0,
+              "max": 1.0,
+              "subjects_with_any": 3
+            },
+            "drowsy_per_subject": {
+              "subjects": 24,
+              "median": 0.18961,
+              "min": 0.0,
+              "max": 1.0,
+              "subjects_with_any": 15
+            }
+          }
+        }
+      ],
+      "browser_formula": [
+        {
+          "false_alarm_rate": 0.05,
+          "cut": 0.08823,
+          "fires_when": "value > cut",
+          "all_subjects": {
+            "alert": 0.049666,
+            "low_vigilance": 0.12715,
+            "drowsy": 0.223134
+          },
+          "out_of_fold": {
+            "cut_range": [
+              0.073607,
+              0.089242
+            ],
+            "windows": {
+              "alert": 0.067813,
+              "low_vigilance": 0.138369,
+              "drowsy": 0.234328
+            },
+            "alert_per_subject": {
+              "subjects": 24,
+              "median": 0.0,
+              "min": 0.0,
+              "max": 0.701754,
+              "subjects_with_any": 8
+            },
+            "drowsy_per_subject": {
+              "subjects": 24,
+              "median": 0.108117,
+              "min": 0.0,
+              "max": 0.913793,
+              "subjects_with_any": 15
+            }
+          }
+        },
+        {
+          "false_alarm_rate": 0.1,
+          "cut": 0.069124,
+          "fires_when": "value > cut",
+          "all_subjects": {
+            "alert": 0.099331,
+            "low_vigilance": 0.188482,
+            "drowsy": 0.297015
+          },
+          "out_of_fold": {
+            "cut_range": [
+              0.055721,
+              0.070343
+            ],
+            "windows": {
+              "alert": 0.114613,
+              "low_vigilance": 0.207928,
+              "drowsy": 0.308955
+            },
+            "alert_per_subject": {
+              "subjects": 24,
+              "median": 0.0,
+              "min": 0.0,
+              "max": 0.947368,
+              "subjects_with_any": 10
+            },
+            "drowsy_per_subject": {
+              "subjects": 24,
+              "median": 0.144156,
+              "min": 0.0,
+              "max": 1.0,
+              "subjects_with_any": 22
+            }
+          }
+        }
+      ],
+      "model_fatigue_score": [
+        {
+          "false_alarm_rate": 0.05,
+          "cut": 0.606013,
+          "fires_when": "value > cut",
+          "all_subjects": {
+            "alert": 0.049666,
+            "low_vigilance": 0.18549,
+            "drowsy": 0.345522
+          },
+          "out_of_fold": {
+            "cut_range": [
+              0.586906,
+              0.611376
+            ],
+            "windows": {
+              "alert": 0.059217,
+              "low_vigilance": 0.193717,
+              "drowsy": 0.335075
+            },
+            "alert_per_subject": {
+              "subjects": 24,
+              "median": 0.0,
+              "min": 0.0,
+              "max": 0.736842,
+              "subjects_with_any": 5
+            },
+            "drowsy_per_subject": {
+              "subjects": 24,
+              "median": 0.159148,
+              "min": 0.0,
+              "max": 1.0,
+              "subjects_with_any": 18
+            }
+          }
+        },
+        {
+          "false_alarm_rate": 0.1,
+          "cut": 0.583279,
+          "fires_when": "value > cut",
+          "all_subjects": {
+            "alert": 0.099331,
+            "low_vigilance": 0.244577,
+            "drowsy": 0.407463
+          },
+          "out_of_fold": {
+            "cut_range": [
+              0.567422,
+              0.584902
+            ],
+            "windows": {
+              "alert": 0.122254,
+              "low_vigilance": 0.246821,
+              "drowsy": 0.40597
+            },
+            "alert_per_subject": {
+              "subjects": 24,
+              "median": 0.0,
+              "min": 0.0,
+              "max": 0.894737,
+              "subjects_with_any": 6
+            },
+            "drowsy_per_subject": {
+              "subjects": 24,
+              "median": 0.27193,
+              "min": 0.0,
+              "max": 1.0,
+              "subjects_with_any": 18
+            }
+          }
+        }
+      ]
+    },
+    "engine_rules": {
+      "perclos-high on perclos": {
+        "rule": {
+          "id": "perclos-high",
+          "threshold": 0.11,
+          "operator": ">=",
+          "status": "AMBER"
+        },
+        "signal": "perclos",
+        "threshold": 0.11,
+        "operator": ">=",
+        "windows": {
+          "alert": 0.051576,
+          "low_vigilance": 0.140613,
+          "drowsy": 0.248507
+        },
+        "windows_firing": 575,
+        "alert_per_subject": {
+          "subjects": 24,
+          "median": 0.0,
+          "min": 0.0,
+          "max": 0.736842,
+          "subjects_with_any": 3
+        },
+        "drowsy_per_subject": {
+          "subjects": 24,
+          "median": 0.071429,
+          "min": 0.0,
+          "max": 0.958333,
+          "subjects_with_any": 13
+        }
+      },
+      "fatigue-score-high on browser_formula": {
+        "rule": {
+          "id": "fatigue-score-high",
+          "threshold": 0.7,
+          "operator": ">=",
+          "status": "RED"
+        },
+        "signal": "browser_formula",
+        "threshold": 0.7,
+        "operator": ">=",
+        "windows": {
+          "alert": 0.0,
+          "low_vigilance": 0.0,
+          "drowsy": 0.0
+        },
+        "windows_firing": 0,
+        "alert_per_subject": {
+          "subjects": 24,
+          "median": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "subjects_with_any": 0
+        },
+        "drowsy_per_subject": {
+          "subjects": 24,
+          "median": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "subjects_with_any": 0
+        }
+      },
+      "fatigue-score-high on model_fatigue_score": {
+        "rule": {
+          "id": "fatigue-score-high",
+          "threshold": 0.7,
+          "operator": ">=",
+          "status": "RED"
+        },
+        "signal": "model_fatigue_score",
+        "threshold": 0.7,
+        "operator": ">=",
+        "windows": {
+          "alert": 0.009551,
+          "low_vigilance": 0.0546,
+          "drowsy": 0.149254
+        },
+        "windows_firing": 283,
+        "alert_per_subject": {
+          "subjects": 24,
+          "median": 0.0,
+          "min": 0.0,
+          "max": 0.157895,
+          "subjects_with_any": 2
+        },
+        "drowsy_per_subject": {
+          "subjects": 24,
+          "median": 0.0,
+          "min": 0.0,
+          "max": 1.0,
+          "subjects_with_any": 9
+        }
+      }
+    },
+    "limits": [
+      "RLDD labels are self-reported, one per video: a drowsy window is a window of a video its subject called drowsy.",
+      "The rates looked at (5 % and 10 % of alert windows) are a team assumption, not a recommendation.",
+      "Windows of one video overlap by 50 s, so the shares are not counts of independent events; an alarm that fires on a window fires on its neighbours too.",
+      "The browser's fatigueScore is also raised by eyes held closed for seconds (vision-hud/sleep.ts); that part is not in these numbers."
+    ]
+  },
   "final_model": {
     "file": "data/fatigue_model.json",
     "C": 0.001,
@@ -6393,5 +6719,1310 @@
       }
     ],
     "note": "Per-frame time is FaceLandmarker.detect_for_video in Python on this machine's CPU, measured while several worker processes ran at once. It is not a browser measurement."
+  },
+  "drozy_validation": {
+    "source": "drozy",
+    "citation": "Massoz, Langohr, François & Verly (2016), The ULg Multimodality Drowsiness Database (called DROZY) and Examples of Use, WACV 2016",
+    "licence": "DROZY is for research and evaluation only: no commercial use, no redistribution in full or in part, no image shown. The pipeline reads the files and writes aggregate numbers only: no frame, crop or per-frame series, and no recording's KSS or reaction times.",
+    "what": "The shipped data/fatigue_model.json applied unchanged to DROZY, whose 14 people the model never saw: nothing is fitted, scaled or chosen on DROZY. Its fatigueScore, PERCLOS alone and the browser's former fixed formula are compared with the mean PVT reaction time and with KSS, on the same windows.",
+    "model": {
+      "trainedOn": "UTA-RLDD (Fold1_part1, Fold1_part2, Fold2_part1, Fold2_part2): 3724 windows of 60 s every 10 s from 72 videos of 24 subjects (1047 alert, 1337 low vigilance, 1340 drowsy; self-reported labels)",
+      "configuration": "blendshape/absolute",
+      "refit_on_drozy": false
+    },
+    "headline": {
+      "view": "per_recording",
+      "signal": "fatigue_score",
+      "target": "pvt_mean_rt_ms",
+      "statistic": "spearman",
+      "value": 0.319691,
+      "pearson_r": 0.635661,
+      "n_recordings": 36,
+      "why": "Per recording, because the 36 tests are the only units that do not overlap: windows share 50 of their 60 s and a person's windows share the person, so window counts overstate the evidence. Spearman rather than Pearson, decided before seeing this model's numbers: a test's mean reaction time is pulled up by a few very slow responses, and with 36 points Pearson can be carried by two or three extreme tests (the earlier 3-feature score showed Pearson well above Spearman for that reason). Pearson is reported next to it."
+    },
+    "signals": {
+      "fatigue_score": "the shipped model's fatigueScore (data/fatigue_model.json, trained on UTA-RLDD), unchanged",
+      "perclos": "the model's first feature alone: closed frames / frames with a face, eye closed when mean eyeBlink > 0.5",
+      "browser_formula": "faceWorker.ts's fixed formula before the model: clamp01(0.6 * perclos + 0.25 * min(1, yawnsPerMin / 4) + 0.15 * clamp01(12 * std(noseY)))"
+    },
+    "targets": {
+      "pvt_mean_rt_ms": "per window: mean reaction time of the PVT stimuli shown in it (start <= stimulus < start + 60 s); per recording: mean of every reaction time of the test. Reaction time = response time - stimulus time, from pvt-rt/; no stimulus is dropped or capped",
+      "kss": "KSS (Karolinska Sleepiness Scale; 1 to 9 in DROZY's file, higher = sleepier) is the score DROZY recorded per test. The scale itself is not registered in shared/sources.json: register it before quoting a KSS figure."
+    },
+    "dataset": {
+      "tests_found": 36,
+      "subjects_found": 14,
+      "tests_extracted": 36,
+      "tests_failed": [],
+      "tests_scored": 36,
+      "subjects_scored": 14,
+      "tests_without_kss": [],
+      "frame_times": "DROZY's timestamps/ (elapsed ms), one per decoded frame; frames processed at 15 per second by those times",
+      "processed_frames": 313752,
+      "processed_fps": {
+        "min": 13.131,
+        "median": 14.883,
+        "max": 14.938
+      },
+      "face_found": {
+        "overall": 0.99891,
+        "min_per_test": 0.98052,
+        "median_per_test": 1.0
+      },
+      "windows": 1967,
+      "windows_rejected": 0,
+      "windows_scored": 1967,
+      "windows_scored_without_stimulus": 0,
+      "window_rule": "60 s windows every 10 s from the first frame, as on RLDD; a window needs at least 450 frames and a face in 80% of them, otherwise it has no score. No window is left out for calibration: the shipped model has none."
+    },
+    "score_distribution": {
+      "fatigue_score": {
+        "min": 0.394677,
+        "p25": 0.477601,
+        "median": 0.520847,
+        "p75": 0.586946,
+        "max": 0.967014
+      },
+      "perclos": {
+        "min": 0.0,
+        "p25": 0.030117,
+        "median": 0.060023,
+        "p75": 0.116136,
+        "max": 0.525917
+      },
+      "browser_formula": {
+        "min": 0.00032,
+        "p25": 0.020811,
+        "median": 0.040051,
+        "p75": 0.075401,
+        "max": 0.32004
+      }
+    },
+    "results": {
+      "subjects": 14,
+      "recordings": 36,
+      "windows": 1967,
+      "per_recording": {
+        "fatigue_score": {
+          "pvt_mean_rt_ms": {
+            "r": 0.635661,
+            "spearman": 0.319691,
+            "n": 36
+          },
+          "kss": {
+            "r": 0.552188,
+            "spearman": 0.481429,
+            "n": 36
+          }
+        },
+        "perclos": {
+          "pvt_mean_rt_ms": {
+            "r": 0.538871,
+            "spearman": 0.150837,
+            "n": 36
+          },
+          "kss": {
+            "r": 0.497167,
+            "spearman": 0.391845,
+            "n": 36
+          }
+        },
+        "browser_formula": {
+          "pvt_mean_rt_ms": {
+            "r": 0.547009,
+            "spearman": 0.116088,
+            "n": 36
+          },
+          "kss": {
+            "r": 0.497928,
+            "spearman": 0.349075,
+            "n": 36
+          }
+        }
+      },
+      "within_subject": {
+        "fatigue_score": {
+          "pvt_mean_rt_ms": {
+            "r": {
+              "subjects": 14,
+              "positive": 11,
+              "median": 0.476533,
+              "min": -0.155251,
+              "max": 0.865404
+            },
+            "spearman": {
+              "subjects": 14,
+              "positive": 12,
+              "median": 0.423201,
+              "min": -0.162852,
+              "max": 0.886894
+            }
+          },
+          "kss": {
+            "r": {
+              "subjects": 13,
+              "positive": 9,
+              "median": 0.520955,
+              "min": -0.562749,
+              "max": 0.897337
+            },
+            "spearman": {
+              "subjects": 13,
+              "positive": 8,
+              "median": 0.474688,
+              "min": -0.564872,
+              "max": 0.942827
+            }
+          }
+        },
+        "perclos": {
+          "pvt_mean_rt_ms": {
+            "r": {
+              "subjects": 14,
+              "positive": 13,
+              "median": 0.557667,
+              "min": -0.391055,
+              "max": 0.855781
+            },
+            "spearman": {
+              "subjects": 14,
+              "positive": 13,
+              "median": 0.632407,
+              "min": -0.375978,
+              "max": 0.880981
+            }
+          },
+          "kss": {
+            "r": {
+              "subjects": 13,
+              "positive": 10,
+              "median": 0.39168,
+              "min": -0.910088,
+              "max": 0.841967
+            },
+            "spearman": {
+              "subjects": 13,
+              "positive": 10,
+              "median": 0.541652,
+              "min": -0.809052,
+              "max": 0.941705
+            }
+          }
+        },
+        "browser_formula": {
+          "pvt_mean_rt_ms": {
+            "r": {
+              "subjects": 14,
+              "positive": 12,
+              "median": 0.55851,
+              "min": -0.349083,
+              "max": 0.851577
+            },
+            "spearman": {
+              "subjects": 14,
+              "positive": 12,
+              "median": 0.626084,
+              "min": -0.352056,
+              "max": 0.890097
+            }
+          },
+          "kss": {
+            "r": {
+              "subjects": 13,
+              "positive": 10,
+              "median": 0.391788,
+              "min": -0.792476,
+              "max": 0.835594
+            },
+            "spearman": {
+              "subjects": 13,
+              "positive": 9,
+              "median": 0.47691,
+              "min": -0.758003,
+              "max": 0.941857
+            }
+          }
+        }
+      },
+      "pooled_windows": {
+        "fatigue_score": {
+          "pvt_mean_rt_ms": {
+            "r": 0.5789,
+            "spearman": 0.306547,
+            "n": 1967
+          },
+          "kss": {
+            "r": 0.493824,
+            "spearman": 0.421255,
+            "n": 1967
+          }
+        },
+        "perclos": {
+          "pvt_mean_rt_ms": {
+            "r": 0.519719,
+            "spearman": 0.187626,
+            "n": 1967
+          },
+          "kss": {
+            "r": 0.453722,
+            "spearman": 0.342942,
+            "n": 1967
+          }
+        },
+        "browser_formula": {
+          "pvt_mean_rt_ms": {
+            "r": 0.524647,
+            "spearman": 0.182228,
+            "n": 1967
+          },
+          "kss": {
+            "r": 0.450562,
+            "spearman": 0.340798,
+            "n": 1967
+          }
+        }
+      },
+      "per_subject": {
+        "1": {
+          "recordings": 3,
+          "windows": 164,
+          "fatigue_score": {
+            "pvt_mean_rt_ms": {
+              "r": 0.485298,
+              "spearman": 0.487046,
+              "n": 164
+            },
+            "kss": {
+              "r": 0.675199,
+              "spearman": 0.66917,
+              "n": 164
+            }
+          },
+          "perclos": {
+            "pvt_mean_rt_ms": {
+              "r": 0.325246,
+              "spearman": 0.320441,
+              "n": 164
+            },
+            "kss": {
+              "r": 0.368562,
+              "spearman": 0.449866,
+              "n": 164
+            }
+          },
+          "browser_formula": {
+            "pvt_mean_rt_ms": {
+              "r": 0.339517,
+              "spearman": 0.316924,
+              "n": 164
+            },
+            "kss": {
+              "r": 0.342257,
+              "spearman": 0.417857,
+              "n": 164
+            }
+          }
+        },
+        "2": {
+          "recordings": 3,
+          "windows": 162,
+          "fatigue_score": {
+            "pvt_mean_rt_ms": {
+              "r": 0.467769,
+              "spearman": 0.62977,
+              "n": 162
+            },
+            "kss": {
+              "r": 0.764042,
+              "spearman": 0.942827,
+              "n": 162
+            }
+          },
+          "perclos": {
+            "pvt_mean_rt_ms": {
+              "r": 0.498692,
+              "spearman": 0.648787,
+              "n": 162
+            },
+            "kss": {
+              "r": 0.821866,
+              "spearman": 0.941705,
+              "n": 162
+            }
+          },
+          "browser_formula": {
+            "pvt_mean_rt_ms": {
+              "r": 0.49871,
+              "spearman": 0.648774,
+              "n": 162
+            },
+            "kss": {
+              "r": 0.821595,
+              "spearman": 0.941857,
+              "n": 162
+            }
+          }
+        },
+        "3": {
+          "recordings": 3,
+          "windows": 165,
+          "fatigue_score": {
+            "pvt_mean_rt_ms": {
+              "r": -0.018477,
+              "spearman": 0.024731,
+              "n": 165
+            },
+            "kss": {
+              "r": -0.311448,
+              "spearman": -0.432921,
+              "n": 165
+            }
+          },
+          "perclos": {
+            "pvt_mean_rt_ms": {
+              "r": 0.113953,
+              "spearman": 0.156595,
+              "n": 165
+            },
+            "kss": {
+              "r": -0.014284,
+              "spearman": -0.008182,
+              "n": 165
+            }
+          },
+          "browser_formula": {
+            "pvt_mean_rt_ms": {
+              "r": 0.117449,
+              "spearman": 0.151478,
+              "n": 165
+            },
+            "kss": {
+              "r": -0.019707,
+              "spearman": -0.022285,
+              "n": 165
+            }
+          }
+        },
+        "4": {
+          "recordings": 3,
+          "windows": 164,
+          "fatigue_score": {
+            "pvt_mean_rt_ms": {
+              "r": 0.865404,
+              "spearman": 0.886894,
+              "n": 164
+            },
+            "kss": {
+              "r": 0.818419,
+              "spearman": 0.710622,
+              "n": 164
+            }
+          },
+          "perclos": {
+            "pvt_mean_rt_ms": {
+              "r": 0.855781,
+              "spearman": 0.880981,
+              "n": 164
+            },
+            "kss": {
+              "r": 0.820452,
+              "spearman": 0.703321,
+              "n": 164
+            }
+          },
+          "browser_formula": {
+            "pvt_mean_rt_ms": {
+              "r": 0.851577,
+              "spearman": 0.881001,
+              "n": 164
+            },
+            "kss": {
+              "r": 0.812528,
+              "spearman": 0.699991,
+              "n": 164
+            }
+          }
+        },
+        "5": {
+          "recordings": 3,
+          "windows": 162,
+          "fatigue_score": {
+            "pvt_mean_rt_ms": {
+              "r": 0.692589,
+              "spearman": 0.299363,
+              "n": 162
+            },
+            "kss": {
+              "r": 0.093105,
+              "spearman": -0.245083,
+              "n": 162
+            }
+          },
+          "perclos": {
+            "pvt_mean_rt_ms": {
+              "r": 0.655449,
+              "spearman": 0.681952,
+              "n": 162
+            },
+            "kss": {
+              "r": 0.377577,
+              "spearman": 0.542524,
+              "n": 162
+            }
+          },
+          "browser_formula": {
+            "pvt_mean_rt_ms": {
+              "r": 0.656943,
+              "spearman": 0.636309,
+              "n": 162
+            },
+            "kss": {
+              "r": 0.377157,
+              "spearman": 0.47691,
+              "n": 162
+            }
+          }
+        },
+        "6": {
+          "recordings": 3,
+          "windows": 164,
+          "fatigue_score": {
+            "pvt_mean_rt_ms": {
+              "r": 0.215078,
+              "spearman": 0.227812,
+              "n": 164
+            },
+            "kss": {
+              "r": 0.303406,
+              "spearman": 0.273262,
+              "n": 164
+            }
+          },
+          "perclos": {
+            "pvt_mean_rt_ms": {
+              "r": 0.0656,
+              "spearman": 0.005485,
+              "n": 164
+            },
+            "kss": {
+              "r": 0.249144,
+              "spearman": 0.004965,
+              "n": 164
+            }
+          },
+          "browser_formula": {
+            "pvt_mean_rt_ms": {
+              "r": -0.051092,
+              "spearman": -0.121039,
+              "n": 164
+            },
+            "kss": {
+              "r": 0.118668,
+              "spearman": -0.105682,
+              "n": 164
+            }
+          }
+        },
+        "7": {
+          "recordings": 2,
+          "windows": 110,
+          "fatigue_score": {
+            "pvt_mean_rt_ms": {
+              "r": 0.762531,
+              "spearman": 0.885327,
+              "n": 110
+            },
+            "kss": {
+              "r": 0.897337,
+              "spearman": 0.865489,
+              "n": 110
+            }
+          },
+          "perclos": {
+            "pvt_mean_rt_ms": {
+              "r": 0.797687,
+              "spearman": 0.878912,
+              "n": 110
+            },
+            "kss": {
+              "r": 0.841967,
+              "spearman": 0.86149,
+              "n": 110
+            }
+          },
+          "browser_formula": {
+            "pvt_mean_rt_ms": {
+              "r": 0.784454,
+              "spearman": 0.890097,
+              "n": 110
+            },
+            "kss": {
+              "r": 0.835594,
+              "spearman": 0.85919,
+              "n": 110
+            }
+          }
+        },
+        "8": {
+          "recordings": 3,
+          "windows": 164,
+          "fatigue_score": {
+            "pvt_mean_rt_ms": {
+              "r": 0.747638,
+              "spearman": 0.743917,
+              "n": 164
+            },
+            "kss": {
+              "r": 0.665134,
+              "spearman": 0.606139,
+              "n": 164
+            }
+          },
+          "perclos": {
+            "pvt_mean_rt_ms": {
+              "r": 0.776214,
+              "spearman": 0.759956,
+              "n": 164
+            },
+            "kss": {
+              "r": 0.666756,
+              "spearman": 0.575635,
+              "n": 164
+            }
+          },
+          "browser_formula": {
+            "pvt_mean_rt_ms": {
+              "r": 0.653422,
+              "spearman": 0.693509,
+              "n": 164
+            },
+            "kss": {
+              "r": 0.583688,
+              "spearman": 0.533809,
+              "n": 164
+            }
+          }
+        },
+        "9": {
+          "recordings": 2,
+          "windows": 110,
+          "fatigue_score": {
+            "pvt_mean_rt_ms": {
+              "r": 0.798144,
+              "spearman": 0.841886,
+              "n": 110
+            },
+            "kss": {
+              "r": 0.770228,
+              "spearman": 0.779026,
+              "n": 110
+            }
+          },
+          "perclos": {
+            "pvt_mean_rt_ms": {
+              "r": 0.800879,
+              "spearman": 0.783912,
+              "n": 110
+            },
+            "kss": {
+              "r": 0.679845,
+              "spearman": 0.723199,
+              "n": 110
+            }
+          },
+          "browser_formula": {
+            "pvt_mean_rt_ms": {
+              "r": 0.818454,
+              "spearman": 0.79968,
+              "n": 110
+            },
+            "kss": {
+              "r": 0.708487,
+              "spearman": 0.743524,
+              "n": 110
+            }
+          }
+        },
+        "10": {
+          "recordings": 2,
+          "windows": 109,
+          "fatigue_score": {
+            "pvt_mean_rt_ms": {
+              "r": 0.438117,
+              "spearman": 0.428492,
+              "n": 109
+            },
+            "kss": {
+              "r": -0.079594,
+              "spearman": -0.099141,
+              "n": 109
+            }
+          },
+          "perclos": {
+            "pvt_mean_rt_ms": {
+              "r": 0.616642,
+              "spearman": 0.616027,
+              "n": 109
+            },
+            "kss": {
+              "r": 0.39168,
+              "spearman": 0.281104,
+              "n": 109
+            }
+          },
+          "browser_formula": {
+            "pvt_mean_rt_ms": {
+              "r": 0.618309,
+              "spearman": 0.615858,
+              "n": 109
+            },
+            "kss": {
+              "r": 0.391788,
+              "spearman": 0.28401,
+              "n": 109
+            }
+          }
+        },
+        "11": {
+          "recordings": 3,
+          "windows": 164,
+          "fatigue_score": {
+            "pvt_mean_rt_ms": {
+              "r": -0.155251,
+              "spearman": -0.162852,
+              "n": 164
+            },
+            "kss": {
+              "r": -0.449493,
+              "spearman": -0.483283,
+              "n": 164
+            }
+          },
+          "perclos": {
+            "pvt_mean_rt_ms": {
+              "r": -0.391055,
+              "spearman": -0.375978,
+              "n": 164
+            },
+            "kss": {
+              "r": -0.910088,
+              "spearman": -0.809052,
+              "n": 164
+            }
+          },
+          "browser_formula": {
+            "pvt_mean_rt_ms": {
+              "r": -0.349083,
+              "spearman": -0.352056,
+              "n": 164
+            },
+            "kss": {
+              "r": -0.792476,
+              "spearman": -0.758003,
+              "n": 164
+            }
+          }
+        },
+        "12": {
+          "recordings": 1,
+          "windows": 55,
+          "fatigue_score": {
+            "pvt_mean_rt_ms": {
+              "r": 0.161524,
+              "spearman": 0.179437,
+              "n": 55
+            },
+            "kss": {
+              "r": null,
+              "spearman": null,
+              "n": 55
+            }
+          },
+          "perclos": {
+            "pvt_mean_rt_ms": {
+              "r": 0.093383,
+              "spearman": 0.041419,
+              "n": 55
+            },
+            "kss": {
+              "r": null,
+              "spearman": null,
+              "n": 55
+            }
+          },
+          "browser_formula": {
+            "pvt_mean_rt_ms": {
+              "r": 0.139091,
+              "spearman": 0.116667,
+              "n": 55
+            },
+            "kss": {
+              "r": null,
+              "spearman": null,
+              "n": 55
+            }
+          }
+        },
+        "13": {
+          "recordings": 2,
+          "windows": 110,
+          "fatigue_score": {
+            "pvt_mean_rt_ms": {
+              "r": -0.066912,
+              "spearman": -0.144792,
+              "n": 110
+            },
+            "kss": {
+              "r": -0.562749,
+              "spearman": -0.564872,
+              "n": 110
+            }
+          },
+          "perclos": {
+            "pvt_mean_rt_ms": {
+              "r": 0.34306,
+              "spearman": 0.177397,
+              "n": 110
+            },
+            "kss": {
+              "r": -0.124855,
+              "spearman": -0.133991,
+              "n": 110
+            }
+          },
+          "browser_formula": {
+            "pvt_mean_rt_ms": {
+              "r": 0.387784,
+              "spearman": 0.235409,
+              "n": 110
+            },
+            "kss": {
+              "r": -0.012307,
+              "spearman": -0.0209,
+              "n": 110
+            }
+          }
+        },
+        "14": {
+          "recordings": 3,
+          "windows": 164,
+          "fatigue_score": {
+            "pvt_mean_rt_ms": {
+              "r": 0.583236,
+              "spearman": 0.41791,
+              "n": 164
+            },
+            "kss": {
+              "r": 0.520955,
+              "spearman": 0.474688,
+              "n": 164
+            }
+          },
+          "perclos": {
+            "pvt_mean_rt_ms": {
+              "r": 0.678446,
+              "spearman": 0.682223,
+              "n": 164
+            },
+            "kss": {
+              "r": 0.478112,
+              "spearman": 0.541652,
+              "n": 164
+            }
+          },
+          "browser_formula": {
+            "pvt_mean_rt_ms": {
+              "r": 0.680305,
+              "spearman": 0.692434,
+              "n": 164
+            },
+            "kss": {
+              "r": 0.476821,
+              "spearman": 0.544946,
+              "n": 164
+            }
+          }
+        }
+      }
+    },
+    "recordings": [
+      {
+        "recording": "1-1",
+        "subject": "1",
+        "test": 1,
+        "video_frames": 17865,
+        "processed_frames": 8934,
+        "processed_fps": 14.89,
+        "face_found": 0.99989,
+        "longest_no_face_s": 0.07,
+        "windows": 55,
+        "windows_rejected": 0,
+        "kss_recorded": true
+      },
+      {
+        "recording": "1-2",
+        "subject": "1",
+        "test": 2,
+        "video_frames": 9497,
+        "processed_frames": 8177,
+        "processed_fps": 13.629,
+        "face_found": 0.99841,
+        "longest_no_face_s": 1.0,
+        "windows": 54,
+        "windows_rejected": 0,
+        "kss_recorded": true
+      },
+      {
+        "recording": "1-3",
+        "subject": "1",
+        "test": 3,
+        "video_frames": 8866,
+        "processed_frames": 8820,
+        "processed_fps": 14.7,
+        "face_found": 1.0,
+        "longest_no_face_s": 0.0,
+        "windows": 55,
+        "windows_rejected": 0,
+        "kss_recorded": true
+      },
+      {
+        "recording": "2-1",
+        "subject": "2",
+        "test": 1,
+        "video_frames": 17899,
+        "processed_frames": 8948,
+        "processed_fps": 14.914,
+        "face_found": 1.0,
+        "longest_no_face_s": 0.0,
+        "windows": 54,
+        "windows_rejected": 0,
+        "kss_recorded": true
+      },
+      {
+        "recording": "2-2",
+        "subject": "2",
+        "test": 2,
+        "video_frames": 9401,
+        "processed_frames": 8222,
+        "processed_fps": 13.703,
+        "face_found": 1.0,
+        "longest_no_face_s": 0.0,
+        "windows": 54,
+        "windows_rejected": 0,
+        "kss_recorded": true
+      },
+      {
+        "recording": "2-3",
+        "subject": "2",
+        "test": 3,
+        "video_frames": 8146,
+        "processed_frames": 8117,
+        "processed_fps": 13.529,
+        "face_found": 1.0,
+        "longest_no_face_s": 0.0,
+        "windows": 54,
+        "windows_rejected": 0,
+        "kss_recorded": true
+      },
+      {
+        "recording": "3-1",
+        "subject": "3",
+        "test": 1,
+        "video_frames": 17882,
+        "processed_frames": 8946,
+        "processed_fps": 14.909,
+        "face_found": 1.0,
+        "longest_no_face_s": 0.0,
+        "windows": 55,
+        "windows_rejected": 0,
+        "kss_recorded": true
+      },
+      {
+        "recording": "3-2",
+        "subject": "3",
+        "test": 2,
+        "video_frames": 8848,
+        "processed_frames": 8810,
+        "processed_fps": 14.683,
+        "face_found": 0.99841,
+        "longest_no_face_s": 0.94,
+        "windows": 55,
+        "windows_rejected": 0,
+        "kss_recorded": true
+      },
+      {
+        "recording": "3-3",
+        "subject": "3",
+        "test": 3,
+        "video_frames": 8874,
+        "processed_frames": 8776,
+        "processed_fps": 14.626,
+        "face_found": 0.99806,
+        "longest_no_face_s": 1.13,
+        "windows": 55,
+        "windows_rejected": 0,
+        "kss_recorded": true
+      },
+      {
+        "recording": "4-1",
+        "subject": "4",
+        "test": 1,
+        "video_frames": 17789,
+        "processed_frames": 8902,
+        "processed_fps": 14.837,
+        "face_found": 1.0,
+        "longest_no_face_s": 0.0,
+        "windows": 54,
+        "windows_rejected": 0,
+        "kss_recorded": true
+      },
+      {
+        "recording": "4-2",
+        "subject": "4",
+        "test": 2,
+        "video_frames": 8463,
+        "processed_frames": 8276,
+        "processed_fps": 13.793,
+        "face_found": 0.99988,
+        "longest_no_face_s": 0.07,
+        "windows": 55,
+        "windows_rejected": 0,
+        "kss_recorded": true
+      },
+      {
+        "recording": "4-3",
+        "subject": "4",
+        "test": 3,
+        "video_frames": 8889,
+        "processed_frames": 8771,
+        "processed_fps": 14.618,
+        "face_found": 1.0,
+        "longest_no_face_s": 0.0,
+        "windows": 55,
+        "windows_rejected": 0,
+        "kss_recorded": true
+      },
+      {
+        "recording": "5-1",
+        "subject": "5",
+        "test": 1,
+        "video_frames": 17898,
+        "processed_frames": 8953,
+        "processed_fps": 14.922,
+        "face_found": 1.0,
+        "longest_no_face_s": 0.0,
+        "windows": 54,
+        "windows_rejected": 0,
+        "kss_recorded": true
+      },
+      {
+        "recording": "5-2",
+        "subject": "5",
+        "test": 2,
+        "video_frames": 8175,
+        "processed_frames": 8119,
+        "processed_fps": 13.537,
+        "face_found": 1.0,
+        "longest_no_face_s": 0.0,
+        "windows": 54,
+        "windows_rejected": 0,
+        "kss_recorded": true
+      },
+      {
+        "recording": "5-3",
+        "subject": "5",
+        "test": 3,
+        "video_frames": 8230,
+        "processed_frames": 8118,
+        "processed_fps": 13.531,
+        "face_found": 0.99975,
+        "longest_no_face_s": 0.13,
+        "windows": 54,
+        "windows_rejected": 0,
+        "kss_recorded": true
+      },
+      {
+        "recording": "6-1",
+        "subject": "6",
+        "test": 1,
+        "video_frames": 17913,
+        "processed_frames": 8933,
+        "processed_fps": 14.888,
+        "face_found": 0.99933,
+        "longest_no_face_s": 0.35,
+        "windows": 55,
+        "windows_rejected": 0,
+        "kss_recorded": true
+      },
+      {
+        "recording": "6-2",
+        "subject": "6",
+        "test": 2,
+        "video_frames": 8852,
+        "processed_frames": 8812,
+        "processed_fps": 14.686,
+        "face_found": 0.99637,
+        "longest_no_face_s": 2.13,
+        "windows": 55,
+        "windows_rejected": 0,
+        "kss_recorded": true
+      },
+      {
+        "recording": "6-3",
+        "subject": "6",
+        "test": 3,
+        "video_frames": 8957,
+        "processed_frames": 8111,
+        "processed_fps": 13.521,
+        "face_found": 0.98052,
+        "longest_no_face_s": 11.8,
+        "windows": 54,
+        "windows_rejected": 0,
+        "kss_recorded": true
+      },
+      {
+        "recording": "7-2",
+        "subject": "7",
+        "test": 2,
+        "video_frames": 7912,
+        "processed_frames": 7879,
+        "processed_fps": 13.131,
+        "face_found": 1.0,
+        "longest_no_face_s": 0.0,
+        "windows": 55,
+        "windows_rejected": 0,
+        "kss_recorded": true
+      },
+      {
+        "recording": "7-3",
+        "subject": "7",
+        "test": 3,
+        "video_frames": 8878,
+        "processed_frames": 8782,
+        "processed_fps": 14.636,
+        "face_found": 0.99772,
+        "longest_no_face_s": 0.8,
+        "windows": 55,
+        "windows_rejected": 0,
+        "kss_recorded": true
+      },
+      {
+        "recording": "8-1",
+        "subject": "8",
+        "test": 1,
+        "video_frames": 17863,
+        "processed_frames": 8928,
+        "processed_fps": 14.881,
+        "face_found": 0.99888,
+        "longest_no_face_s": 0.33,
+        "windows": 54,
+        "windows_rejected": 0,
+        "kss_recorded": true
+      },
+      {
+        "recording": "8-2",
+        "subject": "8",
+        "test": 2,
+        "video_frames": 8874,
+        "processed_frames": 8836,
+        "processed_fps": 14.727,
+        "face_found": 1.0,
+        "longest_no_face_s": 0.0,
+        "windows": 55,
+        "windows_rejected": 0,
+        "kss_recorded": true
+      },
+      {
+        "recording": "8-3",
+        "subject": "8",
+        "test": 3,
+        "video_frames": 9025,
+        "processed_frames": 8258,
+        "processed_fps": 13.762,
+        "face_found": 0.99843,
+        "longest_no_face_s": 0.87,
+        "windows": 55,
+        "windows_rejected": 0,
+        "kss_recorded": true
+      },
+      {
+        "recording": "9-2",
+        "subject": "9",
+        "test": 2,
+        "video_frames": 17908,
+        "processed_frames": 8959,
+        "processed_fps": 14.931,
+        "face_found": 1.0,
+        "longest_no_face_s": 0.0,
+        "windows": 55,
+        "windows_rejected": 0,
+        "kss_recorded": true
+      },
+      {
+        "recording": "9-3",
+        "subject": "9",
+        "test": 3,
+        "video_frames": 17922,
+        "processed_frames": 8959,
+        "processed_fps": 14.931,
+        "face_found": 1.0,
+        "longest_no_face_s": 0.0,
+        "windows": 55,
+        "windows_rejected": 0,
+        "kss_recorded": true
+      },
+      {
+        "recording": "10-1",
+        "subject": "10",
+        "test": 1,
+        "video_frames": 17866,
+        "processed_frames": 8931,
+        "processed_fps": 14.885,
+        "face_found": 0.99989,
+        "longest_no_face_s": 0.07,
+        "windows": 54,
+        "windows_rejected": 0,
+        "kss_recorded": true
+      },
+      {
+        "recording": "10-3",
+        "subject": "10",
+        "test": 3,
+        "video_frames": 17889,
+        "processed_frames": 8943,
+        "processed_fps": 14.904,
+        "face_found": 1.0,
+        "longest_no_face_s": 0.0,
+        "windows": 55,
+        "windows_rejected": 0,
+        "kss_recorded": true
+      },
+      {
+        "recording": "11-1",
+        "subject": "11",
+        "test": 1,
+        "video_frames": 17914,
+        "processed_frames": 8955,
+        "processed_fps": 14.924,
+        "face_found": 1.0,
+        "longest_no_face_s": 0.0,
+        "windows": 55,
+        "windows_rejected": 0,
+        "kss_recorded": true
+      },
+      {
+        "recording": "11-2",
+        "subject": "11",
+        "test": 2,
+        "video_frames": 17886,
+        "processed_frames": 8936,
+        "processed_fps": 14.894,
+        "face_found": 0.9962,
+        "longest_no_face_s": 1.2,
+        "windows": 54,
+        "windows_rejected": 0,
+        "kss_recorded": true
+      },
+      {
+        "recording": "11-3",
+        "subject": "11",
+        "test": 3,
+        "video_frames": 17875,
+        "processed_frames": 8942,
+        "processed_fps": 14.902,
+        "face_found": 1.0,
+        "longest_no_face_s": 0.0,
+        "windows": 55,
+        "windows_rejected": 0,
+        "kss_recorded": true
+      },
+      {
+        "recording": "12-1",
+        "subject": "12",
+        "test": 1,
+        "video_frames": 17889,
+        "processed_frames": 8946,
+        "processed_fps": 14.909,
+        "face_found": 1.0,
+        "longest_no_face_s": 0.0,
+        "windows": 55,
+        "windows_rejected": 0,
+        "kss_recorded": true
+      },
+      {
+        "recording": "13-1",
+        "subject": "13",
+        "test": 1,
+        "video_frames": 17902,
+        "processed_frames": 8951,
+        "processed_fps": 14.918,
+        "face_found": 0.99944,
+        "longest_no_face_s": 0.33,
+        "windows": 55,
+        "windows_rejected": 0,
+        "kss_recorded": true
+      },
+      {
+        "recording": "13-2",
+        "subject": "13",
+        "test": 2,
+        "video_frames": 17900,
+        "processed_frames": 8963,
+        "processed_fps": 14.938,
+        "face_found": 1.0,
+        "longest_no_face_s": 0.0,
+        "windows": 55,
+        "windows_rejected": 0,
+        "kss_recorded": true
+      },
+      {
+        "recording": "14-1",
+        "subject": "14",
+        "test": 1,
+        "video_frames": 17883,
+        "processed_frames": 8942,
+        "processed_fps": 14.903,
+        "face_found": 0.99877,
+        "longest_no_face_s": 0.75,
+        "windows": 54,
+        "windows_rejected": 0,
+        "kss_recorded": true
+      },
+      {
+        "recording": "14-2",
+        "subject": "14",
+        "test": 2,
+        "video_frames": 17861,
+        "processed_frames": 8939,
+        "processed_fps": 14.898,
+        "face_found": 0.99955,
+        "longest_no_face_s": 0.27,
+        "windows": 55,
+        "windows_rejected": 0,
+        "kss_recorded": true
+      },
+      {
+        "recording": "14-3",
+        "subject": "14",
+        "test": 3,
+        "video_frames": 17918,
+        "processed_frames": 8958,
+        "processed_fps": 14.93,
+        "face_found": 1.0,
+        "longest_no_face_s": 0.0,
+        "windows": 55,
+        "windows_rejected": 0,
+        "kss_recorded": true
+      }
+    ],
+    "limits": [
+      "Near-infrared Kinect video, 512x424, faces about 65 px wide: not the demo's colour webcam. The numbers do not transfer to it.",
+      "14 people and 36 tests: one person can move a per-recording correlation a lot. No interval or p-value is computed.",
+      "Windows overlap by 50 s: a window count is not a sample size.",
+      "Per recording, the points mix differences between people with changes within a person.",
+      "Within one person there are at most 3 distinct KSS values (one per test), and some people have only one or two tests.",
+      "The PVT is a reaction test (a mouse click per visual stimulus) taken by people kept awake 28-30 h (`drozy` in shared/sources.json); it is not an astronaut's workload.",
+      "KSS (Karolinska Sleepiness Scale; 1 to 9 in DROZY's file, higher = sleepier) is the score DROZY recorded per test. The scale itself is not registered in shared/sources.json: register it before quoting a KSS figure."
+    ]
   }
 }

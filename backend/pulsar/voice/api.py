@@ -8,6 +8,7 @@ from typing import Any
 from fastapi import APIRouter, Body, HTTPException, Request
 from fastapi.exceptions import RequestValidationError
 
+from pulsar import debug
 from pulsar.contract import telemetry_errors
 from pulsar.voice.pipeline import first_step, phrase
 
@@ -25,4 +26,5 @@ def advise(request: Request, telemetry: dict[str, Any] = Body(...), question: st
         phrasing = phrase(decision, question, first_step(engine, decision))
     except OSError as error:  # Ollama down or the model missing
         raise HTTPException(503, f"the phrasing model is not answering: {error}") from error
+    debug.record("voice", f"says ({phrasing.source}): {phrasing.text}")
     return {"decision": decision, "say": phrasing.text, "source": phrasing.source, "violations": phrasing.violations}
