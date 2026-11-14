@@ -10,7 +10,10 @@ In order of urgency. Tick each box in the PR or in the team chat.
       Then check that it works with Wi-Fi off.
 - [ ] **GitHub repo**: create `synapse-nasa-2026`, give all three access, protect `main` (PR required).
       `gh auth login` on each laptop.
-- [ ] **FS1/FS2/FS3 split** decided, and each person runs `SYNAPSE_VERTICAL=FSx claude` in their clone.
+- [ ] **FS1/FS2/FS3 split** decided, and each person runs `SYNAPSE_VERTICAL=FSx claude` in their clone
+      (PowerShell: `$env:SYNAPSE_VERTICAL='FSx'; claude`).
+- [ ] **Windows laptops**: install `make` (`scoop install make`), pnpm, Ollama, ffmpeg and gh, and run from a shell
+      where Git Bash is on PATH (the `Makefile` and `scripts/*.sh` need bash). Then check that `make contract` passes.
 - [ ] **Review the scenarios in `shared/scenarios/`** (FS2 + team): they are G4's criterion. If an expected
       value looks wrong, change it now, not at 3 a.m.
 - [ ] **Close the open assumptions** in `docs/sources.md`: a clinical source for blood pressure, glucose and
