@@ -114,3 +114,25 @@ def test_director_stays_quiet_instead_of_repeating_itself():
     assert director.validate(quiet, [], user_spoke=False) == director.SILENT
     new = {**same, "say": "Someone just walked in behind you."}
     assert director.validate(new, said, user_spoke=False)["say"] == new["say"]
+
+
+def test_biometrics_are_checked_against_the_contract():
+    good = {
+        "heartRateBpm": None,
+        "heartRateConfidence": 0,
+        "fatigueScore": 0.42,
+        "perclos": 0.3,
+        "yawnsPerMin": 1.0,
+        "postureStability": 0.8,
+        "armAsymmetry": 0.1,
+        "lastPvtMeanMs": None,
+        "lastPvtLapses": None,
+    }
+    assert client.post("/biometrics", json=good).json() == {"ok": True, "biometrics": good}
+    assert client.get("/biometrics/latest").json() == good
+    assert client.post("/biometrics", json={**good, "fatigueScore": 1.5}).status_code == 422
+    assert client.post("/biometrics", json={**good, "perclos": "high"}).status_code == 422
+    assert client.post("/biometrics", json={**good, "extra": 1}).status_code == 422
+    missing = {k: v for k, v in good.items() if k != "perclos"}
+    assert client.post("/biometrics", json=missing).status_code == 422
+    assert client.post("/biometrics", json=[1, 2]).status_code == 422

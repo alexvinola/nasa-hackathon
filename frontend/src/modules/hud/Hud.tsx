@@ -6,6 +6,7 @@ import { PulsarMascot } from "./PulsarMascot";
 import type { Mood } from "./PulsarSprite3D";
 import { useWebcam, type CamState } from "./useWebcam";
 import { SensesBar } from "@/modules/voice-ai/SensesBar";
+import { useFaceMetrics } from "@/modules/vision-hud/useFaceMetrics";
 import { direct, type Direction, type Spot } from "@/modules/voice-ai/pulsarApi";
 
 // shortcut: canned lines so the mascot can be reviewed, replace with the rules-engine verdict once it is wired in.
@@ -45,6 +46,8 @@ function Corner({ className }: { className: string }) {
 /** Full-screen camera with the HUD layered on top. Placeholder readouts until the verticals plug in. */
 export function Hud() {
   const { videoRef, state } = useWebcam();
+  // MediaPipe runs in a worker over the live camera; it shows nothing and posts its numbers to the backend.
+  useFaceMetrics(videoRef, state === "live");
   const still = useReducedMotion();
   const [step, setStep] = useState(0);
   const [pos, setPos] = useState({ x: 0, y: 0 });
