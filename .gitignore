@@ -24,8 +24,9 @@ backend/assets/voices/
 # secrets
 .env
 
-# per-developer preview servers for the Claude desktop app
+# per-developer preview servers for the Claude desktop app, and git worktrees made for Claude subagents
 .claude/launch.json
+.claude/worktrees/
 
 # NASA raw downloads (research/nasa-data/fetch.sh) and OS clutter
 research/nasa-data/raw/
