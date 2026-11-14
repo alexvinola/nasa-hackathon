@@ -105,7 +105,17 @@ export async function frameBase64(video: HTMLVideoElement | null): Promise<strin
   return btoa(binary);
 }
 
-export type Spot = "home" | "top_right" | "mid_left" | "mid_right" | "bottom_left" | "bottom_center" | "bottom_right";
+let waiting = 0;
+
+/**
+ * True while the astronaut is waiting for PULSAR to answer. There is one model and it serves one request at a
+ * time, so background jobs (camera descriptions, AI checks) skip their turn rather than queue ahead of the answer.
+ */
+export function userWaiting() {
+  return waiting > 0;
+}
+
+export type Spot ="home" | "top_right" | "mid_left" | "mid_right" | "bottom_left" | "bottom_center" | "bottom_right";
 export type Direction = { say: string; spot: Spot | ""; reaction: "calm" | "alert"; speak: boolean };
 
 /**
@@ -125,14 +135,21 @@ export async function direct(scene: {
   engaged?: boolean;
   /** Earlier turns, oldest first ("Astronaut: ..." / "PULSAR: ..."); the backend compacts them. */
   history?: string[];
+  /** The current readings (the full contract): the backend's rules engine turns them into PULSAR's health check. */
+  telemetry?: unknown;
   said: string[];
   spot: Spot;
 }): Promise<Direction> {
   const { userSpoke, viaVoice, ...rest } = scene;
-  return (
-    await call("/pulsar/act", {
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...rest, user_spoke: userSpoke, via_voice: viaVoice, history: scene.history?.map((t) => t.slice(0, 300)) }),
-    })
-  ).json();
+  if (userSpoke) waiting++;
+  try {
+    return await (
+      await call("/pulsar/act", {
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...rest, user_spoke: userSpoke, via_voice: viaVoice, history: scene.history?.map((t) => t.slice(0, 300)) }),
+      })
+    ).json();
+  } finally {
+    if (userSpoke) waiting--;
+  }
 }

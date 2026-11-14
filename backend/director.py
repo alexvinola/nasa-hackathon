@@ -7,11 +7,15 @@ unknown spot or reaction, or a line with numbers or clinical words, is replaced 
 """
 
 import re
-from typing import Annotated
+from typing import Annotated, Any
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.concurrency import run_in_threadpool
 from pydantic import BaseModel, Field
+
+from pulsar.contract import telemetry_errors
+from pulsar.rules.engine import RulesEngine
+from pulsar.voice.pipeline import first_step, phrase, verdict_text
 
 from senses import MAX_IMAGE, chat, local_only
 
@@ -43,19 +47,23 @@ FORBIDDEN = re.compile(
 # earlier 400-token prompt with a 52-token JSON answer took about 11 s. `parse` turns the line back into the
 # fields `validate` checks.
 SYSTEM = f"""\
-You are PULSAR, the astronaut's personal companion: a small, warm, calm robot floating over their camera view.
+You are PULSAR, the astronaut's onboard companion: a small, warm, calm robot floating over their camera view.
 Reply with one line only: side|spot|reaction|sentence
 side: where the person is in the picture (left, right, centre, none).
-spot: where you float, away from the person ({", ".join(SPOTS)}). If told to move, go there.
-reaction: calm, or alert if something new just appeared.
+spot: where you float, away from the person ({", ".join(SPOTS)}).
+reaction: calm, or alert if something new just appeared or a health check is active.
 sentence: at most 16 words, first person, a direct answer; - to stay silent.
 Examples:
 centre|top_right|calm|That is a white mug in your right hand.
 none|bottom_left|calm|On my way to the bottom left.
 centre|home|calm|-
-Answer what was actually asked: from the camera when it is about what is visible, from what you know otherwise, \
-and from the conversation for follow-ups. Say so when you do not know. Never write digits.
-Write - when only the camera changed and it does not matter, or you would repeat yourself.
+Your skills:
+ANSWER what was actually asked, from what you know and from the conversation. Say so when you do not know.
+LOOK: when it is about what is visible, answer from the camera.
+MOVE: when told to go somewhere, pick that spot.
+CARE: you never judge health yourself. A health check, when given, comes from the rules engine and is final: \
+say its first step in your own words and never contradict it.
+Never write digits. Write - when only the camera changed and it does not matter, or you would repeat yourself.
 """
 
 LINE = re.compile(r"(left|right|centre|center|none)\s*\|\s*(\w+)\s*\|\s*(\w+)\s*\|\s*(.+)", re.I)
@@ -98,6 +106,8 @@ class Scene(BaseModel):
     spot: str = Field("home", max_length=20)  # where PULSAR is now, so it can decide to move
     via_voice: bool = False  # the instruction came through the open microphone and may not be meant for PULSAR
     engaged: bool = False  # PULSAR answered moments ago, so what the microphone hears now is taken as a reply to it
+    # The current readings (the full contract). The rules engine turns them into the health check PULSAR must respect.
+    telemetry: dict[str, Any] | None = None
     # Earlier turns, oldest first, each "Astronaut: ..." or "PULSAR: ..."; `compact` bounds what reaches the model.
     history: list[Annotated[str, Field(max_length=300)]] = Field(default_factory=list, max_length=12)
     # The current frame as a base64 JPEG, sent when the astronaut speaks so the answer comes from the picture itself.
@@ -146,12 +156,22 @@ def compact(history: list[str]) -> list[str]:
     ]
 
 
-def direct(scene: Scene) -> dict:
+def direct(scene: Scene, engine: RulesEngine | None = None) -> dict:
     if scene.user_spoke and scene.via_voice and not (scene.engaged or addressed(scene.instruction)):
         return SILENT  # talk in the room that is not for PULSAR: no answer, and no model call either
-    if scene.user_spoke and HEALTH_QUESTION.search(scene.instruction):
-        return {"say": NOT_MINE, "spot": scene.spot if scene.spot in SPOTS else "home", "reaction": "calm", "speak": True}
+    decision = engine.evaluate(scene.telemetry) if engine and scene.telemetry else None
+    step = first_step(engine, decision) if decision else None
+    danger = bool(decision) and decision["status"] == "RED"
+    if scene.user_spoke and (danger or HEALTH_QUESTION.search(scene.instruction)):
+        # The engine decides and Gemma only phrases its verdict; with no readings there is nothing to phrase.
+        # While the verdict is RED this is the only thing PULSAR says, whatever it is asked: it keeps telling the
+        # astronaut the step the engine requires until the readings clear, instead of helping with something else.
+        say = phrase(decision, scene.instruction, step).text if decision else NOT_MINE
+        reaction = "alert" if decision and decision["status"] != "GREEN" else "calm"
+        return {"say": say, "spot": scene.spot if scene.spot in SPOTS else "home", "reaction": reaction, "speak": True}
     facts = []
+    if decision and decision["status"] != "GREEN":
+        facts.append("Health check (final):\n" + verdict_text(decision, step))
     if scene.history:
         facts.append("Conversation so far:\n" + "\n".join(compact(scene.history)))
     elif scene.said:
@@ -180,8 +200,10 @@ def direct(scene: Scene) -> dict:
 
 
 @router.post("/pulsar/act")
-async def act(scene: Scene) -> dict:
+async def act(scene: Scene, request: Request) -> dict:
     """Body: what was seen and the astronaut's instruction. Returns where PULSAR goes, how it reacts and what it says."""
     if not scene.seen and not scene.instruction:
         raise HTTPException(400, "nothing seen or instructed")
-    return await run_in_threadpool(direct, scene)
+    if scene.telemetry and telemetry_errors(scene.telemetry):
+        raise HTTPException(422, "telemetry does not match the contract")
+    return await run_in_threadpool(direct, scene, request.app.state.rules_engine)

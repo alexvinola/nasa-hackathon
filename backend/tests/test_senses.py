@@ -4,6 +4,7 @@ import io
 import json
 import urllib.error
 import wave
+from pathlib import Path
 
 import pytest
 from fastapi.testclient import TestClient
@@ -139,6 +140,39 @@ def test_director_takes_a_reply_and_remembers_compactly(monkeypatch):
     assert "number 9 is a rather long sentence with many more words than nine" in prompt  # the latest turns, whole
     assert "number 5 is a rather long sentence..." in prompt  # older ones, cut short
     assert "number 3" not in prompt  # the oldest, forgotten
+
+
+def drowsy_telemetry():
+    shared = Path(__file__).resolve().parents[2] / "shared"
+    telemetry = json.loads((shared / "examples" / "nominal.json").read_text(encoding="utf-8"))
+    telemetry["biometrics"]["perclos"] = 0.45  # past the engine's drowsiness rule
+    return telemetry
+
+
+def test_director_respects_the_rules_engines_health_check(monkeypatch):
+    sent = {}
+    answering(monkeypatch, "centre|home|alert|Let us pause the task for now.", sent)
+    scene = {"user_spoke": True, "instruction": "Shall we start the docking drill?", "telemetry": drowsy_telemetry()}
+
+    assert client.post("/pulsar/act", json=scene).json()["say"] == "Let us pause the task for now."
+    prompt = sent["body"]["messages"][1]["content"]
+    assert "Health check (final)" in prompt and "Pause any task" in prompt  # the engine's verdict and its first step
+
+    # asked about health with readings: the engine decides, Gemma only phrases its verdict
+    answering(monkeypatch, "Your eyes have been closed a lot. Pause any task that needs fast reactions.", sent)
+    asked = client.post("/pulsar/act", json={**scene, "instruction": "Am I too tired to work?"}).json()
+    assert asked["say"].startswith("Your eyes have been closed") and asked["reaction"] == "alert"
+    assert "[VERDICT]" in sent["body"]["messages"][1]["content"]
+
+    assert client.post("/pulsar/act", json={**scene, "telemetry": {"not": "the contract"}}).status_code == 422
+
+    # RED (exhausted): whatever is asked, PULSAR only repeats what the engine requires
+    exhausted = drowsy_telemetry()
+    exhausted["biometrics"]["fatigueScore"] = 0.8
+    answering(monkeypatch, "It is not safe to stay awake on task. Contact the flight surgeon, then stop and make it safe.", sent)
+    told = client.post("/pulsar/act", json={**scene, "instruction": "Tell me a joke.", "telemetry": exhausted}).json()
+    assert "flight surgeon" in told["say"] and told["reaction"] == "alert"
+    assert "Stop what you are doing" in sent["body"]["messages"][1]["content"]  # the required step reached Gemma
 
 
 def test_director_survives_a_line_in_the_wrong_shape(monkeypatch):

@@ -24,5 +24,25 @@ body { font-family: var(--font-mono); }
 
 @keyframes pulsar-float { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-4px) } }
 .pulsar-float { animation: pulsar-float 2.4s steps(6) infinite; }
+/* One heartbeat; the element sets animation-duration to 60 / bpm seconds. */
+@keyframes hud-beat { 0%,30%,100% { transform: scale(1) } 12% { transform: scale(1.45) } }
+.hud-beat { animation: hud-beat 1s ease-out infinite; }
+/* The heart trace draws itself once per beat (the polyline's pathLength is 100). */
+@keyframes hud-ecg { from { stroke-dashoffset: 100 } to { stroke-dashoffset: 0 } }
+.hud-ecg { stroke-dasharray: 100; animation: hud-ecg 1s linear infinite; }
+/* "Time to rest": a slow amber glow. "Danger": the whole view goes red and breathes faster, without flashing. */
+@keyframes hud-rest { 0%,100% { box-shadow: inset 0 0 30px rgb(251 191 36 / 0.25) } 50% { box-shadow: inset 0 0 90px rgb(251 191 36 / 0.5) } }
+.hud-rest { animation: hud-rest 2.4s ease-in-out infinite; }
+@keyframes hud-danger {
+  0%,100% { box-shadow: inset 0 0 80px rgb(220 38 38 / 0.6); background-color: rgb(220 38 38 / 0.10) }
+  50% { box-shadow: inset 0 0 220px rgb(220 38 38 / 0.95); background-color: rgb(220 38 38 / 0.28) }
+}
+.hud-danger { animation: hud-danger 1.1s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .hud-beat { animation: none }
+  .hud-ecg { animation: none; stroke-dasharray: none }
+  .hud-rest { animation: none; box-shadow: inset 0 0 60px rgb(251 191 36 / 0.4) }
+  .hud-danger { animation: none; box-shadow: inset 0 0 160px rgb(220 38 38 / 0.8); background-color: rgb(220 38 38 / 0.2) }
+}
 @keyframes hud-blink { 50% { opacity: 0 } }
 .hud-blink { animation: hud-blink 1s steps(1) infinite; }

@@ -1,8 +1,7 @@
 "use client";
 
 import type { Biometrics } from "@/modules/vision-hud/faceWorker";
-import { useVerdict } from "./useVerdict";
-import type { Status } from "./verdictApi";
+import type { Advice, Decision, Status } from "./verdictApi";
 
 const LIGHT: Record<Status, string> = {
   GREEN: "bg-emerald-400 shadow-[0_0_12px] shadow-emerald-400",
@@ -11,41 +10,106 @@ const LIGHT: Record<Status, string> = {
 };
 const ESCALATION = { SELF_CARE: "SELF-CARE", CREW: "TELL THE CREW", FLIGHT_SURGEON: "FLIGHT SURGEON" } as const;
 
-/** The rules engine's verdict over the HUD: traffic light, escalation, why, and what PULSAR said. */
-export function VerdictPanel({ biometrics }: { biometrics: Biometrics | null }) {
-  const { decision, advice, error } = useVerdict(biometrics);
+/**
+ * The rules engine's verdict over the HUD: traffic light, escalation, the readings and why. What PULSAR says about
+ * it is the mascot's line, not repeated here. `simulated` marks readings that come from sim-core, not the camera.
+ */
+export function VerdictPanel({
+  biometrics,
+  decision,
+  advice,
+  error,
+  simulated,
+  cabinCo2,
+  cabinCo2Limit,
+}: {
+  biometrics: Biometrics | null;
+  decision: Decision | null;
+  advice: Advice | null;
+  error: string | null;
+  simulated: boolean;
+  /** Cabin CO2 in mmHg and the engine's limit for it; the gauge is hidden without a reading. */
+  cabinCo2?: number;
+  cabinCo2Limit?: number | null;
+}) {
+  const bpm = biometrics?.heartRateBpm;
 
   return (
-    <section className="pointer-events-none absolute right-8 top-20 w-80 rounded-lg border border-pulse/30 bg-space/70 p-4 text-[11px] tracking-[0.12em] text-shell/80 backdrop-blur">
+    <section data-hud-panel className="pointer-events-none absolute right-8 top-20 w-80 rounded-lg border border-pulse/30 bg-space/70 p-4 text-sm tracking-[0.1em] text-shell/80 backdrop-blur">
       <header className="flex items-center gap-3">
         <span className={`h-3 w-3 rounded-full ${decision ? LIGHT[decision.status] : "bg-orbit/40"}`} />
-        <span className="text-pulse">{decision ? decision.status : "WAITING FOR THE CAMERA"}</span>
+        <span className="text-pulse">{decision ? decision.status : "WAITING FOR READINGS"}</span>
         {decision && <span className="ml-auto text-orbit">{ESCALATION[decision.escalation]}</span>}
       </header>
 
+      {bpm != null && (
+        // Everything here keeps time with the heart: one beat of the icon and one sweep of the trace per heartbeat.
+        <div className="mt-3 flex items-center gap-3 rounded border border-red-400/40 bg-red-500/10 px-3 py-2">
+          <span aria-hidden className="hud-beat text-3xl leading-none text-red-400" style={{ animationDuration: `${60 / bpm}s` }}>♥</span>
+          <div>
+            <div className="text-2xl leading-none tracking-normal text-shell">{bpm}<span className="ml-1 text-xs text-shell/70">BPM</span></div>
+            <div className="mt-1 text-xs text-red-300">PULSE · SIMULATED</div>
+          </div>
+          <svg aria-hidden viewBox="0 0 120 32" className="ml-auto h-8 w-28 text-red-400">
+            <polyline
+              className="hud-ecg"
+              style={{ animationDuration: `${60 / bpm}s` }}
+              points="0,18 26,18 32,12 38,18 46,18 50,26 56,3 62,29 67,18 78,18 86,11 95,18 120,18"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinejoin="round"
+              pathLength={100}
+            />
+          </svg>
+        </div>
+      )}
+
       {biometrics && (
-        <dl className="mt-3 grid grid-cols-3 gap-2 text-[10px] text-shell/60">
-          <div><dt>PERCLOS</dt><dd className="text-shell">{Math.round(biometrics.perclos * 100)}%</dd></div>
-          <div><dt>FATIGUE</dt><dd className="text-shell">{biometrics.fatigueScore.toFixed(2)}</dd></div>
-          <div><dt>YAWNS/MIN</dt><dd className="text-shell">{biometrics.yawnsPerMin}</dd></div>
+        <dl className="mt-3 grid grid-cols-3 gap-2 text-xs text-shell/70">
+          <div><dt>PERCLOS</dt><dd className="text-base text-shell">{Math.round(biometrics.perclos * 100)}%</dd></div>
+          <div><dt>FATIGUE</dt><dd className="text-base text-shell">{biometrics.fatigueScore.toFixed(2)}</dd></div>
+          <div><dt>YAWNS/MIN</dt><dd className="text-base text-shell">{biometrics.yawnsPerMin}</dd></div>
         </dl>
       )}
 
+      {cabinCo2 != null && (
+        // Cabin air: the CO2 reading against the limit the rules engine applies to it.
+        <div className="mt-3">
+          <div className="flex justify-between text-xs text-shell/70">
+            <span>CABIN CO2 · SIMULATED</span>
+            <span className="text-base text-shell">{cabinCo2.toFixed(1)}<span className="ml-1 text-xs text-shell/70">mmHg</span></span>
+          </div>
+          {cabinCo2Limit != null && (
+            <>
+              <div className="mt-1 h-2 overflow-hidden rounded bg-shell/15" role="meter" aria-label="Cabin CO2" aria-valuemin={0} aria-valuemax={cabinCo2Limit} aria-valuenow={cabinCo2}>
+                <div
+                  className={`h-full ${cabinCo2 > cabinCo2Limit ? "bg-amber-400" : "bg-pulse"}`}
+                  style={{ width: `${Math.min(100, (cabinCo2 / cabinCo2Limit) * 100)}%` }}
+                />
+              </div>
+              <div className="mt-1 text-right text-[11px] text-shell/60">LIMIT {cabinCo2Limit.toFixed(1)} mmHg</div>
+            </>
+          )}
+        </div>
+      )}
+
       {decision && decision.factors.length > 0 && (
-        <ul className="mt-3 space-y-1 normal-case tracking-normal text-shell/80">
+        <ul className="mt-3 space-y-1 text-base normal-case leading-snug tracking-normal text-shell">
           {decision.factors.slice(0, 3).map((f) => <li key={f.signal}>· {f.message}</li>)}
         </ul>
       )}
 
       {advice && (
-        <p className="mt-3 border-t border-pulse/20 pt-3 normal-case tracking-normal text-shell">
-          “{advice.say}”
-          <span className="ml-2 text-[9px] uppercase tracking-[0.2em] text-orbit">{advice.source === "llm" ? "GEMMA 4" : "RULES"}</span>
+        <p className="mt-3 border-t border-pulse/20 pt-3 text-xs uppercase tracking-[0.15em] text-orbit">
+          PULSAR IS SAYING IT · {advice.source === "llm" ? "GEMMA 4" : "RULES"}
         </p>
       )}
 
       {error && <p className="mt-2 text-red-400">{error}</p>}
-      <p className="mt-3 text-[9px] text-shell/40">CAMERA MEASURED · SLEEP, MOOD, CABIN: NOMINAL UNTIL G3/G6</p>
+      <p className="mt-3 text-[11px] text-shell/60">
+        {simulated ? "SIMULATED READINGS · NO CAMERA" : "CAMERA MEASURED · PULSE SIMULATED"} · SLEEP, MOOD, CABIN: NOMINAL UNTIL G3/G6
+      </p>
     </section>
   );
 }
