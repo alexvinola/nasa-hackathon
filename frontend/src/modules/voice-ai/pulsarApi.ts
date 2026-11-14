@@ -72,8 +72,8 @@ export function sceneChange(a: Uint8ClampedArray, b: Uint8ClampedArray): number 
   return sum / (a.length / 4);
 }
 
-/** Sends the current camera frame to the local vision model and returns what it sees. */
-export async function describeFrame(video: HTMLVideoElement): Promise<string> {
+/** The current camera frame as a 640 px wide JPEG, mirrored like the HUD. */
+async function grabFrame(video: HTMLVideoElement): Promise<Blob> {
   if (!video.videoWidth) throw new Error("The camera has no picture yet");
   const canvas = document.createElement("canvas");
   canvas.width = 640; // enough for a scene description and keeps the model fast
@@ -83,7 +83,21 @@ export async function describeFrame(video: HTMLVideoElement): Promise<string> {
   ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
   const frame = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.7));
   if (!frame) throw new Error("Could not read the camera frame");
-  return (await (await call("/vision/describe", { body: frame })).json()).description;
+  return frame;
+}
+
+/** Sends the current camera frame to the local vision model and returns what it sees. */
+export async function describeFrame(video: HTMLVideoElement): Promise<string> {
+  return (await (await call("/vision/describe", { body: await grabFrame(video) })).json()).description;
+}
+
+/** The current frame as base64, for `direct`; undefined when the camera has no picture. */
+export async function frameBase64(video: HTMLVideoElement | null): Promise<string | undefined> {
+  if (!video?.videoWidth) return undefined;
+  const bytes = new Uint8Array(await (await grabFrame(video)).arrayBuffer());
+  let binary = "";
+  for (const byte of bytes) binary += String.fromCharCode(byte);
+  return btoa(binary);
 }
 
 export type Spot = "home" | "top_right" | "mid_left" | "mid_right" | "bottom_left" | "bottom_center" | "bottom_right";
@@ -92,9 +106,11 @@ export type Direction = { say: string; spot: Spot | ""; reaction: "calm" | "aler
 /**
  * Asks Gemma (via the backend) where PULSAR goes, how it reacts and what it says. `instruction` is the astronaut's
  * latest order (voice or typed), `userSpoke` is true when it is new, and `said` is what PULSAR already said so it
- * does not repeat itself. `speak: false` in the answer means there is nothing worth saying.
+ * does not repeat itself. `speak: false` in the answer means there is nothing worth saying. `image` (base64 JPEG)
+ * lets the model look at the frame itself; it roughly doubles the wait, so send it only when there is no `seen`.
  */
 export async function direct(scene: {
+  image?: string;
   seen?: string;
   instruction?: string;
   userSpoke: boolean;
