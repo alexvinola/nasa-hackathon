@@ -1,0 +1,79 @@
+{
+  "model": "gemma4:e4b-it-qat",
+  "machine": "arm64 macOS-27.0.1-arm64-arm-64bit",
+  "offline": true,
+  "scenario": "04-demo-emergency.json",
+  "median_ms": {
+    "stt": 295.264,
+    "rules": 0.05,
+    "llm": 1236.155,
+    "tts": 161.788,
+    "total": 1681.015
+  },
+  "turns": [
+    {
+      "wav": "01.wav",
+      "transcript": "Pulsar, how am I doing?",
+      "status": "RED",
+      "text": "One arm is moving differently from the other, and eyes are closed frequently. Contact the flight surgeon and stop the current task to make it safe.",
+      "source": "llm",
+      "violations": [],
+      "audio_bytes": 334892,
+      "ms": {
+        "stt": 311.486,
+        "rules": 0.066,
+        "llm": 962.757,
+        "tts": 139.232,
+        "total": 1413.542
+      }
+    },
+    {
+      "wav": "02.wav",
+      "transcript": "What should I do now?",
+      "status": "RED",
+      "text": "One arm is moving differently from the other, and eyes are closed frequently. Contact the flight surgeon and stop the current task to make it safe.",
+      "source": "llm",
+      "violations": [],
+      "audio_bytes": 334892,
+      "ms": {
+        "stt": 285.773,
+        "rules": 0.051,
+        "llm": 1170.644,
+        "tts": 167.691,
+        "total": 1624.158
+      }
+    },
+    {
+      "wav": "03.wav",
+      "transcript": "Next step.",
+      "status": "RED",
+      "text": "One arm is moving differently from the other, and eyes are closed a high percentage of the time. Contact the flight surgeon and stop the current task to make it safe.",
+      "source": "llm",
+      "violations": [],
+      "audio_bytes": 381996,
+      "ms": {
+        "stt": 278.713,
+        "rules": 0.046,
+        "llm": 1301.665,
+        "tts": 157.449,
+        "total": 1737.873
+      }
+    },
+    {
+      "wav": "04.wav",
+      "transcript": "Why is my status red?",
+      "status": "RED",
+      "text": "One arm is moving differently from the other, and eyes are closed a high percentage of the time. Contact the flight surgeon, stop the current task and make it safe.",
+      "source": "llm",
+      "violations": [],
+      "audio_bytes": 386604,
+      "ms": {
+        "stt": 304.754,
+        "rules": 0.048,
+        "llm": 2094.49,
+        "tts": 166.127,
+        "total": 2565.419
+      }
+    }
+  ]
+}
