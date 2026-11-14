@@ -8,6 +8,7 @@
  */
 
 import { FaceLandmarker, FilesetResolver, PoseLandmarker } from "@mediapipe/tasks-vision";
+import { mouthOpenRatio, YawnDetector } from "./yawn";
 
 type Frame = { type: "frame"; bitmap: ImageBitmap; at: number };
 type Stop = { type: "stop" };
@@ -34,7 +35,7 @@ export type FaceFrame = {
   pose: Float32Array | null; // 33 landmarks × (x, y, visibility)
   eyeLeft: number; // eyeBlinkLeft blendshape, 0 open to 1 closed (above BLINK counts as closed)
   eyeRight: number;
-  jaw: number; // jawOpen blendshape (above YAWN starts a yawn)
+  jaw: number; // jawOpen blendshape, drawn by the overlay; yawns are counted from the lip ratio in ./yawn
   pitch: number; // head pose in degrees, from the facial transformation matrix
   yaw: number;
   roll: number;
@@ -51,7 +52,6 @@ const scope = self as unknown as {
 
 const WINDOW_MS = 60_000; // PERCLOS is the share of the last minute with the eyes closed
 const BLINK = 0.5; // blendshape score above which an eye counts as closed
-const YAWN = 0.5;
 const NOD = 0.03; // nose drop, as a fraction of frame height, that counts as a head nod
 const POSE_EVERY = 3; // arm asymmetry changes slowly: the pose model runs on one frame in three
 
@@ -64,7 +64,8 @@ let frames = 0;
 let lastPose: ReturnType<PoseLandmarker["detectForVideo"]> | undefined;
 
 const eyes: { at: number; closed: boolean }[] = [];
-const yawns: number[] = [];
+const yawns: number[] = []; // when each yawn was counted, in ms
+const yawnDetector = new YawnDetector(); // calibrated on YawDD: lip ratio ≥ 0.26 held for ≥ 1 s, counted once
 const nods: number[] = [];
 const noseY: number[] = [];
 
@@ -130,15 +131,14 @@ function score(now: number): Biometrics {
   };
 }
 
-function readFace(result: ReturnType<FaceLandmarker["detectForVideo"]>, now: number) {
+function readFace(result: ReturnType<FaceLandmarker["detectForVideo"]>, now: number, width: number, height: number) {
+  const landmarks = result.faceLandmarks?.[0];
+  // Every frame goes to the detector, with a NaN ratio when there is no face: a lost face must not end a yawn early.
+  if (yawnDetector.push(now / 1000, mouthOpenRatio(landmarks, width, height))) yawns.push(now);
   const shapes = result.faceBlendshapes?.[0]?.categories;
   if (!shapes) return;
   const at = (name: string) => shapes.find((c) => c.categoryName === name)?.score ?? 0;
   eyes.push({ at: now, closed: (at("eyeBlinkLeft") + at("eyeBlinkRight")) / 2 > BLINK });
-  const open = at("jawOpen");
-  const wasOpen = yawns.length > 0 && now - yawns[yawns.length - 1] < 1500;
-  if (open > YAWN && !wasOpen) yawns.push(now);
-  const landmarks = result.faceLandmarks?.[0];
   if (landmarks) {
     const nose = landmarks[1] ?? landmarks[0];
     const before = noseY[noseY.length - 1];
@@ -209,7 +209,7 @@ async function handle(frame: Frame) {
       readPose(lastPose);
     }
     const poseMs = runPose ? performance.now() - t1 : 0;
-    readFace(faceResult, now);
+    readFace(faceResult, now, frame.bitmap.width, frame.bitmap.height);
     scope.postMessage({ type: "biometrics", biometrics: score(now), at: now });
     const drawn = frameOf(faceResult, lastPose!, frame.bitmap, now, t1 - t0, poseMs);
     const buffers = [drawn.face, drawn.pose].filter((b): b is Float32Array => b !== null).map((b) => b.buffer as ArrayBuffer);
@@ -228,6 +228,7 @@ scope.onmessage = (event) => {
   if (message.type === "stop") {
     eyes.length = 0;
     yawns.length = 0;
+    yawnDetector.reset();
     nods.length = 0;
     noseY.length = 0;
   }
