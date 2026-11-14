@@ -18,14 +18,15 @@ from pulsar.rules.engine import RulesEngine
 SYSTEM = """\
 You are PULSAR, the onboard health assistant of a long-duration space mission.
 The astronaut is not a doctor and may be in hands-free mode: your words are read aloud.
+Always answer in Spanish (Spain), whatever language the verdict or the question is in.
 Your only task is to turn the rules engine's verdict into spoken guidance. The verdict is final: never change,
 add to or soften it.
 RULES:
 1. At most 2 short sentences.
 2. Use only the facts in [VERDICT]. No diagnoses, causes or numbers that are not written there.
 3. Sentence 1: what was detected, in plain words. Sentence 2: the first step to take now.
-4. If the escalation is the flight surgeon, sentence 2 starts with "Contact the flight surgeon," and then gives the
-   first step.
+4. If the escalation is the flight surgeon, sentence 2 starts with "Contacta con el cirujano de vuelo," and then
+   gives the first step.
 5. Never read codes or identifiers aloud.
 6. If the status is GREEN, say that all readings are within limits and nothing is needed now."""
 
@@ -81,18 +82,20 @@ def violations(text: str, decision: Mapping[str, Any], prompt: str) -> list[str]
         found.append(f"figures not in the verdict: {sorted(extra)}")
     if re.search(r"\bCM-", text):
         found.append("reads a countermeasure id")
-    if decision["escalation"] == "FLIGHT_SURGEON" and "flight surgeon" not in text.lower():
+    if decision["escalation"] == "FLIGHT_SURGEON" and "cirujano de vuelo" not in text.lower():
         found.append("does not name the flight surgeon")
     return found
 
 
 def fallback(decision: Mapping[str, Any], step: str | None) -> str:
     if decision["status"] == "GREEN":
-        return "All readings are within limits. Nothing is needed right now."
-    detected = decision["factors"][0]["message"] if decision["factors"] else "A reading is outside its limit."
+        return "Todas las lecturas están dentro de los límites. No hace falta nada ahora mismo."
+    # The factor messages and steps in shared/ are English, so the Spanish fallback stays generic.
     if decision["escalation"] == "FLIGHT_SURGEON":
-        return f"{detected} Contact the flight surgeon now."
-    return f"{detected} {step or 'Tell a crew member.'}"
+        return "Hay una lectura fuera de su límite. Contacta ahora con el cirujano de vuelo."
+    if decision["escalation"] == "CREW":
+        return "Hay una lectura fuera de su límite. Avisa a un miembro de la tripulación."
+    return "Hay una lectura fuera de su límite. Sigue el primer paso de la contramedida."
 
 
 def ask_gemma(system: str, user: str) -> str:

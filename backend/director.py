@@ -32,13 +32,15 @@ SCREEN_SIDE = {"home": "left", "mid_left": "left", "bottom_left": "left",
                "top_right": "right", "mid_right": "right", "bottom_right": "right", "bottom_center": "centre"}
 CLEAR_OF = {"left": "mid_right", "right": "mid_left"}  # where to go to leave a person on that screen side alone
 
-FALLBACK = {"say": "I'm here if you need me.", "spot": "home", "reaction": "calm", "speak": True}
+FALLBACK = {"say": "Estoy aquí si me necesitas.", "spot": "home", "reaction": "calm", "speak": True}
 SILENT = {"say": "", "spot": "", "reaction": "calm", "speak": False}  # nothing worth saying: the mascot stays as is
 
 # A line is rejected when it states numbers or sounds like a diagnosis, a judgement of health or an order.
 FORBIDDEN = re.compile(
     r"\d|diagnos|disease|syndrome|fatigue|tired|sick|\bill\b|\bpain(s|ful)?\b|heart|blood|pressure|oxygen|emergency|"
-    r"danger|critical|you must|you should|doctor|surgeon|medic",
+    r"danger|critical|you must|you should|doctor|surgeon|medic|"
+    r"diagnós|enfermedad|síndrome|fatiga|cansad|agotad|enferm|dolor|coraz|sangre|presión|oxígeno|emergencia|"
+    r"peligro|crític|debes|deberías|tienes que|médic|cirujan",
     re.I,
 )
 
@@ -52,10 +54,10 @@ Reply with one line only: side|spot|reaction|sentence
 side: where the person is in the picture (left, right, centre, none).
 spot: where you float, away from the person ({", ".join(SPOTS)}).
 reaction: calm, or alert if something new just appeared or a health check is active.
-sentence: at most 16 words, first person, a direct answer; - to stay silent.
+sentence: always in Spanish, at most 16 words, first person, a direct answer; - to stay silent.
 Examples:
-centre|top_right|calm|That is a white mug in your right hand.
-none|bottom_left|calm|On my way to the bottom left.
+centre|top_right|calm|Eso es una taza blanca en tu mano derecha.
+none|bottom_left|calm|Voy hacia abajo a la izquierda.
 centre|home|calm|-
 Your skills:
 ANSWER what was actually asked, from what you know and from the conversation. Say so when you do not know.
@@ -73,7 +75,9 @@ LINE = re.compile(r"(left|right|centre|center|none)\s*\|\s*(\w+)\s*\|\s*(\w+)\s*
 WAKE = re.compile(r"\bpuls[aeo]r\b", re.I)
 ASKS = re.compile(
     r"[?¿]|^\W*(what|where|who|when|why|how|which|is|are|do|does|did|can|could|would|will|please|tell|show|go|move|"
-    r"come|look|describe|watch|stop|hello|hi|hey|thanks|thank)\b",
+    r"come|look|describe|watch|stop|hello|hi|hey|thanks|thank|"
+    r"qué|dónde|quién|cuándo|por qué|cómo|cuál|puedes|podrías|por favor|dime|muestra|enséñame|ve|muévete|ven|"
+    r"mira|describe|observa|detente|hola|gracias)\b",
     re.I,
 )
 
@@ -85,10 +89,12 @@ def addressed(heard: str) -> bool:
 # Health is the rules engine's call, never the model's, so these questions do not reach Gemma at all.
 HEALTH_QUESTION = re.compile(
     r"\b(tired|sleepy|exhausted|sick|ill|unwell|health\w*|pain\w*|hurt\w*|fever|dizzy|diagnos\w*|stress\w*|"
-    r"depress\w*|anxi\w*|fatigue\w*|medic\w*|symptom\w*)\b",
+    r"depress\w*|anxi\w*|fatigue\w*|medic\w*|symptom\w*|"
+    r"cansad\w*|agotad\w*|sueño|enferm\w*|salud|dolor\w*|duele\w*|fiebre|marea\w*|diagnós\w*|estrés|estresad\w*|"
+    r"deprim\w*|ansi\w*|fatiga\w*|médic\w*|síntoma\w*)\b",
     re.I,
 )
-NOT_MINE = "That is not mine to judge. I can only tell you what I see."
+NOT_MINE = "No me corresponde juzgar eso. Solo puedo decirte lo que veo."
 
 
 def parse(content: str) -> dict:
@@ -114,12 +120,13 @@ class Scene(BaseModel):
     image: str = Field("", max_length=4 * MAX_IMAGE // 3 + 4, pattern=r"^(/9j/[A-Za-z0-9+/]*={0,2})?$")
 
 
-FILLER = {"the", "and", "you", "your", "are", "was", "has", "have", "with", "for", "that", "this"}
+FILLER = {"the", "and", "you", "your", "are", "was", "has", "have", "with", "for", "that", "this",
+          "los", "las", "una", "por", "con", "para", "que", "del", "esto", "eso", "est"}
 
 
 def words(text: str) -> set[str]:
     """Rough word stems (first three letters, no filler) so 'sits' and 'sitting' count as the same word."""
-    return {w[:3] for w in re.findall(r"[a-z']+", text.lower()) if len(w) > 2 and w not in FILLER}
+    return {w[:3] for w in re.findall(r"[^\W\d_]+", text.lower()) if len(w) > 2 and w not in FILLER}
 
 
 def repeats(say: str, said: list[str]) -> bool:

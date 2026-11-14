@@ -29,7 +29,7 @@ const UNIT: Record<string, string> = {
 /** The indicator's current value as text, read from the telemetry the HUD sends to the engine. */
 export function currentValue(signal: string, telemetry: Telemetry): string {
   const value = signal.split(".").reduce<unknown>((node, key) => (node as Record<string, unknown> | null)?.[key], telemetry);
-  if (value == null) return "No reading yet";
+  if (value == null) return "Sin lectura todavía";
   if (typeof value === "object") {
     const { systolic, diastolic } = value as { systolic: number; diastolic: number };
     return `${systolic}/${diastolic} mmHg`;

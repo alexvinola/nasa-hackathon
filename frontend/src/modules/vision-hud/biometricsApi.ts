@@ -9,7 +9,7 @@ export async function sendBiometrics(biometrics: Biometrics): Promise<void> {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(biometrics),
   }).catch(() => {
-    throw new Error(`PULSAR backend is not answering at ${API}`);
+    throw new Error(`El backend de PULSAR no responde en ${API}`);
   });
-  if (!response.ok) throw new Error(`Backend error ${response.status}`);
+  if (!response.ok) throw new Error(`Error del backend ${response.status}`);
 }

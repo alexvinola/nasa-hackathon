@@ -48,7 +48,7 @@ def test_phrasing_follows_the_prompt_rules(phrased, name):
     assert {float(n) for n in NUMBER.findall(text)} <= allowed, f"figures that are not in the verdict: {text}"
     assert not re.search(r"\bCM-", text), f"reads a countermeasure id aloud: {text}"
     if decision["escalation"] == "FLIGHT_SURGEON":
-        assert "flight surgeon" in text.lower(), text
+        assert "cirujano de vuelo" in text.lower(), text
 
 
 def test_gemma_does_the_phrasing_and_the_fallback_is_rare(phrased):

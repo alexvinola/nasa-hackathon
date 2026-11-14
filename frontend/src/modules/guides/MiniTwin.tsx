@@ -70,7 +70,7 @@ export function MiniTwin({
   onOpen: (signal: string) => void;
 }) {
   return (
-    <HudPanel title="HOW TO MEASURE" data-twin>
+    <HudPanel title="CÓMO MEDIR" data-twin>
       <div className="relative mx-auto" style={{ width: WIDTH, height: HEIGHT }}>
         <Figure />
         {GUIDES.map((guide) => {
@@ -82,7 +82,7 @@ export function MiniTwin({
               type="button"
               data-indicator={guide.signal}
               aria-pressed={open === guide.signal}
-              aria-label={`Open the guide: ${guide.label} (${status.toLowerCase()})`}
+              aria-label={`Abrir la guía: ${guide.label} (${status.toLowerCase()})`}
               title={guide.label}
               onClick={() => onOpen(guide.signal)}
               // The figure is drawn with a front orthographic camera, so a site maps straight to the box.
