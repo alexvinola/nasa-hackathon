@@ -1,0 +1,129 @@
+{
+  "$comment": "Official HRP names, keyed by the ids the contract uses. The UI shows `name`, never the id.",
+  "hazards": {
+    "RADIATION": {
+      "name": "Space Radiation",
+      "source": "hrp-hazards"
+    },
+    "ISOLATION": {
+      "name": "Isolation and Confinement",
+      "source": "hrp-hazards"
+    },
+    "DISTANCE": {
+      "name": "Distance from Earth",
+      "source": "hrp-hazards"
+    },
+    "GRAVITY": {
+      "name": "Gravity Fields",
+      "source": "hrp-hazards"
+    },
+    "HOSTILE_ENVIRONMENT": {
+      "name": "Hostile/Closed Environments",
+      "source": "hrp-hazards"
+    }
+  },
+  "risks": {
+    "ALTERED_IMMUNE_RESPONSE": {
+      "name": "Risk of Altered Immune System Responses",
+      "group": "Human physiology",
+      "source": "hrp-risks",
+      "usedBySynapse": "Body temperature (manual entry)"
+    },
+    "SENSORIMOTOR_VESTIBULAR": {
+      "name": "Risk of Altered Sensorimotor and Vestibular Function",
+      "group": "Human physiology",
+      "source": "hrp-risks",
+      "usedBySynapse": null
+    },
+    "CARDIOVASCULAR_ADAPTATIONS": {
+      "name": "Risk of Cardiovascular Adaptations",
+      "group": "Human physiology",
+      "source": "hrp-risks",
+      "usedBySynapse": "Heart rate (camera, experimental) and blood pressure (manual entry)"
+    },
+    "DECOMPRESSION_SICKNESS": {
+      "name": "Risk of Decompression Sickness",
+      "group": "Human physiology",
+      "source": "hrp-risks",
+      "usedBySynapse": null
+    },
+    "HOST_MICROORGANISM": {
+      "name": "Risk of Host-Microorganism Interactions",
+      "group": "Human physiology",
+      "source": "hrp-risks",
+      "usedBySynapse": null
+    },
+    "HYPOXIA": {
+      "name": "Risk of Hypoxia",
+      "group": "Human physiology",
+      "source": "hrp-risks",
+      "usedBySynapse": null
+    },
+    "FOOD_AND_NUTRITION": {
+      "name": "Risk of Inadequate Food and Nutrition",
+      "group": "Human physiology",
+      "source": "hrp-risks",
+      "usedBySynapse": "Glucose (manual entry)"
+    },
+    "SPACEWALK_INJURY_PERFORMANCE": {
+      "name": "Risk of Injury and Compromised Performance from Spacewalks",
+      "group": "Human physiology",
+      "source": "hrp-risks",
+      "usedBySynapse": "Cognitive fatigue before operations"
+    },
+    "CARDIORESPIRATORY_MUSCULOSKELETAL_FITNESS": {
+      "name": "Risk of Reduced Cardiorespiratory and Musculoskeletal Fitness",
+      "group": "Human physiology",
+      "source": "hrp-risks",
+      "usedBySynapse": null
+    },
+    "SANS": {
+      "name": "Risk of Spaceflight Associated Neuro-ocular Syndrome (SANS)",
+      "group": "Human physiology",
+      "source": "hrp-risks",
+      "usedBySynapse": "Named only; SYNAPSE does not detect it"
+    },
+    "BONE_CHANGES": {
+      "name": "Risk of Spaceflight-Induced Bone Changes",
+      "group": "Human physiology",
+      "source": "hrp-risks",
+      "usedBySynapse": null
+    },
+    "BEHAVIORAL_PSYCHIATRIC": {
+      "name": "Risk of Behavioral Changes and Psychiatric Disorders",
+      "group": "Behavioral performance and human factors",
+      "source": "hrp-risks",
+      "usedBySynapse": "Daily mood (1-5)"
+    },
+    "INADEQUATE_TEAMWORK": {
+      "name": "Risk of Inadequate Teamwork",
+      "group": "Behavioral performance and human factors",
+      "source": "hrp-risks",
+      "usedBySynapse": null
+    },
+    "SLEEP_AND_SCHEDULES": {
+      "name": "Risk of Inadequate Sleep and Irregular Schedules",
+      "group": "Behavioral performance and human factors",
+      "source": "hrp-risks",
+      "usedBySynapse": "Camera fatigue, PVT-B and sleep hours"
+    },
+    "SYSTEMS_OPERATIONS_SUPPORT": {
+      "name": "Risk of Inadequate Systems Operations Support",
+      "group": "Behavioral performance and human factors",
+      "source": "hrp-risks",
+      "usedBySynapse": null
+    },
+    "DYNAMIC_LOADS_INJURY": {
+      "name": "Risk of Injury from Dynamic Loads",
+      "group": "Behavioral performance and human factors",
+      "source": "hrp-risks",
+      "usedBySynapse": null
+    },
+    "RADIATION_CANCER": {
+      "name": "Risk of Radiation-Induced Cancers",
+      "group": "Space radiation",
+      "source": "hrp-risks",
+      "usedBySynapse": "Simulated dose widget (context only)"
+    }
+  }
+}

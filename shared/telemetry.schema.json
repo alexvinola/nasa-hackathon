@@ -16,7 +16,7 @@
   ],
   "properties": {
     "schemaVersion": {
-      "const": "1.0"
+      "const": "1.1"
     },
     "timestamp": {
       "type": "integer",
@@ -282,7 +282,7 @@
       "maximum": 1
     },
     "hazard": {
-      "description": "The 5 HRP hazards: space radiation, isolation and confinement, distance from Earth, gravity fields, hostile and closed environments",
+      "description": "The 5 official HRP hazards; names in shared/hrp.json",
       "enum": [
         "RADIATION",
         "ISOLATION",
@@ -292,14 +292,25 @@
       ]
     },
     "hrpRisk": {
-      "description": "SLEEP = Risk of Inadequate Sleep and Irregular Schedules; BEHAVIORAL = Risk of Behavioral Changes and Psychiatric Disorders; PERFORMANCE = Risk of Injury and Compromised Performance; the rest are issues named in the challenge",
+      "description": "The 17 official HRP risks; names in shared/hrp.json",
       "enum": [
-        "SLEEP",
-        "BEHAVIORAL",
-        "PERFORMANCE",
-        "CARDIOVASCULAR",
-        "NUTRITION",
-        "IMMUNE"
+        "ALTERED_IMMUNE_RESPONSE",
+        "SENSORIMOTOR_VESTIBULAR",
+        "CARDIOVASCULAR_ADAPTATIONS",
+        "DECOMPRESSION_SICKNESS",
+        "HOST_MICROORGANISM",
+        "HYPOXIA",
+        "FOOD_AND_NUTRITION",
+        "SPACEWALK_INJURY_PERFORMANCE",
+        "CARDIORESPIRATORY_MUSCULOSKELETAL_FITNESS",
+        "SANS",
+        "BONE_CHANGES",
+        "BEHAVIORAL_PSYCHIATRIC",
+        "INADEQUATE_TEAMWORK",
+        "SLEEP_AND_SCHEDULES",
+        "SYSTEMS_OPERATIONS_SUPPORT",
+        "DYNAMIC_LOADS_INJURY",
+        "RADIATION_CANCER"
       ]
     },
     "bodySystem": {
@@ -322,6 +333,7 @@
         "value",
         "threshold",
         "hazard",
+        "source",
         "message"
       ],
       "properties": {
@@ -353,6 +365,13 @@
               "$ref": "#/$defs/hazard"
             }
           ]
+        },
+        "source": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Id in shared/sources.json behind the threshold; null when the threshold is a team assumption"
         },
         "message": {
           "type": "string"

@@ -2,7 +2,7 @@
   "name": "03-high-co2",
   "description": "Only cabin CO2 is high, the astronaut is fine",
   "input": {
-    "schemaVersion": "1.0",
+    "schemaVersion": "1.1",
     "timestamp": 1794652000,
     "biometrics": {
       "heartRateBpm": 76,
@@ -51,12 +51,52 @@
   "expect": {
     "status": "AMBER",
     "escalation": "CREW",
-    "hrpRisk": "PERFORMANCE",
+    "hrpRisk": null,
     "affectedSystems": [
       "RESPIRATORY"
     ],
     "factorSignals": [
       "environment.cabinCo2_mmHg"
     ]
-  }
+  },
+  "provenance": [
+    {
+      "claims": [
+        "input.environment.cabinCo2_mmHg"
+      ],
+      "kind": "assumption",
+      "note": "No source yet for the cabin CO2 limit: find it (candidate: NASA-STD-3001 Vol. 2) and replace this value"
+    },
+    {
+      "claims": [
+        "input.environment.activeHazards"
+      ],
+      "kind": "source",
+      "ref": "hrp-hazards",
+      "note": "Hostile/Closed Environments covers spacecraft habitability; the page does not name CO2"
+    },
+    {
+      "claims": [
+        "expect.hrpRisk"
+      ],
+      "kind": "source",
+      "ref": "hrp-risks",
+      "note": "None of the 17 official risks is about cabin CO2, so no HRP risk is named"
+    },
+    {
+      "claims": [
+        "expect.status",
+        "expect.escalation"
+      ],
+      "kind": "assumption",
+      "note": "Team decision on escalation policy; not taken from a NASA source"
+    },
+    {
+      "claims": [
+        "expect.affectedSystems"
+      ],
+      "kind": "assumption",
+      "note": "Mapping from signal to body-twin system is a SYNAPSE design choice"
+    }
+  ]
 }

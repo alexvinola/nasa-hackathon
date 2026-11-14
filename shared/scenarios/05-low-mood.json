@@ -2,7 +2,7 @@
   "name": "05-low-mood",
   "description": "Mood 1/5 after several days of isolation",
   "input": {
-    "schemaVersion": "1.0",
+    "schemaVersion": "1.1",
     "timestamp": 1794652000,
     "biometrics": {
       "heartRateBpm": 76,
@@ -51,12 +51,52 @@
   "expect": {
     "status": "AMBER",
     "escalation": "CREW",
-    "hrpRisk": "BEHAVIORAL",
+    "hrpRisk": "BEHAVIORAL_PSYCHIATRIC",
     "affectedSystems": [
       "NERVOUS"
     ],
     "factorSignals": [
       "selfReport.mood"
     ]
-  }
+  },
+  "provenance": [
+    {
+      "claims": [
+        "input.selfReport.mood"
+      ],
+      "kind": "assumption",
+      "note": "The 1-5 daily mood scale is a SYNAPSE design choice"
+    },
+    {
+      "claims": [
+        "input.environment.activeHazards"
+      ],
+      "kind": "source",
+      "ref": "hrp-hazards",
+      "note": "Isolation and Confinement is an official hazard"
+    },
+    {
+      "claims": [
+        "expect.hrpRisk"
+      ],
+      "kind": "source",
+      "ref": "hrp-risks",
+      "note": "Risk of Behavioral Changes and Psychiatric Disorders"
+    },
+    {
+      "claims": [
+        "expect.status",
+        "expect.escalation"
+      ],
+      "kind": "assumption",
+      "note": "Team decision on escalation policy; not taken from a NASA source"
+    },
+    {
+      "claims": [
+        "expect.affectedSystems"
+      ],
+      "kind": "assumption",
+      "note": "Mapping from signal to body-twin system is a SYNAPSE design choice"
+    }
+  ]
 }

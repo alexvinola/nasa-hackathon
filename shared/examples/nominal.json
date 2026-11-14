@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0",
+  "schemaVersion": "1.1",
   "timestamp": 1794652000,
   "biometrics": {
     "heartRateBpm": 76,
@@ -23,7 +23,10 @@
     "radiation_mSv": 0.8,
     "cabinCo2_mmHg": 2.9,
     "gravityMode": "MARS_038G",
-    "activeHazards": ["DISTANCE", "GRAVITY"]
+    "activeHazards": [
+      "DISTANCE",
+      "GRAVITY"
+    ]
   },
   "decision": {
     "status": "GREEN",

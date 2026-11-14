@@ -2,7 +2,7 @@
   "name": "04-demo-emergency",
   "description": "Script block 0:55-1:35: eyes half closed, one arm still, radiation and CO2 raised",
   "input": {
-    "schemaVersion": "1.0",
+    "schemaVersion": "1.1",
     "timestamp": 1794652000,
     "biometrics": {
       "heartRateBpm": 76,
@@ -52,17 +52,99 @@
   "expect": {
     "status": "RED",
     "escalation": "FLIGHT_SURGEON",
-    "hrpRisk": "SLEEP",
+    "hrpRisk": "SLEEP_AND_SCHEDULES",
     "affectedSystems": [
       "NERVOUS",
       "MUSCULOSKELETAL",
       "RESPIRATORY"
     ],
     "factorSignals": [
+      "selfReport.sleepHoursLast24h",
       "biometrics.perclos",
       "biometrics.armAsymmetry",
       "environment.cabinCo2_mmHg",
       "environment.radiation_mSv"
     ]
-  }
+  },
+  "provenance": [
+    {
+      "claims": [
+        "input.selfReport.sleepHoursLast24h"
+      ],
+      "kind": "source",
+      "ref": "jones-2022-sleep",
+      "note": "Under 5 h was associated with negative somatic states, under 6 h with slower response"
+    },
+    {
+      "claims": [
+        "input.biometrics.fatigueScore",
+        "input.biometrics.perclos",
+        "input.biometrics.yawnsPerMin"
+      ],
+      "kind": "assumption",
+      "note": "Illustrative until G2 produces the fatigue model trained on RLDD/DROZY"
+    },
+    {
+      "claims": [
+        "input.biometrics.armAsymmetry"
+      ],
+      "kind": "assumption",
+      "note": "No labelled posture data exists; arm asymmetry is a secondary rule-based signal (plan)"
+    },
+    {
+      "claims": [
+        "input.biometrics.lastPvtMeanMs",
+        "input.biometrics.lastPvtLapses"
+      ],
+      "kind": "assumption",
+      "note": "Illustrative PVT-B result; lapse = reaction of 355 ms or more",
+      "ref": "basner-2011-pvtb"
+    },
+    {
+      "claims": [
+        "input.environment.radiation_mSv"
+      ],
+      "kind": "assumption",
+      "note": "Simulated dose for the demo (solar storm); the CSA page gives context, not doses",
+      "ref": "csa-radiation"
+    },
+    {
+      "claims": [
+        "input.environment.cabinCo2_mmHg"
+      ],
+      "kind": "assumption",
+      "note": "No source yet for the cabin CO2 limit: find it (candidate: NASA-STD-3001 Vol. 2) and replace this value"
+    },
+    {
+      "claims": [
+        "input.environment.activeHazards"
+      ],
+      "kind": "source",
+      "ref": "hrp-hazards",
+      "note": "Space Radiation and Hostile/Closed Environments are official hazards"
+    },
+    {
+      "claims": [
+        "expect.hrpRisk"
+      ],
+      "kind": "source",
+      "ref": "hrp-risks",
+      "note": "Risk of Inadequate Sleep and Irregular Schedules: the microsleep is the cause of the error in the script"
+    },
+    {
+      "claims": [
+        "expect.status",
+        "expect.escalation"
+      ],
+      "kind": "assumption",
+      "note": "Team decision on escalation policy; not taken from a NASA source"
+    },
+    {
+      "claims": [
+        "expect.affectedSystems"
+      ],
+      "kind": "assumption",
+      "note": "Mapping from signal to body-twin system is a SYNAPSE design choice"
+    }
+  ]
 }

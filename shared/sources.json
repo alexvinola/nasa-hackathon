@@ -1,0 +1,151 @@
+{
+  "$comment": "Every number and label SYNAPSE shows must trace back to an id in this file, or be marked as an assumption. docs/sources.md is generated from it (make sources).",
+  "sources": {
+    "challenge": {
+      "type": "official",
+      "title": "Space Apps 2026 challenge: Create Health Monitoring Software for Astronauts on Space Missions",
+      "url": "https://www.spaceappschallenge.org/2026/challenges/health-monitoring-software/",
+      "findings": [
+        "Asks for a visual tool so astronauts can assess their health indicators and get guidance",
+        "Accepts keyboard, mouse or camera input"
+      ]
+    },
+    "hrp-hazards": {
+      "type": "official",
+      "title": "NASA HRP: 5 Hazards of Human Spaceflight",
+      "url": "https://www.nasa.gov/hrp/hazards/",
+      "findings": [
+        "Five hazards: Space Radiation; Isolation and Confinement; Distance from Earth; Gravity Fields; Hostile/Closed Environments",
+        "On Mars, astronauts would live in 3/8 of Earth's gravity for up to two years; a Mars trip lasts about three years",
+        "Hostile/Closed Environments covers habitability: temperature, pressure, lighting, noise, microbes, immune responses",
+        "No numeric thresholds"
+      ]
+    },
+    "hrp-risks": {
+      "type": "official",
+      "title": "NASA HRP: Risks of Human Spaceflight",
+      "url": "https://www.nasa.gov/hrp/risks/",
+      "findings": [
+        "17 official risks in three groups: human physiology, behavioral performance and human factors, space radiation",
+        "None of them is about cabin CO2",
+        "No numeric thresholds"
+      ]
+    },
+    "hrp-ongoing-research": {
+      "type": "official",
+      "title": "NASA HRP: Ongoing HRP Research",
+      "url": "https://www.nasa.gov/hrp/ongoing-hrp-research/",
+      "findings": [
+        "ARCHeR tracked the Artemis II crew's wellbeing, activity and sleep with a wrist actigraphy device (as summarized in the plan)"
+      ]
+    },
+    "csa-radiation": {
+      "type": "official",
+      "title": "CSA: Monitoring radiation for astronaut health (2026-02-26)",
+      "url": "https://www.asc-csa.gc.ca/eng/news/articles/2026/2026-02-26-monitoring-radiation-astronaut-health.asp",
+      "findings": [
+        "CANS is a compact, autonomous instrument to measure neutron radiation exposure in space",
+        "Neutron radiation contributes about 30% of total radiation on the ISS",
+        "No dose dataset"
+      ]
+    },
+    "csa-why-science": {
+      "type": "official",
+      "title": "CSA: Why do we conduct science experiments in space?",
+      "url": "https://www.asc-csa.gc.ca/eng/iss/science/why-do-we-conduct-science-experiments-in-space.asp",
+      "findings": [
+        "Context for the Science Contribution Score and the Earth-use closing of the pitch"
+      ]
+    },
+    "jones-2022-sleep": {
+      "type": "paper",
+      "title": "Jones et al. (2022), Sleep deficiency in spaceflight is associated with degraded neurobehavioral functions and elevated stress in astronauts on six-month missions aboard the ISS, Sleep",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8919197",
+      "findings": [
+        "24 astronauts on 6-month ISS missions, Reaction Self Test with PVT-B",
+        "Astronauts reported sleeping 6.5 h on average in flight",
+        "Sleep under 6 h was associated with slower psychomotor response, higher stress and workload",
+        "Sleep under 5 h was associated with negative somatic states",
+        "Sleep was self-reported"
+      ]
+    },
+    "flynn-evans-2016-circadian": {
+      "type": "paper",
+      "title": "Flynn-Evans et al. (2016), Circadian misalignment affects sleep and medication use before and during spaceflight, npj Microgravity",
+      "url": "https://rcastoragev2.blob.core.windows.net/04172f60da9099f5a13d74eec33e02ad/PMC5515517.pdf",
+      "findings": [
+        "Actigraphy from 21 ISS missions, 3,248 days of spaceflight",
+        "Sleep averaged 6.4 h when aligned with circadian timing and 5.4 h when misaligned"
+      ]
+    },
+    "basner-2011-pvtb": {
+      "type": "paper",
+      "title": "Basner, Mollicone & Dinges (2011), Validity and sensitivity of a brief psychomotor vigilance test (PVT-B) to total and partial sleep deprivation, Acta Astronautica",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3197786",
+      "findings": [
+        "3-minute PVT-B",
+        "Lapse threshold lowered from 500 ms to 355 ms",
+        "Inter-stimulus interval 1-4 s per the paper (secondary sources differ: check the original)"
+      ]
+    },
+    "nasa-pvt-iss": {
+      "type": "dataset",
+      "title": "Psychomotor Vigilance Test (PVT) on ISS (data.nasa.gov)",
+      "url": "https://data.nasa.gov/dataset/Psychomotor-Vigilance-Test-PVT-on-ISS/s6vw-3v2s",
+      "findings": [
+        "Design reference for the PVT-B; link may have changed"
+      ]
+    },
+    "nasa-standard-measures": {
+      "type": "official",
+      "title": "NASA Spaceflight Standard Measures (NTRS)",
+      "url": "https://ntrs.nasa.gov/api/citations/20200001281/downloads/20200001281.pdf",
+      "findings": [
+        "Raw per-astronaut data is not public; HRP shares it only through data sharing agreements"
+      ]
+    },
+    "asrs-report-sets": {
+      "type": "dataset",
+      "title": "NASA ASRS Database Report Sets",
+      "url": "https://asrs.arc.nasa.gov/search/reportsets.html",
+      "findings": [
+        "Aviation incident narratives, including crew fatigue sets",
+        "Source for the forensic intro script"
+      ]
+    },
+    "uta-rldd": {
+      "type": "dataset",
+      "title": "UTA Real-Life Drowsiness Dataset",
+      "url": "https://sites.google.com/view/utarldd/home",
+      "findings": [
+        "About 30 h of webcam/phone video from 60 people: alert, low vigilance, drowsy",
+        "Main training set for the fatigue model",
+        "Paper: https://arxiv.org/pdf/1904.07312"
+      ]
+    },
+    "drozy": {
+      "type": "dataset",
+      "title": "DROZY drowsiness database (University of Liege)",
+      "url": "https://orbi.uliege.be/handle/2268/191620",
+      "findings": [
+        "14 subjects, 28-30 h awake; face video, polysomnography, KSS and PVT synchronized"
+      ]
+    },
+    "yawdd": {
+      "type": "dataset",
+      "title": "YawDD yawning detection dataset",
+      "url": "https://ieee-dataport.org/open-access/yawdd-yawning-detection-dataset",
+      "findings": [
+        "Videos of drivers talking, singing and yawning; validates yawn detection"
+      ]
+    },
+    "mrl-eye": {
+      "type": "dataset",
+      "title": "MRL Eye Dataset",
+      "url": "https://mrl.cs.vsb.cz/eyedataset.html",
+      "findings": [
+        "84,898 infrared eye images, open or closed; optional check of the eye-closed threshold"
+      ]
+    }
+  }
+}

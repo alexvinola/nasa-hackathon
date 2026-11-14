@@ -19,6 +19,11 @@ def load(path: Path):
 
 
 @pytest.fixture(scope="session")
+def known_sources():
+    return set(load(SHARED / "sources.json")["sources"])
+
+
+@pytest.fixture(scope="session")
 def client():
     from main import app
 

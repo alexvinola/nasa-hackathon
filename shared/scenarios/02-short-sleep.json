@@ -2,7 +2,7 @@
   "name": "02-short-sleep",
   "description": "Under 6 h of sleep and a slow PVT: self-care is not enough, notify the crew",
   "input": {
-    "schemaVersion": "1.0",
+    "schemaVersion": "1.1",
     "timestamp": 1794652000,
     "biometrics": {
       "heartRateBpm": 76,
@@ -50,7 +50,7 @@
   "expect": {
     "status": "AMBER",
     "escalation": "CREW",
-    "hrpRisk": "SLEEP",
+    "hrpRisk": "SLEEP_AND_SCHEDULES",
     "affectedSystems": [
       "NERVOUS"
     ],
@@ -58,5 +58,61 @@
       "selfReport.sleepHoursLast24h",
       "biometrics.lastPvtMeanMs"
     ]
-  }
+  },
+  "provenance": [
+    {
+      "claims": [
+        "input.selfReport.sleepHoursLast24h"
+      ],
+      "kind": "source",
+      "ref": "jones-2022-sleep",
+      "note": "Under 6 h was associated with slower psychomotor response"
+    },
+    {
+      "claims": [
+        "input.biometrics.lastPvtLapses"
+      ],
+      "kind": "assumption",
+      "note": "Lapse count is illustrative; a lapse is a reaction of 355 ms or more",
+      "ref": "basner-2011-pvtb"
+    },
+    {
+      "claims": [
+        "input.biometrics.lastPvtMeanMs"
+      ],
+      "kind": "assumption",
+      "note": "Slower than the nominal 284 ms; no in-flight reference value used"
+    },
+    {
+      "claims": [
+        "input.biometrics.fatigueScore",
+        "input.biometrics.perclos"
+      ],
+      "kind": "assumption",
+      "note": "Illustrative until G2 produces the fatigue model trained on RLDD/DROZY"
+    },
+    {
+      "claims": [
+        "expect.hrpRisk"
+      ],
+      "kind": "source",
+      "ref": "hrp-risks",
+      "note": "Risk of Inadequate Sleep and Irregular Schedules"
+    },
+    {
+      "claims": [
+        "expect.status",
+        "expect.escalation"
+      ],
+      "kind": "assumption",
+      "note": "Team decision on escalation policy; not taken from a NASA source"
+    },
+    {
+      "claims": [
+        "expect.affectedSystems"
+      ],
+      "kind": "assumption",
+      "note": "Mapping from signal to body-twin system is a SYNAPSE design choice"
+    }
+  ]
 }

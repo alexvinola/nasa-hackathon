@@ -35,7 +35,9 @@ Nobody writes in someone else's folder: until integration, work against `shared/
 - Vision measures, the fatigue classifier estimates, **the rules engine decides**, and Gemma only phrases two
   sentences from the verdict. Never let the LLM decide a status or an escalation.
 - No SANS detection, no camera-based HRV, no latency or metric quoted without measuring it. It is not a medical device.
-- Every rules-engine threshold cites its source in a comment.
+- Every number and label traces back to `shared/sources.json` or is declared as an assumption: scenarios through
+  their `provenance`, rules through `GET /rules`, factors through `source`. HRP hazards and risks use the official
+  names in `shared/hrp.json`. `make contract` fails otherwise; `make sources` regenerates `docs/sources.md`.
 - Fatigue features are extracted with MediaPipe in Python too, exactly as in the browser.
 
 ## Stack and commands
@@ -47,7 +49,8 @@ Nobody writes in someone else's folder: until integration, work against `shared/
 ```bash
 make goals          # scoreboard: which goals pass
 make check-G4       # check one goal
-make contract       # validate the contract and its examples
+make contract       # validate the contract, its examples and their provenance
+make sources        # regenerate docs/sources.md
 make prefetch       # download models and voices to work offline
 make start          # ./start_synapse: Next.js + FastAPI + Ollama
 ```

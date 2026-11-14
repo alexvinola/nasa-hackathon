@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0",
+  "schemaVersion": "1.1",
   "timestamp": 1794652000,
   "biometrics": {
     "heartRateBpm": 76,
@@ -38,13 +38,22 @@
       "MUSCULOSKELETAL",
       "RESPIRATORY"
     ],
-    "hrpRisk": "SLEEP",
+    "hrpRisk": "SLEEP_AND_SCHEDULES",
     "factors": [
+      {
+        "signal": "selfReport.sleepHoursLast24h",
+        "value": 4.5,
+        "threshold": 6,
+        "hazard": "ISOLATION",
+        "source": "jones-2022-sleep",
+        "message": "Under 6 hours of sleep: slower reactions expected"
+      },
       {
         "signal": "biometrics.perclos",
         "value": 0.47,
         "threshold": 0.3,
         "hazard": "ISOLATION",
+        "source": null,
         "message": "Eyes closed almost half of the time"
       },
       {
@@ -52,6 +61,7 @@
         "value": 0.52,
         "threshold": 0.35,
         "hazard": null,
+        "source": null,
         "message": "One arm is not moving like the other"
       },
       {
@@ -59,6 +69,7 @@
         "value": 6.5,
         "threshold": 4.0,
         "hazard": "HOSTILE_ENVIRONMENT",
+        "source": null,
         "message": "High cabin CO2"
       }
     ],

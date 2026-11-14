@@ -3,7 +3,7 @@
 
 SHELL := /bin/bash
 .SHELLFLAGS := -eu -o pipefail -c
-.PHONY: goals contract model start prefetch $(addprefix check-G,0 1 2 3 4 5 6 7 8)
+.PHONY: goals contract sources model start prefetch $(addprefix check-G,0 1 2 3 4 5 6 7 8)
 
 BACKEND_TEST := cd backend && uv run --quiet pytest -q -p no:cacheprovider
 FRONT_UNIT   := cd frontend && pnpm -s vitest run
@@ -17,6 +17,9 @@ goals:
 
 contract:
 	@uv run --quiet --with jsonschema python scripts/check_contract.py
+
+sources:
+	@uv run --quiet python scripts/provenance.py
 
 check-G0: contract
 	@$(call need,backend/main.py frontend/package.json frontend/src/acceptance/contract.test.ts)

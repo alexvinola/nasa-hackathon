@@ -13,7 +13,9 @@ In order of urgency. Tick each box in the PR or in the team chat.
 - [ ] **FS1/FS2/FS3 split** decided, and each person runs `SYNAPSE_VERTICAL=FSx claude` in their clone.
 - [ ] **Review the scenarios in `shared/scenarios/`** (FS2 + team): they are G4's criterion. If an expected
       value looks wrong, change it now, not at 3 a.m.
-- [ ] **Clinical source** for blood pressure, glucose and temperature thresholds (and cabin CO2).
+- [ ] **Close the open assumptions** in `docs/sources.md`: a clinical source for blood pressure, glucose and
+      temperature, and NASA's cabin CO2 limit (candidate: NASA-STD-3001 Vol. 2). Add each source to
+      `shared/sources.json`, cite it from the scenario and run `make sources`.
 
 ## Fixtures to record (first hour)
 
