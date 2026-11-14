@@ -6,7 +6,7 @@ In order of urgency. Tick each box in the PR or in the team chat.
 
 - [ ] **RLDD download (FS1).** 111.3 GB: download only 1 fold (or 2) and start now; it is G2's critical path.
       Ask the DROZY authors if the site does not answer; YawDD needs a free IEEE account.
-- [ ] **`make prefetch` on all three laptops** (MediaPipe, Piper voices, `gemma4:e4b-it-qat` (6.1 GB), whisper base.en/small.en). Gemma 4 needs a current Ollama: 0.22.1 fails the pull with a 412 error, so run
+- [ ] **`make prefetch` on all three laptops** (MediaPipe, Piper voices, `gemma4:e4b-it-qat` (6.1 GB), whisper base.en/small.en). Gemma 4 needs a current Ollama: the model requires 0.30.5 or later (0.22.1 fails the pull with a 412 error), so run
       `brew upgrade ollama` first (0.40.16 on Alex's laptop); prefetch stops with an error otherwise. Under 16 GB of RAM:
       `PULSAR_LLM_MODEL=gemma4:e2b-it-qat make prefetch`, and start the backend with the same variable.
       Then check that it works with Wi-Fi off.
