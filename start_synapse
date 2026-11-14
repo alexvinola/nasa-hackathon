@@ -1,0 +1,104 @@
+#!/usr/bin/env bash
+# Brings up the whole demo on this laptop, offline: Ollama (11434), FastAPI (8000) and Next.js (3000).
+#
+#   ./start_synapse            start what is not running, wait until all three answer, stay up until Ctrl+C
+#   ./start_synapse --check    the same, then stop what it started and exit (0 when all three answered)
+#
+# A service that already answers is reused and left running on exit. Logs: .synapse/logs/.
+set -uo pipefail
+cd "$(dirname "$0")"
+
+MODEL="${PULSAR_LLM_MODEL:-gemma4:e4b-it-qat}"
+OLLAMA_URL="${PULSAR_OLLAMA_URL:-http://127.0.0.1:11434}"
+BACKEND_URL="http://127.0.0.1:8000"
+FRONTEND_URL="http://localhost:3000"
+WAIT_S=120  # the first start compiles the frontend and loads the voice models
+LOGS=.synapse/logs
+CHECK_ONLY=0
+[[ "${1:-}" == "--check" ]] && CHECK_ONLY=1
+
+started=()  # process ids this script started, so it stops those and nothing else
+
+say() { printf '%-9s %s\n' "$1" "$2"; }
+fail() { echo "ERROR: $*" >&2; exit 1; }
+answers() { curl -fs -m 3 -o /dev/null "$1"; }
+
+stop() {
+  trap - EXIT INT TERM
+  for pid in ${started[@]+"${started[@]}"}; do
+    pkill -TERM -P "$pid" 2>/dev/null
+    kill -TERM "$pid" 2>/dev/null
+  done
+}
+trap 'stop; exit 130' INT TERM
+trap stop EXIT
+
+wait_for() {  # wait_for <name> <url> <log>
+  for ((i = 0; i < WAIT_S; i++)); do
+    answers "$2" && return 0
+    sleep 1
+  done
+  echo "ERROR: $1 did not answer at $2 within $WAIT_S s. Last lines of $3:" >&2
+  tail -n 15 "$3" >&2
+  exit 1
+}
+
+# --- what must already be on the machine: nothing is downloaded here, the demo has no network
+for tool in uv pnpm ollama curl; do
+  command -v "$tool" >/dev/null || fail "$tool is not installed"
+done
+for file in frontend/public/mediapipe/face_landmarker.task frontend/public/mediapipe/wasm/vision_wasm_internal.wasm \
+            backend/assets/voices/en_US-lessac-medium.onnx; do
+  [[ -s "$file" ]] || fail "$file is missing: run 'make prefetch' while there is a network"
+done
+[[ -d frontend/node_modules ]] || fail "frontend/node_modules is missing: run '(cd frontend && pnpm install)' while there is a network"
+mkdir -p "$LOGS"
+
+# --- Ollama
+if answers "$OLLAMA_URL/api/tags"; then
+  say ollama "already running"
+else
+  ollama serve >"$LOGS/ollama.log" 2>&1 &
+  started+=($!)
+  wait_for ollama "$OLLAMA_URL/api/tags" "$LOGS/ollama.log"
+  say ollama "started"
+fi
+ollama list 2>/dev/null | awk '{print $1}' | grep -qx "$MODEL" || fail "the model $MODEL is not in Ollama: run 'make prefetch' while there is a network"
+
+# --- backend. HF_HUB_OFFLINE keeps faster-whisper on its local cache instead of asking the network.
+if answers "$BACKEND_URL/health"; then
+  say backend "already running"
+else
+  (cd backend && HF_HUB_OFFLINE="${HF_HUB_OFFLINE:-1}" exec uv run --quiet uvicorn main:app --host 127.0.0.1 --port 8000) >"$LOGS/backend.log" 2>&1 &
+  started+=($!)
+  wait_for backend "$BACKEND_URL/health" "$LOGS/backend.log"
+  say backend "started"
+fi
+
+# --- frontend
+if answers "$FRONTEND_URL/"; then
+  say frontend "already running"
+else
+  (cd frontend && exec pnpm dev) >"$LOGS/frontend.log" 2>&1 &
+  started+=($!)
+  wait_for frontend "$FRONTEND_URL/" "$LOGS/frontend.log"
+  say frontend "started"
+fi
+
+# --- load Gemma now, with the context size every call uses, so the first verdict does not wait for it
+if curl -fs -m 180 -o /dev/null "$OLLAMA_URL/api/chat" -d "{\"model\":\"$MODEL\",\"stream\":false,\"think\":false,\"keep_alive\":\"30m\",\"options\":{\"num_ctx\":2048,\"num_predict\":1},\"messages\":[{\"role\":\"user\",\"content\":\"ok\"}]}"; then
+  say gemma "loaded"
+else
+  fail "Gemma ($MODEL) did not answer through Ollama"
+fi
+
+answers "$OLLAMA_URL/api/tags" && answers "$BACKEND_URL/health" && answers "$FRONTEND_URL/" || fail "a service stopped answering"
+say ready "$FRONTEND_URL  (backend $BACKEND_URL, Ollama $OLLAMA_URL)"
+
+[[ $CHECK_ONLY == 1 ]] && exit 0
+if [[ ${#started[@]} -eq 0 ]]; then
+  echo "Everything was already running; nothing here to keep alive."
+  exit 0
+fi
+echo "Ctrl+C stops what this script started."
+wait
