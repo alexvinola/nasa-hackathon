@@ -74,33 +74,45 @@ def test_director_only_accepts_closed_choices_and_safe_lines():
     assert director.validate({**ok, "say": "You look tired."}) == director.FALLBACK
     assert director.validate({**ok, "say": "Your heart rate is 90."}) == director.FALLBACK
     assert director.validate({**ok, "say": ""}) == director.FALLBACK
-    # mirrored view: a person on the frame's left is on the screen's right, so the mascot must not go there
-    assert director.validate({**ok, "spot": "mid_right", "person_side": "left"})["spot"] == "mid_left"
-    assert director.validate({**ok, "spot": "mid_left", "person_side": "left"})["spot"] == "mid_left"
-    assert director.validate({**ok, "spot": "home", "person_side": "right"})["spot"] == "mid_right"
+    # frames arrive mirrored like the HUD: a person on the frame's left is on the screen's left, so the mascot leaves it
+    assert director.validate({**ok, "spot": "mid_left", "person_side": "left"})["spot"] == "mid_right"
+    assert director.validate({**ok, "spot": "home", "person_side": "left"})["spot"] == "mid_right"
+    assert director.validate({**ok, "spot": "mid_right", "person_side": "left"})["spot"] == "mid_right"
+    assert director.validate({**ok, "spot": "top_right", "person_side": "right"})["spot"] == "mid_left"
 
 
-def test_director_asks_gemma_for_a_schema_constrained_answer(monkeypatch):
-    sent = {}
-
+def answering(monkeypatch, line, sent=None):
     def fake_urlopen(request, timeout):
-        sent.update(body=json.loads(request.data))
-        answer = {"spot": "bottom_right", "reaction": "calm", "say": "Good to see you.", "person_side": "none"}
-        return io.BytesIO(json.dumps({"message": {"content": json.dumps(answer)}}).encode())
+        if sent is not None:
+            sent.update(body=json.loads(request.data))
+        return io.BytesIO(json.dumps({"message": {"content": line}}).encode())
 
     monkeypatch.setattr(senses.urllib.request, "urlopen", fake_urlopen)
-    response = client.post("/pulsar/act", json={"seen": "A person waves.", "instruction": "hello", "user_spoke": True})
+
+
+def test_director_asks_gemma_for_one_short_line(monkeypatch):
+    sent = {}
+    answering(monkeypatch, "none|bottom_right|calm|Good to see you.\n", sent)
+    scene = {"instruction": "hello", "user_spoke": True, "image": "/9j/4AAQ"}
+    response = client.post("/pulsar/act", json=scene)
 
     assert response.json() == {"spot": "bottom_right", "reaction": "calm", "say": "Good to see you.", "speak": True}
-    assert sent["body"]["format"]["properties"]["spot"]["enum"] == director_spots()
-    assert sent["body"]["think"] is False
+    system, user = sent["body"]["messages"]
+    assert "side|spot|reaction|sentence" in system["content"] and user["images"] == ["/9j/4AAQ"]
+    assert sent["body"]["think"] is False and sent["body"]["keep_alive"]
     assert client.post("/pulsar/act", json={}).status_code == 400
+    assert client.post("/pulsar/act", json={"instruction": "hi", "image": "not a jpeg"}).status_code == 422
 
 
-def director_spots():
+def test_director_survives_a_line_in_the_wrong_shape(monkeypatch):
     import director
 
-    return director.SPOTS
+    scene = {"seen": "A person waves.", "instruction": "hello", "user_spoke": True}
+    for broken in ("home|none|calm|Fields in the wrong order.", "Sure! Here is my answer.", ""):
+        answering(monkeypatch, broken)
+        assert client.post("/pulsar/act", json=scene).json() == director.FALLBACK
+    answering(monkeypatch, "centre|home|calm|-")
+    assert client.post("/pulsar/act", json={"seen": "A person waves."}).json() == director.SILENT
 
 
 def test_director_stays_quiet_instead_of_repeating_itself():
