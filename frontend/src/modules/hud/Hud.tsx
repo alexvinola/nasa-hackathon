@@ -6,7 +6,10 @@ import { PulsarMascot } from "./PulsarMascot";
 import type { Mood } from "./PulsarSprite3D";
 import { useWebcam, type CamState } from "./useWebcam";
 import { SensesBar } from "@/modules/voice-ai/SensesBar";
+import { VerdictPanel } from "@/modules/voice-ai/VerdictPanel";
 import { useFaceMetrics } from "@/modules/vision-hud/useFaceMetrics";
+import { FaceOverlay } from "@/modules/vision-hud/FaceOverlay";
+import type { FaceFrame } from "@/modules/vision-hud/faceWorker";
 import { direct, frameBase64, type Direction, type Spot } from "@/modules/voice-ai/pulsarApi";
 
 // shortcut: canned lines so the mascot can be reviewed, replace with the rules-engine verdict once it is wired in.
@@ -47,7 +50,8 @@ function Corner({ className }: { className: string }) {
 export function Hud() {
   const { videoRef, state } = useWebcam();
   // MediaPipe runs in a worker over the live camera; it shows nothing and posts its numbers to the backend.
-  useFaceMetrics(videoRef, state === "live");
+  const faceFrame = useRef<FaceFrame | null>(null);
+  const biometrics = useFaceMetrics(videoRef, state === "live", faceFrame);
   const still = useReducedMotion();
   const [step, setStep] = useState(0);
   const [pos, setPos] = useState({ x: 0, y: 0 });
@@ -112,6 +116,7 @@ export function Hud() {
   return (
     <main className="relative h-screen w-screen overflow-hidden bg-space">
       <video ref={videoRef} muted playsInline className="absolute inset-0 h-full w-full -scale-x-100 object-cover" />
+      {state === "live" && <FaceOverlay frameRef={faceFrame} videoRef={videoRef} />}
       {state !== "live" && (
         <div className="absolute inset-0 grid place-items-center bg-[radial-gradient(ellipse_at_center,var(--color-space-lift),var(--color-space))] text-sm tracking-widest text-orbit">
           {CAM_LABEL[state]}
@@ -144,6 +149,8 @@ export function Hud() {
           tag={directed ? "GEMMA 4" : seen ? "CAMERA · AI DESCRIPTION" : "MOCK"}
         />
       </motion.div>
+
+      <VerdictPanel biometrics={biometrics} />
 
       <SensesBar videoRef={videoRef} camLive={state === "live"} line={directed ? line.text : (seen ?? line.text)} onSeen={setSeen} onInstruction={instruct} />
 

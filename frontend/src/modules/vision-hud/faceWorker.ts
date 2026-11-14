@@ -25,6 +25,25 @@ export type Biometrics = {
   lastPvtLapses: number | null;
 };
 
+/** What the overlay draws for one frame: every landmark MediaPipe found plus the values the metrics use. */
+export type FaceFrame = {
+  at: number;
+  width: number;
+  height: number;
+  face: Float32Array | null; // 478 landmarks × (x, y, z), normalised to the frame
+  pose: Float32Array | null; // 33 landmarks × (x, y, visibility)
+  eyeLeft: number; // eyeBlinkLeft blendshape, 0 open to 1 closed (above BLINK counts as closed)
+  eyeRight: number;
+  jaw: number; // jawOpen blendshape (above YAWN starts a yawn)
+  pitch: number; // head pose in degrees, from the facial transformation matrix
+  yaw: number;
+  roll: number;
+  axes: number[] | null; // the head's x, y, z axes projected on the image: [xx, xy, yx, yy, zx, zy]
+  delegate: "GPU" | "CPU";
+  faceMs: number; // time spent in the face model for this frame
+  poseMs: number; // time in the pose model, 0 on the frames it skips
+};
+
 const scope = self as unknown as {
   onmessage: ((event: MessageEvent<In>) => void) | null;
   postMessage: (message: unknown, transfer?: Transferable[]) => void;
@@ -34,30 +53,48 @@ const WINDOW_MS = 60_000; // PERCLOS is the share of the last minute with the ey
 const BLINK = 0.5; // blendshape score above which an eye counts as closed
 const YAWN = 0.5;
 const NOD = 0.03; // nose drop, as a fraction of frame height, that counts as a head nod
+const POSE_EVERY = 3; // arm asymmetry changes slowly: the pose model runs on one frame in three
 
 let face: FaceLandmarker | undefined;
 let pose: PoseLandmarker | undefined;
 let busy = false;
+let ready: Promise<void> | undefined;
+let delegate: "GPU" | "CPU" = "GPU";
+let frames = 0;
+let lastPose: ReturnType<PoseLandmarker["detectForVideo"]> | undefined;
 
 const eyes: { at: number; closed: boolean }[] = [];
 const yawns: number[] = [];
 const nods: number[] = [];
 const noseY: number[] = [];
 
-async function load() {
-  const fileset = await FilesetResolver.forVisionTasks("/mediapipe/wasm");
-  face ??= await FaceLandmarker.createFromOptions(fileset, {
-    baseOptions: { modelAssetPath: "/mediapipe/face_landmarker.task", delegate: "CPU" },
-    runningMode: "VIDEO",
-    numFaces: 1,
-    outputFaceBlendshapes: true,
-    outputFacialTransformationMatrixes: true,
-  });
-  pose ??= await PoseLandmarker.createFromOptions(fileset, {
-    baseOptions: { modelAssetPath: "/mediapipe/pose_landmarker_lite.task", delegate: "CPU" },
-    runningMode: "VIDEO",
-    numPoses: 1,
-  });
+/** Loads both models once. Tries the GPU (WebGL in the worker) and falls back to the CPU if the browser refuses. */
+function load(): Promise<void> {
+  ready ??= (async () => {
+    const fileset = await FilesetResolver.forVisionTasks("/mediapipe/wasm");
+    const create = (use: "GPU" | "CPU") =>
+      Promise.all([
+        FaceLandmarker.createFromOptions(fileset, {
+          baseOptions: { modelAssetPath: "/mediapipe/face_landmarker.task", delegate: use },
+          runningMode: "VIDEO",
+          numFaces: 1,
+          outputFaceBlendshapes: true,
+          outputFacialTransformationMatrixes: true,
+        }),
+        PoseLandmarker.createFromOptions(fileset, {
+          baseOptions: { modelAssetPath: "/mediapipe/pose_landmarker_lite.task", delegate: use },
+          runningMode: "VIDEO",
+          numPoses: 1,
+        }),
+      ]);
+    try {
+      [face, pose] = await create("GPU");
+    } catch {
+      delegate = "CPU";
+      [face, pose] = await create("CPU");
+    }
+  })();
+  return ready;
 }
 
 const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
@@ -119,6 +156,41 @@ function readPose(result: ReturnType<PoseLandmarker["detectForVideo"]>) {
   armAsymmetry = clamp01(Math.abs(leftWrist.y - rightWrist.y) / width / 2);
 }
 
+const DEG = 180 / Math.PI;
+
+function frameOf(
+  faceResult: ReturnType<FaceLandmarker["detectForVideo"]>,
+  poseResult: ReturnType<PoseLandmarker["detectForVideo"]>,
+  bitmap: ImageBitmap,
+  at: number,
+  faceMs: number,
+  poseMs: number,
+): FaceFrame {
+  const landmarks = faceResult.faceLandmarks?.[0];
+  const points = poseResult.landmarks?.[0];
+  const shapes = faceResult.faceBlendshapes?.[0]?.categories ?? [];
+  const shape = (name: string) => shapes.find((c) => c.categoryName === name)?.score ?? 0;
+  // Column-major 4×4 rotation + translation of the canonical face (MediaPipe face geometry).
+  const m = faceResult.facialTransformationMatrixes?.[0]?.data;
+  return {
+    at,
+    width: bitmap.width,
+    height: bitmap.height,
+    face: landmarks ? Float32Array.from(landmarks.flatMap((l) => [l.x, l.y, l.z])) : null,
+    pose: points ? Float32Array.from(points.flatMap((l) => [l.x, l.y, l.visibility ?? 0])) : null,
+    eyeLeft: shape("eyeBlinkLeft"),
+    eyeRight: shape("eyeBlinkRight"),
+    jaw: shape("jawOpen"),
+    pitch: m ? Math.atan2(m[6], m[10]) * DEG : 0,
+    yaw: m ? Math.atan2(-m[2], Math.hypot(m[6], m[10])) * DEG : 0,
+    roll: m ? Math.atan2(m[1], m[0]) * DEG : 0,
+    axes: m ? [m[0], m[1], m[4], m[5], m[8], m[9]] : null,
+    delegate,
+    faceMs,
+    poseMs,
+  };
+}
+
 async function handle(frame: Frame) {
   if (busy) {
     frame.bitmap.close(); // drop the frame instead of queueing: a stale frame is worth nothing
@@ -128,9 +200,20 @@ async function handle(frame: Frame) {
   try {
     await load();
     const now = frame.at;
-    readFace(face!.detectForVideo(frame.bitmap, now), now);
-    readPose(pose!.detectForVideo(frame.bitmap, now));
+    const t0 = performance.now();
+    const faceResult = face!.detectForVideo(frame.bitmap, now);
+    const t1 = performance.now();
+    const runPose = frames++ % POSE_EVERY === 0 || !lastPose;
+    if (runPose) {
+      lastPose = pose!.detectForVideo(frame.bitmap, now);
+      readPose(lastPose);
+    }
+    const poseMs = runPose ? performance.now() - t1 : 0;
+    readFace(faceResult, now);
     scope.postMessage({ type: "biometrics", biometrics: score(now), at: now });
+    const drawn = frameOf(faceResult, lastPose!, frame.bitmap, now, t1 - t0, poseMs);
+    const buffers = [drawn.face, drawn.pose].filter((b): b is Float32Array => b !== null).map((b) => b.buffer as ArrayBuffer);
+    scope.postMessage({ type: "face", frame: drawn }, buffers); // transferred, not copied
   } catch (error) {
     scope.postMessage({ type: "error", message: error instanceof Error ? error.message : String(error) });
   } finally {
