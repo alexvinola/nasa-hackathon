@@ -313,10 +313,38 @@ a { color: inherit; }
 }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
+
+/* The language selector is available in the film and in every journey chapter. */
+.language-switch { position: fixed; top: max(12px, env(safe-area-inset-top, 0px)); right: max(16px, env(safe-area-inset-right, 0px)); z-index: 30; display: flex; gap: 4px; padding: 5px; background: #09132eeF; border: 1px solid #9a8cff55; border-radius: 999px; box-shadow: 0 6px 25px #0005; }
+.language-switch button { border: 0; background: transparent; color: #b7c2e3; border-radius: 999px; padding: 9px 12px; min-width: 42px; font: 600 12px var(--f-mono); cursor: pointer; }
+.language-switch button[aria-pressed="true"] { color: var(--space); background: var(--pulse); }
+.language-switch button:focus-visible { outline: 2px solid var(--shell); outline-offset: 3px; }
+.story-nav { padding-right: max(150px, 10vw); }
+.hud-tr { top: 64px; }
+.hud-rw { top: 110px; }
+.story .split > *, .journey-panel > * { min-width: 0; }
+html[lang="es"] .master { font-size: clamp(26px, 7vh, 86px); }
+@media (max-width: 760px) {
+  .story-nav { padding-right: 128px; min-height: 74px; }
+  .story-nav nav { flex-wrap: wrap; column-gap: 16px; row-gap: 10px; }
+  .language-switch { right: 12px; }
+  .language-switch button { padding: 9px 10px; min-width: 38px; }
+  .story .kicker span { margin-left: 0; display: block; margin-top: 6px; }
+  .hud-tl { right: 95px; left: 12px; font-size: 8px; letter-spacing: .03em; }
+  .rec { flex: none; }
+  html[lang="es"] .mark { grid-template-columns: minmax(3.8em, auto) 1fr; gap: 0 .7em; }
+  html[lang="es"] .pillar { font-size: clamp(11px, 1.6vh, 16px); }
+  .instrument-top { flex-wrap: wrap; }
+}
+
 </style>
 
 </head>
 <body>
+<div class="language-switch" role="group" aria-label="Presentation language">
+  <button type="button" data-language="en" lang="en" aria-label="English" aria-pressed="false">EN</button>
+  <button type="button" data-language="es" lang="es" aria-label="Español" aria-pressed="false">ES</button>
+</div>
 <div class="film paused" id="film" data-mode="reveal">
   <canvas id="cv" aria-hidden="true"></canvas>
   <div class="vignette" aria-hidden="true"></div>
@@ -521,7 +549,218 @@ a { color: inherit; }
 </main>
 
 <script>
+/* Translate text nodes in place: scene animations, tab state and player listeners stay intact. */
 (() => {
+  const spanish = {
+  "PULSAR · The human side of the mission": "PULSAR · El lado humano de la misión",
+  "Meet PULSAR: a personal health companion concept for space. Follow a crew member from early drowsiness signs to an explainable response.": "Conoce PULSAR: una propuesta de compañero personal de salud para el espacio. Acompaña a un tripulante desde las señales de somnolencia hasta una respuesta comprensible.",
+  "Presentation language": "Idioma de la presentación",
+  "Flight recorder · Cam 04 · Habitat node 2": "Registro de vuelo · Cámara 04 · Módulo 2",
+  "Day": "Día",
+  "Ship time": "Hora de la nave",
+  "◀◀ Rewind": "◀◀ Retroceder",
+  "Dramatization · fictional mission": "Dramatización · misión ficticia",
+  "Mission day 212. The crew is asleep.": "Día 212 de misión. La tripulación duerme.",
+  "All systems nominal.": "Todos los sistemas en orden.",
+  "Master alarm": "Alarma general",
+  "Cabin pressure drop · Node 2": "Caída de presión · Módulo 2",
+  "03:12:08  Pressure drop detected · node 2": "03:12:08  Caída de presión detectada · módulo 2",
+  "03:12:09  Sealing hatch 2-A": "03:12:09  Cerrando escotilla 2-A",
+  "03:12:11  Source: valve V-14 left open": "03:12:11  Origen: válvula V-14 abierta",
+  "03:12:12  Last operated 01:12 · maintenance shift": "03:12:12  Última operación 01:12 · turno de mantenimiento",
+  "Cabin pressure": "Presión de cabina",
+  "Signal lost": "Señal perdida",
+  "Flight recorder · rewinding": "Registro de vuelo · retrocediendo",
+  "Valve V-14 maintenance. The engineer has been awake for 19 hours.": "Mantenimiento de la válvula V-14. El ingeniero lleva 19 horas despierto.",
+  "Four hours of sleep. CO₂ building up in the sleep station.": "Cuatro horas de sueño. El CO₂ se acumula en la zona de descanso.",
+  "Slower blinks. A skipped checklist step. Nobody noticed.": "Parpadeos más lentos. Un paso de la lista omitido. Nadie lo notó.",
+  "The warning signs were there 48 hours earlier.": "Las señales ya estaban ahí 48 horas antes.",
+  "Nobody was listening.": "Nadie estaba escuchando.",
+  "Meet": "Conoce a",
+  "Your personal": "Tu",
+  "health companion": "compañero de salud",
+  "in space.": "en el espacio.",
+  "Spots signs of fatigue through the webcam": "Estima señales de somnolencia con la webcam",
+  "A rules engine decides. The AI only speaks.": "Las reglas deciden. La IA lo comunica.",
+  "Runs on one laptop, fully offline": "Diseñado para un portátil, sin conexión",
+  "Play the film": "Ver la intro",
+  "41 s · sound on · Space pauses · ← → seek": "41 s · con sonido · Espacio: pausa · ← → avanzar",
+  "Skip film · explore the journey ↓": "Saltar intro · explorar el recorrido ↓",
+  "Play": "Reproducir",
+  "Pause": "Pausar",
+  "Replay": "Repetir",
+  "Sound on": "Sonido activado",
+  "Sound off": "Sonido desactivado",
+  "Fullscreen": "Pantalla completa",
+  "Position in the film": "Posición en la intro",
+  "Follow the crew journey ↓": "Sigue el recorrido de la tripulación ↓",
+  "PULSAR · back to film": "PULSAR · volver a la intro",
+  "Journey chapters": "Capítulos del recorrido",
+  "The person": "La persona",
+  "The journey": "El recorrido",
+  "The design": "El diseño",
+  "What’s next": "Próximos pasos",
+  "01 / The human factor": "01 / El factor humano",
+  "Pitch · 0:41–1:00": "Presentación · 0:41–1:00",
+  "And the crew?": "¿Y la tripulación?",
+  "A mission has telemetry for its machines. PULSAR asks how we can make a crew member’s early signs of drowsiness visible, too.": "Una misión tiene telemetría para sus máquinas. PULSAR plantea cómo hacer visibles también las primeras señales de somnolencia de la tripulación.",
+  "Meet Alex, a flight engineer preparing for a maintenance shift. Follow a different version of the story: one where someone is listening.": "Conoce a Alex, un ingeniero de vuelo que prepara su turno de mantenimiento. Descubre otra versión de la historia: una en la que alguien sí escucha.",
+  "Follow Alex’s shift": "Acompaña a Alex en su turno",
+  "Illustrative crew persona": "Perfil ficticio de un tripulante",
+  "CREW PROFILE / 01": "PERFIL DE TRIPULANTE / 01",
+  "Flight engineer · Mission day 210": "Ingeniero de vuelo · Día 210 de misión",
+  "BEFORE THE SHIFT": "ANTES DEL TURNO",
+  "AT THE WORKSTATION": "EN EL PUESTO DE TRABAJO",
+  "UP NEXT": "A CONTINUACIÓN",
+  "Four hours of sleep, reported by Alex.": "Cuatro horas de sueño, declaradas por Alex.",
+  "Eye closures and yawns become signals worth checking.": "El cierre de ojos y los bostezos son señales que conviene revisar.",
+  "A maintenance checklist that needs sustained attention.": "Una lista de mantenimiento que exige atención sostenida.",
+  "“I have a job to do. Help me understand when I should pause.”": "«Tengo un trabajo que hacer. Ayúdame a entender cuándo debo parar».",
+  "Fictional persona · illustrative scenario": "Persona ficticia · escenario ilustrativo",
+  "02 / A companion through the shift": "02 / Un compañero durante el turno",
+  "Pitch · 1:00–1:55": "Presentación · 1:00–1:55",
+  "From a quiet signal": "De una señal discreta",
+  "to a": "a un",
+  "clear next step.": "siguiente paso claro.",
+  "Interactive concept walkthrough": "Recorrido interactivo de la propuesta",
+  "Alex’s journey": "El recorrido de Alex",
+  "01 / NOTICE": "01 / OBSERVAR",
+  "Make the signs visible": "Hacer visibles las señales",
+  "02 / CHECK": "02 / COMPROBAR",
+  "Add the human context": "Añadir el contexto humano",
+  "03 / SUPPORT": "03 / ACOMPAÑAR",
+  "Explain the next step": "Explicar el siguiente paso",
+  "Passive signals / webcam": "Señales pasivas / webcam",
+  "A small sign.": "Una pequeña señal.",
+  "A reason to check in.": "Un motivo para comprobar cómo estás.",
+  "At the workstation, a webcam estimates signs consistent with drowsiness, including eye closures and yawns. These are screening signals to place in context.": "En el puesto de trabajo, una webcam estima señales compatibles con somnolencia, como el cierre de ojos y los bostezos. Son indicios que debemos interpretar en su contexto.",
+  "Add Alex’s context": "Añadir el contexto de Alex",
+  "VISION / LOCAL PROCESSING": "VISIÓN / PROCESAMIENTO LOCAL",
+  "ILLUSTRATION": "ILUSTRACIÓN",
+  "Schematic eye closure signal, not recorded data": "Esquema del cierre de ojos; no son datos registrados",
+  "Eye closures · yawns · estimated score": "Cierre de ojos · bostezos · puntuación estimada",
+  "Features computed locally.": "Indicadores calculados en el dispositivo.",
+  "Video frames discarded by design.": "Diseñado para descartar los fotogramas.",
+  "Three complementary views": "Tres perspectivas complementarias",
+  "Ask. Measure.": "Preguntar. Medir.",
+  "Put it together.": "Combinar la información.",
+  "Alex reports recent sleep. A three-minute reaction-time test adds an active measure of alertness. The rules engine combines these inputs with the camera estimate.": "Alex indica cuánto ha dormido. Una prueba de reacción de tres minutos añade una medida activa del estado de alerta. El motor de reglas combina estos datos con la estimación de la cámara.",
+  "See the response": "Ver la respuesta",
+  "CONTEXT / EXAMPLE SNAPSHOT": "CONTEXTO / EJEMPLO",
+  "SIMULATED": "SIMULADO",
+  "Camera estimate": "Estimación de la cámara",
+  "Drowsiness signs": "Señales de somnolencia",
+  "Sleep · self-report": "Sueño · declaración personal",
+  "4 hours / last 24 h": "4 horas / últimas 24 h",
+  "Reaction-time test": "Prueba de tiempo de reacción",
+  "Mean + lapses": "Media + lapsos",
+  "The full test takes three minutes.": "La prueba completa dura tres minutos.",
+  "This walkthrough shows the inputs, not a live test.": "Este recorrido muestra las entradas; no ejecuta la prueba.",
+  "Explainable support": "Apoyo comprensible",
+  "A response Alex": "Una respuesta que Alex",
+  "can understand.": "puede entender.",
+  "Explicit rules determine the status and suggested response. The language model turns that result into a short message, with the contributing factors available to inspect.": "Unas reglas explícitas determinan el estado y la respuesta sugerida. El modelo de lenguaje lo convierte en un mensaje breve. Los factores que lo motivan se pueden consultar.",
+  "Look inside the decision": "Ver cómo se toma la decisión",
+  "PULSAR / EXAMPLE MESSAGE": "PULSAR / MENSAJE DE EJEMPLO",
+  "ILLUSTRATIVE": "ILUSTRATIVO",
+  "CHECK IN BEFORE CONTINUING": "COMPRUEBA TU ESTADO ANTES DE SEGUIR",
+  "“You reported limited sleep. Let’s review your alertness before the next task.”": "«Has indicado que has dormido poco. Revisemos tu estado de alerta antes de la siguiente tarea».",
+  "CONTEXT → sleep report + camera signs": "CONTEXTO → sueño declarado + señales de cámara",
+  "DECISION → explicit rules": "DECISIÓN → reglas explícitas",
+  "MESSAGE → local language model": "MENSAJE → modelo de lenguaje local",
+  "Illustrative product journey, not a live assessment. The example message does not demonstrate an implemented rule or a medical conclusion.": "Recorrido ilustrativo del producto; no es una evaluación en directo. El mensaje de ejemplo no demuestra una regla implementada ni una conclusión médica.",
+  "03 / Designed to be understood": "03 / Diseñado para entenderlo",
+  "Pitch · 1:55–2:25": "Presentación · 1:55–2:25",
+  "The rules decide.": "Las reglas deciden.",
+  "The AI gives them a voice.": "La IA les da voz.",
+  "A clear boundary between estimating a signal, deciding a response, and explaining it to the crew.": "Una separación clara entre estimar una señal, decidir una respuesta y explicársela a la tripulación.",
+  "System flow: signals to rules to communication": "Flujo del sistema: señales, reglas y comunicación",
+  "01 / INPUTS": "01 / ENTRADAS",
+  "Observe": "Observar",
+  "Camera features, reported sleep and reaction-time results.": "Indicadores de cámara, sueño declarado y resultados de la prueba de reacción.",
+  "02 / RULES ENGINE": "02 / MOTOR DE REGLAS",
+  "Decide": "Decidir",
+  "Explicit rules combine the evidence into a status and response.": "Reglas explícitas combinan la información para determinar un estado y una respuesta.",
+  "03 / LOCAL AI": "03 / IA LOCAL",
+  "Communicate": "Comunicar",
+  "A brief, understandable message grounded in the rules’ verdict.": "Un mensaje breve y comprensible basado en el resultado de las reglas.",
+  "One laptop. No network dependency.": "Un portátil. Sin depender de la red.",
+  "Designed for local operation, including the language and voice models.": "Diseñado para funcionar localmente, incluidos los modelos de lenguaje y voz.",
+  "Features stay. Frames go.": "Indicadores útiles. Fotogramas descartados.",
+  "The design processes video live and discards frames, without storing or sending footage.": "El diseño procesa el vídeo en directo y descarta los fotogramas, sin guardarlos ni enviarlos.",
+  "A response with a reason.": "Una respuesta con un porqué.",
+  "Contributing factors make the rules’ output inspectable. The language model phrases the verdict.": "Los factores permiten revisar el resultado de las reglas. El modelo de lenguaje lo expresa con palabras.",
+  "04 / The next frontier": "04 / La próxima frontera",
+  "Pitch · 2:25–2:45": "Presentación · 2:25–2:45",
+  "Care for the crew.": "Cuidar a la tripulación.",
+  "Care for the mission.": "Cuidar la misión.",
+  "Our hackathon focus is drowsiness: a focused prototype, with spaceflight validation still ahead.": "En este hackathon nos centramos en la somnolencia: un prototipo de alcance concreto, pendiente de validación para vuelos espaciales.",
+  "Validate estimates against reaction-time measures.": "Validar las estimaciones con medidas del tiempo de reacción.",
+  "Evaluate sensitivity to lighting and glasses.": "Evaluar el efecto de la iluminación y las gafas.",
+  "Test which signals transfer to microgravity.": "Comprobar qué señales son útiles en microgravedad.",
+  "Prototype concept · Not a medical device.": "Propuesta de prototipo · No es un dispositivo médico.",
+  "No claim of diagnosis or validation for spaceflight.": "No se afirma capacidad de diagnóstico ni validación para vuelos espaciales.",
+  "Revisit the journey": "Volver al recorrido",
+  "Your personal health companion in space.": "Tu compañero personal de salud en el espacio.",
+  "Personal Unit for Learning, Support, Assistance & Reminders": "Unidad personal de aprendizaje, apoyo, asistencia y recordatorios",
+  "Replay the opening film ↗": "Volver a ver la intro ↗",
+  "PULSAR, a round white robot with a glowing smiling face, waving, circled by an orbit ring": "PULSAR, un robot blanco y redondo con una cara luminosa y sonriente, que saluda rodeado por un anillo orbital",
+  "PULSAR, a friendly white robot with a glowing face and an orbit ring": "PULSAR, un simpático robot blanco con una cara luminosa y un anillo orbital"
+};
+  const text = english => document.documentElement.lang === 'es' ? (spanish[english] ?? english) : english;
+  const records = [];
+  const walker = document.createTreeWalker(document.documentElement, NodeFilter.SHOW_TEXT);
+  while (walker.nextNode()) {
+    const node = walker.currentNode;
+    if (node.parentElement.closest('script, style, .acronym, #clock, #pp, #mute')) continue;
+    const key = node.textContent.trim();
+    if (Object.hasOwn(spanish, key)) records.push({ node, original: node.textContent, key });
+  }
+  const attributes = [];
+  document.querySelectorAll('[aria-label], [alt], meta[name="description"]').forEach(element => {
+    for (const name of ['aria-label', 'alt', 'content']) {
+      const value = element.getAttribute(name);
+      if (Object.hasOwn(spanish, value)) attributes.push({ element, name, original: value });
+    }
+  });
+  const acronymWords = [...document.querySelectorAll('.acronym .w')];
+  const acronymEnglish = acronymWords.map(word => word.innerHTML);
+  const acronymSpanish = ['Unidad', 'personal de', 'aprendizaje,', 'apoyo,', 'asistencia y', 'recordatorios'];
+  const languageButtons = [...document.querySelectorAll('[data-language]')];
+  function setLanguage(language, updateURL = true) {
+    const lang = language === 'en' ? 'en' : 'es';
+    document.documentElement.lang = lang;
+    records.forEach(({ node, original, key }) => {
+      node.textContent = lang === 'es' ? original.replace(key, spanish[key]) : original;
+    });
+    attributes.forEach(({ element, name, original }) => element.setAttribute(name, lang === 'es' ? spanish[original] : original));
+    acronymWords.forEach((word, index) => {
+      if (lang === 'es') word.textContent = acronymSpanish[index];
+      else word.innerHTML = acronymEnglish[index];
+    });
+    languageButtons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.language === lang)));
+    window.dispatchEvent(new Event('pulsar-language-change'));
+    try { localStorage.setItem('pulsar-presentation-language', lang); } catch { /* Optional in restricted/file contexts. */ }
+    if (updateURL) {
+      try {
+        const url = new URL(location.href);
+        url.searchParams.set('lang', lang);
+        history.replaceState(null, '', url);
+      } catch { /* The selector also works without URL persistence. */ }
+    }
+  }
+  window.pulsarI18n = Object.freeze({ text, setLanguage });
+  languageButtons.forEach(button => button.addEventListener('click', () => setLanguage(button.dataset.language)));
+  const requested = new URLSearchParams(location.search).get('lang');
+  let saved;
+  try { saved = localStorage.getItem('pulsar-presentation-language'); } catch { /* Use the default. */ }
+  setLanguage(['en', 'es'].includes(requested) ? requested : ['en', 'es'].includes(saved) ? saved : 'es', false);
+})();
+</script>
+
+<script>
+(() => {
+  const translate = window.pulsarI18n.text;
   const END = 41;
   const film = document.getElementById('film'), hud = document.getElementById('hud');
   const clockEl = document.getElementById('clock'), pressEl = document.getElementById('press'), pbar = document.getElementById('pbar');
@@ -562,7 +801,7 @@ a { color: inherit; }
   function shipClock(x) {
     const abs = 212 * 86400 + (3 * 3600 + 12 * 60) + Math.min(x, 16) - back(x);
     const day = Math.floor(abs / 86400), s = abs - day * 86400;
-    return `Day ${day} · ${pad(s / 3600)}:${pad((s % 3600) / 60)}:${pad(s % 60)}`;
+    return `${translate('Day')} ${day} · ${pad(s / 3600)}:${pad((s % 3600) / 60)}:${pad(s % 60)}`;
   }
 
   /* ---------- canvas: habitat corridor, static, stars ---------- */
@@ -742,7 +981,8 @@ a { color: inherit; }
   function ui() {
     scrub.value = t.toFixed(2);
     timeEl.textContent = `${fmt(t)} / ${fmt(END)}`;
-    pp.textContent = playing ? 'Pause' : t >= END ? 'Replay' : 'Play';
+    pp.textContent = translate(playing ? 'Pause' : t >= END ? 'Replay' : 'Play');
+    muteBtn.textContent = translate(muted ? 'Sound off' : 'Sound on');
   }
   function play() {
     poster.hidden = true;
@@ -765,7 +1005,7 @@ a { color: inherit; }
   pp.addEventListener('click', () => (playing ? pause() : play()));
   scrub.addEventListener('input', () => { poster.hidden = true; seek(+scrub.value); });
   muteBtn.addEventListener('click', () => {
-    muted = !muted; muteBtn.textContent = muted ? 'Sound off' : 'Sound on';
+    muted = !muted; muteBtn.textContent = translate(muted ? 'Sound off' : 'Sound on');
     if (master) master.gain.value = muted ? 0 : .9;
   });
   const fullscreen = () => {
@@ -773,7 +1013,7 @@ a { color: inherit; }
   };
   document.getElementById('fs').addEventListener('click', fullscreen);
   addEventListener('keydown', (e) => {
-    if (film.getBoundingClientRect().bottom < innerHeight * .5 || e.target.closest('.story') || e.target.tagName === 'A') return;
+    if (film.getBoundingClientRect().bottom < innerHeight * .5 || e.target.closest('.story, .language-switch') || e.target.tagName === 'A') return;
     if (e.target.tagName === 'INPUT' && e.key !== ' ') return;
     if (e.target.tagName === 'BUTTON' && (e.key === ' ' || e.key === 'Enter')) return; // the button handles it
     if (e.key === ' ' || e.key === 'k') { e.preventDefault(); if (!poster.hidden && !playing) { t = 0; sync(true); } playing ? pause() : play(); }
@@ -801,6 +1041,7 @@ a { color: inherit; }
     sync(false); render(t); readouts(t); ui();
     requestAnimationFrame(tick);
   }
+  addEventListener('pulsar-language-change', () => { readouts(t); ui(); });
   resize(); addEventListener('resize', resize);
   sync(true); requestAnimationFrame(tick);
 })();
