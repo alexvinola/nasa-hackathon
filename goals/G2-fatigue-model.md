@@ -17,3 +17,11 @@ One command extracts features with MediaPipe in Python (the same extractor as th
 ## Notes
 - 60 s windows with a 10 s step; per-subject normalization using their first minutes as baseline.
 - If RLDD does not arrive in time: DROZY/YawDD; if nothing arrives, thresholds from the NASA paper, and we say so in the pitch.
+- DROZY license (`drozy` in `shared/sources.json`): the repository goes public, so nothing from DROZY is committed.
+  The raw data lives in `data/raw/drozy/` (git-ignored) and each person downloads it and accepts the license.
+  - The G1 fixtures (`data/fixtures/*.y4m`) come from our own recordings, never from DROZY.
+  - Notebooks are committed without outputs (`nbstripout`): a cell that shows a frame would embed it in the `.ipynb`.
+  - No screenshot of DROZY frames in `docs/`, `research/`, PRs, slides or the video; charts and numbers are fine.
+  - Every place that reports a DROZY result cites Massoz et al. (2016), WACV.
+- DROZY video is near-infrared grayscale, not a colour webcam: check MediaPipe finds the face and eyelids on a few
+  videos before building on it.
