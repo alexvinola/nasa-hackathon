@@ -9,7 +9,7 @@ const LIGHT: Record<Status, string> = {
   AMBER: "bg-amber-400 shadow-[0_0_12px] shadow-amber-400",
   RED: "bg-red-500 shadow-[0_0_12px] shadow-red-500 animate-pulse",
 };
-const ESCALATION = { SELF_CARE: "SELF-CARE", CREW: "TELL THE CREW", FLIGHT_SURGEON: "FLIGHT SURGEON" } as const;
+const ESCALATION = { SELF_CARE: "AUTOCUIDADO", CREW: "AVISA A LA TRIPULACIÓN", FLIGHT_SURGEON: "CIRUJANO DE VUELO" } as const;
 
 /**
  * The rules engine's verdict over the HUD: traffic light, escalation, the readings and why. What PULSAR says about
@@ -44,7 +44,7 @@ export function VerdictPanel({
     <section data-hud-panel className="pointer-events-none absolute right-8 top-20 w-80 rounded-lg border border-pulse/30 bg-space/60 p-4 text-sm tracking-[0.1em] text-shell/80 backdrop-blur">
       <button type="button" aria-expanded={open} onClick={() => setOpen((was) => !was)} className="pointer-events-auto flex w-full items-center gap-3 text-left">
         <span className={`h-3 w-3 rounded-full ${decision ? LIGHT[decision.status] : "bg-orbit/40"}`} />
-        <span className="text-pulse">{decision ? decision.status : "WAITING FOR READINGS"}</span>
+        <span className="text-pulse">{decision ? decision.status : "ESPERANDO LECTURAS"}</span>
         {decision && <span className="ml-auto text-orbit">{ESCALATION[decision.escalation]}</span>}
         <span aria-hidden className={`${decision ? "" : "ml-auto"} border border-pulse/40 px-1.5 text-xs leading-tight text-pulse`}>{open ? "−" : "+"}</span>
       </button>
@@ -55,14 +55,14 @@ export function VerdictPanel({
         <button
           type="button"
           data-reading="biometrics.heartRateBpm"
-          title="How to take your pulse"
+          title="Cómo tomarte el pulso"
           onClick={() => onOpenGuide?.("biometrics.heartRateBpm")}
           className="pointer-events-auto mt-3 flex w-full items-center gap-3 rounded border border-red-400/40 bg-red-500/10 px-3 py-2 text-left tracking-[0.1em] hover:border-red-300"
         >
           <span aria-hidden className="hud-beat text-3xl leading-none text-red-400" style={{ animationDuration: `${60 / bpm}s` }}>♥</span>
           <span>
-            <span className="block text-2xl leading-none tracking-normal text-shell">{bpm}<span className="ml-1 text-xs text-shell/70">BPM</span></span>
-            <span className="mt-1 block text-xs text-red-300">PULSE · SIMULATED</span>
+            <span className="block text-2xl leading-none tracking-normal text-shell">{bpm}<span className="ml-1 text-xs text-shell/70">LPM</span></span>
+            <span className="mt-1 block text-xs text-red-300">PULSO · SIMULADO</span>
           </span>
           <svg aria-hidden viewBox="0 0 120 32" className="ml-auto h-8 w-28 text-red-400">
             <polyline
@@ -82,8 +82,8 @@ export function VerdictPanel({
       {biometrics && (
         <dl className="mt-3 grid grid-cols-3 gap-2 text-xs text-shell/90">
           <div><dt>PERCLOS</dt><dd className="text-base text-shell">{Math.round(biometrics.perclos * 100)}%</dd></div>
-          <div><dt>FATIGUE</dt><dd className="text-base text-shell">{biometrics.fatigueScore.toFixed(2)}</dd></div>
-          <div><dt>YAWNS/MIN</dt><dd className="text-base text-shell">{biometrics.yawnsPerMin}</dd></div>
+          <div><dt>FATIGA</dt><dd className="text-base text-shell">{biometrics.fatigueScore.toFixed(2)}</dd></div>
+          <div><dt>BOSTEZOS/MIN</dt><dd className="text-base text-shell">{biometrics.yawnsPerMin}</dd></div>
         </dl>
       )}
 
@@ -91,18 +91,18 @@ export function VerdictPanel({
         // Cabin air: the CO2 reading against the limit the rules engine applies to it.
         <div className="mt-3">
           <div className="flex justify-between text-xs text-shell/90">
-            <span>CABIN CO2 · SIMULATED</span>
+            <span>CO2 DE LA CABINA · SIMULADO</span>
             <span className="text-base text-shell">{cabinCo2.toFixed(1)}<span className="ml-1 text-xs text-shell/90">mmHg</span></span>
           </div>
           {cabinCo2Limit != null && (
             <>
-              <div className="mt-1 h-2 overflow-hidden rounded bg-shell/15" role="meter" aria-label="Cabin CO2" aria-valuemin={0} aria-valuemax={cabinCo2Limit} aria-valuenow={cabinCo2}>
+              <div className="mt-1 h-2 overflow-hidden rounded bg-shell/15" role="meter" aria-label="CO2 de la cabina" aria-valuemin={0} aria-valuemax={cabinCo2Limit} aria-valuenow={cabinCo2}>
                 <div
                   className={`h-full ${cabinCo2 > cabinCo2Limit ? "bg-amber-400" : "bg-pulse"}`}
                   style={{ width: `${Math.min(100, (cabinCo2 / cabinCo2Limit) * 100)}%` }}
                 />
               </div>
-              <div className="mt-1 text-right text-[11px] text-shell/80">LIMIT {cabinCo2Limit.toFixed(1)} mmHg</div>
+              <div className="mt-1 text-right text-[11px] text-shell/80">LÍMITE {cabinCo2Limit.toFixed(1)} mmHg</div>
             </>
           )}
         </div>
@@ -116,13 +116,13 @@ export function VerdictPanel({
 
       {advice && (
         <p className="mt-3 border-t border-pulse/20 pt-3 text-xs uppercase tracking-[0.15em] text-orbit">
-          PULSAR IS SAYING IT · {advice.source === "llm" ? "GEMMA 4" : "RULES"}
+          PULSAR LO DICE · {advice.source === "llm" ? "GEMMA 4" : "REGLAS"}
         </p>
       )}
 
       {error && <p className="mt-2 text-red-400">{error}</p>}
       <p className="mt-3 text-[11px] text-shell/80">
-        {simulated ? "SIMULATED READINGS · NO CAMERA" : "CAMERA MEASURED · PULSE SIMULATED"} · SLEEP, MOOD, CABIN: NOMINAL UNTIL G3/G6
+        {simulated ? "LECTURAS SIMULADAS · SIN CÁMARA" : "MEDIDO POR CÁMARA · PULSO SIMULADO"} · SUEÑO, ÁNIMO, CABINA: NOMINAL HASTA G3/G6
       </p>
       </div>
     </section>

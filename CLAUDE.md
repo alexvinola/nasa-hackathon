@@ -2,13 +2,19 @@
 
 A health platform for astronauts that runs entirely on a laptop, with no network. Full plan:
 [technical and functional document](https://docs.google.com/document/d/1VzA7EZoMSXTpHM6scSSvi0cd2ngCrVhFplvnuf4OImk/edit).
-Three people, three verticals, one contract and one weekend. Everything in the repository is written in English.
+Three people, three verticals, one contract and one weekend. Code, comments, docs and the contract are written in
+English. Spanish is also accepted: PULSAR speaks Spanish (Gemma prompts, fallbacks, Piper voice `es_ES-davefx-medium`)
+and the frontend's user-visible text is in Spanish; strings an acceptance test asserts on stay as the test expects.
 
 **PULSAR**: Personal Unit for Learning, Support, Assistance & Reminders. *Your personal health companion in space.*
 Formerly S.Y.N.A.P.S.E.; internal identifiers (`SYNAPSE_VERTICAL`, `.synapse/`, `start_synapse`, `window.__synapse`)
 keep the old codename so running sessions and scripts do not break. Mascot and presentation intro: `docs/brand/`.
 
 ## Goal-driven development
+
+For current implementation evidence, outstanding work and host-specific agent wiring,
+see [the harness guide](docs/HARNESS.md) and [implementation status](docs/IMPLEMENTATION.md).
+The declared stack below is the target; manifests and acceptance checks determine what is actually installed.
 
 - Work on **one goal at a time** from `GOALS.md`, with the `work-goal` skill. A goal is done when
   `make check-<id>` passes and the `goal-verifier` subagent confirms it; "it seems to work" does not count.

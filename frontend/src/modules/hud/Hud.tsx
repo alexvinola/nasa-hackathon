@@ -55,13 +55,13 @@ const WANDER: Spot[] = ["top_right", "bottom_right", "bottom_left", "home"];
 const WANDER_EVERY_MS = 20_000;
 // A question about what is in view gets the camera frame attached, so Gemma answers from the picture. Anything else
 // goes without it: on a CPU-only laptop the picture alone adds several seconds to the answer.
-const ABOUT_THE_VIEW = /\b(see|look|watch|show|camera|picture|image|view|holding|wearing|behind|colou?r|how many|who is|what is (this|that)|what am i|ves|mira|c[aá]mara|imagen)\b/i;
+const ABOUT_THE_VIEW = /\b(see|look|watch|show|camera|picture|image|view|holding|wearing|behind|colou?r|how many|who is|what is (this|that)|what am i|ves|veo|ver|mira|muestra|ense[nñ]a|c[aá]mara|imagen|foto|tengo|llevo|detr[aá]s|color|cu[aá]nt[oa]s|qui[eé]n es|qu[eé] es (esto|eso))\b/i;
 
 const CAM_LABEL: Record<CamState, string> = {
-  starting: "CAM · STARTING",
-  live: "CAM · LIVE",
-  denied: "CAM · PERMISSION DENIED",
-  unavailable: "CAM · NOT AVAILABLE",
+  starting: "CÁMARA · INICIANDO",
+  live: "CÁMARA · EN DIRECTO",
+  denied: "CÁMARA · PERMISO DENEGADO",
+  unavailable: "CÁMARA · NO DISPONIBLE",
 };
 
 function Corner({ className }: { className: string }) {
@@ -299,7 +299,7 @@ export function Hud() {
 
       <AlertIndicator
         level={level}
-        detail={level === "danger" && flagged(EXHAUSTED_SIGNAL) ? "NOT SAFE TO STAY AWAKE" : undefined}
+        detail={level === "danger" && flagged(EXHAUSTED_SIGNAL) ? "NO ES SEGURO SEGUIR DESPIERTO" : undefined}
         steps={steps}
         acknowledged={acknowledged}
         testing={testing}
@@ -331,12 +331,12 @@ export function Hud() {
 
       <div className="absolute right-8 top-8 bg-space/90 px-2 py-1 text-right text-xs font-bold tracking-[0.2em] text-pulse">
         <div className={state === "live" ? "" : "text-amber-300"}>● {CAM_LABEL[state]}</div>
-        <div className="mt-1 text-shell">OFFLINE · LOCAL ONLY</div>
+        <div className="mt-1 text-shell">SIN CONEXIÓN · SOLO LOCAL</div>
       </div>
 
       <div className="absolute inset-x-8 bottom-8 flex items-end justify-between text-xs tracking-[0.2em] text-shell/70">
         <span className="bg-space/90 px-2 py-1 text-shell">PULSAR HUD · v0.1</span>
-        <span className="bg-space/90 px-2 py-1 font-bold text-amber-300">NOT A MEDICAL DEVICE</span>
+        <span className="bg-space/90 px-2 py-1 font-bold text-amber-300">NO ES UN DISPOSITIVO MÉDICO</span>
       </div>
 
       {/* Stays open even if the readings flicker back to clear mid-test. */}

@@ -71,32 +71,32 @@ export function LogPanel() {
           <span className="text-shell/40">{clock(event.at)}</span> <span className="uppercase">{event.kind}</span> {event.text}
         </li>
       ))}
-      {!shown.length && <li className="text-shell/50">{down ? "" : "Nothing yet."}</li>}
-      {down && <li className="text-red-400">The backend is not answering at {API}.</li>}
+      {!shown.length && <li className="text-shell/50">{down ? "" : "Nada todavía."}</li>}
+      {down && <li className="text-red-400">El backend no responde en {API}.</li>}
       <div ref={end} />
     </ol>
   );
   const controls = (
     <div className="mb-2 flex gap-2">
       <button type="button" aria-pressed={all} onClick={() => setAll((was) => !was)} className="pointer-events-auto border border-shell/40 px-2 py-0.5">
-        {all ? "ALL REQUESTS" : "WITHOUT THE 1 S POLLING"}
+        {all ? "TODAS LAS PETICIONES" : "SIN EL SONDEO DE 1 S"}
       </button>
       <button type="button" onClick={() => setWide((was) => !was)} className="pointer-events-auto border border-shell/40 px-2 py-0.5">
-        {wide ? "CLOSE (L)" : "WIDE (L)"}
+        {wide ? "CERRAR (L)" : "ANCHO (L)"}
       </button>
     </div>
   );
 
   return (
     <>
-      <HudPanel title={`BACKEND LOG (L)${down ? " · DOWN" : ""}`} defaultOpen={false}>
+      <HudPanel title={`LOG DEL BACKEND (L)${down ? " · CAÍDO" : ""}`} defaultOpen={false}>
         {controls}
         <div className="max-h-48 overflow-y-auto">{lines}</div>
       </HudPanel>
       {wide && (
-        <section aria-label="Backend log" className="fixed inset-x-8 bottom-8 top-1/2 z-40 flex flex-col border border-pulse/50 bg-space/90 p-3 text-xs tracking-[0.12em] text-shell/80 backdrop-blur">
+        <section aria-label="Log del backend" className="fixed inset-x-8 bottom-8 top-1/2 z-40 flex flex-col border border-pulse/50 bg-space/90 p-3 text-xs tracking-[0.12em] text-shell/80 backdrop-blur">
           <div className="flex items-center justify-between text-pulse">
-            <span>BACKEND LOG · {shown.length} LINES</span>
+            <span>LOG DEL BACKEND · {shown.length} LÍNEAS</span>
           </div>
           <div className="mt-2">{controls}</div>
           <div className="min-h-0 flex-1 overflow-y-auto">{lines}</div>

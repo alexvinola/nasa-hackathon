@@ -9,6 +9,8 @@ From audio to a spoken answer on the demo laptop with no network: faster-whisper
 - `backend/scripts/voice_bench.py` plays each `.wav` in `data/fixtures/voice/`, gets text and audio back, and writes `backend/bench/voice_latency.json` with per-stage latency (STT, rules, LLM, TTS) and total.
 - It works with networking disabled (`HF_HUB_OFFLINE=1`, Ollama on localhost).
 - Gemma's answer is at most 2 sentences and mentions no figures or diagnoses absent from the verdict (checked automatically over the G4 scenarios).
+- PULSAR speaks Spanish: when the escalation is the flight surgeon, the answer names "cirujano de vuelo".
+  (Changed 2026-11-14: the criterion looked for "flight surgeon" while PULSAR spoke English.)
 
 ## Check
 `make check-G5` → `backend/tests/acceptance/test_voice.py` (runs the bench and validates the JSON and the prompt rules).

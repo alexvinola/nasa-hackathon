@@ -37,10 +37,9 @@ def local_only(request: Request) -> None:
 
 router = APIRouter(dependencies=[Depends(local_only)])
 
-VOICE = Path(os.environ.get("PULSAR_VOICE", Path(__file__).parent / "assets/voices/en_US-lessac-medium.onnx"))
-# English only. Speech in any other language comes out as nonsense: set PULSAR_WHISPER_MODEL=base (multilingual,
-# about twice as slow) to be understood in Spanish, for example.
-WHISPER_MODEL = os.environ.get("PULSAR_WHISPER_MODEL", "base.en")
+VOICE = Path(os.environ.get("PULSAR_VOICE", Path(__file__).parent / "assets/voices/es_ES-davefx-medium.onnx"))
+# Multilingual so the astronaut can speak Spanish; about twice as slow as base.en (set that for an English-only crew).
+WHISPER_MODEL = os.environ.get("PULSAR_WHISPER_MODEL", "base")
 OLLAMA_URL = os.environ.get("PULSAR_OLLAMA_URL", "http://127.0.0.1:11434")
 VISION_MODEL = os.environ.get("PULSAR_LLM_MODEL", "gemma4:e4b-it-qat")
 MAX_AUDIO = 10 * 1024 * 1024

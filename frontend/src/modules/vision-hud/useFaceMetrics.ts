@@ -37,12 +37,12 @@ export function useFaceMetrics(
     if (!live || !worker) return;
     let on = true;
     let timer = 0;
-    worker.onerror = () => onError?.("the face worker stopped");
+    worker.onerror = () => onError?.("el proceso de cara se detuvo");
 
     worker.onmessage =(event: MessageEvent<{ type: string; biometrics?: Biometrics; frame?: FaceFrame; message?: string }>) => {
       // Typically the model files are missing (they are not in git: `make prefetch` downloads them). Say so
       // instead of leaving the mesh and the camera readings silently absent.
-      if (on && event.data.type === "error") onError?.(event.data.message ?? "the face models could not be loaded");
+      if (on && event.data.type === "error") onError?.(event.data.message ?? "no se pudieron cargar los modelos de cara");
       if (on && event.data.type === "face" && event.data.frame && frameRef) frameRef.current = event.data.frame;
       if (!on || event.data.type !== "biometrics" || !event.data.biometrics) return;
       const reading = event.data.biometrics;

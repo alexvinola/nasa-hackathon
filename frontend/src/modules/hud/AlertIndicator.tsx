@@ -4,9 +4,9 @@ import type { AlarmLevel } from "./useAlarmSound";
 import { useHotkey } from "./useHotkey";
 
 const LOOK = {
-  clear: { box: "border-pulse text-pulse", label: "ALL CLEAR" },
-  rest: { box: "border-amber-400 text-amber-300", label: "TIME TO REST" },
-  danger: { box: "border-red-500 text-red-200", label: "DANGER" },
+  clear: { box: "border-pulse text-pulse", label: "TODO EN ORDEN" },
+  rest: { box: "border-amber-400 text-amber-300", label: "HORA DE DESCANSAR" },
+  danger: { box: "border-red-500 text-red-200", label: "PELIGRO" },
 } as const;
 
 function Icon({ level }: { level: AlarmLevel }) {
@@ -47,7 +47,7 @@ export function AlertIndicator({
   onTest,
 }: {
   level: AlarmLevel;
-  /** Appended to the label, e.g. "NOT SAFE TO STAY AWAKE". */
+  /** Appended to the label, e.g. "NO ES SEGURO SEGUIR DESPIERTO". */
   detail?: string;
   steps: string[];
   acknowledged: boolean;
@@ -71,7 +71,7 @@ export function AlertIndicator({
       </header>
       {level && steps.length > 0 && (
         <>
-          <p className="mt-3 text-center text-xs text-shell/90">DO THIS NOW</p>
+          <p className="mt-3 text-center text-xs text-shell/90">HAZ ESTO AHORA</p>
           <ol className="mt-1 list-inside list-decimal space-y-2 text-center text-lg normal-case leading-snug tracking-normal text-white">
             {steps.map((step) => <li key={step}>{step}</li>)}
           </ol>
@@ -84,7 +84,7 @@ export function AlertIndicator({
           onClick={onTest}
           className={`mt-3 w-full border-2 px-3 py-2 text-sm text-white disabled:opacity-60 ${level === "danger" ? "border-red-400 bg-red-600 font-bold" : "border-amber-300 bg-amber-400 font-bold !text-space"}`}
         >
-          {acknowledged ? "UNDERSTOOD · ALARM STOPPED" : "TAKE THE REACTION TEST TO STOP THE ALARM (ESC)"}
+          {acknowledged ? "ENTENDIDO · ALARMA DETENIDA" : "HAZ EL TEST DE REACCIÓN PARA DETENER LA ALARMA (ESC)"}
         </button>
       )}
     </section>

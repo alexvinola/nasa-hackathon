@@ -32,7 +32,7 @@ export function GuidePanel({ guide, value, status, onClose }: { guide: Guide; va
     <section
       data-hud-panel
       data-guide={guide.signal}
-      aria-label={`Guide: ${guide.label}`}
+      aria-label={`Guía: ${guide.label}`}
       className="absolute left-[19rem] top-24 z-10 max-h-[calc(100vh-17rem)] w-[40rem] max-w-[calc(100vw-43rem)] overflow-y-auto border-2 border-pulse/60 bg-space/70 p-4 text-sm text-shell backdrop-blur"
     >
       <header className="flex items-start gap-3">
@@ -41,7 +41,7 @@ export function GuidePanel({ guide, value, status, onClose }: { guide: Guide; va
           <p className="text-xs tracking-[0.1em] text-shell/70">{guide.instrument}</p>
         </div>
         <button type="button" onClick={onClose} aria-label="Close the guide" className="ml-auto border border-shell/40 px-2 py-1 text-xs tracking-[0.15em] text-shell/80 hover:border-shell">
-          CLOSE ✕
+          CERRAR ✕
         </button>
       </header>
 
@@ -49,15 +49,15 @@ export function GuidePanel({ guide, value, status, onClose }: { guide: Guide; va
         <div>
           <GuideAnimation signal={guide.signal} focus={guide.how[step].focus} label={guide.label} />
           <dl className="mt-2 w-64 text-xs tracking-[0.1em] text-shell/70">
-            <dt>NOW</dt>
+            <dt>AHORA</dt>
             <dd data-guide-value className="text-xl tracking-normal text-shell">{value}</dd>
-            <dt className="mt-1">RULES ENGINE</dt>
+            <dt className="mt-1">MOTOR DE REGLAS</dt>
             <dd data-guide-status className={`mt-1 inline-block border px-2 py-0.5 text-sm ${TONE[status]}`}>{status}</dd>
           </dl>
         </div>
 
         <div className="min-w-0 flex-1">
-          <h3 className="text-xs tracking-[0.15em] text-orbit">HOW</h3>
+          <h3 className="text-xs tracking-[0.15em] text-orbit">CÓMO</h3>
           <ol className="mt-1 space-y-1">
             {guide.how.map((item, index) => (
               <li key={item.text}>
@@ -80,18 +80,18 @@ export function GuidePanel({ guide, value, status, onClose }: { guide: Guide; va
         </div>
       </div>
 
-      <h3 className="mt-3 text-xs tracking-[0.15em] text-orbit">WHY IT MATTERS IN SPACE</h3>
+      <h3 className="mt-3 text-xs tracking-[0.15em] text-orbit">POR QUÉ IMPORTA EN EL ESPACIO</h3>
       <p className="mt-1 leading-snug">{guide.why}</p>
 
-      <h3 className="mt-3 text-xs tracking-[0.15em] text-orbit">IF IT DOES NOT LOOK NORMAL</h3>
+      <h3 className="mt-3 text-xs tracking-[0.15em] text-orbit">SI NO PARECE NORMAL</h3>
       <p className="mt-1 leading-snug">{guide.whenAbnormal.text}</p>
       {guide.whenAbnormal.countermeasureIds.length > 0 && (
         // Rule ids stay out of sight: some carry their limit in the name, and a guide quotes no threshold.
-        <p className="mt-1 text-xs text-shell/60">COUNTERMEASURE {guide.whenAbnormal.countermeasureIds.join(", ")}</p>
+        <p className="mt-1 text-xs text-shell/60">CONTRAMEDIDA {guide.whenAbnormal.countermeasureIds.join(", ")}</p>
       )}
 
       <p className="mt-3 border-t border-pulse/20 pt-2 text-[11px] tracking-[0.1em] text-shell/60">
-        SOURCES: {guide.sources.join(", ")}{guide.assumption ? " · STEPS: TEAM WORDING" : ""} · <span className="text-orbit">NOT A MEDICAL DEVICE</span>
+        FUENTES: {guide.sources.join(", ")}{guide.assumption ? " · PASOS: REDACCIÓN DEL EQUIPO" : ""} · <span className="text-orbit">NOT A MEDICAL DEVICE</span>
       </p>
     </section>
   );

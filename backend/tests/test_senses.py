@@ -122,10 +122,12 @@ def test_director_decides_when_to_speak_without_asking_the_model(monkeypatch):
     heard = {"user_spoke": True, "via_voice": True}
     for not_for_pulsar in ("Yeah, I'll call you back after lunch, bye mum.", "Uh. Hmm."):
         assert client.post("/pulsar/act", json={**heard, "instruction": not_for_pulsar}).json() == director.SILENT
-    for meant_for_it in ("Pulsar, come here", "What is that?", "¿Qué ves?", "Please move left"):
+    for meant_for_it in ("Pulsar, come here", "What is that?", "¿Qué ves?", "Please move left", "Dime qué ves", "Ven aquí"):
         assert director.addressed(meant_for_it)
     # health is never the model's call, typed or spoken
     assert client.post("/pulsar/act", json={"user_spoke": True, "instruction": "Do I look tired?"}).json()["say"] == director.NOT_MINE
+    assert client.post("/pulsar/act", json={"user_spoke": True, "instruction": "¿Estoy cansado?"}).json()["say"] == director.NOT_MINE
+    assert director.FORBIDDEN.search("Pareces cansado.") and director.FORBIDDEN.search("Avisa al médico.")
     assert not director.FORBIDDEN.search("I will still paint it.")  # "ill" and "pain" only count as whole words
 
 
@@ -169,9 +171,9 @@ def test_director_respects_the_rules_engines_health_check(monkeypatch):
     # RED (exhausted): whatever is asked, PULSAR only repeats what the engine requires
     exhausted = drowsy_telemetry()
     exhausted["biometrics"]["fatigueScore"] = 0.8
-    answering(monkeypatch, "It is not safe to stay awake on task. Contact the flight surgeon, then stop and make it safe.", sent)
+    answering(monkeypatch, "No es seguro seguir con la tarea. Contacta con el cirujano de vuelo y para lo que estás haciendo.", sent)
     told = client.post("/pulsar/act", json={**scene, "instruction": "Tell me a joke.", "telemetry": exhausted}).json()
-    assert "flight surgeon" in told["say"] and told["reaction"] == "alert"
+    assert "cirujano de vuelo" in told["say"] and told["reaction"] == "alert"
     assert "Stop what you are doing" in sent["body"]["messages"][1]["content"]  # the required step reached Gemma
 
 
