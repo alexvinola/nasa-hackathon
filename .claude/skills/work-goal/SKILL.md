@@ -1,11 +1,12 @@
 ---
 name: work-goal
-description: Work on a goal from GOALS.md (G0-G8) until its check `make check-Gn` passes. Use it when the human says "work on G4", "/work-goal G1" or asks to move a hackathon goal forward.
+description: Work on a goal from GOALS.md (G0-G11) until its check `make check-Gn` passes. Use it when the human says "work on G4", "/work-goal G1" or asks to move a hackathon goal forward.
 ---
 
 # Work on a goal
 
 A goal is done when `make check-<id>` passes and the verifier confirms it. There is no other criterion.
+See [the harness guide](../../../docs/HARNESS.md) for Windows commands and host limitations.
 
 ## 1. Prepare
 
@@ -35,6 +36,6 @@ The acceptance test is the specification, so it comes before the code:
 
 1. `make check-<id>` green.
 2. Launch the `goal-verifier` subagent with the id and the branch. If it does not confirm, go back to the loop with its findings.
-3. `rm .synapse/active-goal`, final commit and `git push -u origin goal/<id>-<slug>`.
-4. Open the PR against `main` with the `github-workflow` skill, pasting the output of `make check-<id>` and the verifier report. It is merged only if the check also passes on `main` after rebasing.
+3. Remove `.synapse/active-goal`. Commit and push only when the human has authorized those actions.
+4. If authorized to open a PR, use the `github-workflow` skill and include the output of `make check-<id>` and the verifier report. Merge requires separate authorization and a passing check on `main` after rebasing.
 5. Report to the human: what was done, what the check proved, what was left out and any measured figure (fps, latency).

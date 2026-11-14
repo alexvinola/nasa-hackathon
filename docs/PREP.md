@@ -1,6 +1,9 @@
 # Preparation (what an agent cannot do)
 
-In order of urgency. Tick each box in the PR or in the team chat.
+In order of urgency. Tick each box only with current evidence in the PR or team chat.
+Some source and fixtures now exist; unchecked items are readiness checks, not statements
+that all implementation is missing. See [implementation status](IMPLEMENTATION.md)
+and [the agent harness](HARNESS.md).
 
 ## Now, before writing code
 
@@ -10,7 +13,7 @@ In order of urgency. Tick each box in the PR or in the team chat.
       `brew upgrade ollama` first (0.40.16 on Alex's laptop); prefetch stops with an error otherwise. Under 16 GB of RAM:
       `PULSAR_LLM_MODEL=gemma4:e2b-it-qat make prefetch`, and start the backend with the same variable.
       Then check that it works with Wi-Fi off.
-- [ ] **GitHub repo**: create `synapse-nasa-2026`, give all three access, protect `main` (PR required).
+- [ ] **GitHub repo**: confirm all three have access to `alexvinola/nasa-hackathon` and protect `main` (PR required).
       `gh auth login` on each laptop.
 - [ ] **FS1/FS2/FS3 split** decided, and each person runs `SYNAPSE_VERTICAL=FSx claude` in their clone
       (PowerShell: `$env:SYNAPSE_VERTICAL='FSx'; claude`).
@@ -26,7 +29,8 @@ In order of urgency. Tick each box in the PR or in the team chat.
 
 - [ ] `data/fixtures/eyes_closed.y4m` and `data/fixtures/alert.y4m` (10-15 s, under the venue lighting) for G1.
       `ffmpeg -i in.mp4 -pix_fmt yuv420p -r 30 out.y4m`
-- [ ] 4-6 voice commands in `data/fixtures/voice/*.wav` (16 kHz mono) for G5: "how am I doing?",
+- [ ] Verify the existing voice fixtures and record any missing commands in `data/fixtures/voice/*.wav`
+      (16 kHz mono) for G5: "how am I doing?",
       "next step", "call the flight surgeon"...
 
 ## Demo laptop
@@ -39,7 +43,8 @@ In order of urgency. Tick each box in the PR or in the team chat.
 ## Submission
 
 - [ ] Read the Space Apps submission requirements (video, public URL, description) and the deadline.
-- [ ] AWS Amplify for the static frontend in demo mode (account and permissions ready on Saturday).
+- [ ] If a public static presentation is required, agree its hosting separately. It must not receive
+      health data or become a runtime dependency of the offline demo.
 - [ ] Record the full demo video on Sunday before the pitch.
 
 ## Tools
@@ -47,5 +52,7 @@ In order of urgency. Tick each box in the PR or in the team chat.
 - Node 24 + pnpm, uv, Docker, gh: already installed on Alex's laptop. Ollama still needs to be started.
 - Python: the system ships 3.14; pin 3.12 in `backend/` and `data/` (`uv python pin 3.12`), because
   faster-whisper (ctranslate2) and MediaPipe for Python may not have 3.14 wheels.
-- Claude Code on all three laptops, with this repo: CLAUDE.md, the `work-goal` / `new-goal` skills,
-  the `goal-verifier` subagent and the hooks load automatically when the project is opened.
+- Verify customization discovery on each host: Claude Code uses CLAUDE.md and `.claude/`;
+  VS Code uses AGENTS.md and the repository `.github/agents/` wrappers and harness skill.
+  Existing workflows remain in `.claude/skills/`. Check the active hooks rather than assuming
+  that every editor/tool enforces them. See [the harness guide](HARNESS.md).
