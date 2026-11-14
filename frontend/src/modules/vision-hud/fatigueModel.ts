@@ -39,6 +39,7 @@ export const FATIGUE_MODEL = {
 
 // `constants` in fatigue_model.json. The last five are team assumptions (see fatigue_features.py).
 export const WINDOW_S = 60;
+export const MODEL_BLINK = 0.5; // `blendshape_closed`: the eye closure the model was trained with, not the HUD's BLINK
 export const MAX_GAP_S = 0.25;
 export const MIN_WINDOW_FRAMES = 450; // at least 7.5 processed frames a second on average
 export const MIN_FACE_FRACTION = 0.8; // a window with a face in fewer of its frames gives no score
@@ -52,7 +53,7 @@ const EPS = 1e-9;
 export type Sample = {
   t: number; // seconds
   face: boolean;
-  closed: number; // 1 when (eyeBlinkLeft + eyeBlinkRight) / 2 > BLINK, else 0
+  closed: number; // 1 when (eyeBlinkLeft + eyeBlinkRight) / 2 > MODEL_BLINK, else 0
   pitch: number; // head pitch in degrees, atan2(m[6], m[10]) of the facial transformation matrix
   mouth: number; // mouth opening ratio (./yawn)
 };

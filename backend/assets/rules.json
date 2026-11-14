@@ -46,7 +46,7 @@
       "bodySystems": ["NERVOUS"],
       "countermeasureId": "CM-DROWSY-01",
       "source": "uta-rldd",
-      "assumption": "Calibrated on RLDD (data/out/fatigue_report.md, 'Where a threshold would sit'): 0.111 is the cut that lets 5 % of the alert 60 s windows of all 24 subjects fire. Out of fold (each subject scored with the others' cut) it fires on 7 % of alert windows and 24 % of the windows of videos their subject called drowsy. The 5 % rate is the team's choice. Self-reported labels, other people's webcams: not validated on the demo camera, and not a clinical PERCLOS cut-off.",
+      "assumption": "Calibrated on RLDD (data/out/fatigue_report.md, 'Where a threshold would sit'): 0.111 is the cut that lets 5 % of the alert 60 s windows of all 24 subjects fire. Out of fold (each subject scored with the others' cut) it fires on 7 % of alert windows and 24 % of the windows of videos their subject called drowsy. The 5 % rate is the team's choice. Self-reported labels, other people's webcams: not validated on the demo camera, and not a clinical PERCLOS cut-off. RLDD's PERCLOS counts an eye as closed above an eyeBlink score of 0.5; the HUD uses 0.65 so that looking down at the keyboard is not counted (vision-hud/thresholds.ts), which makes this rule fire less often than the RLDD figures say.",
       "message": "Ojos cerrados el {value} del tiempo, por encima de {threshold}."
     },
     {

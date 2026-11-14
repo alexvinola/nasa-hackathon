@@ -52,7 +52,8 @@ export function LogPanel() {
         last.current = body.last;
         if (!body.events.length) return;
         setEvents((had) => {
-          const lines = [...had, ...body.events];
+          // Two polls can overlap and bring the same events: keep one line per id.
+          const lines = [...new Map([...had, ...body.events].map((e) => [e.id, e])).values()];
           const kept = [...lines.filter((e) => !e.noisy).slice(-KEEP), ...lines.filter((e) => e.noisy).slice(-KEEP_NOISY)];
           return kept.sort((a, b) => a.id - b.id);
         });

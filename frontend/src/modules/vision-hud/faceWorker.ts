@@ -16,7 +16,7 @@
  */
 
 import { FaceLandmarker, FilesetResolver } from "@mediapipe/tasks-vision";
-import { estimateFatigue, WINDOW_S, type FatigueEstimate, type Sample } from "./fatigueModel";
+import { estimateFatigue, MODEL_BLINK, WINDOW_S, type FatigueEstimate, type Sample } from "./fatigueModel";
 import { SustainedClosure } from "./sleep";
 import { BLINK } from "./thresholds";
 import { mouthOpenRatio, YawnDetector } from "./yawn";
@@ -160,12 +160,13 @@ function readFace(result: ReturnType<FaceLandmarker["detectForVideo"]>, now: num
   if (yawnDetector.push(now / 1000, mouth)) yawns.push(now);
   const shapes = result.faceBlendshapes?.[0]?.categories;
   const at = (name: string) => shapes?.find((c) => c.categoryName === name)?.score ?? 0;
-  const closed = (at("eyeBlinkLeft") + at("eyeBlinkRight")) / 2 > BLINK;
+  const blink = (at("eyeBlinkLeft") + at("eyeBlinkRight")) / 2;
+  const closed = blink > BLINK;
   const m = result.facialTransformationMatrixes?.[0]?.data;
   samples.push({
     t: now / 1000,
     face: Boolean(landmarks),
-    closed: landmarks && shapes ? Number(closed) : Number.NaN,
+    closed: landmarks && shapes ? Number(blink > MODEL_BLINK) : Number.NaN, // the model's own definition
     pitch: landmarks && m ? Math.atan2(m[6], m[10]) * DEG : Number.NaN,
     mouth,
   });

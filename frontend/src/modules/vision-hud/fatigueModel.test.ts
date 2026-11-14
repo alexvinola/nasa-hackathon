@@ -14,6 +14,7 @@ import {
   MAX_GAP_S,
   MIN_FACE_FRACTION,
   MIN_WINDOW_FRAMES,
+  MODEL_BLINK,
   NOD_OFF_DEG,
   NOD_ON_DEG,
   openEpisodes,
@@ -22,7 +23,6 @@ import {
   windowFeatures,
   type Sample,
 } from "./fatigueModel";
-import { BLINK } from "./thresholds";
 import { YAWN_PARAMS } from "./yawn";
 
 const FPS = 15;
@@ -67,7 +67,7 @@ describe("the model file", () => {
       nod_on_deg: NOD_ON_DEG,
       nod_off_deg: NOD_OFF_DEG,
       pitch_down_sign: 1,
-      blendshape_closed: BLINK,
+      blendshape_closed: MODEL_BLINK,
     });
     expect(model.eye_closure.method).toBe("blendshape");
     expect(model.normalisation.variant).toBe("absolute");
