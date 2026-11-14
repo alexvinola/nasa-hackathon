@@ -1,0 +1,68 @@
+{
+  "name": "04-demo-emergency",
+  "description": "Script block 0:55-1:35: eyes half closed, one arm still, radiation and CO2 raised",
+  "input": {
+    "schemaVersion": "1.0",
+    "timestamp": 1794652000,
+    "biometrics": {
+      "heartRateBpm": 76,
+      "heartRateConfidence": 0.62,
+      "fatigueScore": 0.86,
+      "perclos": 0.47,
+      "yawnsPerMin": 3,
+      "postureStability": 0.94,
+      "armAsymmetry": 0.52,
+      "lastPvtMeanMs": 412,
+      "lastPvtLapses": 6
+    },
+    "selfReport": {
+      "sleepHoursLast24h": 4.5,
+      "mood": 4,
+      "bloodPressure": null,
+      "glucoseMgDl": null,
+      "bodyTempC": null
+    },
+    "environment": {
+      "radiation_mSv": 12.0,
+      "cabinCo2_mmHg": 6.5,
+      "gravityMode": "MARS_038G",
+      "activeHazards": [
+        "RADIATION",
+        "HOSTILE_ENVIRONMENT",
+        "DISTANCE",
+        "GRAVITY"
+      ]
+    },
+    "decision": {
+      "status": "GREEN",
+      "escalation": "SELF_CARE",
+      "affectedSystems": [],
+      "hrpRisk": null,
+      "factors": [],
+      "countermeasureId": null
+    },
+    "voice": {
+      "handsFreeMode": false,
+      "isListening": false,
+      "transcript": "",
+      "responseText": "",
+      "audioUrl": ""
+    }
+  },
+  "expect": {
+    "status": "RED",
+    "escalation": "FLIGHT_SURGEON",
+    "hrpRisk": "SLEEP",
+    "affectedSystems": [
+      "NERVOUS",
+      "MUSCULOSKELETAL",
+      "RESPIRATORY"
+    ],
+    "factorSignals": [
+      "biometrics.perclos",
+      "biometrics.armAsymmetry",
+      "environment.cabinCo2_mmHg",
+      "environment.radiation_mSv"
+    ]
+  }
+}

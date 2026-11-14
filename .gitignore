@@ -1,0 +1,20 @@
+# local state of the goal loop
+.synapse/
+
+# environments and dependencies
+.venv/
+__pycache__/
+node_modules/
+.next/
+out/
+frontend/test-results/
+frontend/playwright-report/
+
+# datasets and heavy models: downloaded with make prefetch or by hand (docs/PREP.md)
+data/raw/
+data/features/
+*.part
+frontend/public/mediapipe/wasm/
+
+# secrets
+.env

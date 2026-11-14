@@ -1,0 +1,45 @@
+{
+  "timestamp": 1794652000,
+  "biometrics": {
+    "heartRateBpm": 76,
+    "heartRateConfidence": 0.62,
+    "fatigueScore": 0.21,
+    "perclos": 0.18,
+    "yawnsPerMin": 0,
+    "postureStability": 0.94,
+    "armAsymmetry": 0.08,
+    "lastPvtMeanMs": 284,
+    "lastPvtLapses": 1
+  },
+  "selfReport": {
+    "sleepHoursLast24h": 6.5,
+    "mood": 4,
+    "bloodPressure": null,
+    "glucoseMgDl": null,
+    "bodyTempC": null
+  },
+  "environment": {
+    "radiation_mSv": 0.8,
+    "cabinCo2_mmHg": 2.9,
+    "gravityMode": "MARS_038G",
+    "activeHazards": [
+      "DISTANCE",
+      "GRAVITY"
+    ]
+  },
+  "decision": {
+    "status": "GREEN",
+    "escalation": "SELF_CARE",
+    "affectedSystems": [],
+    "hrpRisk": null,
+    "factors": [],
+    "countermeasureId": null
+  },
+  "voice": {
+    "handsFreeMode": false,
+    "isListening": false,
+    "transcript": "",
+    "responseText": "",
+    "audioUrl": ""
+  }
+}

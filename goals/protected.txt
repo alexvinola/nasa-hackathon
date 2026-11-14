@@ -1,0 +1,11 @@
+# Paths that define what "done" means. The agent does not change them to make a check pass:
+# editing them asks the human for confirmation (hook .claude/hooks/guard_paths.py).
+# One glob pattern per line; ** crosses directories.
+shared/**
+goals/**
+GOALS.md
+Makefile
+scripts/check_*
+**/acceptance/**
+.claude/settings.json
+.claude/hooks/**

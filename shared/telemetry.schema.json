@@ -1,0 +1,363 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://synapse.local/telemetry.schema.json",
+  "title": "S.Y.N.A.P.S.E. telemetry contract",
+  "description": "Full state shared by the frontend (Zustand store) and the backend (FastAPI). Changing it is a team decision: bump schemaVersion and update shared/examples and shared/scenarios.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "timestamp",
+    "biometrics",
+    "selfReport",
+    "environment",
+    "decision",
+    "voice"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0"
+    },
+    "timestamp": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Unix epoch, seconds"
+    },
+    "biometrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "heartRateBpm",
+        "heartRateConfidence",
+        "fatigueScore",
+        "perclos",
+        "yawnsPerMin",
+        "postureStability",
+        "armAsymmetry",
+        "lastPvtMeanMs",
+        "lastPvtLapses"
+      ],
+      "properties": {
+        "heartRateBpm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 20,
+          "maximum": 250
+        },
+        "heartRateConfidence": {
+          "$ref": "#/$defs/unit"
+        },
+        "fatigueScore": {
+          "$ref": "#/$defs/unit"
+        },
+        "perclos": {
+          "$ref": "#/$defs/unit"
+        },
+        "yawnsPerMin": {
+          "type": "number",
+          "minimum": 0
+        },
+        "postureStability": {
+          "$ref": "#/$defs/unit"
+        },
+        "armAsymmetry": {
+          "$ref": "#/$defs/unit"
+        },
+        "lastPvtMeanMs": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "lastPvtLapses": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        }
+      }
+    },
+    "selfReport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sleepHoursLast24h",
+        "mood",
+        "bloodPressure",
+        "glucoseMgDl",
+        "bodyTempC"
+      ],
+      "properties": {
+        "sleepHoursLast24h": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 24
+        },
+        "mood": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1,
+          "maximum": 5
+        },
+        "bloodPressure": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "systolic",
+                "diastolic"
+              ],
+              "properties": {
+                "systolic": {
+                  "type": "number",
+                  "minimum": 50,
+                  "maximum": 260
+                },
+                "diastolic": {
+                  "type": "number",
+                  "minimum": 30,
+                  "maximum": 160
+                }
+              }
+            }
+          ]
+        },
+        "glucoseMgDl": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 20,
+          "maximum": 600
+        },
+        "bodyTempC": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 30,
+          "maximum": 44
+        }
+      }
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "radiation_mSv",
+        "cabinCo2_mmHg",
+        "gravityMode",
+        "activeHazards"
+      ],
+      "properties": {
+        "radiation_mSv": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Simulated dose (CSA widget)"
+        },
+        "cabinCo2_mmHg": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Simulated cabin CO2"
+        },
+        "gravityMode": {
+          "enum": [
+            "MICROGRAVITY",
+            "MOON_016G",
+            "MARS_038G"
+          ]
+        },
+        "activeHazards": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/hazard"
+          }
+        }
+      }
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "escalation",
+        "affectedSystems",
+        "hrpRisk",
+        "factors",
+        "countermeasureId"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "GREEN",
+            "AMBER",
+            "RED"
+          ]
+        },
+        "escalation": {
+          "enum": [
+            "SELF_CARE",
+            "CREW",
+            "FLIGHT_SURGEON"
+          ]
+        },
+        "affectedSystems": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/bodySystem"
+          }
+        },
+        "hrpRisk": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/hrpRisk"
+            }
+          ]
+        },
+        "factors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/factor"
+          }
+        },
+        "countermeasureId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "voice": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "handsFreeMode",
+        "isListening",
+        "transcript",
+        "responseText",
+        "audioUrl"
+      ],
+      "properties": {
+        "handsFreeMode": {
+          "type": "boolean"
+        },
+        "isListening": {
+          "type": "boolean"
+        },
+        "transcript": {
+          "type": "string"
+        },
+        "responseText": {
+          "type": "string"
+        },
+        "audioUrl": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "unit": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "hazard": {
+      "description": "The 5 HRP hazards: space radiation, isolation and confinement, distance from Earth, gravity fields, hostile and closed environments",
+      "enum": [
+        "RADIATION",
+        "ISOLATION",
+        "DISTANCE",
+        "GRAVITY",
+        "HOSTILE_ENVIRONMENT"
+      ]
+    },
+    "hrpRisk": {
+      "description": "SLEEP = Risk of Inadequate Sleep and Irregular Schedules; BEHAVIORAL = Risk of Behavioral Changes and Psychiatric Disorders; PERFORMANCE = Risk of Injury and Compromised Performance; the rest are issues named in the challenge",
+      "enum": [
+        "SLEEP",
+        "BEHAVIORAL",
+        "PERFORMANCE",
+        "CARDIOVASCULAR",
+        "NUTRITION",
+        "IMMUNE"
+      ]
+    },
+    "bodySystem": {
+      "description": "Zones of the SVG body twin that light up",
+      "enum": [
+        "NERVOUS",
+        "CARDIOVASCULAR",
+        "RESPIRATORY",
+        "MUSCULOSKELETAL",
+        "METABOLIC",
+        "IMMUNE"
+      ]
+    },
+    "factor": {
+      "description": "One reason behind an alert, as the rules engine explains it",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "signal",
+        "value",
+        "threshold",
+        "hazard",
+        "message"
+      ],
+      "properties": {
+        "signal": {
+          "type": "string",
+          "description": "Path of the field in the contract, e.g. biometrics.perclos"
+        },
+        "value": {
+          "type": [
+            "number",
+            "string",
+            "boolean",
+            "null"
+          ]
+        },
+        "threshold": {
+          "type": [
+            "number",
+            "string",
+            "null"
+          ]
+        },
+        "hazard": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/hazard"
+            }
+          ]
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
