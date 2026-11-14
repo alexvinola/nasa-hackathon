@@ -19,12 +19,10 @@ const RIGHT_EYE_OUTER = 33;
 const MOUTH_CORNER = 291;
 const FOREHEAD = 10;
 const NOSE_TIP = 1;
-// Pose: shoulders, elbows, wrists.
-const ARMS: [number, number][] = [[11, 13], [13, 15], [12, 14], [14, 16], [11, 12]];
 
 /**
  * MediaPipe's view of the astronaut, drawn over the camera: the 478-point face mesh, eyes and mouth coloured by the
- * blendshape scores the metrics use, head-pose axes, the arms the asymmetry is measured on, and an AI cross-check
+ * blendshape scores the metrics use, head-pose axes, and an AI cross-check
  * badge (Gemma looking at the same frame). The canvas has the video's size and CSS, so the points land on the face.
  */
 export function FaceOverlay({ frameRef, videoRef }: { frameRef: MutableRefObject<FaceFrame | null>; videoRef: RefObject<HTMLVideoElement | null> }) {
@@ -108,7 +106,6 @@ function draw(ctx: CanvasRenderingContext2D, f: FaceFrame, fps: number) {
   const unit = h / 480; // line widths and text scale with the worker's input resolution (640 px wide)
   ctx.lineCap = "round";
 
-  if (f.pose) drawArms(ctx, f.pose, w, h, unit);
   if (!f.face) return;
   const p = f.face;
   const at = (i: number): [number, number] => [p[i * 3] * w, p[i * 3 + 1] * h];
@@ -165,7 +162,7 @@ function draw(ctx: CanvasRenderingContext2D, f: FaceFrame, fps: number) {
   const [fx, fy] = at(FOREHEAD);
   label(ctx, fx, fy - 28 * unit, `PITCH ${sign(f.pitch)}°  YAW ${sign(f.yaw)}°  ROLL ${sign(f.roll)}°`, `rgba(${PULSE}, 0.9)`, unit, 0);
   label(ctx, fx, fy - 44 * unit, `FACE MESH · 478 LANDMARKS · ${Math.round(fps)} FPS`, `rgba(${PULSE}, 0.5)`, unit, 0);
-  label(ctx, fx, fy - 58 * unit, `${f.delegate} · FACE ${f.faceMs.toFixed(0)} MS · POSE ${f.poseMs ? f.poseMs.toFixed(0) + " MS" : "SKIPPED"}`, `rgba(${PULSE}, 0.5)`, unit, 0);
+  label(ctx, fx, fy - 58 * unit, `${f.delegate} · FACE ${f.faceMs.toFixed(0)} MS`, `rgba(${PULSE}, 0.5)`, unit, 0);
 
   if (f.axes) {
     const [nx, ny] = at(NOSE_TIP);
@@ -182,35 +179,6 @@ function draw(ctx: CanvasRenderingContext2D, f: FaceFrame, fps: number) {
     axis(xx, xy, "rgba(248, 113, 113, 0.9)");
     axis(yx, yy, "rgba(52, 211, 153, 0.9)");
     axis(zx, zy, `rgba(${ORBIT}, 0.95)`);
-  }
-}
-
-function drawArms(ctx: CanvasRenderingContext2D, pose: Float32Array, w: number, h: number, unit: number) {
-  const at = (i: number) => ({ x: pose[i * 3] * w, y: pose[i * 3 + 1] * h, seen: pose[i * 3 + 2] > 0.5 });
-  ctx.strokeStyle = `rgba(${ORBIT}, 0.8)`;
-  ctx.lineWidth = 2 * unit;
-  ctx.beginPath();
-  for (const [a, b] of ARMS) {
-    const [p, q] = [at(a), at(b)];
-    if (!p.seen || !q.seen) continue;
-    ctx.moveTo(p.x, p.y);
-    ctx.lineTo(q.x, q.y);
-  }
-  ctx.stroke();
-  ctx.fillStyle = `rgba(${ORBIT}, 0.95)`;
-  for (const i of [11, 12, 13, 14, 15, 16]) {
-    const j = at(i);
-    if (!j.seen) continue;
-    ctx.beginPath();
-    ctx.arc(j.x, j.y, 3.5 * unit, 0, Math.PI * 2);
-    ctx.fill();
-  }
-  // Arm elevation: angle of shoulder -> wrist from straight down, the quantity armAsymmetry compares.
-  for (const [shoulder, wrist, side] of [[11, 15, "L"], [12, 16, "R"]] as const) {
-    const [s, wr] = [at(shoulder), at(wrist)];
-    if (!s.seen || !wr.seen) continue;
-    const angle = Math.atan2(Math.abs(wr.x - s.x), wr.y - s.y) * (180 / Math.PI);
-    label(ctx, wr.x, wr.y + 22 * unit, `ARM ${side} ${Math.round(angle)}°`, `rgba(${ORBIT}, 0.95)`, unit, 0);
   }
 }
 
