@@ -54,7 +54,7 @@ export function SensesBar({
         try {
           const text = await transcribe(new Blob(chunks, { type: rec.mimeType }));
           setHeard(text);
-          setError(text ? "" : "I could not hear anything. Hold the button while you speak.");
+          setError(text ? "" : "No he oído nada. Mantén pulsado el botón mientras hablas.");
           if (text) onInstruction?.(text);
         } catch (e) {
           fail(e);
@@ -99,7 +99,7 @@ export function SensesBar({
           ) : (
             heard && (
               <span className="inline-block border-2 border-pulse bg-space/95 px-3 py-1 text-white">
-                <span className="mr-2 text-sm font-bold tracking-[0.15em] text-pulse">YOU SAID</span>
+                <span className="mr-2 text-sm font-bold tracking-[0.15em] text-pulse">HAS DICHO</span>
                 {heard}
               </span>
             )
@@ -110,17 +110,17 @@ export function SensesBar({
             value={typed}
             onChange={(e) => setTyped(e.target.value)}
             maxLength={400}
-            placeholder="Tell PULSAR what to do..."
-            aria-label="Type an instruction for PULSAR"
+            placeholder="Dile a PULSAR qué hacer..."
+            aria-label="Escribe una instrucción para PULSAR"
             className="min-w-0 flex-1 border-2 border-shell bg-space/95 px-3 py-2 text-lg tracking-normal text-white outline-none placeholder:text-shell/70 focus:border-pulse"
           />
           <button type="submit" disabled={!typed.trim()} className={`${BUTTON} ${ON}`}>
-            SEND (ENTER)
+            ENVIAR (ENTER)
           </button>
         </form>
         <div className="flex gap-2">
           <button type="button" disabled={!line} onClick={speakLine} className={`${BUTTON} ${OFF}`}>
-            ▶ SPEAK (S)
+            ▶ HABLAR (S)
           </button>
           <button
             type="button"
@@ -132,7 +132,7 @@ export function SensesBar({
             onPointerCancel={release}
             className={`${BUTTON} touch-none select-none ${talk === "recording" ? "border-red-500 bg-red-600 text-white" : OFF}`}
           >
-            {talk === "recording" ? "● RELEASE TO SEND" : talk === "transcribing" ? "TRANSCRIBING…" : "HOLD TO TALK (SPACE)"}
+            {talk === "recording" ? "● SUELTA PARA ENVIAR" : talk === "transcribing" ? "TRANSCRIBIENDO…" : "MANTÉN PARA HABLAR (ESPACIO)"}
           </button>
         </div>
       </div>

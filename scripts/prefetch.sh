@@ -24,7 +24,7 @@ else
 fi
 
 PIPER=https://huggingface.co/rhasspy/piper-voices/resolve/main
-for voice in en/en_US/lessac/medium/en_US-lessac-medium en/en_US/amy/medium/en_US-amy-medium; do
+for voice in es/es_ES/davefx/medium/es_ES-davefx-medium en/en_US/lessac/medium/en_US-lessac-medium en/en_US/amy/medium/en_US-amy-medium; do
   fetch "$PIPER/$voice.onnx" "backend/assets/voices/$(basename "$voice").onnx"
   fetch "$PIPER/$voice.onnx.json" "backend/assets/voices/$(basename "$voice").onnx.json"
 done
@@ -39,7 +39,7 @@ fi
 # faster-whisper stores models in the Hugging Face cache; once it is filled, HF_HUB_OFFLINE=1 works.
 uv run --quiet --python 3.12 --with faster-whisper python -c "
 from faster_whisper import WhisperModel
-for size in ('base.en', 'small.en'):
+for size in ('base', 'base.en', 'small.en'):
     WhisperModel(size, device='cpu', compute_type='int8'); print('whisper', size, 'ok')
 "
 

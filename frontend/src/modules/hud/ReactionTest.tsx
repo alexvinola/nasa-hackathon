@@ -73,21 +73,21 @@ export function ReactionTest({
   const failed = phase === "done" && !result.passed;
   const says =
     phase === "ready"
-      ? "Reaction test. Press ENTER or click the big box the moment it lights up."
+      ? "Test de reacción. Pulsa ENTER o haz clic en el recuadro grande en cuanto se ilumine."
       : phase !== "done"
         ? last === undefined
-          ? "Wait for the light…"
+          ? "Espera a la luz…"
           : last === null
-            ? "Missed: too early or no answer."
+            ? "Fallo: demasiado pronto o sin respuesta."
             : isGood(last)
-              ? `Good: ${last} ms.`
-              : `${last} ms does not count.`
+              ? `Bien: ${last} ms.`
+              : `${last} ms no cuenta.`
         : result.passed
-          ? `Passed: ${result.good} of ${TRIALS} good, ${result.meanMs} ms on average. Alarm stopped.`
-          : `Not passed: ${result.good} of ${TRIALS} good, you needed ${NEEDED}. Do what the list says.`;
+          ? `Superado: ${result.good} de ${TRIALS} buenas, ${result.meanMs} ms de media. Alarma detenida.`
+          : `No superado: ${result.good} de ${TRIALS} buenas, necesitabas ${NEEDED}. Haz lo que dice la lista.`;
 
   return (
-    <div role="dialog" aria-modal="true" aria-label="Reaction test" className="fixed inset-0 z-50 flex flex-col items-center gap-6 bg-space p-8 tracking-[0.15em]">
+    <div role="dialog" aria-modal="true" aria-label="Test de reacción" className="fixed inset-0 z-50 flex flex-col items-center gap-6 bg-space p-8 tracking-[0.15em]">
       <PulsarMascot message={says} mood={failed ? "alert" : "idle"} />
 
       {phase !== "done" ? (
@@ -98,38 +98,38 @@ export function ReactionTest({
             onPointerDown={react}
             className={`grid min-h-0 w-full flex-1 place-items-center border-4 text-6xl font-bold ${phase === "go" ? "border-pulse bg-pulse text-space" : "border-shell/40 text-shell/70"}`}
           >
-            {phase === "ready" ? "ENTER OR CLICK TO START" : phase === "go" ? "NOW" : "WAIT…"}
+            {phase === "ready" ? "ENTER O CLIC PARA EMPEZAR" : phase === "go" ? "YA" : "ESPERA…"}
           </button>
           <p className="max-w-4xl text-center text-base normal-case leading-snug tracking-normal text-shell">
-            Stimulus {Math.min(reactions.length + 1, TRIALS)} of {TRIALS}. A reaction counts when it takes between{" "}
-            {FALSE_START_MS} and {LAPSE_MS} ms: faster than {FALSE_START_MS} ms is a guess, {LAPSE_MS} ms or slower is a
-            lapse (PVT-B criterion). Pressing before the light, or not within {NO_RESPONSE_MS / 1000} s, is a miss. You
-            need {NEEDED} of {TRIALS} to stop the alarm.
+            Estímulo {Math.min(reactions.length + 1, TRIALS)} de {TRIALS}. Una reacción cuenta si tarda entre{" "}
+            {FALSE_START_MS} y {LAPSE_MS} ms: menos de {FALSE_START_MS} ms es una suposición, {LAPSE_MS} ms o más es un
+            lapso (criterio PVT-B). Pulsar antes de la luz, o no responder en {NO_RESPONSE_MS / 1000} s, es un fallo.
+            Necesitas {NEEDED} de {TRIALS} para detener la alarma.
           </p>
           <button type="button" onClick={onClose} className="text-sm text-shell/70 underline">
-            CANCEL · THE ALARM KEEPS RINGING
+            CANCELAR · LA ALARMA SIGUE SONANDO
           </button>
         </>
       ) : result.passed ? (
         <div role="status" className="grid w-full flex-1 place-items-center border-4 border-pulse text-center text-pulse">
           <div>
-            <h2 className="text-5xl font-bold">TEST PASSED · ALARM STOPPED</h2>
+            <h2 className="text-5xl font-bold">TEST SUPERADO · ALARMA DETENIDA</h2>
             <p className="mt-4 text-xl text-shell">
-              {result.good} / {TRIALS} GOOD REACTIONS · MEAN {result.meanMs} ms
+              {result.good} / {TRIALS} REACCIONES BUENAS · MEDIA {result.meanMs} ms
             </p>
             <button type="button" onClick={onClose} className="mt-8 border-2 border-pulse px-8 py-3 text-lg font-bold">
-              CLOSE (ENTER)
+              CERRAR (ENTER)
             </button>
           </div>
         </div>
       ) : (
         <div role="alert" className="grid w-full flex-1 place-items-center overflow-y-auto border-4 border-red-500 text-center text-red-200">
           <div className="max-w-3xl p-6">
-            <h2 className="text-4xl font-bold">TEST FAILED · {result.good} / {TRIALS} GOOD REACTIONS</h2>
-            <p className="mt-6 text-sm text-shell/90">DO THIS NOW</p>
+            <h2 className="text-4xl font-bold">TEST NO SUPERADO · {result.good} / {TRIALS} REACCIONES BUENAS</h2>
+            <p className="mt-6 text-sm text-shell/90">HAZ ESTO AHORA</p>
             <ol className="mt-2 list-inside list-decimal space-y-2 text-2xl normal-case leading-snug tracking-normal text-white">
-              <li>Check your pulse.</li>
-              {steps.length ? steps.map((step) => <li key={step}>{step}</li>) : <li>Stop what you are doing and go to sleep.</li>}
+              <li>Comprueba tu pulso.</li>
+              {steps.length ? steps.map((step) => <li key={step}>{step}</li>) : <li>Deja lo que estás haciendo y ve a dormir.</li>}
             </ol>
             <button
               type="button"
@@ -139,10 +139,10 @@ export function ReactionTest({
               }}
               className="mt-8 w-full border-2 border-red-400 bg-red-600 px-3 py-3 text-lg font-bold text-white"
             >
-              I AM GOING TO REST · STOP THE ALARM
+              VOY A DESCANSAR · DETENER LA ALARMA
             </button>
             <button type="button" onClick={restart} className="mt-3 w-full border-2 border-shell/40 px-3 py-3 text-lg text-shell">
-              TRY AGAIN (ENTER)
+              REINTENTAR (ENTER)
             </button>
           </div>
         </div>

@@ -82,33 +82,33 @@ export function FaceOverlay({
       <canvas ref={canvas} className={`pointer-events-none absolute inset-0 h-full w-full -scale-x-100 object-cover ${show ? "" : "hidden"}`} />
       {/* Joins the HUD's left column of panels. */}
       {column && createPortal(
-      <HudPanel title="AI CHECK · GEMMA 4" defaultOpen={false}>
+      <HudPanel title="COMPROBACIÓN IA · GEMMA 4" defaultOpen={false}>
         <div className="flex flex-col gap-1">
           <button type="button" aria-pressed={show} onClick={() => setShow((s) => !s)} className="border border-pulse/50 px-2 py-1 text-left text-xs text-pulse">
-            FACE MESH {show ? "ON" : "OFF"} (M)
+            MALLA FACIAL {show ? "SÍ" : "NO"} (M)
           </button>
           <button type="button" aria-pressed={checking} onClick={() => setChecking((c) => !c)} className="border border-pulse/50 px-2 py-1 text-left text-xs text-pulse">
-            AI CHECK {checking ? "ON" : "OFF"} (C)
+            COMPROBACIÓN IA {checking ? "SÍ" : "NO"} (C)
           </button>
         </div>
         {problem && (
           <p role="alert" className="mt-2 border border-red-500 bg-red-600/30 p-2 normal-case tracking-normal text-white">
-            No face mesh: the face models did not load ({problem}). Run <code>make prefetch</code> and reload.
+            Sin malla facial: los modelos de cara no se cargaron ({problem}). Ejecuta <code>make prefetch</code> y recarga.
           </p>
         )}
         {last ? (
           <dl className="mt-2 space-y-1">
-            <Row label="EYES" mp={last.claim.eyes} ai={last.ai.eyes} ok={last.agrees.eyes} tally={tally.eyes} />
-            <Row label="MOUTH" mp={last.claim.mouth} ai={last.ai.mouth} ok={last.agrees.mouth} tally={tally.mouth} />
-            <div className="pt-1 text-shell/70">{last.ai.person ? "FACE CONFIRMED" : "NO FACE SEEN BY AI"} · {Math.round(last.ms)} MS</div>
+            <Row label="OJOS" mp={last.claim.eyes} ai={last.ai.eyes} ok={last.agrees.eyes} tally={tally.eyes} />
+            <Row label="BOCA" mp={last.claim.mouth} ai={last.ai.mouth} ok={last.agrees.mouth} tally={tally.mouth} />
+            <div className="pt-1 text-shell/70">{last.ai.person ? "CARA CONFIRMADA" : "LA IA NO VE NINGUNA CARA"} · {Math.round(last.ms)} ms</div>
           </dl>
         ) : (
           <p className="mt-2 normal-case tracking-normal text-shell/70">
-            {checking ? "First check in a few seconds." : "AI check off: it slows the mesh on a laptop without a GPU."}
+            {checking ? "Primera comprobación en unos segundos." : "Comprobación IA desactivada: ralentiza la malla en un portátil sin GPU."}
           </p>
         )}
         {error && <p className="mt-1 text-red-300">{error}</p>}
-        <p className="mt-2 text-[11px] tracking-normal text-shell/70">Evidence only: the rules engine decides.</p>
+        <p className="mt-2 text-[11px] tracking-normal text-shell/70">Solo evidencia: decide el motor de reglas.</p>
       </HudPanel>,
       column)}
     </>
@@ -122,7 +122,7 @@ function Row({ label, mp, ai, ok, tally }: { label: string; mp: string; ai: stri
     <div className="flex justify-between">
       <dt>{label}</dt>
       <dd>
-        MP {mp.toUpperCase()} · AI {ai.toUpperCase()} <span className={tone}>{mark}</span>{" "}
+        MP {mp.toUpperCase()} · IA {ai.toUpperCase()} <span className={tone}>{mark}</span>{" "}
         <span className="text-shell/70">{tally.total ? `${tally.agree}/${tally.total}` : ""}</span>
       </dd>
     </div>
@@ -184,13 +184,13 @@ function draw(ctx: CanvasRenderingContext2D, f: FaceFrame, fps: number) {
     ctx.stroke();
     label(ctx, ex + dir * 18 * unit, ey + 4 * unit, text, color, unit, dir);
   };
-  callout(LEFT_EYE_OUTER, `EYE L ${f.eyeLeft.toFixed(2)}${f.eyeLeft > BLINK ? " CLOSED" : ""}`, eye(f.eyeLeft));
-  callout(RIGHT_EYE_OUTER, `EYE R ${f.eyeRight.toFixed(2)}${f.eyeRight > BLINK ? " CLOSED" : ""}`, eye(f.eyeRight));
-  callout(MOUTH_CORNER, `JAW ${f.jaw.toFixed(2)}${f.jaw > MOUTH ? " OPEN" : ""}`, f.jaw > MOUTH ? `rgba(${AMBER}, 0.95)` : `rgba(${PULSE}, 0.8)`);
+  callout(LEFT_EYE_OUTER, `OJO I ${f.eyeLeft.toFixed(2)}${f.eyeLeft > BLINK ? " CERRADO" : ""}`, eye(f.eyeLeft));
+  callout(RIGHT_EYE_OUTER, `OJO D ${f.eyeRight.toFixed(2)}${f.eyeRight > BLINK ? " CERRADO" : ""}`, eye(f.eyeRight));
+  callout(MOUTH_CORNER, `MANDÍBULA ${f.jaw.toFixed(2)}${f.jaw > MOUTH ? " ABIERTA" : ""}`, f.jaw > MOUTH ? `rgba(${AMBER}, 0.95)` : `rgba(${PULSE}, 0.8)`);
 
   const [fx, fy] = at(FOREHEAD);
-  label(ctx, fx, fy - 28 * unit, `PITCH ${sign(f.pitch)}°  YAW ${sign(f.yaw)}°  ROLL ${sign(f.roll)}°`, `rgba(${PULSE}, 0.9)`, unit, 0);
-  label(ctx, fx, fy - 44 * unit, `FACE MESH · 478 LANDMARKS · ${Math.round(fps)} FPS`, `rgba(${PULSE}, 0.5)`, unit, 0);
+  label(ctx, fx, fy - 28 * unit, `CABECEO ${sign(f.pitch)}°  GUIÑADA ${sign(f.yaw)}°  ALABEO ${sign(f.roll)}°`, `rgba(${PULSE}, 0.9)`, unit, 0);
+  label(ctx, fx, fy - 44 * unit, `MALLA FACIAL · 478 PUNTOS · ${Math.round(fps)} FPS`, `rgba(${PULSE}, 0.5)`, unit, 0);
   label(ctx, fx, fy - 58 * unit, `${f.delegate} · FACE ${f.faceMs.toFixed(0)} MS`, `rgba(${PULSE}, 0.5)`, unit, 0);
 
   if (f.axes) {

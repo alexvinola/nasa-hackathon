@@ -2,7 +2,9 @@
 
 A health platform for astronauts that runs entirely on a laptop, with no network. Full plan:
 [technical and functional document](https://docs.google.com/document/d/1VzA7EZoMSXTpHM6scSSvi0cd2ngCrVhFplvnuf4OImk/edit).
-Three people, three verticals, one contract and one weekend. Everything in the repository is written in English.
+Three people, three verticals, one contract and one weekend. Code, comments, docs and the contract are written in
+English. Spanish is also accepted: PULSAR speaks Spanish (Gemma prompts, fallbacks, Piper voice `es_ES-davefx-medium`)
+and the frontend's user-visible text is in Spanish; strings an acceptance test asserts on stay as the test expects.
 
 **PULSAR**: Personal Unit for Learning, Support, Assistance & Reminders. *Your personal health companion in space.*
 Formerly S.Y.N.A.P.S.E.; internal identifiers (`SYNAPSE_VERTICAL`, `.synapse/`, `start_synapse`, `window.__synapse`)

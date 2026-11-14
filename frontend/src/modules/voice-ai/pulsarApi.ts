@@ -3,11 +3,11 @@ const API = process.env.NEXT_PUBLIC_PULSAR_API ?? "http://localhost:8000";
 
 async function call(path: string, init: RequestInit): Promise<Response> {
   const response = await fetch(API + path, { method: "POST", ...init }).catch(() => {
-    throw new Error(`PULSAR backend is not answering at ${API}`);
+    throw new Error(`El backend de PULSAR no responde en ${API}`);
   });
   if (!response.ok) {
     const detail = (await response.json().catch(() => null))?.detail;
-    throw new Error(typeof detail === "string" ? detail : `Backend error ${response.status}`);
+    throw new Error(typeof detail === "string" ? detail : `Error del backend ${response.status}`);
   }
   return response;
 }
@@ -79,7 +79,7 @@ export function sceneChange(a: Uint8ClampedArray, b: Uint8ClampedArray): number 
 
 /** The current camera frame as a 640 px wide JPEG, mirrored like the HUD. */
 async function grabFrame(video: HTMLVideoElement): Promise<Blob> {
-  if (!video.videoWidth) throw new Error("The camera has no picture yet");
+  if (!video.videoWidth) throw new Error("La cámara aún no tiene imagen");
   const canvas = document.createElement("canvas");
   canvas.width = 640; // enough for a scene description and keeps the model fast
   canvas.height = Math.round((640 * video.videoHeight) / video.videoWidth);
@@ -87,7 +87,7 @@ async function grabFrame(video: HTMLVideoElement): Promise<Blob> {
   ctx.setTransform(-1, 0, 0, 1, canvas.width, 0); // mirrored like the HUD, so "left" and "right" match what the user sees
   ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
   const frame = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.7));
-  if (!frame) throw new Error("Could not read the camera frame");
+  if (!frame) throw new Error("No se pudo leer el fotograma de la cámara");
   return frame;
 }
 

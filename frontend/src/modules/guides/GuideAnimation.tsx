@@ -341,9 +341,9 @@ export function GuideAnimation({ signal, focus, label }: { signal: string; focus
   return (
     <div ref={boxRef} data-guide-animation data-focus={focus} data-motion={still ? "still" : "loop"} className="h-64 w-64 shrink-0 border border-pulse/30 bg-space-lift/60">
       {failed ? (
-        <p className="grid h-full place-items-center p-3 text-center text-xs text-orbit">ANIMATION NEEDS WEBGL · FOLLOW THE STEPS</p>
+        <p className="grid h-full place-items-center p-3 text-center text-xs text-orbit">LA ANIMACIÓN NECESITA WEBGL · SIGUE LOS PASOS</p>
       ) : (
-        <canvas ref={canvasRef} role="img" aria-label={`How to measure: ${label}`} className="block h-full w-full" />
+        <canvas ref={canvasRef} role="img" aria-label={`Cómo medir: ${label}`} className="block h-full w-full" />
       )}
     </div>
   );

@@ -49,7 +49,7 @@ export function useAiCheck(videoRef: RefObject<HTMLVideoElement | null>, frameRe
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ image, claim }),
         });
-        if (!response.ok) throw new Error(`AI check: backend error ${response.status}`);
+        if (!response.ok) throw new Error(`Comprobación IA: error del backend ${response.status}`);
         const check: AiCheck = await response.json();
         setLast(check);
         setError(null);

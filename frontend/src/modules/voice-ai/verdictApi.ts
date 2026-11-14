@@ -36,7 +36,7 @@ export type Rule = { id: string; signal: string; threshold: number; status: Stat
 /** Every rule the engine applies (GET /rules). */
 export async function listRules(): Promise<Rule[]> {
   const response = await fetch(`${API}/rules`);
-  if (!response.ok) throw new Error(`Backend error ${response.status}`);
+  if (!response.ok) throw new Error(`Error del backend ${response.status}`);
   return response.json();
 }
 
@@ -47,16 +47,16 @@ async function post<T>(path: string, body: unknown, timeoutMs?: number): Promise
     body: JSON.stringify(body),
     signal: timeoutMs ? AbortSignal.timeout(timeoutMs) : undefined,
   }).catch(() => {
-    throw new Error(`PULSAR backend is not answering at ${API}`);
+    throw new Error(`El backend de PULSAR no responde en ${API}`);
   });
-  if (!response.ok) throw new Error(`Backend error ${response.status}`);
+  if (!response.ok) throw new Error(`Error del backend ${response.status}`);
   return response.json();
 }
 
 /** The steps of one countermeasure, as the rules engine lists them (GET /countermeasures/{id}). */
 export async function countermeasureSteps(id: string): Promise<string[]> {
   const response = await fetch(`${API}/countermeasures/${encodeURIComponent(id)}`);
-  if (!response.ok) throw new Error(`Backend error ${response.status}`);
+  if (!response.ok) throw new Error(`Error del backend ${response.status}`);
   return (await response.json()).steps;
 }
 

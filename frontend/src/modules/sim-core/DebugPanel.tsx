@@ -31,19 +31,19 @@ export function DebugPanel({
   useHotkey("4", () => onSound(!sound));
 
   return (
-    <HudPanel title="DEBUG · FALSE ALARMS (1-4)" defaultOpen={false}>
+    <HudPanel title="DEPURACIÓN · FALSAS ALARMAS (1-4)" defaultOpen={false}>
       <div className="grid grid-cols-2 gap-2">
         <button type="button" aria-pressed={mode === "rest"} onClick={() => toggle("rest")} className={`${BUTTON} ${mode === "rest" ? "border-amber-400 bg-amber-400/20 text-amber-300" : OFF}`}>
-          WARNING {mode === "rest" ? "ON" : "OFF"} (1)
+          AVISO {mode === "rest" ? "SÍ" : "NO"} (1)
         </button>
         <button type="button" aria-pressed={mode === "danger"} onClick={() => toggle("danger")} className={`${BUTTON} ${mode === "danger" ? "border-red-500 bg-red-600/30 text-red-200" : OFF}`}>
-          DANGER {mode === "danger" ? "ON" : "OFF"} (2)
+          PELIGRO {mode === "danger" ? "SÍ" : "NO"} (2)
         </button>
         <button type="button" aria-pressed={mode === "loop"} onClick={() => toggle("loop")} className={`${BUTTON} ${mode === "loop" ? "border-pulse bg-pulse/20 text-pulse" : OFF}`}>
-          LOOP {mode === "loop" ? "ON" : "OFF"} (3)
+          BUCLE {mode === "loop" ? "SÍ" : "NO"} (3)
         </button>
         <button type="button" aria-pressed={sound} onClick={() => onSound(!sound)} className={`${BUTTON} ${sound ? "border-pulse bg-pulse/20 text-pulse" : OFF}`}>
-          SOUND {sound ? "ON" : "OFF"} (4)
+          SONIDO {sound ? "SÍ" : "NO"} (4)
         </button>
       </div>
     </HudPanel>
