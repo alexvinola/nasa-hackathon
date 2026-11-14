@@ -1,7 +1,5 @@
-"""Offline voice pipeline (goal G5). Boundary only: nothing here is implemented or wired to the app yet.
-
-G5's acceptance test (`backend/tests/acceptance/test_voice.py`) must be written and approved by the human
-before any code lands here. This docstring fixes where that code goes and what it may and may not do.
+"""Offline voice pipeline (goal G5): `pipeline.py` (the turn), `api.py` (POST /voice/advise),
+`scripts/voice_bench.py` (latency). Acceptance test: `tests/acceptance/test_voice.py`.
 
 Pipeline, all on localhost with no network (`HF_HUB_OFFLINE=1`):
 
@@ -14,7 +12,8 @@ Rules for the LLM stage (product rules in CLAUDE.md):
 - Gemma never decides a status, an escalation or a risk. It receives the decision the rules engine already
   produced and only phrases it; the PULSAR prompt goes in the system message, the verdict in the user message.
 - The answer is at most 2 sentences and mentions no figure or diagnosis absent from the verdict.
-- Speech-to-text stays with faster-whisper: Ollama exposes Gemma 4 with text and image input only.
+- Speech-to-text uses faster-whisper (shared with /stt). Gemma 4 E4B can transcribe too (research/llm/README.md);
+  switching is a separate decision, after a real-microphone test.
 
 Interface it will expose (to be confirmed by the G5 acceptance test):
 

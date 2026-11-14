@@ -8,6 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pulsar import settings
 from pulsar.rules import build_engine
 from pulsar.rules.api import router as rules_router
+from pulsar.voice.api import router as voice_router
 
 
 def create_app(lifespan=None, routers: Iterable[APIRouter] = ()) -> FastAPI:
@@ -29,6 +30,7 @@ def create_app(lifespan=None, routers: Iterable[APIRouter] = ()) -> FastAPI:
         allow_headers=["*"],
     )
     app.include_router(rules_router)
+    app.include_router(voice_router)
     for router in routers:
         app.include_router(router)
 
