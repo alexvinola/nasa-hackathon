@@ -1,0 +1,79 @@
+NASA ASRS fatigue report sets (100 de-identified aviation incident reports): what fatigue incidents look like.
+
+uv run --with pypdf python research/nasa-data/asrs.py > research/nasa-data/findings/asrs.txt
+
+Counts structured fields and narrative keywords. ASRS reports are voluntary and not corroborated: counts
+describe these 100 reports, not how often anything happens.
+
+reports parsed: 100
+
+-- time
+    32  0601-1200
+    26  1801-2400
+    21  1201-1800
+    12  0001-0600
+
+-- phase
+    23  Initial Approach
+    17  Taxi
+    10  Cruise
+    10  Climb
+    10  Descent
+     9  Landing
+     8  Final Approach
+     8  Takeoff / Launch
+     5  Parked
+
+-- human
+    84  Fatigue
+    65  Situational Awareness
+    45  Communication Breakdown
+    45  Workload
+    39  Time Pressure
+    29  Distraction
+    20  Confusion
+    18  Human-Machine Interface
+    18  Troubleshooting
+
+-- anomaly
+    82  Deviation / Discrepancy - Procedural
+    42  Inflight Event / Encounter
+    39  Aircraft Equipment Problem
+    25  Deviation - Altitude
+    14  Ground Event / Encounter
+    14  Conflict
+    12  ATC Issue
+     9  Deviation - Track / Heading
+     8  Flight Deck / Cabin / Aircraft Event
+
+-- primary
+    55  Human Factors
+    18  Aircraft
+    10  Procedure
+     6  Ambiguous
+     5  Weather
+     4  Company Policy
+     1  Environment - Non Weather Related
+     1  Equipment / Tooling
+
+-- result
+    25  Became Reoriented
+    22  Took Evasive Action
+    20  Overcame Equipment Problem
+    19  Requested ATC Assistance / Clarification
+    11  Regained Aircraft Control
+     9  Landed in Emergency Condition
+     9  FLC complied w / Automation / Advisory
+     9  Returned To Clearance
+     7  Returned To Gate
+
+-- reports in approach, descent or landing: 46 of 100
+
+-- narratives mentioning (of 100 )
+    14  slept / sleep
+    22  reserve / schedule
+    36  red-eye / night / overnight
+    32  duty / hours awake
+     3  circadian / WOCL
+    20  nap / rest
+     2  microsleep / fell asleep / nodded
