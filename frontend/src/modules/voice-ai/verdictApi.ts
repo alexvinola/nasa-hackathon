@@ -21,8 +21,17 @@ export type Telemetry = typeof nominal;
  * The full contract the engine needs. Only `biometrics` is measured (the camera); sleep, mood, cabin and the PVT
  * keep shared/examples/nominal.json until the judge sliders (G6) and the PVT-B (G3) fill them.
  */
-export function telemetryFrom(biometrics: Biometrics): Telemetry {
-  return { ...nominal, timestamp: Math.floor(Date.now() / 1000), biometrics } as Telemetry;
+export function telemetryFrom(biometrics: Biometrics, cabinCo2?: number): Telemetry {
+  const environment = cabinCo2 == null ? nominal.environment : { ...nominal.environment, cabinCo2_mmHg: cabinCo2 };
+  return { ...nominal, timestamp: Math.floor(Date.now() / 1000), biometrics, environment } as Telemetry;
+}
+
+/** The limit the rules engine applies to one signal (GET /rules), so the HUD never hard-codes a threshold. */
+export async function ruleThreshold(signal: string): Promise<number | null> {
+  const response = await fetch(`${API}/rules`);
+  if (!response.ok) throw new Error(`Backend error ${response.status}`);
+  const rules: { signal: string; threshold: number }[] = await response.json();
+  return rules.find((rule) => rule.signal === signal)?.threshold ?? null;
 }
 
 async function post<T>(path: string, body: unknown): Promise<T> {
@@ -35,6 +44,13 @@ async function post<T>(path: string, body: unknown): Promise<T> {
   });
   if (!response.ok) throw new Error(`Backend error ${response.status}`);
   return response.json();
+}
+
+/** The steps of one countermeasure, as the rules engine lists them (GET /countermeasures/{id}). */
+export async function countermeasureSteps(id: string): Promise<string[]> {
+  const response = await fetch(`${API}/countermeasures/${encodeURIComponent(id)}`);
+  if (!response.ok) throw new Error(`Backend error ${response.status}`);
+  return (await response.json()).steps;
 }
 
 /** The engine's decision alone: deterministic and instant, cheap enough to ask every couple of seconds. */

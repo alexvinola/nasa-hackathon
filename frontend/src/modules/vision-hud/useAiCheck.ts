@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type MutableRefObject, type RefObject } from "react";
-import { frameBase64 } from "@/modules/voice-ai/pulsarApi";
+import { frameBase64, userWaiting } from "@/modules/voice-ai/pulsarApi";
 import type { FaceFrame } from "./faceWorker";
 
 const API = process.env.NEXT_PUBLIC_PULSAR_API ?? "http://localhost:8000";
@@ -27,13 +27,17 @@ export function useAiCheck(videoRef: RefObject<HTMLVideoElement | null>, frameRe
   const [tally, setTally] = useState<{ eyes: Tally; mouth: Tally }>({ eyes: { agree: 0, total: 0 }, mouth: { agree: 0, total: 0 } });
   const [error, setError] = useState<string | null>(null);
   const busy = useRef(false);
+  const restUntil = useRef(0);
 
   useEffect(() => {
     if (!on) return;
     const id = setInterval(async () => {
       const frame = frameRef.current;
-      if (busy.current || !frame?.face) return;
+      // One model serves everything: never ahead of an answer the astronaut is waiting for, and at most a
+      // quarter of its time (on a CPU-only laptop a single check takes longer than EVERY_MS).
+      if (busy.current || !frame?.face || userWaiting() || performance.now() < restUntil.current) return;
       busy.current = true;
+      const started = performance.now();
       try {
         const claim = {
           eyes: ((frame.eyeLeft + frame.eyeRight) / 2 > BLINK ? "closed" : "open") as State,
@@ -58,6 +62,7 @@ export function useAiCheck(videoRef: RefObject<HTMLVideoElement | null>, frameRe
         setError(e instanceof Error ? e.message : String(e));
       } finally {
         busy.current = false;
+        restUntil.current = performance.now() + 3 * (performance.now() - started);
       }
     }, EVERY_MS);
     return () => clearInterval(id);

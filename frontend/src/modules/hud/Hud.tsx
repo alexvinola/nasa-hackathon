@@ -1,27 +1,23 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
+import { AlertIndicator } from "./AlertIndicator";
 import { PulsarMascot } from "./PulsarMascot";
-import type { Mood } from "./PulsarSprite3D";
+import { useAlarmSound, type AlarmLevel } from "./useAlarmSound";
 import { useWebcam, type CamState } from "./useWebcam";
 import { SensesBar } from "@/modules/voice-ai/SensesBar";
 import { VerdictPanel } from "@/modules/voice-ai/VerdictPanel";
+import { useVerdict } from "@/modules/voice-ai/useVerdict";
+import { countermeasureSteps, ruleThreshold, telemetryFrom } from "@/modules/voice-ai/verdictApi";
 import { useFaceMetrics } from "@/modules/vision-hud/useFaceMetrics";
 import { FaceOverlay } from "@/modules/vision-hud/FaceOverlay";
-import type { FaceFrame } from "@/modules/vision-hud/faceWorker";
+import type { Biometrics, FaceFrame } from "@/modules/vision-hud/faceWorker";
+import { DebugPanel } from "@/modules/sim-core/DebugPanel";
+import { useSimVitals, type SimMode } from "@/modules/sim-core/useSimVitals";
 import { direct, frameBase64, type Direction, type Spot } from "@/modules/voice-ai/pulsarApi";
 
-// shortcut: canned lines so the mascot can be reviewed, replace with the rules-engine verdict once it is wired in.
-// `at` is where PULSAR flies to, as a fraction of the free screen; [0, 0] is its home corner.
-const MOCK_SCRIPT: { text: string; mood: Mood; at: [number, number] }[] = [
-  { text: "Hi, I'm PULSAR. I'm watching over you.", mood: "idle", at: [0, 0] },
-  { text: "Taking a quick look around the cabin.", mood: "idle", at: [1, 0.15] },
-  { text: "Hold still, calibrating the camera.", mood: "idle", at: [0.5, 1] },
-  { text: "You look tired. How about a short break?", mood: "alert", at: [0.1, 0.6] },
-  { text: "Back to my corner. Call me if you need me.", mood: "idle", at: [0, 0] },
-];
-// Zones Gemma can pick, as a fraction of the free screen.
+// Zones Gemma can pick, as a fraction of the free screen; [0, 0] is PULSAR's home corner.
 const SPOTS: Record<Spot, [number, number]> = {
   home: [0, 0],
   top_right: [1, 0.05],
@@ -32,10 +28,28 @@ const SPOTS: Record<Spot, [number, number]> = {
   bottom_right: [1, 1],
 };
 // Mascot plus speech bubble plus both screen margins, so it never flies off screen.
-const MASCOT_W = 192 + 12 + 260 + 64;
+const MASCOT_W = 192 + 12 + 340 + 64;
 const MASCOT_H = 192 + 64;
-// How long after PULSAR speaks the conversation stays open, so a spoken reply needs neither its name nor a question.
-const ENGAGED_MS = 30_000;
+// The same without the margins (what must not overlap a panel), its home offset from the screen edge, and the gap
+// kept around panels.
+const MASCOT_BOX_W = 192 + 12 + 340;
+const MASCOT_BOX_H = 192;
+const HOME = 32;
+const GAP = 12;
+const PANEL_RESERVE = 352; // the verdict panel on the right: 20rem wide plus its 2rem margin
+// Where PULSAR goes during an alarm, as a fraction of the free screen.
+const CENTER: [number, number] = [0.5, 0.5];
+// The engine signals behind the two alarms: eyes closed too much of the time (rule `perclos-high`) and a fatigue
+// score past the unsafe level (rule `fatigue-score-high`).
+const DROWSY_SIGNAL = "biometrics.perclos";
+const EXHAUSTED_SIGNAL = "biometrics.fatigueScore";
+const CO2_SIGNAL = "environment.cabinCo2_mmHg";
+// With nothing to react to, PULSAR drifts to the next of these every so often instead of sitting in its corner.
+const WANDER: Spot[] = ["top_right", "bottom_right", "bottom_left", "home"];
+const WANDER_EVERY_MS = 20_000;
+// A question about what is in view gets the camera frame attached, so Gemma answers from the picture. Anything else
+// goes without it: on a CPU-only laptop the picture alone adds several seconds to the answer.
+const ABOUT_THE_VIEW = /\b(see|look|watch|show|camera|picture|image|view|holding|wearing|behind|colou?r|how many|who is|what is (this|that)|what am i|ves|mira|c[aá]mara|imagen)\b/i;
 
 const CAM_LABEL: Record<CamState, string> = {
   starting: "CAM · STARTING",
@@ -45,82 +59,173 @@ const CAM_LABEL: Record<CamState, string> = {
 };
 
 function Corner({ className }: { className: string }) {
-  return <span className={`absolute h-8 w-8 border-pulse/80 ${className}`} />;
+  return <span className={`absolute h-8 w-8 ${className}`} />;
 }
 
-/** Full-screen camera with the HUD layered on top. Placeholder readouts until the verticals plug in. */
+/** Full-screen camera with the HUD layered on top. Every line PULSAR says comes from the rules engine or Gemma. */
 export function Hud() {
   const { videoRef, state } = useWebcam();
   // MediaPipe runs in a worker over the live camera; it shows nothing and posts its numbers to the backend.
   const faceFrame = useRef<FaceFrame | null>(null);
-  const biometrics = useFaceMetrics(videoRef, state === "live", faceFrame);
+  const measured = useFaceMetrics(videoRef, state === "live", faceFrame);
+  // The debug panel can force a false alarm or loop a simulated shift, and mute the alarm sounds.
+  const [simMode, setSimMode] = useState<SimMode>("live");
+  const [sound, setSound] = useState(true);
+  const sim = useSimVitals(simMode);
+  // Camera readings when there is a camera and nothing is forced, simulated ones otherwise. The pulse is simulated
+  // either way: nothing measures it yet.
+  const reading = useMemo<Biometrics>(
+    () => (measured && simMode === "live" ? { ...measured, heartRateBpm: sim.vitals.heartRateBpm, heartRateConfidence: 0 } : sim.vitals),
+    [measured, simMode, sim.vitals],
+  );
+  const telemetryNow = useRef(telemetryFrom(reading, sim.cabinCo2));
+  telemetryNow.current = telemetryFrom(reading, sim.cabinCo2);
+  // The rules engine decides on those readings and Gemma phrases its verdict.
+  const { decision, advice, error } = useVerdict(reading, sim.cabinCo2);
+  // The engine's own CO2 limit, for the cabin-air gauge: the HUD never hard-codes a threshold.
+  const [co2Limit, setCo2Limit] = useState<number | null>(null);
+  useEffect(() => {
+    ruleThreshold(CO2_SIGNAL).then(setCo2Limit).catch(() => undefined);
+  }, []);
+
+  // Two alarm levels, both read off the engine's verdict and never decided here: amber "time to rest" when it
+  // finds the astronaut drowsy, red "danger" for anything it rates RED (exhaustion included).
+  const flagged = (signal: string) => !!decision?.factors.some((f) => f.signal === signal);
+  const level: AlarmLevel = decision?.status === "RED" ? "danger" : flagged(DROWSY_SIGNAL) ? "rest" : null;
+  // The astronaut stops an alarm by acknowledging it: the sound and the pulsing frame end, the indicator stays
+  // until the readings clear. It rings again only for a later alarm, or if this one worsens from rest to danger.
+  const [ackedLevel, setAckedLevel] = useState<AlarmLevel>(null);
+  useEffect(() => {
+    if (!level) setAckedLevel(null);
+  }, [level]);
+  const acknowledged = !!level && (ackedLevel === level || ackedLevel === "danger");
+  const ringing: AlarmLevel = acknowledged ? null : level;
+  // One sound per alarm level: forcing an alarm that is already on changes nothing here, so it cannot start another.
+  useAlarmSound(sound ? ringing : null);
+  // What to do about it: the steps of the countermeasure the engine picked, shown on the alert indicator.
+  const [steps, setSteps] = useState<string[]>([]);
+  const countermeasure = level ? decision?.countermeasureId : null;
+  useEffect(() => {
+    setSteps([]);
+    if (!countermeasure) return;
+    let on = true;
+    countermeasureSteps(countermeasure).then((s) => on && setSteps(s)).catch(() => undefined);
+    return () => {
+      on = false;
+    };
+  }, [countermeasure]);
+
   const still = useReducedMotion();
-  const [step, setStep] = useState(0);
   const [pos, setPos] = useState({ x: 0, y: 0 });
   const [heading, setHeading] = useState(0);
   // Last x, and the yaw that currently means "facing the camera" (grows by 2π on every spin).
   const face = useRef({ x: 0, front: 0 });
-  // What the local vision model says it sees while WATCH is on, and the last thing the astronaut said.
-  const [seen, setSeen] = useState<string | null>(null);
-  // The astronaut's latest order (voice or typed): it stays in force while the camera keeps changing.
-  const [instruction, setInstruction] = useState("");
-  // Gemma's last decision (where to go, how to react, what to say); it overrides the mock script once it exists.
+  // Gemma's last stage direction: where the mascot is and how it reacts.
   const [directed, setDirected] = useState<Direction | null>(null);
+  // What the mascot is saying, whoever produced it last: the engine's finding, Gemma's phrasing of it, or an answer.
+  const [bubble, setBubble] = useState("");
   const said = useRef<string[]>([]);
   const turns = useRef<string[]>([]); // the conversation, oldest first: "Astronaut: ..." and "PULSAR: ..."
-  const spokeAt = useRef(-Infinity); // when PULSAR last said something
+  // Where the mascot is: Gemma's choice after a turn, the middle of the view during an alarm, wandering otherwise.
+  const [at, setAt] = useState<Spot>("home");
   const spot = useRef<Spot>("home");
-  const mock = MOCK_SCRIPT[step];
-  const line = directed ? { text: directed.say, mood: directed.reaction === "alert" ? "alert" : "idle" as Mood, at: SPOTS[directed.spot || "home"] } : mock;
-  const [tx, ty] = line.at;
+  spot.current = at;
+  const movedAt = useRef(0);
+  const moveTo = useCallback((next: Spot) => {
+    movedAt.current = performance.now();
+    setAt(next);
+  }, []);
+  const [tx, ty] = ringing ? CENTER : SPOTS[at];
 
   useEffect(() => {
-    const id = setInterval(() => setStep((s) => (s + 1) % MOCK_SCRIPT.length), 7000);
+    if (ringing) return;
+    const id = setInterval(() => {
+      if (performance.now() - movedAt.current < WANDER_EVERY_MS) return; // Gemma moved it recently: leave it there
+      moveTo(WANDER[(WANDER.indexOf(spot.current) + 1) % WANDER.length]);
+    }, 1000);
     return () => clearInterval(id);
+  }, [ringing, moveTo]);
+
+  /** PULSAR says `text`: on the mascot and in its memory. SPEAK reads it aloud. */
+  const say = useCallback((text: string, heard?: string) => {
+    said.current = [...said.current, text].slice(-5);
+    // The backend compacts this further; here it only has to stay bounded.
+    turns.current = [...turns.current, ...(heard ? [`Astronaut: ${heard}`] : []), `PULSAR: ${text}`].slice(-12);
+    setBubble(text);
   }, []);
 
-  // One call to Gemma, from either trigger. A stale answer never overwrites a newer one, and a silent one is dropped.
+  // The verdict changed: the mascot shows the engine's own finding at once, because Gemma needs several seconds
+  // to phrase it and an alarm must not wait for wording. Back to all clear, the old warning is dropped.
+  const reason = decision ? `${decision.status}|${decision.factors.map((f) => f.signal).join(",")}` : "";
+  useEffect(() => {
+    setBubble(decision?.factors[0]?.message ?? "");
+  }, [reason]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Gemma's phrasing of that verdict arrives: the mascot says it.
+  useEffect(() => {
+    if (advice) say(advice.say);
+  }, [advice, say]);
+
+  // The astronaut typed or held the talk button: one call to Gemma, always answered. A stale answer never
+  // overwrites a newer one.
   const asked = useRef(0);
-  const ask = useCallback((seenNow: string | null, order: string, userSpoke: boolean, viaVoice = false) => {
+  const instruct = useCallback((order: string) => {
     const mine = ++asked.current;
-    // WATCH is off, so there is no description: let Gemma look at the frame itself rather than answer blind.
-    const frame = userSpoke && !seenNow ? frameBase64(videoRef.current).catch(() => undefined) : undefined;
-    // For a while after PULSAR speaks, whatever the open microphone hears counts as a reply to it.
-    const engaged = performance.now() - spokeAt.current < ENGAGED_MS;
+    const frame = ABOUT_THE_VIEW.test(order) ? frameBase64(videoRef.current).catch(() => undefined) : undefined;
     Promise.resolve(frame)
       .then((image) =>
-        direct({ image, seen: seenNow ?? "", instruction: order, userSpoke, viaVoice, engaged, history: turns.current, said: said.current, spot: spot.current }),
+        direct({
+          image,
+          instruction: order,
+          userSpoke: true,
+          history: turns.current,
+          said: said.current,
+          spot: spot.current,
+          telemetry: telemetryNow.current, // so PULSAR knows the engine's current health check
+        }),
       )
       .then((d) => {
         if (mine !== asked.current || !d.speak || !d.spot) return;
-        spot.current = d.spot;
-        said.current = [...said.current, d.say].slice(-5);
-        // The backend compacts this further; here it only has to stay bounded.
-        turns.current = [...turns.current, ...(userSpoke ? [`Astronaut: ${order}`] : []), `PULSAR: ${d.say}`].slice(-12);
-        spokeAt.current = performance.now();
-        if (userSpoke) setInstruction(order); // only words PULSAR took as meant for it become the standing instruction
+        moveTo(d.spot);
         setDirected(d);
+        say(d.say, order);
       })
-      .catch(() => mine === asked.current && setDirected(null)); // backend or model down: back to the plain line
-  }, [videoRef]);
-
-  // The camera changed: Gemma speaks only if it matters for the standing instruction.
-  const lastSeen = useRef<string | null>(null);
-  useEffect(() => {
-    if (seen && seen !== lastSeen.current) ask(seen, instruction, false);
-    lastSeen.current = seen;
-  }, [seen]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // The astronaut typed (always answered) or spoke (answered when it was meant for PULSAR), using the latest description.
-  const instruct = useCallback((text: string, spoken = false) => ask(lastSeen.current, text, true, spoken), [ask]);
+      .catch(() => undefined); // backend or model down: the mascot keeps its last line
+  }, [videoRef, say, moveTo]);
 
   useEffect(() => {
     const [fx, fy] = still ? [0, 0] : [tx, ty];
     const next = { x: fx * Math.max(0, innerWidth - MASCOT_W), y: fy * Math.max(0, innerHeight - MASCOT_H) };
+    // During an alarm, centre it in the width left of the verdict panel instead of the whole screen.
+    if (ringing && !still) next.x = Math.max(0, (innerWidth - PANEL_RESERVE - MASCOT_BOX_W) / 2 - HOME);
+    // Never park over a panel. Try the wanted place and every place that sits flush against a panel or a screen
+    // edge, and take the one that covers no panel and is nearest to where it wanted to go. On a window too small
+    // to have such a place, it takes the one that covers least.
+    const panels = [...document.querySelectorAll("[data-hud-panel]")].map((panel) => panel.getBoundingClientRect());
+    const maxX = Math.max(0, innerWidth - MASCOT_W);
+    const maxY = Math.max(0, innerHeight - MASCOT_H);
+    const covered = (x: number, y: number) =>
+      panels.reduce((area, r) => {
+        const w = Math.min(HOME + x + MASCOT_BOX_W + GAP, r.right) - Math.max(HOME + x - GAP, r.left);
+        const h = Math.min(HOME + y + MASCOT_BOX_H + GAP, r.bottom) - Math.max(HOME + y - GAP, r.top);
+        return area + (w > 0 && h > 0 ? w * h : 0);
+      }, 0);
+    const want = { x: Math.min(next.x, maxX), y: Math.min(next.y, maxY) };
+    const xs = [want.x, 0, maxX, ...panels.flatMap((r) => [r.right + GAP - HOME, r.left - GAP - MASCOT_BOX_W - HOME])];
+    const ys = [want.y, 0, maxY, ...panels.flatMap((r) => [r.bottom + GAP - HOME, r.top - GAP - MASCOT_BOX_H - HOME])];
+    let cost = Infinity;
+    for (const x of xs.filter((x) => x >= 0 && x <= maxX)) {
+      for (const y of ys.filter((y) => y >= 0 && y <= maxY)) {
+        const c = covered(x, y) * 1e6 + Math.hypot(x - want.x, y - want.y);
+        if (c < cost) [cost, next.x, next.y] = [c, x, y];
+      }
+    }
     setHeading(face.current.front + Math.sign(next.x - face.current.x) * 0.9); // look where it flies
     face.current.x = next.x;
     setPos(next);
-  }, [tx, ty, still]);
+  }, [tx, ty, still, level, ringing, steps, reason, state]); // the panels come and go with the alarm and the camera
+
+  const edge = ringing === "danger" ? "border-red-500" : ringing === "rest" ? "border-amber-400" : "border-pulse/80";
 
   return (
     <main className="relative h-screen w-screen overflow-hidden bg-space">
@@ -135,15 +240,18 @@ export function Hud() {
       <div className="hud-scanlines pointer-events-none absolute inset-0" />
       <div className="hud-vignette pointer-events-none absolute inset-0" />
 
+      {ringing === "rest" && <div className="hud-rest pointer-events-none absolute inset-0 border-4 border-amber-400" />}
+      {ringing === "danger" && <div className="hud-danger pointer-events-none absolute inset-0 border-8 border-red-600" />}
+
       <div className="pointer-events-none absolute inset-4">
-        <Corner className="left-0 top-0 border-l-2 border-t-2" />
-        <Corner className="right-0 top-0 border-r-2 border-t-2" />
-        <Corner className="bottom-0 left-0 border-b-2 border-l-2" />
-        <Corner className="bottom-0 right-0 border-b-2 border-r-2" />
+        <Corner className={`left-0 top-0 border-l-2 border-t-2 ${edge}`} />
+        <Corner className={`right-0 top-0 border-r-2 border-t-2 ${edge}`} />
+        <Corner className={`bottom-0 left-0 border-b-2 border-l-2 ${edge}`} />
+        <Corner className={`bottom-0 right-0 border-b-2 border-r-2 ${edge}`} />
       </div>
 
       <motion.div
-        className="absolute left-8 top-8"
+        className="pointer-events-none absolute left-8 top-8"
         animate={pos}
         transition={{ duration: 2.4, ease: "easeInOut" }}
         onAnimationComplete={() => {
@@ -152,23 +260,41 @@ export function Hud() {
         }}
       >
         <PulsarMascot
-          message={directed ? line.text : (seen ?? line.text)}
-          mood={line.mood}
+          message={bubble}
+          mood={ringing || directed?.reaction === "alert" ? "alert" : "idle"}
           heading={heading}
-          tag={directed ? "GEMMA 4" : seen ? "CAMERA · AI DESCRIPTION" : "MOCK"}
+          bpm={reading.heartRateBpm}
         />
       </motion.div>
 
-      <VerdictPanel biometrics={biometrics} />
+      <AlertIndicator
+        level={level}
+        detail={level === "danger" && flagged(EXHAUSTED_SIGNAL) ? "NOT SAFE TO STAY AWAKE" : undefined}
+        steps={steps}
+        acknowledged={acknowledged}
+        onAcknowledge={() => setAckedLevel(level)}
+      />
 
-      <SensesBar videoRef={videoRef} camLive={state === "live"} line={directed ? line.text : (seen ?? line.text)} onSeen={setSeen} onInstruction={instruct} />
+      <VerdictPanel
+        biometrics={reading}
+        decision={decision}
+        advice={advice}
+        error={error}
+        simulated={!measured || simMode !== "live"}
+        cabinCo2={sim.cabinCo2}
+        cabinCo2Limit={co2Limit}
+      />
 
-      <div className="absolute right-8 top-8 text-right text-[11px] tracking-[0.2em] text-pulse">
+      <DebugPanel mode={simMode} onMode={setSimMode} sound={sound} onSound={setSound} />
+
+      <SensesBar line={bubble} onInstruction={instruct} />
+
+      <div className="absolute right-8 top-8 text-right text-xs tracking-[0.2em] text-pulse">
         <div className={state === "live" ? "" : "text-orbit"}>● {CAM_LABEL[state]}</div>
         <div className="mt-1 text-shell/70">OFFLINE · LOCAL ONLY</div>
       </div>
 
-      <div className="absolute inset-x-8 bottom-8 flex items-end justify-between text-[11px] tracking-[0.2em] text-shell/70">
+      <div className="absolute inset-x-8 bottom-8 flex items-end justify-between text-xs tracking-[0.2em] text-shell/70">
         <span>PULSAR HUD · v0.1</span>
         <span className="text-orbit">NOT A MEDICAL DEVICE</span>
       </div>

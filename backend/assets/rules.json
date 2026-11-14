@@ -50,6 +50,24 @@
       "message": "Eyes closed {value} of the time, above {threshold}."
     },
     {
+      "id": "fatigue-score-high",
+      "signal": "biometrics.fatigueScore",
+      "operator": ">=",
+      "threshold": 0.7,
+      "unit": "",
+      "display": "percent",
+      "status": "RED",
+      "hazard": "ISOLATION",
+      "hrpRisk": "SLEEP_AND_SCHEDULES",
+      "bodySystems": [
+        "NERVOUS"
+      ],
+      "countermeasureId": "CM-EXHAUSTED-01",
+      "source": null,
+      "assumption": "Team placeholder until G2 calibrates the fatigue classifier on RLDD/DROZY (uta-rldd, drozy): 0.70 is the alert level proposed for G1 in GOALS.md, not a validated cut-off. RED by team decision: past this level staying awake on task is treated as unsafe, which is for the flight surgeon to judge, not the app.",
+      "message": "Fatigue score {value}, at or above {threshold}: not safe to stay awake on task."
+    },
+    {
       "id": "sleep-under-6h",
       "signal": "selfReport.sleepHoursLast24h",
       "operator": "<",

@@ -63,10 +63,11 @@ export function FaceOverlay({ frameRef, videoRef }: { frameRef: MutableRefObject
   return (
     <>
       <canvas ref={canvas} className={`pointer-events-none absolute inset-0 h-full w-full -scale-x-100 object-cover ${show ? "" : "hidden"}`} />
-      <div className="absolute bottom-16 left-8 w-64 border border-pulse/30 bg-space/70 p-3 text-[10px] tracking-[0.15em] text-shell/70 backdrop-blur">
+      {/* Stacked above the debug panel (sim-core/DebugPanel), clear of the controls at the bottom of the HUD. */}
+      <div data-hud-panel className="absolute bottom-[19rem] left-8 w-64 border border-pulse/30 bg-space/70 p-3 text-xs tracking-[0.12em] text-shell/80 backdrop-blur">
         <div className="flex items-center justify-between text-pulse">
           <span>AI CHECK · GEMMA 4</span>
-          <button type="button" onClick={() => setShow((s) => !s)} className="border border-pulse/50 px-1 text-[9px] text-pulse">
+          <button type="button" onClick={() => setShow((s) => !s)} className="border border-pulse/50 px-2 py-1 text-xs text-pulse">
             MESH {show ? "ON" : "OFF"} (M)
           </button>
         </div>

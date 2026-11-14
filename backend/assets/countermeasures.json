@@ -64,6 +64,17 @@
       "note": "Team wording, not clinical guidance. The reading is simulated in the demo."
     },
     {
+      "id": "CM-EXHAUSTED-01",
+      "title": "Too exhausted to stay on task",
+      "steps": [
+        "Stop what you are doing and make it safe.",
+        "Tell the crew you need to sleep now and hand over any critical task.",
+        "Go to your sleep station and rest."
+      ],
+      "source": null,
+      "note": "Team wording, not clinical guidance."
+    },
+    {
       "id": "CM-RAD-01",
       "title": "Raised radiation dose",
       "steps": [
