@@ -14,7 +14,14 @@ fetch() {  # fetch <url> <destination>
 MP=https://storage.googleapis.com/mediapipe-models
 fetch "$MP/face_landmarker/face_landmarker/float16/1/face_landmarker.task" frontend/public/mediapipe/face_landmarker.task
 fetch "$MP/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task" frontend/public/mediapipe/pose_landmarker_lite.task
-# MediaPipe's .wasm files come from the npm package: cp -r node_modules/@mediapipe/tasks-vision/wasm public/mediapipe/wasm
+# MediaPipe's .wasm files come from the npm package; `make prefetch` copies them once pnpm has installed it.
+if [[ -d frontend/node_modules/@mediapipe/tasks-vision/wasm ]]; then
+  mkdir -p frontend/public/mediapipe/wasm
+  cp -r frontend/node_modules/@mediapipe/tasks-vision/wasm/. frontend/public/mediapipe/wasm/
+  echo "present      frontend/public/mediapipe/wasm"
+else
+  echo "WARNING: run (cd frontend && pnpm install) first, then re-run to copy the MediaPipe wasm files" >&2
+fi
 
 PIPER=https://huggingface.co/rhasspy/piper-voices/resolve/main
 for voice in en/en_US/lessac/medium/en_US-lessac-medium en/en_US/amy/medium/en_US-amy-medium; do
