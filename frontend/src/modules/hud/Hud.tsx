@@ -10,6 +10,7 @@ import { VerdictPanel } from "@/modules/voice-ai/VerdictPanel";
 import { useFaceMetrics } from "@/modules/vision-hud/useFaceMetrics";
 import { FaceOverlay } from "@/modules/vision-hud/FaceOverlay";
 import type { FaceFrame } from "@/modules/vision-hud/faceWorker";
+import { TwinPanel } from "@/modules/sim-core/TwinPanel";
 import { direct, frameBase64, type Direction, type Spot } from "@/modules/voice-ai/pulsarApi";
 
 // shortcut: canned lines so the mascot can be reviewed, replace with the rules-engine verdict once it is wired in.
@@ -162,6 +163,8 @@ export function Hud() {
       <VerdictPanel biometrics={biometrics} />
 
       <SensesBar videoRef={videoRef} camLive={state === "live"} line={directed ? line.text : (seen ?? line.text)} onSeen={setSeen} onInstruction={instruct} />
+
+      <TwinPanel biometrics={biometrics} />
 
       <div className="absolute right-8 top-8 text-right text-[11px] tracking-[0.2em] text-pulse">
         <div className={state === "live" ? "" : "text-orbit"}>● {CAM_LABEL[state]}</div>

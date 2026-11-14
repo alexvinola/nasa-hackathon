@@ -1,0 +1,133 @@
+{
+  "$comment": "Indicator guides (G9): for each health indicator the challenge names, how to take the measurement, why it matters in spaceflight and what to do when it is out of range. `signal` is the field in the telemetry contract. `why` cites ids in shared/sources.json through `sources` and uses the official names in shared/hrp.json. Guides quote no thresholds: `whenAbnormal` points at rule and countermeasure ids of the rules engine (backend/assets/), or says that no rule judges the value. The steps in `how` are declared in `assumption`. Checked by frontend/src/acceptance/indicators.test.ts.",
+  "notice": "Not a medical device",
+  "indicators": [
+    {
+      "signal": "selfReport.bloodPressure",
+      "label": "Blood pressure",
+      "unit": "mmHg",
+      "method": "By hand, with an automatic monitor and its arm cuff.",
+      "how": [
+        "Hold still in a secure position and rest for a few minutes. Do not measure right after exercise.",
+        "Wrap the cuff around your bare upper arm, snug, with the tube running down the inside of the arm.",
+        "Keep that arm relaxed and level with your heart.",
+        "Start the monitor. Stay still and do not talk while the cuff tightens and releases.",
+        "Read the two numbers: the higher one is systolic, the lower one is diastolic.",
+        "Write down both numbers and the time."
+      ],
+      "why": "NASA's Human Research Program lists the Risk of Cardiovascular Adaptations among the risks of human spaceflight, and blood pressure is one of the two readings PULSAR files under it. With the hazard Distance from Earth there is no clinic to go to: a log of readings taken the same way each time is what the crew and the flight surgeon have to work with.",
+      "whenAbnormal": {
+        "ruleIds": [],
+        "countermeasureIds": [],
+        "note": "PULSAR does not judge this value yet: tell the crew medical officer. Give them the reading, the time and how you feel."
+      },
+      "sources": ["hrp-risks", "hrp-hazards", "challenge-video"],
+      "assumption": "The steps are team wording for a generic automatic monitor, not clinical guidance from a source."
+    },
+    {
+      "signal": "biometrics.heartRateBpm",
+      "label": "Heart rate",
+      "unit": "bpm",
+      "method": "By hand, with a timer. PULSAR's camera estimate of heart rate is experimental.",
+      "how": [
+        "Hold still in a secure position and rest for a few minutes.",
+        "Place two fingertips, not the thumb, on the inside of your wrist below the base of the thumb.",
+        "Press lightly until you feel the pulse.",
+        "Count the beats for 30 seconds on a timer, then double the count: that is beats per minute.",
+        "Notice whether the beats feel regular, and write down the count and the time."
+      ],
+      "why": "Heart rate is the other reading PULSAR files under the Risk of Cardiovascular Adaptations, one of the risks NASA's Human Research Program lists for human spaceflight. A count taken by hand needs no equipment, so any crewmate can take it when someone feels unwell, and it gives the flight surgeon something to compare over time.",
+      "whenAbnormal": {
+        "ruleIds": [],
+        "countermeasureIds": [],
+        "note": "PULSAR does not judge this value yet: tell the crew medical officer. Give them the count, the time and how you feel."
+      },
+      "sources": ["hrp-risks", "challenge-video"],
+      "assumption": "The steps are team wording for a pulse count by hand, not clinical guidance from a source."
+    },
+    {
+      "signal": "selfReport.glucoseMgDl",
+      "label": "Blood glucose",
+      "unit": "mg/dL",
+      "method": "By hand, with a finger-stick meter, a test strip and a lancet.",
+      "how": [
+        "Wash and dry your hands.",
+        "Put a fresh test strip into the meter.",
+        "Prick the side of a fingertip with a new lancet.",
+        "Touch the drop of blood to the edge of the strip and wait for the reading.",
+        "Press a clean pad on the fingertip until it stops bleeding.",
+        "Stow the lancet and the strip in the sharps container.",
+        "Write down the reading, the time and when you last ate."
+      ],
+      "why": "PULSAR files glucose under the Risk of Inadequate Food and Nutrition, one of the risks NASA's Human Research Program lists. In NASA's open dataset from a civilian orbital crew, blood glucose read higher the day after landing than before the flight and went back to baseline later, with the fasting state unknown: one reading means little, so note when you last ate and look at the trend.",
+      "whenAbnormal": {
+        "ruleIds": [],
+        "countermeasureIds": [],
+        "note": "PULSAR does not judge this value yet: tell the crew medical officer. Give them the reading, the time and when you last ate."
+      },
+      "sources": ["hrp-risks", "osdr-osd-575"],
+      "assumption": "The steps are team wording for a generic finger-stick meter, not clinical guidance from a source."
+    },
+    {
+      "signal": "selfReport.bodyTempC",
+      "label": "Body temperature",
+      "unit": "°C",
+      "method": "By hand, with a digital thermometer.",
+      "how": [
+        "Wait a while after eating, drinking or exercising.",
+        "Clean the tip of the thermometer.",
+        "Place it as its instructions say: under the tongue, in the ear or on the forehead.",
+        "Hold still until it signals that the reading is done.",
+        "Write down the temperature and the time."
+      ],
+      "why": "NASA's hazard Hostile/Closed Environments covers the microbes and immune responses of life in a sealed habitat, and its Human Research Program lists the Risk of Altered Immune System Responses. Body temperature is a simple sign the crew can check and log when someone feels unwell.",
+      "whenAbnormal": {
+        "ruleIds": [],
+        "countermeasureIds": [],
+        "note": "PULSAR does not judge this value yet: tell the crew medical officer. Give them the temperature, the time and how you feel."
+      },
+      "sources": ["hrp-hazards", "hrp-risks"],
+      "assumption": "The steps are team wording for a generic digital thermometer, not clinical guidance from a source."
+    },
+    {
+      "signal": "selfReport.sleepHoursLast24h",
+      "label": "Sleep",
+      "unit": "h",
+      "method": "Self-report: no equipment needed.",
+      "how": [
+        "Think back over the last 24 hours, not only the last sleep period.",
+        "Add up the time you were actually asleep, naps included.",
+        "Leave out the time you lay awake.",
+        "Report the total in hours; half hours are fine."
+      ],
+      "why": "Astronauts on six-month space station missions who slept less had slower reactions and reported more stress. NASA's Human Research Program tracks this as the Risk of Inadequate Sleep and Irregular Schedules. In that study sleep was self-reported too, so an honest total is what makes the reading useful.",
+      "whenAbnormal": {
+        "ruleIds": ["sleep-under-6h"],
+        "countermeasureIds": ["CM-FATIGUE-01"],
+        "note": "The rules engine checks this value; the limit and where it comes from are the engine's, not this guide's. If it flags your sleep, follow these steps."
+      },
+      "sources": ["jones-2022-sleep", "hrp-risks"],
+      "assumption": "The steps are team wording for a self-report, not a validated sleep diary."
+    },
+    {
+      "signal": "selfReport.mood",
+      "label": "Mood",
+      "unit": "/ 5",
+      "method": "Self-report: no equipment needed.",
+      "how": [
+        "Stop for a moment, once a day, at about the same time.",
+        "Ask yourself how you have felt overall today, not just right now.",
+        "Pick a number from 1 (very low) to 5 (very good).",
+        "Answer for yourself: there is no right number, and the trend over days matters more than one day."
+      ],
+      "why": "NASA names Isolation and Confinement as one of the five hazards of human spaceflight, and its Human Research Program lists the Risk of Behavioral Changes and Psychiatric Disorders. A daily number makes a slow change visible to you and to the crew before it gets in the way of the work.",
+      "whenAbnormal": {
+        "ruleIds": ["mood-low"],
+        "countermeasureIds": ["CM-MOOD-01"],
+        "note": "The rules engine checks this value; the limit is a team assumption listed by the engine, not by this guide. If it flags your mood, follow these steps."
+      },
+      "sources": ["hrp-hazards", "hrp-risks"],
+      "assumption": "The daily scale from one to five is a PULSAR design choice, not a validated questionnaire; the steps are team wording."
+    }
+  ]
+}
