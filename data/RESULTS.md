@@ -76,9 +76,17 @@ How to read it:
   Within a person, PERCLOS alone is positive for more people than the model is.
 - Near-infrared video with faces about 65 px wide: these numbers do not transfer to the demo's colour webcam.
 
-Earlier pipeline on this machine, same 36 tests, for comparison: its former-formula score gave +0.55 / +0.12 against
-PVT and +0.50 / +0.35 against KSS per test, and a within-person median of +0.55 (12 of 14): the same as above, from an
-independent extraction. Its PERCLOS was baseline-subtracted per person, so its PERCLOS figures are not comparable.
+## Thresholds (RLDD)
+
+Section "Where a threshold would sit" of `data/out/fatigue_report.md`; block `thresholds` of `metrics.json`.
+
+- The engine's PERCLOS warning (`perclos-high`) is calibrated here: 0.11 lets 5 % of the alert windows of all 24
+  subjects fire. Out of fold it fires on 7 % of alert windows and 24 % of the windows of videos called drowsy. At the
+  former 0.30 it fired on 6 % of those.
+- The false alarms are not spread evenly: the median alert person has none, a few have most of them.
+- The danger rule (`fatigueScore` at or above 0.70) never fires on the minute's formula in RLDD. In the browser it is
+  reached by eyes held closed for about 3 s (`vision-hud/sleep.ts`), whose timings are team assumptions.
+- Not validated on the demo camera.
 
 ## Yawns (YawDD)
 

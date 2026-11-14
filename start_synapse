@@ -33,9 +33,14 @@ stop() {
 trap 'stop; exit 130' INT TERM
 trap stop EXIT
 
-wait_for() {  # wait_for <name> <url> <log>
+wait_for() {  # wait_for <name> <url> <log> <pid>
   for ((i = 0; i < WAIT_S; i++)); do
     answers "$2" && return 0
+    if ! kill -0 "$4" 2>/dev/null; then  # it died, typically because its port is taken
+      echo "ERROR: $1 stopped before answering at $2. Last lines of $3:" >&2
+      tail -n 15 "$3" >&2
+      exit 1
+    fi
     sleep 1
   done
   echo "ERROR: $1 did not answer at $2 within $WAIT_S s. Last lines of $3:" >&2
@@ -60,7 +65,7 @@ if answers "$OLLAMA_URL/api/tags"; then
 else
   ollama serve >"$LOGS/ollama.log" 2>&1 &
   started+=($!)
-  wait_for ollama "$OLLAMA_URL/api/tags" "$LOGS/ollama.log"
+  wait_for ollama "$OLLAMA_URL/api/tags" "$LOGS/ollama.log" $!
   say ollama "started"
 fi
 ollama list 2>/dev/null | awk '{print $1}' | grep -qx "$MODEL" || fail "the model $MODEL is not in Ollama: run 'make prefetch' while there is a network"
@@ -71,7 +76,7 @@ if answers "$BACKEND_URL/health"; then
 else
   (cd backend && HF_HUB_OFFLINE="${HF_HUB_OFFLINE:-1}" exec uv run --quiet uvicorn main:app --host 127.0.0.1 --port 8000) >"$LOGS/backend.log" 2>&1 &
   started+=($!)
-  wait_for backend "$BACKEND_URL/health" "$LOGS/backend.log"
+  wait_for backend "$BACKEND_URL/health" "$LOGS/backend.log" $!
   say backend "started"
 fi
 
@@ -79,9 +84,9 @@ fi
 if answers "$FRONTEND_URL/"; then
   say frontend "already running"
 else
-  (cd frontend && exec pnpm dev) >"$LOGS/frontend.log" 2>&1 &
+  (cd frontend && exec pnpm exec next dev -p 3000) >"$LOGS/frontend.log" 2>&1 &  # never another port: CORS allows 3000
   started+=($!)
-  wait_for frontend "$FRONTEND_URL/" "$LOGS/frontend.log"
+  wait_for frontend "$FRONTEND_URL/" "$LOGS/frontend.log" $!
   say frontend "started"
 fi
 

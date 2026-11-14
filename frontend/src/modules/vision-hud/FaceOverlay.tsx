@@ -198,7 +198,7 @@ function draw(ctx: CanvasRenderingContext2D, f: FaceFrame, fps: number) {
   const drowsy = f.model?.label === "drowsy";
   const reading = f.model
     ? `${MODEL_LABEL[f.model.label]} · PUNTUACIÓN ${f.model.score.toFixed(2)} · ${f.model.probabilities.map((p) => Math.round(p * 100)).join("/")} %`
-    : f.modelWaitS > 0 ? `FALTAN ${Math.ceil(f.modelWaitS)} S` : "MINUTO NO UTILIZABLE (CARA PERDIDA)";
+    : f.modelWaitS > 0 ? `FALTAN ${Math.ceil(f.modelWaitS)} S` : "MINUTO NO UTILIZABLE";
   label(ctx, fx, fy - 72 * unit, `MODELO RLDD · ${reading}`, `rgba(${drowsy ? AMBER : ORBIT}, 0.95)`, unit, 0);
 
   if (f.axes) {

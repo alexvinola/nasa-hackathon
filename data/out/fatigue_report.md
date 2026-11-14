@@ -259,7 +259,7 @@ Every DROZY test (coverage only: no test's reaction times or KSS are listed, per
 
 ## Where a threshold would sit
 
-The rules engine decides with thresholds on PERCLOS and on `fatigueScore`; both are team placeholders. This section does not choose them: it shows what each cut costs. A window fires when its value is above the cut. The cut for a rate is the smallest alert value with at most that share of alert windows above it. `out_of_fold` scores every subject with the cut from the other subjects' alert windows.
+The rules engine decides with thresholds on PERCLOS and on `fatigueScore`. This section does not choose them: it shows what each cut costs, and the last table shows what the rules in force do on the same windows. A window fires when its value is above the cut. The cut for a rate is the smallest alert value with at most that share of alert windows above it. `out_of_fold` scores every subject with the cut from the other subjects' alert windows.
 
 | signal | alert windows allowed to fire | cut (fires above it) | windows firing out of fold (alert / low / drowsy) | per person, alert windows firing: median (range) | per person, drowsy windows firing: median (range), people with any |
 |---|---|---|---|---|---|

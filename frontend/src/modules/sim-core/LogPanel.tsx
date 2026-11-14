@@ -7,9 +7,9 @@ import { useHotkey } from "@/modules/hud/useHotkey";
 const API = process.env.NEXT_PUBLIC_PULSAR_API ?? "http://localhost:8000";
 const POLL_MS = 1000;
 const KEEP = 400; // lines kept in the page, as many as the backend keeps
-const NOISY = new Set(["/biometrics", "/rules/evaluate"]); // sent every second or two: hidden unless asked for
+const KEEP_NOISY = 100; // of the requests sent every second or two, which are hidden unless asked for
 
-type LogEvent = { id: number; at: number; kind: string; text: string; path?: string };
+type LogEvent = { id: number; at: number; kind: string; text: string; noisy?: boolean };
 
 const TONE: Record<string, string> = {
   http: "text-shell/60",
@@ -42,11 +42,20 @@ export function LogPanel() {
         const response = await fetch(`${API}/debug/events?after=${last.current}`);
         const body: { events: LogEvent[]; last: number } = await response.json();
         if (!on) return;
-        // A restarted backend counts from 1 again: start over instead of waiting for it to pass the old id.
-        if (body.last < last.current) setEvents([]);
-        last.current = body.last;
         setDown(false);
-        if (body.events.length) setEvents((had) => [...had, ...body.events].slice(-KEEP));
+        if (body.last < last.current) {
+          // A restarted backend counts from 1 again: start over and ask for everything on the next poll.
+          last.current = 0;
+          setEvents([]);
+          return;
+        }
+        last.current = body.last;
+        if (!body.events.length) return;
+        setEvents((had) => {
+          const lines = [...had, ...body.events];
+          const kept = [...lines.filter((e) => !e.noisy).slice(-KEEP), ...lines.filter((e) => e.noisy).slice(-KEEP_NOISY)];
+          return kept.sort((a, b) => a.id - b.id);
+        });
       } catch {
         if (on) setDown(true);
       }
@@ -59,7 +68,7 @@ export function LogPanel() {
     };
   }, []);
 
-  const shown = events.filter((event) => all || event.kind !== "http" || !NOISY.has(event.path ?? ""));
+  const shown = events.filter((event) => all || !event.noisy);
   useEffect(() => {
     end.current?.scrollIntoView({ block: "end" }); // returns a promise in current browsers: it must not be the effect's result
   }, [shown.length, wide]);

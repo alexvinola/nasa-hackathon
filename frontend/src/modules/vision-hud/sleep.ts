@@ -20,8 +20,7 @@ const EPS = 1e-9;
 export class SustainedClosure {
   private start: number | null = null; // when the current closure began
   private last = 0; // the last frame that confirmed it
-  private peak = 0; // the highest score of the latest closure
-  private peakAt = Number.NEGATIVE_INFINITY;
+  private held: { score: number; at: number }[] = []; // scores still being held, highest first
 
   push(timeS: number, closed: boolean | null): void {
     if (this.start !== null && timeS - this.last > MAX_GAP_S + EPS) this.start = null;
@@ -33,22 +32,23 @@ export class SustainedClosure {
     this.start ??= timeS;
     this.last = timeS;
     const now = ramp(timeS - this.start);
-    if (now > 0 && now >= this.current(timeS)) [this.peak, this.peakAt] = [now, timeS];
+    if (now <= 0) return;
+    // A lower score reached later outlives a higher one reached earlier: keep both, drop what it supersedes.
+    this.held = [...this.held.filter((h) => h.score > now && timeS - h.at <= CLOSURE_HOLD_S + EPS), { score: now, at: timeS }];
   }
 
-  /** The score at `timeS`: the latest closure's peak while it is held, 0 afterwards. */
+  /** The score at `timeS`: the highest closure score still held, 0 when none is. */
   score(timeS: number): number {
     return this.current(timeS);
   }
 
   reset(): void {
     this.start = null;
-    this.peak = 0;
-    this.peakAt = Number.NEGATIVE_INFINITY;
+    this.held = [];
   }
 
   private current(timeS: number): number {
-    return timeS - this.peakAt <= CLOSURE_HOLD_S + EPS ? this.peak : 0;
+    return this.held.find((h) => timeS - h.at <= CLOSURE_HOLD_S + EPS)?.score ?? 0;
   }
 }
 

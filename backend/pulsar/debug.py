@@ -15,36 +15,42 @@ from typing import Any
 
 from fastapi import APIRouter
 
-MAX_EVENTS = 400  # about the last few minutes of a live HUD
+MAX_EVENTS = 400  # the lines worth reading: verdict changes, Gemma, voice, errors, one-off requests
+MAX_NOISY = 100  # requests the HUD repeats every second or two, kept apart so they cannot push the rest out
 MAX_TEXT = 240  # an event is one line: a model's answer is cut to this
 
 router = APIRouter(tags=["debug"])
 
 _events: deque[dict[str, Any]] = deque(maxlen=MAX_EVENTS)
+_noisy: deque[dict[str, Any]] = deque(maxlen=MAX_NOISY)
+_newest = 0  # id of the last event recorded by this process; a restarted backend starts again from 0
 _ids = itertools.count(1)
 _lock = threading.Lock()  # endpoints run in a thread pool
 
 
-def record(kind: str, text: str, **data: Any) -> None:
+def record(kind: str, text: str, noisy: bool = False, **data: Any) -> None:
     """Add one event. `kind` groups them in the panel: http, engine, gemma, voice, error."""
+    global _newest
     text = " ".join(str(text).split())
     if len(text) > MAX_TEXT:
         text = text[: MAX_TEXT - 1] + "…"
     with _lock:
-        _events.append({"id": next(_ids), "at": time.time(), "kind": kind, "text": text, **data})
+        _newest = next(_ids)
+        (_noisy if noisy else _events).append({"id": _newest, "at": time.time(), "kind": kind, "text": text, "noisy": noisy, **data})
 
 
 def events_after(after: int) -> list[dict[str, Any]]:
     with _lock:
-        return [event for event in _events if event["id"] > after]
+        return sorted((event for event in (*_events, *_noisy) if event["id"] > after), key=lambda event: event["id"])
 
 
 def clear() -> None:
     with _lock:
         _events.clear()
+        _noisy.clear()
 
 
 @router.get("/debug/events", summary="What the backend did lately, for the HUD's log panel")
 def events(after: int = 0) -> dict[str, Any]:
-    found = events_after(after)
-    return {"events": found, "last": found[-1]["id"] if found else after}
+    # `last` is this process's newest id, not an echo of `after`: after a restart it is smaller, and the panel starts over.
+    return {"events": events_after(after), "last": _newest}

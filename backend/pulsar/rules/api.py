@@ -31,7 +31,10 @@ def evaluate(request: Request, telemetry: dict[str, Any] = Body(...)) -> dict[st
         raise RequestValidationError(errors)
     decision = _engine(request).evaluate(telemetry)
     signals = ", ".join(factor.get("signal", "?") for factor in decision.get("factors", [])) or "nothing triggered"
-    debug.record("engine", f"{decision.get('status')}: {signals}", status=decision.get("status"))
+    verdict = f"{decision.get('status')}: {signals}"
+    if verdict != getattr(request.app.state, "last_verdict", None):  # asked every 2 s: only a change is news
+        request.app.state.last_verdict = verdict
+        debug.record("engine", verdict, status=decision.get("status"))
     return decision
 
 

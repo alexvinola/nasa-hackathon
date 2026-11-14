@@ -46,7 +46,7 @@
       "bodySystems": ["NERVOUS"],
       "countermeasureId": "CM-DROWSY-01",
       "source": "uta-rldd",
-      "assumption": "Calibrated on RLDD (data/out/fatigue_report.md, 'Where a threshold would sit'): 0.111 is the cut that lets 5 % of alert 60 s windows fire; out of fold it fires on 24 % of the windows of videos their subject called drowsy. The 5 % rate is the team's choice. Self-reported labels, other people's webcams: not validated on the demo camera, and not a clinical PERCLOS cut-off.",
+      "assumption": "Calibrated on RLDD (data/out/fatigue_report.md, 'Where a threshold would sit'): 0.111 is the cut that lets 5 % of the alert 60 s windows of all 24 subjects fire. Out of fold (each subject scored with the others' cut) it fires on 7 % of alert windows and 24 % of the windows of videos their subject called drowsy. The 5 % rate is the team's choice. Self-reported labels, other people's webcams: not validated on the demo camera, and not a clinical PERCLOS cut-off.",
       "message": "Eyes closed {value} of the time, above {threshold}."
     },
     {

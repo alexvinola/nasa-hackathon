@@ -1,7 +1,8 @@
 """Where a threshold on a camera signal would sit, and what it would cost, measured on the RLDD windows.
 
 The rules engine decides with thresholds on ``biometrics.perclos`` and ``biometrics.fatigueScore``
-(``backend/assets/rules.json``); both are team placeholders. This module does not choose them. It reports,
+(``backend/assets/rules.json``). This module does not choose them: the team does, and a rule may cite these
+numbers as its calibration (``perclos-high`` does). It reports,
 for each signal, the cut that keeps the share of ALERT windows above it at a given rate (the false alarms),
 and the share of low-vigilance and drowsy windows above that cut (what it catches), so that whoever writes
 the rule knows the trade.

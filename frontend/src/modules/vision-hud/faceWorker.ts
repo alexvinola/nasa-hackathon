@@ -63,6 +63,9 @@ const scope = self as unknown as {
 };
 
 const WINDOW_MS = 60_000; // PERCLOS is the share of the last minute with the eyes closed
+// Assumption: with fewer seconds than this, one blink is a large share of the frames (0.11 of the first 2 s) and
+// the engine's warning would fire at the start of every session.
+const PERCLOS_MIN_MS = 10_000;
 const NOD = 0.03; // nose drop, as a fraction of frame height, that counts as a head nod
 const MODEL_EVERY_MS = 1000; // how often the RLDD model is run again over the last 60 s
 
@@ -117,7 +120,8 @@ function prune(now: number) {
 
 function score(now: number): Biometrics {
   prune(now);
-  const perclos = eyes.length ? eyes.filter((e) => e.closed).length / eyes.length : 0;
+  const measured = eyes.length > 0 && now - eyes[0].at >= PERCLOS_MIN_MS;
+  const perclos = measured ? eyes.filter((e) => e.closed).length / eyes.length : 0;
   const yawnsPerMin = yawns.length; // the window is one minute
   const spread = Math.sqrt(mean(noseY.map((y) => (y - mean(noseY)) ** 2)));
   const postureStability = clamp01(1 - spread * 12);

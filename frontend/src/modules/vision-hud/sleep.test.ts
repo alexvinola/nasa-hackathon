@@ -40,6 +40,13 @@ describe("SustainedClosure", () => {
     expect(closure.score(at + CLOSURE_HOLD_S)).toBe(0);
   });
 
+  it("keeps a later, shorter closure after an earlier peak has expired", () => {
+    const [closure, at] = run([true, 5], [false, 1], [true, 3], [false, 0.1]); // 1.0 until 5 s, then 0.64 until 9 s
+    expect(closure.score(at)).toBe(1);
+    expect(closure.score(5 + CLOSURE_HOLD_S + 0.5)).toBeCloseTo(0.64, 1);
+    expect(closure.score(9 + CLOSURE_HOLD_S + 0.5)).toBe(0);
+  });
+
   it("bridges a face lost for a moment and ends the closure when it is lost for longer", () => {
     const [bridged, t1] = run([true, 2], [null, 0.13], [true, 2]);
     expect(bridged.score(t1)).toBe(1);

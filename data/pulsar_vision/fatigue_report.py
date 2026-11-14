@@ -189,8 +189,8 @@ def thresholds_section(th: dict) -> list[str]:
     """Where a threshold would sit on each camera signal and what it would cost: every number from ``thresholds``."""
     lines = ["## Where a threshold would sit\n"]
     lines.append(
-        "The rules engine decides with thresholds on PERCLOS and on `fatigueScore`; both are team placeholders. This section does not "
-        f"choose them: it shows what each cut costs. {th['how']}\n"
+        "The rules engine decides with thresholds on PERCLOS and on `fatigueScore`. This section does not choose them: it shows what each "
+        f"cut costs, and the last table shows what the rules in force do on the same windows. {th['how']}\n"
     )
     rows = []
     for name, points in th["signals"].items():

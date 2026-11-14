@@ -14,6 +14,7 @@ from pulsar.voice.api import router as voice_router
 
 
 QUIET_PATHS = {"/debug/events", "/health"}
+NOISY_PATHS = {"/biometrics", "/rules/evaluate"}  # sent by the HUD every second or two
 
 
 def create_app(lifespan=None, routers: Iterable[APIRouter] = ()) -> FastAPI:
@@ -51,11 +52,13 @@ def create_app(lifespan=None, routers: Iterable[APIRouter] = ()) -> FastAPI:
         try:
             response = await call_next(request)
         except Exception as error:
-            debug.record("error", f"{request.method} {path} failed: {error!r}", path=path)
+            # The class only: an exception's text can quote the bytes of a request body.
+            debug.record("error", f"{request.method} {path} failed: {type(error).__name__}", path=path)
             raise
         ms = round((time.perf_counter() - started) * 1000)
-        debug.record("http" if response.status_code < 400 else "error", f"{request.method} {path} {response.status_code} · {ms} ms",
-                     path=path, status=response.status_code, ms=ms)
+        failed = response.status_code >= 400
+        debug.record("error" if failed else "http", f"{request.method} {path} {response.status_code} · {ms} ms",
+                     noisy=path in NOISY_PATHS and not failed, path=path, status=response.status_code, ms=ms)
         return response
 
     @app.get("/health", tags=["health"], summary="Liveness probe for start_synapse")
