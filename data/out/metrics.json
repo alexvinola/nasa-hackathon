@@ -3578,6 +3578,332 @@
       }
     }
   },
+  "thresholds": {
+    "false_alarm_rates": [
+      0.05,
+      0.1
+    ],
+    "how": "A window fires when its value is above the cut. The cut for a rate is the smallest alert value with at most that share of alert windows above it. `out_of_fold` scores every subject with the cut from the other subjects' alert windows.",
+    "signals": {
+      "perclos": [
+        {
+          "false_alarm_rate": 0.05,
+          "cut": 0.111111,
+          "fires_when": "value > cut",
+          "all_subjects": {
+            "alert": 0.049666,
+            "low_vigilance": 0.138369,
+            "drowsy": 0.246269
+          },
+          "out_of_fold": {
+            "cut_range": [
+              0.082011,
+              0.114483
+            ],
+            "windows": {
+              "alert": 0.069723,
+              "low_vigilance": 0.154076,
+              "drowsy": 0.24403
+            },
+            "alert_per_subject": {
+              "subjects": 24,
+              "median": 0.0,
+              "min": 0.0,
+              "max": 0.982456,
+              "subjects_with_any": 3
+            },
+            "drowsy_per_subject": {
+              "subjects": 24,
+              "median": 0.054545,
+              "min": 0.0,
+              "max": 1.0,
+              "subjects_with_any": 12
+            }
+          }
+        },
+        {
+          "false_alarm_rate": 0.1,
+          "cut": 0.0821,
+          "fires_when": "value > cut",
+          "all_subjects": {
+            "alert": 0.099331,
+            "low_vigilance": 0.207928,
+            "drowsy": 0.350746
+          },
+          "out_of_fold": {
+            "cut_range": [
+              0.066741,
+              0.083799
+            ],
+            "windows": {
+              "alert": 0.12703,
+              "low_vigilance": 0.216156,
+              "drowsy": 0.35597
+            },
+            "alert_per_subject": {
+              "subjects": 24,
+              "median": 0.0,
+              "min": 0.0,
+              "max": 1.0,
+              "subjects_with_any": 3
+            },
+            "drowsy_per_subject": {
+              "subjects": 24,
+              "median": 0.18961,
+              "min": 0.0,
+              "max": 1.0,
+              "subjects_with_any": 15
+            }
+          }
+        }
+      ],
+      "browser_formula": [
+        {
+          "false_alarm_rate": 0.05,
+          "cut": 0.08823,
+          "fires_when": "value > cut",
+          "all_subjects": {
+            "alert": 0.049666,
+            "low_vigilance": 0.12715,
+            "drowsy": 0.223134
+          },
+          "out_of_fold": {
+            "cut_range": [
+              0.073607,
+              0.089242
+            ],
+            "windows": {
+              "alert": 0.067813,
+              "low_vigilance": 0.138369,
+              "drowsy": 0.234328
+            },
+            "alert_per_subject": {
+              "subjects": 24,
+              "median": 0.0,
+              "min": 0.0,
+              "max": 0.701754,
+              "subjects_with_any": 8
+            },
+            "drowsy_per_subject": {
+              "subjects": 24,
+              "median": 0.108117,
+              "min": 0.0,
+              "max": 0.913793,
+              "subjects_with_any": 15
+            }
+          }
+        },
+        {
+          "false_alarm_rate": 0.1,
+          "cut": 0.069124,
+          "fires_when": "value > cut",
+          "all_subjects": {
+            "alert": 0.099331,
+            "low_vigilance": 0.188482,
+            "drowsy": 0.297015
+          },
+          "out_of_fold": {
+            "cut_range": [
+              0.055721,
+              0.070343
+            ],
+            "windows": {
+              "alert": 0.114613,
+              "low_vigilance": 0.207928,
+              "drowsy": 0.308955
+            },
+            "alert_per_subject": {
+              "subjects": 24,
+              "median": 0.0,
+              "min": 0.0,
+              "max": 0.947368,
+              "subjects_with_any": 10
+            },
+            "drowsy_per_subject": {
+              "subjects": 24,
+              "median": 0.144156,
+              "min": 0.0,
+              "max": 1.0,
+              "subjects_with_any": 22
+            }
+          }
+        }
+      ],
+      "model_fatigue_score": [
+        {
+          "false_alarm_rate": 0.05,
+          "cut": 0.606013,
+          "fires_when": "value > cut",
+          "all_subjects": {
+            "alert": 0.049666,
+            "low_vigilance": 0.18549,
+            "drowsy": 0.345522
+          },
+          "out_of_fold": {
+            "cut_range": [
+              0.586906,
+              0.611376
+            ],
+            "windows": {
+              "alert": 0.059217,
+              "low_vigilance": 0.193717,
+              "drowsy": 0.335075
+            },
+            "alert_per_subject": {
+              "subjects": 24,
+              "median": 0.0,
+              "min": 0.0,
+              "max": 0.736842,
+              "subjects_with_any": 5
+            },
+            "drowsy_per_subject": {
+              "subjects": 24,
+              "median": 0.159148,
+              "min": 0.0,
+              "max": 1.0,
+              "subjects_with_any": 18
+            }
+          }
+        },
+        {
+          "false_alarm_rate": 0.1,
+          "cut": 0.583279,
+          "fires_when": "value > cut",
+          "all_subjects": {
+            "alert": 0.099331,
+            "low_vigilance": 0.244577,
+            "drowsy": 0.407463
+          },
+          "out_of_fold": {
+            "cut_range": [
+              0.567422,
+              0.584902
+            ],
+            "windows": {
+              "alert": 0.122254,
+              "low_vigilance": 0.246821,
+              "drowsy": 0.40597
+            },
+            "alert_per_subject": {
+              "subjects": 24,
+              "median": 0.0,
+              "min": 0.0,
+              "max": 0.894737,
+              "subjects_with_any": 6
+            },
+            "drowsy_per_subject": {
+              "subjects": 24,
+              "median": 0.27193,
+              "min": 0.0,
+              "max": 1.0,
+              "subjects_with_any": 18
+            }
+          }
+        }
+      ]
+    },
+    "engine_rules": {
+      "perclos-high on perclos": {
+        "rule": {
+          "id": "perclos-high",
+          "threshold": 0.3,
+          "operator": ">=",
+          "status": "AMBER"
+        },
+        "signal": "perclos",
+        "threshold": 0.3,
+        "operator": ">=",
+        "windows": {
+          "alert": 0.0,
+          "low_vigilance": 0.010471,
+          "drowsy": 0.059701
+        },
+        "windows_firing": 94,
+        "alert_per_subject": {
+          "subjects": 24,
+          "median": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "subjects_with_any": 0
+        },
+        "drowsy_per_subject": {
+          "subjects": 24,
+          "median": 0.0,
+          "min": 0.0,
+          "max": 0.712121,
+          "subjects_with_any": 4
+        }
+      },
+      "fatigue-score-high on browser_formula": {
+        "rule": {
+          "id": "fatigue-score-high",
+          "threshold": 0.7,
+          "operator": ">=",
+          "status": "RED"
+        },
+        "signal": "browser_formula",
+        "threshold": 0.7,
+        "operator": ">=",
+        "windows": {
+          "alert": 0.0,
+          "low_vigilance": 0.0,
+          "drowsy": 0.0
+        },
+        "windows_firing": 0,
+        "alert_per_subject": {
+          "subjects": 24,
+          "median": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "subjects_with_any": 0
+        },
+        "drowsy_per_subject": {
+          "subjects": 24,
+          "median": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "subjects_with_any": 0
+        }
+      },
+      "fatigue-score-high on model_fatigue_score": {
+        "rule": {
+          "id": "fatigue-score-high",
+          "threshold": 0.7,
+          "operator": ">=",
+          "status": "RED"
+        },
+        "signal": "model_fatigue_score",
+        "threshold": 0.7,
+        "operator": ">=",
+        "windows": {
+          "alert": 0.009551,
+          "low_vigilance": 0.0546,
+          "drowsy": 0.149254
+        },
+        "windows_firing": 283,
+        "alert_per_subject": {
+          "subjects": 24,
+          "median": 0.0,
+          "min": 0.0,
+          "max": 0.157895,
+          "subjects_with_any": 2
+        },
+        "drowsy_per_subject": {
+          "subjects": 24,
+          "median": 0.0,
+          "min": 0.0,
+          "max": 1.0,
+          "subjects_with_any": 9
+        }
+      }
+    },
+    "limits": [
+      "RLDD labels are self-reported, one per video: a drowsy window is a window of a video its subject called drowsy.",
+      "The rates looked at (5 % and 10 % of alert windows) are a team assumption, not a recommendation.",
+      "Windows of one video overlap by 50 s, so the shares are not counts of independent events; an alarm that fires on a window fires on its neighbours too.",
+      "The browser's fatigueScore is also raised by eyes held closed for seconds (vision-hud/sleep.ts); that part is not in these numbers."
+    ]
+  },
   "final_model": {
     "file": "data/fatigue_model.json",
     "C": 0.001,

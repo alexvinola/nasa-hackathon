@@ -180,29 +180,29 @@ DROZY: Massoz, Langohr, François & Verly (2016), The ULg Multimodality Drowsine
 
 | signal | vs mean PVT reaction time, Pearson / Spearman | tests | vs KSS, Pearson / Spearman * | tests |
 |---|---|---|---|---|
-| model `fatigueScore` | +0.64 / +0.32 | 36 | +0.55 / +0.48 | 36 |
-| PERCLOS alone | +0.54 / +0.15 | 36 | +0.50 / +0.39 | 36 |
-| former browser formula | +0.55 / +0.12 | 36 | +0.50 / +0.35 | 36 |
+| fatigue_score | +0.64 / +0.32 | 36 | +0.55 / +0.48 | 36 |
+| PERCLOS | +0.54 / +0.15 | 36 | +0.50 / +0.39 | 36 |
+| browser formula | +0.55 / +0.12 | 36 | +0.50 / +0.35 | 36 |
 
 **Within each person** (Pearson r over that person's windows; median across people, lowest to highest, and in how many it is positive). A person's own level is a constant here, so differences between people cannot drive it:
 
 | signal | vs PVT reaction time of the window | people positive | vs KSS * | people positive |
 |---|---|---|---|---|
-| model `fatigueScore` | +0.48 (-0.16 to +0.87) | 11 of 14 | +0.52 (-0.56 to +0.90) | 9 of 13 |
-| PERCLOS alone | +0.56 (-0.39 to +0.86) | 13 of 14 | +0.39 (-0.91 to +0.84) | 10 of 13 |
-| former browser formula | +0.56 (-0.35 to +0.85) | 12 of 14 | +0.39 (-0.79 to +0.84) | 10 of 13 |
+| fatigue_score | +0.48 (-0.16 to +0.87) | 11 of 14 | +0.52 (-0.56 to +0.90) | 9 of 13 |
+| PERCLOS | +0.56 (-0.39 to +0.86) | 13 of 14 | +0.39 (-0.91 to +0.84) | 10 of 13 |
+| browser formula | +0.56 (-0.35 to +0.85) | 12 of 14 | +0.39 (-0.79 to +0.84) | 10 of 13 |
 
 Every scored window pooled (overlapping windows: the counts are not sample sizes):
 
 | signal | vs PVT reaction time, Pearson / Spearman | windows | vs KSS, Pearson / Spearman * | windows |
 |---|---|---|---|---|
-| model `fatigueScore` | +0.58 / +0.31 | 1967 | +0.49 / +0.42 | 1967 |
-| PERCLOS alone | +0.52 / +0.19 | 1967 | +0.45 / +0.34 | 1967 |
-| former browser formula | +0.52 / +0.18 | 1967 | +0.45 / +0.34 | 1967 |
+| fatigue_score | +0.58 / +0.31 | 1967 | +0.49 / +0.42 | 1967 |
+| PERCLOS | +0.52 / +0.19 | 1967 | +0.45 / +0.34 | 1967 |
+| browser formula | +0.52 / +0.18 | 1967 | +0.45 / +0.34 | 1967 |
 
 \* KSS (Karolinska Sleepiness Scale; 1 to 9 in DROZY's file, higher = sleepier) is the score DROZY recorded per test. The scale itself is not registered in shared/sources.json: register it before quoting a KSS figure.
 
-**Reading.** Per test against reaction time, the model's Spearman (+0.32) is above that of PERCLOS alone (+0.15) and above that of the former browser formula (+0.12). With 36 tests and no interval, these differences are not evidence that one signal is better than another. A positive sign means the signal rises as reactions slow down.
+**Reading.** Per test against reaction time, the model's Spearman (+0.32) is above that of PERCLOS (+0.15) and above that of browser formula (+0.12). With 36 tests and no interval, these differences are not evidence that one signal is better than another. A positive sign means the signal rises as reactions slow down.
 
 The model's `fatigueScore` on DROZY windows runs from 0.39 to 0.97 (middle half 0.48 to 0.59); out of fold on RLDD it ran from 0.39 to 0.99. A threshold on the score cannot be read off DROZY: its video is not the demo's.
 
@@ -256,6 +256,32 @@ Every DROZY test (coverage only: no test's reaction times or KSS are listed, per
 | 14-1 | 14.9 | 99.88 % | 0.8 | 54 of 54 |
 | 14-2 | 14.9 | 99.95 % | 0.3 | 55 of 55 |
 | 14-3 | 14.9 | 100.00 % | 0.0 | 55 of 55 |
+
+## Where a threshold would sit
+
+The rules engine decides with thresholds on PERCLOS and on `fatigueScore`; both are team placeholders. This section does not choose them: it shows what each cut costs. A window fires when its value is above the cut. The cut for a rate is the smallest alert value with at most that share of alert windows above it. `out_of_fold` scores every subject with the cut from the other subjects' alert windows.
+
+| signal | alert windows allowed to fire | cut (fires above it) | windows firing out of fold (alert / low / drowsy) | per person, alert windows firing: median (range) | per person, drowsy windows firing: median (range), people with any |
+|---|---|---|---|---|---|
+| PERCLOS | 5 % | 0.111 | 7.0 % / 15.4 % / 24.4 % | 0.0 % (0.0 % to 98.2 %) | 5.5 % (0.0 % to 100.0 %), 12 of 24 |
+| PERCLOS | 10 % | 0.082 | 12.7 % / 21.6 % / 35.6 % | 0.0 % (0.0 % to 100.0 %) | 19.0 % (0.0 % to 100.0 %), 15 of 24 |
+| browser formula | 5 % | 0.088 | 6.8 % / 13.8 % / 23.4 % | 0.0 % (0.0 % to 70.2 %) | 10.8 % (0.0 % to 91.4 %), 15 of 24 |
+| browser formula | 10 % | 0.069 | 11.5 % / 20.8 % / 30.9 % | 0.0 % (0.0 % to 94.7 %) | 14.4 % (0.0 % to 100.0 %), 22 of 24 |
+| model fatigueScore | 5 % | 0.606 | 5.9 % / 19.4 % / 33.5 % | 0.0 % (0.0 % to 73.7 %) | 15.9 % (0.0 % to 100.0 %), 18 of 24 |
+| model fatigueScore | 10 % | 0.583 | 12.2 % / 24.7 % / 40.6 % | 0.0 % (0.0 % to 89.5 %) | 27.2 % (0.0 % to 100.0 %), 18 of 24 |
+
+**The thresholds the engine applies today**, on the same windows:
+
+| rule | compared with | fires when | windows firing | share firing (alert / low / drowsy) | people whose drowsy video fires at all |
+|---|---|---|---|---|---|
+| `perclos-high` (AMBER) | PERCLOS | >= 0.30 | 94 | 0.0 % / 1.0 % / 6.0 % | 4 of 24 |
+| `fatigue-score-high` (RED) | browser formula | >= 0.70 | 0 | 0.0 % / 0.0 % / 0.0 % | 0 of 24 |
+| `fatigue-score-high` (RED) | model fatigueScore | >= 0.70 | 283 | 1.0 % / 5.5 % / 14.9 % | 9 of 24 |
+
+- RLDD labels are self-reported, one per video: a drowsy window is a window of a video its subject called drowsy.
+- The rates looked at (5 % and 10 % of alert windows) are a team assumption, not a recommendation.
+- Windows of one video overlap by 50 s, so the shares are not counts of independent events; an alarm that fires on a window fires on its neighbours too.
+- The browser's fatigueScore is also raised by eyes held closed for seconds (vision-hud/sleep.ts); that part is not in these numbers.
 
 ## The model the browser gets
 
