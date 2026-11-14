@@ -8,10 +8,12 @@
  */
 
 import { FaceLandmarker, FilesetResolver, PoseLandmarker } from "@mediapipe/tasks-vision";
+import { BLINK, MOUTH_OPEN, YAWN_MS } from "./thresholds";
 
 type Frame = { type: "frame"; bitmap: ImageBitmap; at: number };
 type Stop = { type: "stop" };
-type In = Frame | Stop;
+type Warm = { type: "warm" }; // load the models now, before the first frame arrives
+type In = Frame | Stop | Warm;
 
 export type Biometrics = {
   heartRateBpm: number | null;
@@ -50,8 +52,6 @@ const scope = self as unknown as {
 };
 
 const WINDOW_MS = 60_000; // PERCLOS is the share of the last minute with the eyes closed
-const BLINK = 0.5; // blendshape score above which an eye counts as closed
-const YAWN = 0.5;
 const NOD = 0.03; // nose drop, as a fraction of frame height, that counts as a head nod
 const POSE_EVERY = 3; // arm asymmetry changes slowly: the pose model runs on one frame in three
 
@@ -65,6 +65,8 @@ let lastPose: ReturnType<PoseLandmarker["detectForVideo"]> | undefined;
 
 const eyes: { at: number; closed: boolean }[] = [];
 const yawns: number[] = [];
+let mouthOpenSince: number | undefined;
+let yawnCounted = false;
 const nods: number[] = [];
 const noseY: number[] = [];
 
@@ -135,9 +137,18 @@ function readFace(result: ReturnType<FaceLandmarker["detectForVideo"]>, now: num
   if (!shapes) return;
   const at = (name: string) => shapes.find((c) => c.categoryName === name)?.score ?? 0;
   eyes.push({ at: now, closed: (at("eyeBlinkLeft") + at("eyeBlinkRight")) / 2 > BLINK });
-  const open = at("jawOpen");
-  const wasOpen = yawns.length > 0 && now - yawns[yawns.length - 1] < 1500;
-  if (open > YAWN && !wasOpen) yawns.push(now);
+  // A yawn is one long opening of the mouth: counted once, when it has lasted YAWN_MS. A word spoken with the
+  // mouth wide open is too short to count, and a long yawn is not counted again every second and a half.
+  if (at("jawOpen") > MOUTH_OPEN) {
+    mouthOpenSince ??= now;
+    if (!yawnCounted && now - mouthOpenSince >= YAWN_MS) {
+      yawns.push(now);
+      yawnCounted = true;
+    }
+  } else {
+    mouthOpenSince = undefined;
+    yawnCounted = false;
+  }
   const landmarks = result.faceLandmarks?.[0];
   if (landmarks) {
     const nose = landmarks[1] ?? landmarks[0];
@@ -225,10 +236,15 @@ async function handle(frame: Frame) {
 scope.onmessage = (event) => {
   const message = event.data;
   if (message.type === "frame") void handle(message);
+  if (message.type === "warm") {
+    load().catch((error) => scope.postMessage({ type: "error", message: error instanceof Error ? error.message : String(error) }));
+  }
   if (message.type === "stop") {
     eyes.length = 0;
     yawns.length = 0;
     nods.length = 0;
     noseY.length = 0;
+    mouthOpenSince = undefined;
+    yawnCounted = false;
   }
 };

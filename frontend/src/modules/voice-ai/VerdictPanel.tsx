@@ -35,11 +35,11 @@ export function VerdictPanel({
   const bpm = biometrics?.heartRateBpm;
 
   return (
-    <section data-hud-panel className="pointer-events-none absolute right-8 top-20 w-80 rounded-lg border border-pulse/30 bg-space/70 p-4 text-sm tracking-[0.1em] text-shell/80 backdrop-blur">
+    <section data-hud-panel className="pointer-events-none absolute right-8 top-20 w-80 rounded-lg border-2 border-pulse/60 bg-space/90 p-4 text-sm tracking-[0.1em] text-shell backdrop-blur">
       <header className="flex items-center gap-3">
         <span className={`h-3 w-3 rounded-full ${decision ? LIGHT[decision.status] : "bg-orbit/40"}`} />
-        <span className="text-pulse">{decision ? decision.status : "WAITING FOR READINGS"}</span>
-        {decision && <span className="ml-auto text-orbit">{ESCALATION[decision.escalation]}</span>}
+        <span className="font-bold text-pulse">{decision ? decision.status : "WAITING FOR READINGS"}</span>
+        {decision && <span className="ml-auto font-bold text-shell">{ESCALATION[decision.escalation]}</span>}
       </header>
 
       {bpm != null && (
@@ -47,7 +47,7 @@ export function VerdictPanel({
         <div className="mt-3 flex items-center gap-3 rounded border border-red-400/40 bg-red-500/10 px-3 py-2">
           <span aria-hidden className="hud-beat text-3xl leading-none text-red-400" style={{ animationDuration: `${60 / bpm}s` }}>♥</span>
           <div>
-            <div className="text-2xl leading-none tracking-normal text-shell">{bpm}<span className="ml-1 text-xs text-shell/70">BPM</span></div>
+            <div className="text-2xl leading-none tracking-normal text-shell">{bpm}<span className="ml-1 text-xs text-shell/90">BPM</span></div>
             <div className="mt-1 text-xs text-red-300">PULSE · SIMULATED</div>
           </div>
           <svg aria-hidden viewBox="0 0 120 32" className="ml-auto h-8 w-28 text-red-400">
@@ -66,7 +66,7 @@ export function VerdictPanel({
       )}
 
       {biometrics && (
-        <dl className="mt-3 grid grid-cols-3 gap-2 text-xs text-shell/70">
+        <dl className="mt-3 grid grid-cols-3 gap-2 text-xs text-shell/90">
           <div><dt>PERCLOS</dt><dd className="text-base text-shell">{Math.round(biometrics.perclos * 100)}%</dd></div>
           <div><dt>FATIGUE</dt><dd className="text-base text-shell">{biometrics.fatigueScore.toFixed(2)}</dd></div>
           <div><dt>YAWNS/MIN</dt><dd className="text-base text-shell">{biometrics.yawnsPerMin}</dd></div>
@@ -76,9 +76,9 @@ export function VerdictPanel({
       {cabinCo2 != null && (
         // Cabin air: the CO2 reading against the limit the rules engine applies to it.
         <div className="mt-3">
-          <div className="flex justify-between text-xs text-shell/70">
+          <div className="flex justify-between text-xs text-shell/90">
             <span>CABIN CO2 · SIMULATED</span>
-            <span className="text-base text-shell">{cabinCo2.toFixed(1)}<span className="ml-1 text-xs text-shell/70">mmHg</span></span>
+            <span className="text-base text-shell">{cabinCo2.toFixed(1)}<span className="ml-1 text-xs text-shell/90">mmHg</span></span>
           </div>
           {cabinCo2Limit != null && (
             <>
@@ -88,7 +88,7 @@ export function VerdictPanel({
                   style={{ width: `${Math.min(100, (cabinCo2 / cabinCo2Limit) * 100)}%` }}
                 />
               </div>
-              <div className="mt-1 text-right text-[11px] text-shell/60">LIMIT {cabinCo2Limit.toFixed(1)} mmHg</div>
+              <div className="mt-1 text-right text-[11px] text-shell/80">LIMIT {cabinCo2Limit.toFixed(1)} mmHg</div>
             </>
           )}
         </div>
@@ -107,7 +107,7 @@ export function VerdictPanel({
       )}
 
       {error && <p className="mt-2 text-red-400">{error}</p>}
-      <p className="mt-3 text-[11px] text-shell/60">
+      <p className="mt-3 text-[11px] text-shell/80">
         {simulated ? "SIMULATED READINGS · NO CAMERA" : "CAMERA MEASURED · PULSE SIMULATED"} · SLEEP, MOOD, CABIN: NOMINAL UNTIL G3/G6
       </p>
     </section>
