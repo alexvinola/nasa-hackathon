@@ -16,7 +16,8 @@ def chat(messages: list[dict[str, Any]], *, options: dict[str, Any] | None = Non
         "stream": False,
         "think": False,  # on by default in Gemma 4; it only adds latency to short answers
         "keep_alive": "30m",
-        "options": options or {},
+        # Same context size as `senses.chat`: a call that asks for another one makes Ollama reload the model.
+        "options": {"num_ctx": 2048, **(options or {})},
         "messages": messages,
     }
     if fmt is not None:
