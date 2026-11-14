@@ -27,3 +27,20 @@ Generation speed: about 39 tokens/s.
   and the AMBER answer read the countermeasure id aloud ("CM-SLEEP-01"). Pass the factor messages and the
   countermeasure's first step as text, never ids.
 - Disable thinking (`think: false`): it is on by default and only adds latency for two sentences.
+
+## Can Gemma verify the camera? Eye state on labelled MRL Eye crops
+
+`eye_state_probe.py`, 2026-11-14, same laptop and model, temperature 0, `pulsar.vision.verify.look` (the prompt
+`POST /vision/verify` uses). MRL images are small infrared crops of one eye, upscaled to 224 px.
+
+| Truth | Gemma said open | closed | unclear |
+|---|---|---|---|
+| Open (25) | 24 | 0 | 1 |
+| Closed (25) | 15 | 2 | 8 |
+
+A prompt written for a single-eye infrared crop did not change it: closed eyes recognised 3 of 15, open 15 of 15.
+
+**Gemma 4 E4B almost never confirms a closed eye on these crops**: when it says "closed" it is right, but it misses
+most closed eyes. On a full-colour webcam face it may do better; the HUD shows the live agreement rate so that is
+measured, not assumed. Until then the AI check is evidence beside the reading, never a reason to trust or
+discard PERCLOS, and a disagreement on "closed" is expected more often from Gemma's side than from MediaPipe's.
