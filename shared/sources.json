@@ -92,6 +92,18 @@
         "Only Methods and part of Results were read verbatim; Discussion and Conclusions are unverified"
       ]
     },
+    "challenge-video": {
+      "type": "official",
+      "title": "Space Apps 2026 challenge video: Create Health Monitoring Software for Astronauts on Space Missions (Brazilian Space Agency)",
+      "url": "https://www.youtube.com/watch?v=RERG3gEmdC8",
+      "findings": [
+        "Challenge authored by the Brazilian Space Agency (AEB); video embedded on the challenge page",
+        "Scenario: halfway to Mars a crewmate has a sharp chest pain and collapses; asks for guidance in an emergency",
+        "Astronauts are not doctors: explain how to take each measurement, why it matters and what to do when a value does not look normal",
+        "Remind the crew to take measurements; adapt to a spacecraft, a space station or a lunar base",
+        "Suggests NASA's Open Science Data Repository; the same tools could serve remote communities on Earth"
+      ]
+    },
     "fmcsa-1998-perclos": {
       "type": "official",
       "title": "FMCSA Technology Division (1998), PERCLOS: A Valid Psychophysiological Measure of Alertness As Assessed by Psychomotor Vigilance, tech brief FHWA-MCRT-98-006",
@@ -161,7 +173,10 @@
       "title": "DROZY drowsiness database (University of Liege)",
       "url": "https://orbi.uliege.be/handle/2268/191620",
       "findings": [
-        "14 subjects, 28-30 h awake; face video, polysomnography, KSS and PVT synchronized"
+        "14 subjects, 28-30 h awake; face video, polysomnography, KSS and PVT synchronized",
+        "Video is Kinect v2 near-infrared intensity, 8-bit, 512x424, 30 fps (15 fps in tests 2-3 of subjects 1-8); 36 tests usable",
+        "License (2018-07-18): research and evaluation only, no commercial use, no redistribution in full or in part, no modification, no revealing subject identities, no showing images except those marked publishable",
+        "Any document, presentation or poster with results from DROZY must cite Massoz, Langohr, François & Verly (2016), The ULg Multimodality Drowsiness Database (called DROZY) and Examples of Use, WACV 2016"
       ]
     },
     "yawdd": {
