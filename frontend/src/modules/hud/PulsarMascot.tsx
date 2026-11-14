@@ -34,7 +34,7 @@ export function PulsarMascot({
 
   // While the text is being typed PULSAR talks, unless it is alerting.
   const acting = mood === "idle" && typed < message.length ? "talk" : mood;
-  const tone = mood === "alert" ? "border-red-500" : "border-pulse/70";
+  const tone = mood === "alert" ? "border-red-500" : "border-pulse";
 
   return (
     <div className="flex items-start gap-3">
@@ -47,7 +47,7 @@ export function PulsarMascot({
           key={message}
           initial={{ opacity: 0, x: -8 }}
           animate={{ opacity: 1, x: 0 }}
-          className={`relative mt-10 w-[340px] border-2 bg-space/80 px-4 py-3 text-base leading-snug text-shell ${tone}`}
+          className={`relative mt-10 w-[340px] border-2 bg-space/95 px-4 py-3 text-lg leading-snug text-white ${tone}`}
         >
           <span aria-hidden>
             {message.slice(0, typed)}

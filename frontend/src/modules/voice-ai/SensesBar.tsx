@@ -4,9 +4,11 @@ import { useEffect, useRef, useState } from "react";
 import { useHotkey } from "@/modules/hud/useHotkey";
 import { isSpeaking, speak, stopSpeaking, transcribe } from "./pulsarApi";
 
-const BUTTON = "border-2 px-4 py-2 disabled:opacity-40";
-const OFF = "border-shell/40 bg-space/60 text-shell/80";
-const ON = "border-pulse bg-pulse/20 text-pulse";
+// Solid, dark-on-light or light-on-dark: the HUD sits over a camera picture that can be a bright white room, where
+// translucent panels and pale text disappear.
+const BUTTON = "border-2 px-4 py-2 font-bold disabled:border-shell/50 disabled:bg-space/90 disabled:text-shell/60";
+const OFF = "border-shell bg-space/90 text-shell";
+const ON = "border-pulse bg-pulse text-space";
 
 /**
  * PULSAR's controls. Nothing here runs on its own: SEND answers what was typed, HOLD TO TALK records while the
@@ -90,8 +92,18 @@ export function SensesBar({
   return (
     <div className="pointer-events-none absolute inset-x-0 bottom-16 flex justify-center px-8 text-sm tracking-[0.15em]">
       <div data-hud-panel className="pointer-events-auto flex w-full max-w-2xl flex-col items-center gap-2">
-        <p role="status" className="min-h-6 text-center text-base tracking-normal text-shell">
-          {error ? <span className="text-orbit">{error}</span> : heard && `YOU · ${heard}`}
+        {/* What PULSAR understood, on a solid plate so it can be checked against what was said or typed. */}
+        <p role="status" className="min-h-8 text-center text-lg tracking-normal">
+          {error ? (
+            <span className="inline-block border-2 border-red-500 bg-space/95 px-3 py-1 text-red-200">{error}</span>
+          ) : (
+            heard && (
+              <span className="inline-block border-2 border-pulse bg-space/95 px-3 py-1 text-white">
+                <span className="mr-2 text-sm font-bold tracking-[0.15em] text-pulse">YOU SAID</span>
+                {heard}
+              </span>
+            )
+          )}
         </p>
         <form onSubmit={send} className="flex w-full gap-2">
           <input
@@ -100,7 +112,7 @@ export function SensesBar({
             maxLength={400}
             placeholder="Tell PULSAR what to do..."
             aria-label="Type an instruction for PULSAR"
-            className="min-w-0 flex-1 border-2 border-shell/40 bg-space/70 px-3 py-2 text-base tracking-normal text-shell outline-none placeholder:text-shell/40 focus:border-pulse"
+            className="min-w-0 flex-1 border-2 border-shell bg-space/95 px-3 py-2 text-lg tracking-normal text-white outline-none placeholder:text-shell/70 focus:border-pulse"
           />
           <button type="submit" disabled={!typed.trim()} className={`${BUTTON} ${ON}`}>
             SEND (ENTER)
@@ -118,7 +130,7 @@ export function SensesBar({
             onPointerUp={release}
             onPointerLeave={release}
             onPointerCancel={release}
-            className={`${BUTTON} touch-none select-none ${talk === "recording" ? "border-red-500 bg-red-500/30 text-red-200" : OFF}`}
+            className={`${BUTTON} touch-none select-none ${talk === "recording" ? "border-red-500 bg-red-600 text-white" : OFF}`}
           >
             {talk === "recording" ? "● RELEASE TO SEND" : talk === "transcribing" ? "TRANSCRIBING…" : "HOLD TO TALK (SPACE)"}
           </button>

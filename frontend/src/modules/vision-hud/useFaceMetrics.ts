@@ -17,18 +17,32 @@ export function useFaceMetrics(
   videoRef: RefObject<HTMLVideoElement | null>,
   live: boolean,
   frameRef?: MutableRefObject<FaceFrame | null>, // the landmarks of the last frame, for FaceOverlay
+  onError?: (message: string) => void, // must be stable (a state setter): the worker restarts when it changes
 ) {
   const [latest, setLatest] = useState<Biometrics | null>(null);
   const posted = useRef(0);
   const shown = useRef(0);
 
+  // The worker starts with the page and loads its models at once (about 25 MB plus the GPU set-up), so they are
+  // ready by the time the camera permission is granted instead of starting to load on the first frame.
+  const [worker, setWorker] = useState<Worker | null>(null);
   useEffect(() => {
-    if (!live) return;
-    const worker = new Worker(new URL("./faceWorker.ts", import.meta.url));
+    const w = new Worker(new URL("./faceWorker.ts", import.meta.url));
+    w.postMessage({ type: "warm" });
+    setWorker(w);
+    return () => w.terminate();
+  }, []);
+
+  useEffect(() => {
+    if (!live || !worker) return;
     let on = true;
     let timer = 0;
+    worker.onerror = () => onError?.("the face worker stopped");
 
-    worker.onmessage = (event: MessageEvent<{ type: string; biometrics?: Biometrics; frame?: FaceFrame }>) => {
+    worker.onmessage =(event: MessageEvent<{ type: string; biometrics?: Biometrics; frame?: FaceFrame; message?: string }>) => {
+      // Typically the model files are missing (they are not in git: `make prefetch` downloads them). Say so
+      // instead of leaving the mesh and the camera readings silently absent.
+      if (on && event.data.type === "error") onError?.(event.data.message ?? "the face models could not be loaded");
       if (on && event.data.type === "face" && event.data.frame && frameRef) frameRef.current = event.data.frame;
       if (!on || event.data.type !== "biometrics" || !event.data.biometrics) return;
       const reading = event.data.biometrics;
@@ -47,6 +61,7 @@ export function useFaceMetrics(
     const pump = async () => {
       const video = videoRef.current;
       if (!on) return;
+      const started = performance.now();
       if (video?.videoWidth) {
         try {
           const bitmap = await createImageBitmap(video, {
@@ -59,17 +74,20 @@ export function useFaceMetrics(
           // a frame that cannot be read is simply skipped
         }
       }
-      if (on) timer = window.setTimeout(pump, 1000 / FPS);
+      // Copying the frame takes time too: wait only for what is left of this frame's slot, so FPS is really FPS.
+      if (on) timer = window.setTimeout(pump, Math.max(0, 1000 / FPS - (performance.now() - started)));
     };
     void pump();
 
     return () => {
       on = false;
       clearTimeout(timer);
+      worker.onmessage = null;
       worker.postMessage({ type: "stop" });
-      worker.terminate();
+      if (frameRef) frameRef.current = null;
+      setLatest(null); // the camera is gone: do not leave its last reading up as if it were current
     };
-  }, [live, videoRef, frameRef]);
+  }, [live, worker, videoRef, frameRef, onError]);
 
   return latest;
 }

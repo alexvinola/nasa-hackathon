@@ -80,7 +80,7 @@ export function VerdictPanel({
       )}
 
       {biometrics && (
-        <dl className="mt-3 grid grid-cols-3 gap-2 text-xs text-shell/70">
+        <dl className="mt-3 grid grid-cols-3 gap-2 text-xs text-shell/90">
           <div><dt>PERCLOS</dt><dd className="text-base text-shell">{Math.round(biometrics.perclos * 100)}%</dd></div>
           <div><dt>FATIGUE</dt><dd className="text-base text-shell">{biometrics.fatigueScore.toFixed(2)}</dd></div>
           <div><dt>YAWNS/MIN</dt><dd className="text-base text-shell">{biometrics.yawnsPerMin}</dd></div>
@@ -90,9 +90,9 @@ export function VerdictPanel({
       {cabinCo2 != null && (
         // Cabin air: the CO2 reading against the limit the rules engine applies to it.
         <div className="mt-3">
-          <div className="flex justify-between text-xs text-shell/70">
+          <div className="flex justify-between text-xs text-shell/90">
             <span>CABIN CO2 · SIMULATED</span>
-            <span className="text-base text-shell">{cabinCo2.toFixed(1)}<span className="ml-1 text-xs text-shell/70">mmHg</span></span>
+            <span className="text-base text-shell">{cabinCo2.toFixed(1)}<span className="ml-1 text-xs text-shell/90">mmHg</span></span>
           </div>
           {cabinCo2Limit != null && (
             <>
@@ -102,7 +102,7 @@ export function VerdictPanel({
                   style={{ width: `${Math.min(100, (cabinCo2 / cabinCo2Limit) * 100)}%` }}
                 />
               </div>
-              <div className="mt-1 text-right text-[11px] text-shell/60">LIMIT {cabinCo2Limit.toFixed(1)} mmHg</div>
+              <div className="mt-1 text-right text-[11px] text-shell/80">LIMIT {cabinCo2Limit.toFixed(1)} mmHg</div>
             </>
           )}
         </div>
@@ -121,7 +121,7 @@ export function VerdictPanel({
       )}
 
       {error && <p className="mt-2 text-red-400">{error}</p>}
-      <p className="mt-3 text-[11px] text-shell/60">
+      <p className="mt-3 text-[11px] text-shell/80">
         {simulated ? "SIMULATED READINGS · NO CAMERA" : "CAMERA MEASURED · PULSE SIMULATED"} · SLEEP, MOOD, CABIN: NOMINAL UNTIL G3/G6
       </p>
       </div>

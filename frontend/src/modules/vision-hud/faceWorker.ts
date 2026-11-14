@@ -12,11 +12,13 @@
  */
 
 import { FaceLandmarker, FilesetResolver } from "@mediapipe/tasks-vision";
+import { BLINK } from "./thresholds";
 import { mouthOpenRatio, YawnDetector } from "./yawn";
 
 type Frame = { type: "frame"; bitmap: ImageBitmap; at: number };
 type Stop = { type: "stop" };
-type In = Frame | Stop;
+type Warm = { type: "warm" }; // load the models now, before the first frame arrives
+type In = Frame | Stop | Warm;
 
 export type Biometrics = {
   heartRateBpm: number | null;
@@ -53,7 +55,6 @@ const scope = self as unknown as {
 };
 
 const WINDOW_MS = 60_000; // PERCLOS is the share of the last minute with the eyes closed
-const BLINK = 0.5; // blendshape score above which an eye counts as closed
 const NOD = 0.03; // nose drop, as a fraction of frame height, that counts as a head nod
 
 let face: FaceLandmarker | undefined;
@@ -193,6 +194,9 @@ async function handle(frame: Frame) {
 scope.onmessage = (event) => {
   const message = event.data;
   if (message.type === "frame") void handle(message);
+  if (message.type === "warm") {
+    load().catch((error) => scope.postMessage({ type: "error", message: error instanceof Error ? error.message : String(error) }));
+  }
   if (message.type === "stop") {
     eyes.length = 0;
     yawns.length = 0;

@@ -5,15 +5,15 @@ import { createPortal } from "react-dom";
 import { HudPanel, LEFT_COLUMN_ID } from "@/modules/hud/HudPanel";
 import { FaceLandmarker } from "@mediapipe/tasks-vision";
 import type { FaceFrame } from "./faceWorker";
+import { BLINK, MOUTH_OPEN as MOUTH } from "./thresholds";
 import { useAiCheck, type Tally } from "./useAiCheck";
+import { useHotkey } from "@/modules/hud/useHotkey";
 
 type Connection = { start: number; end: number };
 
 const PULSE = "94, 242, 236"; // brand tokens (app/globals.css) as rgb, for alpha
 const ORBIT = "154, 140, 255";
 const AMBER = "251, 191, 36";
-const BLINK = 0.5;
-const MOUTH = 0.35;
 
 // Landmark indices (MediaPipe face mesh): eye outer corners, mouth corner, forehead, nose tip.
 const LEFT_EYE_OUTER = 263;
@@ -27,12 +27,25 @@ const NOSE_TIP = 1;
  * blendshape scores the metrics use, head-pose axes, and an AI cross-check
  * badge (Gemma looking at the same frame). The canvas has the video's size and CSS, so the points land on the face.
  */
-export function FaceOverlay({ frameRef, videoRef }: { frameRef: MutableRefObject<FaceFrame | null>; videoRef: RefObject<HTMLVideoElement | null> }) {
+export function FaceOverlay({
+  frameRef,
+  videoRef,
+  problem,
+}: {
+  frameRef: MutableRefObject<FaceFrame | null>;
+  videoRef: RefObject<HTMLVideoElement | null>;
+  /** Why there is no mesh, when the face worker failed (e.g. the model files are missing). */
+  problem?: string;
+}) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const [show, setShow] = useState(true);
+  // Off until asked for: each check is a Gemma call on the same frame, and on a laptop without a GPU that takes
+  // the processor away from the face model, which then stutters and misses blinks.
+  const [checking, setChecking] = useState(false);
+  useHotkey("c", () => setChecking((c) => !c));
   const fps = useRef({ last: 0, value: 0 });
-  // The cross-check runs whenever there is a face, whether or not the mesh is drawn over it.
-  const { last, tally, error } = useAiCheck(videoRef, frameRef, true);
+  // Once switched on, the cross-check runs whenever there is a face, whether or not the mesh is drawn over it.
+  const { last, tally, error } = useAiCheck(videoRef, frameRef, checking);
   const column = typeof document === "undefined" ? null : document.getElementById(LEFT_COLUMN_ID);
 
   useEffect(() => {
@@ -70,20 +83,32 @@ export function FaceOverlay({ frameRef, videoRef }: { frameRef: MutableRefObject
       {/* Joins the HUD's left column of panels. */}
       {column && createPortal(
       <HudPanel title="AI CHECK · GEMMA 4" defaultOpen={false}>
-        <button type="button" onClick={() => setShow((s) => !s)} className="border border-pulse/50 px-2 py-1 text-xs text-pulse">
-          FACE MESH {show ? "ON" : "OFF"} (M)
-        </button>
+        <div className="flex flex-col gap-1">
+          <button type="button" aria-pressed={show} onClick={() => setShow((s) => !s)} className="border border-pulse/50 px-2 py-1 text-left text-xs text-pulse">
+            FACE MESH {show ? "ON" : "OFF"} (M)
+          </button>
+          <button type="button" aria-pressed={checking} onClick={() => setChecking((c) => !c)} className="border border-pulse/50 px-2 py-1 text-left text-xs text-pulse">
+            AI CHECK {checking ? "ON" : "OFF"} (C)
+          </button>
+        </div>
+        {problem && (
+          <p role="alert" className="mt-2 border border-red-500 bg-red-600/30 p-2 normal-case tracking-normal text-white">
+            No face mesh: the face models did not load ({problem}). Run <code>make prefetch</code> and reload.
+          </p>
+        )}
         {last ? (
           <dl className="mt-2 space-y-1">
             <Row label="EYES" mp={last.claim.eyes} ai={last.ai.eyes} ok={last.agrees.eyes} tally={tally.eyes} />
             <Row label="MOUTH" mp={last.claim.mouth} ai={last.ai.mouth} ok={last.agrees.mouth} tally={tally.mouth} />
-            <div className="pt-1 text-shell/40">{last.ai.person ? "FACE CONFIRMED" : "NO FACE SEEN BY AI"} · {Math.round(last.ms)} MS</div>
+            <div className="pt-1 text-shell/70">{last.ai.person ? "FACE CONFIRMED" : "NO FACE SEEN BY AI"} · {Math.round(last.ms)} MS</div>
           </dl>
         ) : (
-          <p className="mt-2 text-shell/40">FIRST CHECK IN A FEW SECONDS</p>
+          <p className="mt-2 normal-case tracking-normal text-shell/70">
+            {checking ? "First check in a few seconds." : "AI check off: it slows the mesh on a laptop without a GPU."}
+          </p>
         )}
-        {error && <p className="mt-1 text-red-400">{error}</p>}
-        <p className="mt-2 text-[9px] tracking-normal text-shell/40">Evidence only: the rules engine decides.</p>
+        {error && <p className="mt-1 text-red-300">{error}</p>}
+        <p className="mt-2 text-[11px] tracking-normal text-shell/70">Evidence only: the rules engine decides.</p>
       </HudPanel>,
       column)}
     </>
@@ -92,13 +117,13 @@ export function FaceOverlay({ frameRef, videoRef }: { frameRef: MutableRefObject
 
 function Row({ label, mp, ai, ok, tally }: { label: string; mp: string; ai: string; ok: boolean | null; tally: Tally }) {
   const mark = ok === null ? "·" : ok ? "✓" : "✗";
-  const tone = ok === null ? "text-shell/50" : ok ? "text-emerald-400" : "text-amber-400";
+  const tone = ok === null ? "text-shell/70" : ok ? "text-emerald-300" : "text-amber-300";
   return (
     <div className="flex justify-between">
       <dt>{label}</dt>
       <dd>
         MP {mp.toUpperCase()} · AI {ai.toUpperCase()} <span className={tone}>{mark}</span>{" "}
-        <span className="text-shell/40">{tally.total ? `${tally.agree}/${tally.total}` : ""}</span>
+        <span className="text-shell/70">{tally.total ? `${tally.agree}/${tally.total}` : ""}</span>
       </dd>
     </div>
   );

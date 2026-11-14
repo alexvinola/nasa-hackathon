@@ -71,7 +71,8 @@ export function Hud() {
   const { videoRef, state } = useWebcam();
   // MediaPipe runs in a worker over the live camera; it shows nothing and posts its numbers to the backend.
   const faceFrame = useRef<FaceFrame | null>(null);
-  const measured = useFaceMetrics(videoRef, state === "live", faceFrame);
+  const [faceProblem, setFaceProblem] = useState("");
+  const measured = useFaceMetrics(videoRef, state === "live", faceFrame, setFaceProblem);
   // The debug panel can force a false alarm or loop a simulated shift, and mute the alarm sounds.
   const [simMode, setSimMode] = useState<SimMode>("live");
   const [sound, setSound] = useState(true);
@@ -249,7 +250,7 @@ export function Hud() {
         <MiniTwin statuses={guideStatuses} open={guideSignal} onOpen={setGuideSignal} />
         <DebugPanel mode={simMode} onMode={setSimMode} sound={sound} onSound={setSound} />
       </div>
-      {state === "live" && <FaceOverlay frameRef={faceFrame} videoRef={videoRef} />}
+      {state === "live" && <FaceOverlay frameRef={faceFrame} videoRef={videoRef} problem={faceProblem} />}
       {state !== "live" && (
         <div className="absolute inset-0 grid place-items-center bg-[radial-gradient(ellipse_at_center,var(--color-space-lift),var(--color-space))] text-sm tracking-widest text-orbit">
           {CAM_LABEL[state]}
@@ -317,14 +318,14 @@ export function Hud() {
 
       <SensesBar line={bubble} onInstruction={instruct} />
 
-      <div className="absolute right-8 top-8 text-right text-xs tracking-[0.2em] text-pulse">
-        <div className={state === "live" ? "" : "text-orbit"}>● {CAM_LABEL[state]}</div>
-        <div className="mt-1 text-shell/70">OFFLINE · LOCAL ONLY</div>
+      <div className="absolute right-8 top-8 bg-space/90 px-2 py-1 text-right text-xs font-bold tracking-[0.2em] text-pulse">
+        <div className={state === "live" ? "" : "text-amber-300"}>● {CAM_LABEL[state]}</div>
+        <div className="mt-1 text-shell">OFFLINE · LOCAL ONLY</div>
       </div>
 
       <div className="absolute inset-x-8 bottom-8 flex items-end justify-between text-xs tracking-[0.2em] text-shell/70">
-        <span>PULSAR HUD · v0.1</span>
-        <span className="text-orbit">NOT A MEDICAL DEVICE</span>
+        <span className="bg-space/90 px-2 py-1 text-shell">PULSAR HUD · v0.1</span>
+        <span className="bg-space/90 px-2 py-1 font-bold text-amber-300">NOT A MEDICAL DEVICE</span>
       </div>
     </main>
   );

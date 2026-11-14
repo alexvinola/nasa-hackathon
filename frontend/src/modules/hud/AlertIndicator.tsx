@@ -4,9 +4,9 @@ import type { AlarmLevel } from "./useAlarmSound";
 import { useHotkey } from "./useHotkey";
 
 const LOOK = {
-  clear: { box: "border-pulse/40 text-pulse", label: "ALL CLEAR" },
-  rest: { box: "border-amber-400 bg-amber-400/10 text-amber-300", label: "TIME TO REST" },
-  danger: { box: "border-red-500 bg-red-600/20 text-red-200", label: "DANGER" },
+  clear: { box: "border-pulse text-pulse", label: "ALL CLEAR" },
+  rest: { box: "border-amber-400 text-amber-300", label: "TIME TO REST" },
+  danger: { box: "border-red-500 text-red-200", label: "DANGER" },
 } as const;
 
 function Icon({ level }: { level: AlarmLevel }) {
@@ -59,7 +59,7 @@ export function AlertIndicator({
       data-hud-panel
       role={level ? "alert" : "status"}
       // Centred in the width left of the verdict panel (20rem wide plus its 2rem margin), so the two never overlap.
-      className={`absolute left-[calc((100vw-22rem)/2)] top-6 -translate-x-1/2 border-2 bg-space/85 px-4 py-3 text-sm tracking-[0.15em] backdrop-blur ${look.box} ${level ? "w-[min(32rem,calc(100vw-26rem))]" : ""}`}
+      className={`absolute left-[calc((100vw-22rem)/2)] top-6 -translate-x-1/2 border-2 bg-space/95 px-4 py-3 text-sm tracking-[0.15em] backdrop-blur ${look.box} ${level ? "w-[min(32rem,calc(100vw-26rem))]" : ""}`}
     >
       <header className={`flex items-center justify-center gap-3 ${level === "danger" ? "text-lg font-bold" : level ? "text-base font-bold" : ""}`}>
         <Icon level={level} />
@@ -67,8 +67,8 @@ export function AlertIndicator({
       </header>
       {level && steps.length > 0 && (
         <>
-          <p className="mt-3 text-center text-xs text-shell/70">DO THIS NOW</p>
-          <ol className="mt-1 list-inside list-decimal space-y-2 text-center text-base normal-case leading-snug tracking-normal text-shell">
+          <p className="mt-3 text-center text-xs text-shell/90">DO THIS NOW</p>
+          <ol className="mt-1 list-inside list-decimal space-y-2 text-center text-lg normal-case leading-snug tracking-normal text-white">
             {steps.map((step) => <li key={step}>{step}</li>)}
           </ol>
         </>
@@ -78,7 +78,7 @@ export function AlertIndicator({
           type="button"
           disabled={acknowledged}
           onClick={onAcknowledge}
-          className={`mt-3 w-full border-2 px-3 py-2 text-sm text-white disabled:opacity-60 ${level === "danger" ? "border-red-400 bg-red-600/50" : "border-amber-300 bg-amber-500/30"}`}
+          className={`mt-3 w-full border-2 px-3 py-2 text-sm text-white disabled:opacity-60 ${level === "danger" ? "border-red-400 bg-red-600 font-bold" : "border-amber-300 bg-amber-400 font-bold !text-space"}`}
         >
           {acknowledged ? "UNDERSTOOD · ALARM STOPPED" : "I UNDERSTAND · STOP THE ALARM (ESC)"}
         </button>

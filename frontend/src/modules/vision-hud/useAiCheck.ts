@@ -3,11 +3,10 @@
 import { useEffect, useRef, useState, type MutableRefObject, type RefObject } from "react";
 import { frameBase64, userWaiting } from "@/modules/voice-ai/pulsarApi";
 import type { FaceFrame } from "./faceWorker";
+import { BLINK, MOUTH_OPEN as MOUTH } from "./thresholds"; // the worker's own, so the claim is what the metrics counted
 
 const API = process.env.NEXT_PUBLIC_PULSAR_API ?? "http://localhost:8000";
 const EVERY_MS = 6000; // Gemma also directs the mascot and phrases verdicts: one check every few seconds is enough
-const BLINK = 0.5; // the worker's own thresholds, so the claim is exactly what the metrics counted
-const MOUTH = 0.35;
 
 type State = "open" | "closed";
 export type AiCheck = {
