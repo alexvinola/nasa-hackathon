@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { AlertIndicator } from "./AlertIndicator";
+import { LEFT_COLUMN_ID } from "./HudPanel";
 import { PulsarMascot } from "./PulsarMascot";
 import { useAlarmSound, type AlarmLevel } from "./useAlarmSound";
 import { useWebcam, type CamState } from "./useWebcam";
@@ -242,6 +243,12 @@ export function Hud() {
   return (
     <main className="relative h-screen w-screen overflow-hidden bg-space">
       <video ref={videoRef} muted playsInline className="absolute inset-0 h-full w-full -scale-x-100 object-cover" />
+      {/* The left column of foldable panels, below the mascot's home corner. Declared before the camera overlay,
+          whose AI-check panel joins it through a portal. */}
+      <div id={LEFT_COLUMN_ID} className="absolute left-8 top-60 z-[1] flex max-h-[calc(100vh-18rem)] w-64 flex-col gap-2 overflow-y-auto">
+        <MiniTwin statuses={guideStatuses} open={guideSignal} onOpen={setGuideSignal} />
+        <DebugPanel mode={simMode} onMode={setSimMode} sound={sound} onSound={setSound} />
+      </div>
       {state === "live" && <FaceOverlay frameRef={faceFrame} videoRef={videoRef} />}
       {state !== "live" && (
         <div className="absolute inset-0 grid place-items-center bg-[radial-gradient(ellipse_at_center,var(--color-space-lift),var(--color-space))] text-sm tracking-widest text-orbit">
@@ -298,7 +305,6 @@ export function Hud() {
         onOpenGuide={setGuideSignal}
       />
 
-      <MiniTwin statuses={guideStatuses} open={guideSignal} onOpen={setGuideSignal} />
       {guide && (
         <GuidePanel
           key={guide.signal}
@@ -308,8 +314,6 @@ export function Hud() {
           onClose={() => setGuideSignal(null)}
         />
       )}
-
-      <DebugPanel mode={simMode} onMode={setSimMode} sound={sound} onSound={setSound} />
 
       <SensesBar line={bubble} onInstruction={instruct} />
 

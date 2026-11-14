@@ -33,7 +33,7 @@ export function GuidePanel({ guide, value, status, onClose }: { guide: Guide; va
       data-hud-panel
       data-guide={guide.signal}
       aria-label={`Guide: ${guide.label}`}
-      className="absolute left-[19rem] top-24 z-10 max-h-[calc(100vh-17rem)] w-[40rem] max-w-[calc(100vw-43rem)] overflow-y-auto border-2 border-pulse/60 bg-space/90 p-4 text-sm text-shell backdrop-blur"
+      className="absolute left-[19rem] top-24 z-10 max-h-[calc(100vh-17rem)] w-[40rem] max-w-[calc(100vw-43rem)] overflow-y-auto border-2 border-pulse/60 bg-space/70 p-4 text-sm text-shell backdrop-blur"
     >
       <header className="flex items-start gap-3">
         <div>

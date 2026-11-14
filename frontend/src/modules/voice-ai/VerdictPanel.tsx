@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import type { Biometrics } from "@/modules/vision-hud/faceWorker";
 import type { Advice, Decision, Status } from "./verdictApi";
 
@@ -36,15 +37,19 @@ export function VerdictPanel({
   onOpenGuide?: (signal: string) => void;
 }) {
   const bpm = biometrics?.heartRateBpm;
+  // Folds down to the traffic light and the escalation, which stay in view.
+  const [open, setOpen] = useState(true);
 
   return (
-    <section data-hud-panel className="pointer-events-none absolute right-8 top-20 w-80 rounded-lg border border-pulse/30 bg-space/70 p-4 text-sm tracking-[0.1em] text-shell/80 backdrop-blur">
-      <header className="flex items-center gap-3">
+    <section data-hud-panel className="pointer-events-none absolute right-8 top-20 w-80 rounded-lg border border-pulse/30 bg-space/60 p-4 text-sm tracking-[0.1em] text-shell/80 backdrop-blur">
+      <button type="button" aria-expanded={open} onClick={() => setOpen((was) => !was)} className="pointer-events-auto flex w-full items-center gap-3 text-left">
         <span className={`h-3 w-3 rounded-full ${decision ? LIGHT[decision.status] : "bg-orbit/40"}`} />
         <span className="text-pulse">{decision ? decision.status : "WAITING FOR READINGS"}</span>
         {decision && <span className="ml-auto text-orbit">{ESCALATION[decision.escalation]}</span>}
-      </header>
+        <span aria-hidden className={`${decision ? "" : "ml-auto"} border border-pulse/40 px-1.5 text-xs leading-tight text-pulse`}>{open ? "−" : "+"}</span>
+      </button>
 
+      <div hidden={!open}>
       {bpm != null && (
         // Everything here keeps time with the heart: one beat of the icon and one sweep of the trace per heartbeat.
         <button
@@ -119,6 +124,7 @@ export function VerdictPanel({
       <p className="mt-3 text-[11px] text-shell/60">
         {simulated ? "SIMULATED READINGS · NO CAMERA" : "CAMERA MEASURED · PULSE SIMULATED"} · SLEEP, MOOD, CABIN: NOMINAL UNTIL G3/G6
       </p>
+      </div>
     </section>
   );
 }

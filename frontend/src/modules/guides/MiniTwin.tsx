@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
+import { HudPanel } from "@/modules/hud/HudPanel";
 import { GUIDES, type GuideStatus } from "./guides";
 import { FIGURE_ASPECT, FIGURE_HALF_HEIGHT, SITE, disposeScene, lightScene, standingFigure } from "./mannequin";
 
@@ -69,9 +70,8 @@ export function MiniTwin({
   onOpen: (signal: string) => void;
 }) {
   return (
-    <section data-hud-panel data-twin className="absolute left-8 top-60 border border-pulse/30 bg-space/70 p-3 text-xs tracking-[0.12em] text-shell/80 backdrop-blur">
-      <h2 className="text-pulse">HOW TO MEASURE</h2>
-      <div className="relative mt-2" style={{ width: WIDTH, height: HEIGHT }}>
+    <HudPanel title="HOW TO MEASURE" data-twin>
+      <div className="relative mx-auto" style={{ width: WIDTH, height: HEIGHT }}>
         <Figure />
         {GUIDES.map((guide) => {
           const [x, y] = SITE[guide.signal];
@@ -95,6 +95,6 @@ export function MiniTwin({
           );
         })}
       </div>
-    </section>
+    </HudPanel>
   );
 }

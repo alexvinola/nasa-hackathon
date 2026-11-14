@@ -1,5 +1,6 @@
 "use client";
 
+import { HudPanel } from "@/modules/hud/HudPanel";
 import { useHotkey } from "@/modules/hud/useHotkey";
 import type { SimMode } from "./useSimVitals";
 
@@ -30,9 +31,8 @@ export function DebugPanel({
   useHotkey("4", () => onSound(!sound));
 
   return (
-    <section data-hud-panel className="absolute bottom-44 left-8 w-64 border border-pulse/30 bg-space/70 p-3 text-xs tracking-[0.12em] text-shell/80 backdrop-blur">
-      <h2 className="text-pulse">DEBUG · FALSE ALARMS</h2>
-      <div className="mt-2 grid grid-cols-2 gap-2">
+    <HudPanel title="DEBUG · FALSE ALARMS (1-4)" defaultOpen={false}>
+      <div className="grid grid-cols-2 gap-2">
         <button type="button" aria-pressed={mode === "rest"} onClick={() => toggle("rest")} className={`${BUTTON} ${mode === "rest" ? "border-amber-400 bg-amber-400/20 text-amber-300" : OFF}`}>
           WARNING {mode === "rest" ? "ON" : "OFF"} (1)
         </button>
@@ -46,6 +46,6 @@ export function DebugPanel({
           SOUND {sound ? "ON" : "OFF"} (4)
         </button>
       </div>
-    </section>
+    </HudPanel>
   );
 }

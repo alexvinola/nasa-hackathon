@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState, type MutableRefObject, type RefObject } from "react";
+import { createPortal } from "react-dom";
+import { HudPanel, LEFT_COLUMN_ID } from "@/modules/hud/HudPanel";
 import { FaceLandmarker } from "@mediapipe/tasks-vision";
 import type { FaceFrame } from "./faceWorker";
 import { useAiCheck, type Tally } from "./useAiCheck";
@@ -29,7 +31,9 @@ export function FaceOverlay({ frameRef, videoRef }: { frameRef: MutableRefObject
   const canvas = useRef<HTMLCanvasElement>(null);
   const [show, setShow] = useState(true);
   const fps = useRef({ last: 0, value: 0 });
-  const { last, tally, error } = useAiCheck(videoRef, frameRef, show);
+  // The cross-check runs whenever there is a face, whether or not the mesh is drawn over it.
+  const { last, tally, error } = useAiCheck(videoRef, frameRef, true);
+  const column = typeof document === "undefined" ? null : document.getElementById(LEFT_COLUMN_ID);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -63,14 +67,12 @@ export function FaceOverlay({ frameRef, videoRef }: { frameRef: MutableRefObject
   return (
     <>
       <canvas ref={canvas} className={`pointer-events-none absolute inset-0 h-full w-full -scale-x-100 object-cover ${show ? "" : "hidden"}`} />
-      {/* Stacked above the debug panel (sim-core/DebugPanel), clear of the controls at the bottom of the HUD. */}
-      <div data-hud-panel className="absolute bottom-[19rem] left-8 w-64 border border-pulse/30 bg-space/70 p-3 text-xs tracking-[0.12em] text-shell/80 backdrop-blur">
-        <div className="flex items-center justify-between text-pulse">
-          <span>AI CHECK · GEMMA 4</span>
-          <button type="button" onClick={() => setShow((s) => !s)} className="border border-pulse/50 px-2 py-1 text-xs text-pulse">
-            MESH {show ? "ON" : "OFF"} (M)
-          </button>
-        </div>
+      {/* Joins the HUD's left column of panels. */}
+      {column && createPortal(
+      <HudPanel title="AI CHECK · GEMMA 4" defaultOpen={false}>
+        <button type="button" onClick={() => setShow((s) => !s)} className="border border-pulse/50 px-2 py-1 text-xs text-pulse">
+          FACE MESH {show ? "ON" : "OFF"} (M)
+        </button>
         {last ? (
           <dl className="mt-2 space-y-1">
             <Row label="EYES" mp={last.claim.eyes} ai={last.ai.eyes} ok={last.agrees.eyes} tally={tally.eyes} />
@@ -78,11 +80,12 @@ export function FaceOverlay({ frameRef, videoRef }: { frameRef: MutableRefObject
             <div className="pt-1 text-shell/40">{last.ai.person ? "FACE CONFIRMED" : "NO FACE SEEN BY AI"} · {Math.round(last.ms)} MS</div>
           </dl>
         ) : (
-          <p className="mt-2 text-shell/40">{show ? "FIRST CHECK IN A FEW SECONDS" : "PAUSED WITH THE MESH"}</p>
+          <p className="mt-2 text-shell/40">FIRST CHECK IN A FEW SECONDS</p>
         )}
         {error && <p className="mt-1 text-red-400">{error}</p>}
         <p className="mt-2 text-[9px] tracking-normal text-shell/40">Evidence only: the rules engine decides.</p>
-      </div>
+      </HudPanel>,
+      column)}
     </>
   );
 }
