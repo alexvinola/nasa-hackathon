@@ -1,0 +1,77 @@
+{
+  "schema": "pulsar.yawn_params/1",
+  "generated_at": "2026-11-14T17:47:32Z",
+  "limit": null,
+  "variant": "absolute",
+  "threshold": 0.26,
+  "min_duration_s": 1.0,
+  "release_factor": 0.8,
+  "max_gap_s": 0.25,
+  "baseline_window_s": null,
+  "threshold_meaning": "mouth_open_ratio must reach this value",
+  "release_threshold": 0.208,
+  "rule": "Open when ratio >= on. Stay open while ratio >= off (off = baseline + release_factor * threshold; baseline = 0 for the absolute variant). Frames without a face are skipped; if more than max_gap_s passes since the last frame that kept it open, close at that frame. A yawn is an open stretch whose last frame is at least min_duration_s after its first.",
+  "feature": {
+    "name": "inner_lip_gap_over_outer_eye_corner_distance_2d_px",
+    "formula": "dist(upper_inner_lip, lower_inner_lip) / dist(right_eye_outer, left_eye_outer), 2D Euclidean distance in pixels (x * image_width, y * image_height)",
+    "landmarks": {
+      "upper_inner_lip": 13,
+      "lower_inner_lip": 14,
+      "right_eye_outer": 33,
+      "left_eye_outer": 263
+    }
+  },
+  "calibrated_at_fps": [
+    14.985,
+    15.0
+  ],
+  "face_landmarker": {
+    "model_file_name": "face_landmarker.task",
+    "model_sha256": "64184e229b263107bc2b804c6625db1341ff2bb731874b0bcc2fe6544e0bc9ff",
+    "running_mode": "VIDEO",
+    "num_faces": 1,
+    "min_face_detection_confidence": 0.5,
+    "min_face_presence_confidence": 0.5,
+    "min_tracking_confidence": 0.5
+  },
+  "other_variant": {
+    "variant": "relative",
+    "threshold": 0.2,
+    "min_duration_s": 0.6,
+    "release_factor": 0.8,
+    "max_gap_s": 0.25,
+    "baseline_window_s": 2.0
+  },
+  "trainedOn": "YawDD Mirror, 307 videos of 90 subjects (Normal, Talking, Yawning)",
+  "validated": {
+    "yawning_recall": {
+      "count": 88,
+      "of": 102,
+      "rate": 0.862745,
+      "ci95_wilson": [
+        0.782713,
+        0.916446
+      ]
+    },
+    "talking_false_alarm": {
+      "count": 3,
+      "of": 100,
+      "rate": 0.03,
+      "ci95_wilson": [
+        0.010255,
+        0.084519
+      ]
+    },
+    "normal_false_alarm": {
+      "count": 0,
+      "of": 105,
+      "rate": 0.0,
+      "ci95_wilson": [
+        0.0,
+        0.035294
+      ]
+    }
+  },
+  "source": "yawdd",
+  "citation": "S. Abtahi, M. Omidyeganeh, S. Shirmohammadi, and B. Hariri, \"YawDD: A Yawning Detection Dataset\", Proc. ACM Multimedia Systems, Singapore, March 19-21 2014."
+}

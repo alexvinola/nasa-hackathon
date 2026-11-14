@@ -1,0 +1,350 @@
+relative_path,camera,subject_id,sex,eyewear,facial_hair,condition,source_fps,processed_fps,frames_read,reported_frames,processed_frames,no_face_frames,minutes,max_ratio,median_ratio,fold,yawns_out_of_fold_absolute,yawns_out_of_fold_relative,yawns_final_absolute,yawns_final_relative,longest_open_s_final,baseline_1s,baseline_2s,baseline_3s
+Dash/Female/1-FemaleNoGlasses.avi,dash,dash-F01,F,none,none,mixed,30.0003,15.00015,2741,2741,1371,0,1.52276,0.31671,0.07394,-1,-1,-1,2,0,4.26662,0.13674,0.13735,0.13713
+Dash/Female/2-FemaleNoGlasses.avi,dash,dash-F02,F,none,none,mixed,30.0003,15.00015,2180,2180,1090,0,1.2111,0.46074,0.09786,-1,-1,-1,2,2,2.59997,0.07118,0.08586,0.08391
+Dash/Female/3-FemaleGlasses.avi,dash,dash-F03,F,glasses,none,mixed,30.0003,15.00015,3057,3057,1529,0,1.69832,0.56889,0.07888,-1,-1,-1,4,4,4.53329,0.07708,0.07968,0.07986
+Dash/Female/4-FemaleNoGlasses.avi,dash,dash-F04,F,none,none,mixed,30.0003,15.00015,1496,1496,748,0,0.8311,0.46388,0.17272,-1,-1,-1,3,3,3.1333,0.00291,0.07944,0.13962
+Dash/Female/5-FemaleNoGlasses.avi,dash,dash-F05,F,none,none,mixed,30.0003,15.00015,2149,2149,1075,0,1.19388,0.33515,0.07472,-1,-1,-1,0,1,0.66666,0.00233,0.00966,0.00614
+Dash/Female/6-FemaleNoGlasses.avi,dash,dash-F06,F,none,none,mixed,30.0003,15.00015,1491,1491,746,5,0.82833,0.55254,0.09085,-1,-1,-1,3,3,5.33328,0.01269,0.00977,0.01269
+Dash/Female/7-FemaleNoGlasses.avi,dash,dash-F07,F,none,none,mixed,30.0003,15.00015,3618,3618,1809,0,2.00998,0.34474,0.02435,-1,-1,-1,3,4,1.39999,0.00123,0.004,0.00395
+Dash/Female/8-FemaleGlasses.avi.avi,dash,dash-F08,F,glasses,none,mixed,30.0003,15.00015,2297,2297,1149,0,1.2761,0.64392,0.06157,-1,-1,-1,3,4,2.59997,0.00242,0.00244,0.00253
+Dash/Female/9-FemaleNoGlasses.avi,dash,dash-F09,F,none,none,mixed,30.0003,15.00015,1532,1532,766,0,0.8511,0.56104,0.06794,-1,-1,-1,1,2,1.19999,0.00121,0.0017,0.04522
+Dash/Female/10-FemaleNoGlasses.avi,dash,dash-F10,F,none,none,mixed,30.0003,15.00015,1217,1217,609,6,0.6761,0.4947,0.20326,-1,-1,-1,2,3,3.3333,0.14669,0.13305,0.14669
+Dash/Female/11-FemaleGlasses.avi.avi,dash,dash-F11,F,glasses,none,mixed,30.0003,15.00015,1683,1683,842,0,0.93499,0.53981,0.08042,-1,-1,-1,3,3,2.86664,0.00623,0.06094,0.00702
+Dash/Female/12-FemaleGlasses.avi.avi,dash,dash-F12,F,glasses,none,mixed,30.0003,15.00015,2518,2518,1259,60,1.39887,0.3958,0.08873,-1,-1,-1,2,3,2.59997,0.00506,0.00507,0.00487
+Dash/Female/13-FemaleGlasses.avi.avi,dash,dash-F13,F,glasses,none,mixed,30.0003,15.00015,2488,2488,1244,0,1.38221,0.45239,0.11982,-1,-1,-1,2,5,1.59998,0.04644,0.01816,0.03207
+Dash/Male/1-MaleGlasses.avi,dash,dash-M01,M,glasses,none,mixed,30.0003,15.00015,2576,2576,1288,0,1.4311,0.65262,0.08198,-1,-1,-1,3,3,4.26662,0.00259,0.05469,0.03302
+Dash/Male/2-MaleGlasses.avi,dash,dash-M02,M,glasses,none,mixed,30.0003,15.00015,2364,2364,1182,1,1.31332,0.33046,0.01311,-1,-1,-1,3,3,2.53331,0.0091,0.02295,0.00742
+Dash/Male/3-MaleGlasses.avi,dash,dash-M03,M,glasses,none,mixed,30.0003,15.00015,2086,2086,1043,0,1.15888,0.49118,0.03996,-1,-1,-1,3,3,1.86665,0.01446,0.06079,0.05134
+Dash/Male/4-MaleNoGlasses.avi,dash,dash-M04,M,none,none,mixed,30.0003,15.00015,1998,1998,999,0,1.10999,0.48754,0.00458,-1,-1,-1,2,3,3.26663,0.00076,0.00154,0.00178
+Dash/Male/5-MaleGlasses.avi,dash,dash-M05,M,glasses,none,mixed,30.0003,15.00015,2395,2395,1198,0,1.33054,0.55892,0.1031,-1,-1,-1,2,3,1.26665,0.04651,0.07779,0.08927
+Dash/Male/6-MaleGlasses.avi,dash,dash-M06,M,glasses,none,mixed,30.0003,15.00015,1633,1633,817,0,0.90721,0.52219,0.04986,-1,-1,-1,3,3,3.59996,0.00444,0.00566,0.00487
+Dash/Male/7-MaleGlasses.avi,dash,dash-M07,M,glasses,none,mixed,30.0003,15.00015,2398,2398,1199,0,1.33221,0.52308,0.06888,-1,-1,-1,3,3,3.39997,0.00234,0.00263,0.00295
+Dash/Male/8-MaleNoGlasses.avi,dash,dash-M08,M,none,none,mixed,30.0003,15.00015,2179,2179,1090,2,1.21054,0.45326,0.04184,-1,-1,-1,3,4,5.93327,0.00507,0.00539,0.00484
+Dash/Male/9-MaleNoGlasses.avi,dash,dash-M09,M,none,none,mixed,30.0003,15.00015,2020,2020,1010,0,1.12221,0.54859,0.09407,-1,-1,-1,3,3,3.39997,0.08103,0.07326,0.06989
+Dash/Male/10-MaleGlasses.avi,dash,dash-M10,M,glasses,none,mixed,30.0003,15.00015,2418,2418,1209,0,1.34332,0.35109,0.09102,-1,-1,-1,3,3,3.39997,0.07475,0.07909,0.0855
+Dash/Male/11-MaleGlasses.avi,dash,dash-M11,M,glasses,none,mixed,30.0003,15.00015,1760,1760,880,0,0.97777,0.64281,0.11256,-1,-1,-1,2,2,4.39996,0.11136,0.10273,0.01993
+Dash/Male/12-MaleGlasses.avi,dash,dash-M12,M,glasses,none,mixed,30.0003,15.00015,1957,1957,979,0,1.08721,0.46102,0.13251,-1,-1,-1,4,4,2.73331,0.02755,0.0654,0.00502
+Dash/Male/13-MaleNoGlasses .avi,dash,dash-M13,M,none,none,mixed,30.0003,15.00015,2190,2190,1095,0,1.21665,0.42901,0.00484,-1,-1,-1,3,3,2.26664,0.00046,0.0008,0.00255
+Dash/Male/14-MaleNoGlasses.avi,dash,dash-M14,M,none,none,mixed,30.0003,15.00015,3010,3010,1505,0,1.67221,0.7049,0.11717,-1,-1,-1,2,2,5.33328,0.00716,0.05695,0.03031
+Dash/Male/15-MaleGlasses.avi,dash,dash-M15,M,glasses,none,mixed,30.0003,15.00015,2639,2639,1320,0,1.4661,0.57584,0.11678,-1,-1,-1,2,2,3.19997,0.12044,0.11104,0.11044
+Dash/Male/16-MaleNoGlasses.avi,dash,dash-M16,M,none,none,mixed,30.0003,15.00015,2503,2503,1252,0,1.39054,0.51936,0.09452,-1,-1,-1,2,3,3.59996,0.00837,0.00636,0.00837
+Mirror/Female_mirror/1-FemaleNoGlasses-Normal.avi,mirror,mirror-F01,F,none,none,normal,29.97003,14.98501,419,419,210,0,0.23301,0.08411,0.00225,1,0,0,0,0,0.0,0.00224,0.00085,0.0013
+Mirror/Female_mirror/1-FemaleNoGlasses-Talking.avi,mirror,mirror-F01,F,none,none,talking,29.97003,14.98501,560,560,280,0,0.31142,0.38804,0.12623,1,0,1,0,0,0.86753,0.09532,0.16007,0.14695
+Mirror/Female_mirror/1-FemaleNoGlasses-Yawning.avi,mirror,mirror-F01,F,none,none,yawning,29.97003,14.98501,387,387,194,2,0.21522,0.81813,0.01087,1,1,1,1,1,3.33667,0.01059,0.01208,0.09029
+Mirror/Female_mirror/2-FemaleNoGlasses-Normal.avi,mirror,mirror-F02,F,none,none,normal,29.97003,14.98501,489,489,245,0,0.27194,0.12536,0.00871,4,0,0,0,0,0.0,0.12209,0.11069,0.10803
+Mirror/Female_mirror/2-FemaleNoGlasses-Talking.avi,mirror,mirror-F02,F,none,none,talking,29.97003,14.98501,841,841,421,0,0.46769,0.29113,0.08339,4,0,2,0,0,0.06673,0.09442,0.03323,0.03909
+Mirror/Female_mirror/2-FemaleNoGlasses-Yawning.avi,mirror,mirror-F02,F,none,none,yawning,29.97003,14.98501,586,586,293,0,0.32588,0.29546,0.11022,4,1,1,1,1,1.73507,0.08267,0.07658,0.01151
+Mirror/Female_mirror/3-FemaleGlasses-Normal.avi,mirror,mirror-F03,F,glasses,none,normal,29.97003,14.98501,510,510,255,0,0.28362,0.08831,0.00528,4,0,0,0,0,0.0,0.01642,0.01998,0.02688
+Mirror/Female_mirror/3-FemaleGlasses-Talking.avi,mirror,mirror-F03,F,glasses,none,talking,29.97003,14.98501,814,814,407,0,0.45267,0.26553,0.12999,4,0,0,0,0,0.13347,0.07641,0.12021,0.1299
+Mirror/Female_mirror/3-FemaleGlasses-Yawning.avi,mirror,mirror-F03,F,glasses,none,yawning,29.97003,14.98501,363,363,182,1,0.20187,0.54252,0.10562,4,1,1,1,1,3.06973,0.0903,0.09518,0.12124
+Mirror/Female_mirror/4-FemaleGlasses-Normal.avi,mirror,mirror-F04,F,glasses,none,normal,29.97003,14.98501,659,659,330,0,0.36648,0.05895,0.0027,3,0,0,0,0,0.0,0.00127,0.00155,0.00151
+Mirror/Female_mirror/4-FemaleGlasses-Talking.avi,mirror,mirror-F04,F,glasses,none,talking,29.97003,14.98501,1202,1202,601,0,0.66845,0.32791,0.11458,3,0,0,0,1,0.73407,0.08019,0.08226,0.08268
+Mirror/Female_mirror/4-FemaleGlasses-Yawning.avi,mirror,mirror-F04,F,glasses,none,yawning,29.97003,14.98501,625,625,313,8,0.34757,0.65602,0.10212,3,2,1,2,1,3.93727,0.19472,0.37827,0.42537
+Mirror/Female_mirror/5-FemaleGlasses-Normal.avi,mirror,mirror-F05,F,glasses,none,normal,29.97003,14.98501,673,673,337,0,0.37426,0.04667,0.00317,1,0,0,0,0,0.0,0.00403,0.00329,0.00321
+Mirror/Female_mirror/5-FemaleGlasses-Talking.avi,mirror,mirror-F05,F,glasses,none,talking,29.97003,14.98501,1025,1025,513,0,0.57001,0.15714,0.03546,1,0,0,0,0,0.0,0.0017,0.00173,0.00286
+Mirror/Female_mirror/5-FemaleGlasses-Yawning.avi,mirror,mirror-F05,F,glasses,none,yawning,29.97003,14.98501,737,737,369,35,0.40985,0.58171,0.01239,1,1,3,2,3,2.33567,0.0015,0.00292,0.00444
+Mirror/Female_mirror/6-FemaleNoGlasses-Normal.avi,mirror,mirror-F06,F,none,none,normal,29.97003,14.98501,607,607,304,0,0.33756,0.01322,0.00326,3,0,0,0,0,0.0,0.00356,0.00302,0.00346
+Mirror/Female_mirror/6-FemaleNoGlasses-Talking.avi,mirror,mirror-F06,F,none,none,talking,29.97003,14.98501,978,978,489,0,0.54388,0.2107,0.09829,3,0,0,0,0,0.0,0.00595,0.0075,0.01337
+Mirror/Female_mirror/6-FemaleNoGlasses-Yawning.avi,mirror,mirror-F06,F,none,none,yawning,29.97003,14.98501,561,561,281,0,0.31198,0.5486,0.08341,3,1,1,1,1,7.27393,0.08023,0.07823,0.07865
+Mirror/Female_mirror/7-FemaleGlasses-Normal.avi,mirror,mirror-F07,F,glasses,none,normal,29.97003,14.98501,718,718,359,4,0.39929,0.01691,0.0017,3,0,0,0,0,0.0,0.00148,0.00116,0.00134
+Mirror/Female_mirror/7-FemaleGlasses-Talking.avi,mirror,mirror-F07,F,glasses,none,talking,29.97003,14.98501,907,907,454,0,0.50439,0.30682,0.0118,3,0,0,0,0,0.2002,0.08461,0.08465,0.07395
+Mirror/Female_mirror/7-FemaleGlasses-Yawning.avi,mirror,mirror-F07,F,glasses,none,yawning,29.97003,14.98501,715,715,358,0,0.39762,0.21628,0.00433,3,0,2,0,1,0.0,0.00368,0.00367,0.00384
+Mirror/Female_mirror/8-FemaleGlasses-Normal.avi,mirror,mirror-F08,F,glasses,none,normal,29.97003,14.98501,692,692,346,0,0.38483,0.02013,0.00253,2,0,0,0,0,0.0,0.00256,0.00257,0.00261
+Mirror/Female_mirror/8-FemaleGlasses-Talking.avi,mirror,mirror-F08,F,glasses,none,talking,29.97003,14.98501,806,806,403,0,0.44823,0.14708,0.05758,2,0,0,0,0,0.0,0.00166,0.06737,0.10293
+Mirror/Female_mirror/8-FemaleGlasses-Yawning.avi,mirror,mirror-F08,F,glasses,none,yawning,29.97003,14.98501,690,690,345,0,0.38372,0.19523,0.01685,2,0,0,0,0,0.0,0.0011,0.00155,0.00154
+Mirror/Female_mirror/9-FemaleNoGlasses-Normal.avi,mirror,mirror-F09,F,none,none,normal,29.97003,14.98501,510,510,255,0,0.28362,0.09152,0.00486,2,0,0,0,0,0.0,0.00429,0.0057,0.00547
+Mirror/Female_mirror/9-FemaleNoGlasses-Talking.avi,mirror,mirror-F09,F,none,none,talking,29.97003,14.98501,788,788,394,0,0.43822,0.35305,0.12351,2,0,0,0,0,0.46713,0.12273,0.12324,0.13388
+Mirror/Female_mirror/9-FemaleNoGlasses-Yawning.avi,mirror,mirror-F09,F,none,none,yawning,29.97003,14.98501,402,402,201,0,0.22356,0.62208,0.01369,2,1,0,1,0,1.26793,0.11558,0.55072,0.10758
+Mirror/Female_mirror/10-FemaleNoGlasses-Normal.avi,mirror,mirror-F10,F,none,none,normal,29.97003,14.98501,664,664,332,0,0.36926,0.16899,0.00426,2,0,0,0,0,0.0,0.00436,0.00548,0.00577
+Mirror/Female_mirror/10-FemaleNoGlasses-Talking.avi,mirror,mirror-F10,F,none,none,talking,29.97003,14.98501,1086,1086,543,0,0.60394,0.32999,0.07842,2,0,0,0,0,0.2002,0.00872,0.03439,0.07433
+Mirror/Female_mirror/10-FemaleNoGlasses-Yawning.avi,mirror,mirror-F10,F,none,none,yawning,29.97003,14.98501,633,633,317,0,0.35202,0.32769,0.13486,2,2,0,2,0,3.33667,0.24621,0.26324,0.27864
+Mirror/Female_mirror/11-FemaleNoGlasses-Normal.avi,mirror,mirror-F11,F,none,none,normal,29.97003,14.98501,552,552,276,42,0.30697,0.10548,0.00496,0,0,0,0,0,0.0,0.00478,0.0038,0.00431
+Mirror/Female_mirror/11-FemaleNoGlasses-Talking.avi,mirror,mirror-F11,F,none,none,talking,29.97003,14.98501,1088,1088,544,1,0.60505,0.24297,0.10921,0,0,0,0,0,0.0,0.12228,0.15897,0.14833
+Mirror/Female_mirror/11-FemaleNoGlasses-Yawning.avi,mirror,mirror-F11,F,none,none,yawning,29.97003,14.98501,594,594,297,10,0.33033,0.64909,0.04329,0,2,2,2,2,1.73507,0.00142,0.0015,0.00169
+Mirror/Female_mirror/12-FemaleNoGlasses-Normal.avi,mirror,mirror-F12,F,none,none,normal,29.97003,14.98501,646,646,323,0,0.35925,0.23649,0.08625,1,0,0,0,0,0.0,0.1216,0.12497,0.12545
+Mirror/Female_mirror/12-FemaleNoGlasses-Talking.avi,mirror,mirror-F12,F,none,none,talking,29.97003,14.98501,893,893,447,0,0.49661,0.16446,0.09355,1,0,0,0,0,0.0,0.00119,0.00125,0.03959
+Mirror/Female_mirror/12-FemaleNoGlasses-Yawning.avi,mirror,mirror-F12,F,none,none,yawning,29.97003,14.98501,836,836,418,0,0.46491,0.4343,0.11965,1,2,2,2,2,6.4064,0.00059,0.0007,0.00081
+Mirror/Female_mirror/13-FemaleNoGlasses-Normal.avi,mirror,mirror-F13,F,none,none,normal,29.97003,14.98501,780,780,390,0,0.43377,0.03058,0.00322,3,0,0,0,0,0.0,0.00197,0.00213,0.00242
+Mirror/Female_mirror/13-FemaleNoGlasses-Talking.avi,mirror,mirror-F13,F,none,none,talking,29.97003,14.98501,897,897,449,13,0.49883,0.21893,0.08706,3,0,1,0,0,0.0,0.00377,0.00373,0.00423
+Mirror/Female_mirror/13-FemaleNoGlasses-Yawning.avi,mirror,mirror-F13,F,none,none,yawning,29.97003,14.98501,647,647,324,0,0.3598,0.36256,0.00386,3,1,1,1,1,2.53587,0.00327,0.00239,0.00298
+Mirror/Female_mirror/14-FemaleNoGlasses-Normal.avi,mirror,mirror-F14,F,none,none,normal,29.97003,14.98501,664,664,332,0,0.36926,0.00693,0.00355,0,0,0,0,0,0.0,0.00124,0.00181,0.00302
+Mirror/Female_mirror/14-FemaleNoGlasses-Talking.avi,mirror,mirror-F14,F,none,none,talking,29.97003,14.98501,1284,1284,642,0,0.71405,0.13924,0.05311,0,0,0,0,0,0.0,0.00213,0.01042,0.01701
+Mirror/Female_mirror/14-FemaleNoGlasses-Yawning.avi,mirror,mirror-F14,F,none,none,yawning,29.97003,14.98501,631,631,316,0,0.35091,0.24812,0.02056,0,0,1,0,1,0.0,0.01616,0.01465,0.01125
+Mirror/Female_mirror/15-FemaleGlasses-Normal.avi,mirror,mirror-F15,F,glasses,none,normal,29.97003,14.98501,588,588,294,0,0.32699,0.0155,0.00437,2,0,0,0,0,0.0,0.0025,0.00304,0.004
+Mirror/Female_mirror/15-FemaleGlasses-Talking.avi,mirror,mirror-F15,F,glasses,none,talking,29.97003,14.98501,995,995,498,1,0.55333,0.21082,0.05292,2,0,0,0,0,0.0,0.09875,0.06784,0.01434
+Mirror/Female_mirror/15-FemaleGlasses-Yawning.avi,mirror,mirror-F15,F,glasses,none,yawning,29.97003,14.98501,576,576,288,0,0.32032,0.18523,0.00842,2,0,0,0,0,0.0,0.00379,0.00378,0.00398
+Mirror/Female_mirror/15-FemaleSunGlasses-Normal.avi,mirror,mirror-F15,F,sunglasses,none,normal,29.97003,14.98501,696,696,348,0,0.38705,0.01995,0.0059,2,0,0,0,0,0.0,0.00564,0.00628,0.00659
+Mirror/Female_mirror/15-FemaleSunGlasses-Yawning.avi,mirror,mirror-F15,F,sunglasses,none,yawning,29.97003,14.98501,467,467,234,0,0.2597,0.2963,0.00812,2,1,1,1,1,1.66833,0.00865,0.00842,0.00836
+Mirror/Female_mirror/16-FemaleGlasses-Normal.avi,mirror,mirror-F16,F,glasses,none,normal,29.97003,14.98501,631,631,316,0,0.35091,0.00618,0.00428,2,0,0,0,0,0.0,0.00379,0.00395,0.00395
+Mirror/Female_mirror/16-FemaleGlasses-Talking.avi,mirror,mirror-F16,F,glasses,none,talking,29.97003,14.98501,889,889,445,0,0.49438,0.22683,0.0858,2,0,0,0,0,0.0,0.11047,0.05288,0.00608
+Mirror/Female_mirror/16-FemaleGlasses-Yawning.avi,mirror,mirror-F16,F,glasses,none,yawning,29.97003,14.98501,622,622,311,0,0.3459,0.48627,0.09983,2,2,2,2,2,2.73607,0.10695,0.11234,0.15018
+Mirror/Female_mirror/17-FemaleNoGlasses-Normal.avi,mirror,mirror-F17,F,none,none,normal,29.97003,14.98501,635,635,318,0,0.35313,0.02956,0.00527,0,0,0,0,0,0.0,0.00342,0.00412,0.00478
+Mirror/Female_mirror/17-FemaleNoGlasses-Talking.avi,mirror,mirror-F17,F,none,none,talking,29.97003,14.98501,903,903,452,0,0.50217,0.397,0.12612,0,1,1,1,1,2.4024,0.12512,0.11847,0.11712
+Mirror/Female_mirror/17-FemaleNoGlasses-Yawning.avi,mirror,mirror-F17,F,none,none,yawning,29.97003,14.98501,585,585,293,0,0.32533,0.56479,0.06861,0,2,2,2,2,3.06973,0.01778,0.04429,0.1844
+Mirror/Female_mirror/17-FemaleSunGlasses-Normal.avi,mirror,mirror-F17,F,sunglasses,none,normal,29.97003,14.98501,501,501,251,0,0.27861,0.03029,0.00635,0,0,0,0,0,0.0,0.00646,0.00661,0.00641
+Mirror/Female_mirror/17-FemaleSunGlasses-Talking.avi,mirror,mirror-F17,F,sunglasses,none,talking,29.97003,14.98501,985,985,493,0,0.54777,0.49642,0.10271,0,0,4,0,4,0.93427,0.00749,0.03604,0.08648
+Mirror/Female_mirror/17-FemaleSunGlasses-Yawning.avi,mirror,mirror-F17,F,sunglasses,none,yawning,29.97003,14.98501,432,432,216,3,0.24024,0.51356,0.04068,0,2,2,2,2,2.46913,0.06875,0.17358,0.27599
+Mirror/Female_mirror/18-FemaleNoGlasses-Normal.avi,mirror,mirror-F18,F,none,none,normal,29.97003,14.98501,769,769,385,0,0.42765,0.0732,0.00549,1,0,0,0,0,0.0,0.00765,0.00836,0.00828
+Mirror/Female_mirror/18-FemaleNoGlasses-Talking.avi,mirror,mirror-F18,F,none,none,talking,29.97003,14.98501,1111,1111,556,0,0.61784,0.2584,0.07606,1,0,1,0,0,0.0,0.00696,0.07611,0.09023
+Mirror/Female_mirror/18-FemaleNoGlasses-Yawning.avi,mirror,mirror-F18,F,none,none,yawning,29.97003,14.98501,557,557,279,0,0.30975,0.26675,0.0072,1,1,1,1,1,2.73607,0.00842,0.00847,0.0101
+Mirror/Female_mirror/18-FemaleSunGlasses-Normal.avi,mirror,mirror-F18,F,sunglasses,none,normal,29.97003,14.98501,659,659,330,0,0.36648,0.0216,0.00422,1,0,0,0,0,0.0,0.00453,0.00435,0.00448
+Mirror/Female_mirror/18-FemaleSunGlasses-Talking.avi,mirror,mirror-F18,F,sunglasses,none,talking,29.97003,14.98501,991,991,496,0,0.55111,0.20927,0.04446,1,0,0,0,0,0.0,0.05654,0.05122,0.04521
+Mirror/Female_mirror/18-FemaleSunGlasses-Yawning.avi,mirror,mirror-F18,F,sunglasses,none,yawning,29.97003,14.98501,639,639,320,11,0.35536,0.41071,0.00588,1,1,1,1,1,2.93627,0.00404,0.00491,0.00544
+Mirror/Female_mirror/19-FemaleNoGlasses-Normal.avi,mirror,mirror-F19,F,none,none,normal,29.97003,14.98501,678,678,339,0,0.37704,0.0165,0.00599,4,0,0,0,0,0.0,0.00614,0.00633,0.0063
+Mirror/Female_mirror/19-FemaleNoGlasses-Talking&Yawning.avi,mirror,mirror-F19,F,none,none,talking_yawning,29.97003,14.98501,676,676,338,0,0.37593,0.49191,0.04284,4,1,1,1,1,2.53587,0.1237,0.12086,0.10487
+Mirror/Female_mirror/19-FemaleNoGlasses-Talking.avi,mirror,mirror-F19,F,none,none,talking,29.97003,14.98501,1133,1133,567,0,0.63007,0.27316,0.12046,4,0,2,0,0,0.06673,0.0098,0.01645,0.03016
+Mirror/Female_mirror/19-FemaleNoGlasses-Yawning.avi,mirror,mirror-F19,F,none,none,yawning,29.97003,14.98501,744,744,372,0,0.41375,0.47262,0.00889,4,1,1,1,1,4.27093,0.01037,0.00985,0.00991
+Mirror/Female_mirror/20-FemaleNoGlasses-Normal.avi,mirror,mirror-F20,F,none,none,normal,29.97003,14.98501,812,812,406,6,0.45156,0.04346,0.00408,0,0,0,0,0,0.0,0.00165,0.00292,0.00326
+Mirror/Female_mirror/20-FemaleNoGlasses-Talking.avi,mirror,mirror-F20,F,none,none,talking,29.97003,14.98501,717,717,359,0,0.39873,0.22623,0.06628,0,0,0,0,0,0.0,0.00909,0.00442,0.00909
+Mirror/Female_mirror/20-FemaleNoGlasses-Yawning.avi,mirror,mirror-F20,F,none,none,yawning,29.97003,14.98501,763,763,382,0,0.42431,0.45046,0.01523,0,2,2,2,2,1.66833,0.00306,0.03821,0.04107
+Mirror/Female_mirror/21-FemaleNoGlasses-Normal.avi,mirror,mirror-F21,F,none,none,normal,29.97003,14.98501,605,605,303,0,0.33645,0.19978,0.00627,1,0,0,0,0,0.0,0.01369,0.00863,0.00733
+Mirror/Female_mirror/21-FemaleNoGlasses-Talking.avi,mirror,mirror-F21,F,none,none,talking,29.97003,14.98501,1003,1003,502,0,0.55778,0.23149,0.08961,1,0,0,0,0,0.0,0.0322,0.09816,0.12316
+Mirror/Female_mirror/21-FemaleNoGlasses-Yawning.avi,mirror,mirror-F21,F,none,none,yawning,29.97003,14.98501,493,493,247,0,0.27416,0.46848,0.0461,1,1,1,1,1,1.86853,0.11071,0.10658,0.10531
+Mirror/Female_mirror/22-FemaleNoGlasses-Normal.avi,mirror,mirror-F22,F,none,none,normal,29.97003,14.98501,633,633,317,0,0.35202,0.08064,0.00261,2,0,0,0,0,0.0,0.00554,0.00503,0.00423
+Mirror/Female_mirror/22-FemaleNoGlasses-Talking.avi,mirror,mirror-F22,F,none,none,talking,29.97003,14.98501,1101,1101,551,0,0.61228,0.36915,0.11535,2,0,0,0,0,0.73407,0.12956,0.13436,0.11557
+Mirror/Female_mirror/22-FemaleNoGlasses-Yawning.avi,mirror,mirror-F22,F,none,none,yawning,29.97003,14.98501,631,631,316,0,0.35091,0.61651,0.00352,2,1,1,1,1,2.93627,0.11625,0.12419,0.13163
+Mirror/Female_mirror/22-FemaleSunGlasses-Normal.avi,mirror,mirror-F22,F,sunglasses,none,normal,29.97003,14.98501,364,364,182,0,0.20242,0.0549,0.00743,2,0,0,0,0,0.0,0.00429,0.00503,0.00582
+Mirror/Female_mirror/22-FemaleSunGlasses-Talking.avi,mirror,mirror-F22,F,sunglasses,none,talking,29.97003,14.98501,624,624,312,0,0.34701,0.3677,0.15032,2,0,1,0,1,0.93427,0.0093,0.0159,0.10144
+Mirror/Female_mirror/22-FemaleSunGlasses-Yawning.avi,mirror,mirror-F22,F,sunglasses,none,yawning,29.97003,14.98501,425,425,213,23,0.23635,0.63246,0.03516,2,1,2,1,2,1.8018,0.00931,0.06399,0.07127
+Mirror/Female_mirror/23-FemaleNoGlasses-Normal.avi,mirror,mirror-F23,F,none,none,normal,29.97003,14.98501,721,721,361,0,0.40096,0.12324,0.00645,2,0,0,0,0,0.0,0.06437,0.0031,0.00513
+Mirror/Female_mirror/23-FemaleNoGlasses-Talking&Yawning.avi,mirror,mirror-F23,F,none,none,talking_yawning,29.97003,14.98501,565,565,283,0,0.3142,0.55718,0.07018,2,1,1,1,1,1.33467,0.07472,0.06561,0.06478
+Mirror/Female_mirror/23-FemaleNoGlasses-Talking.avi,mirror,mirror-F23,F,none,none,talking,29.97003,14.98501,838,838,419,0,0.46602,0.26591,0.09561,2,0,0,0,0,0.06673,0.05684,0.06224,0.07762
+Mirror/Female_mirror/23-FemaleNoGlasses-Yawning.avi,mirror,mirror-F23,F,none,none,yawning,29.97003,14.98501,525,525,263,0,0.29196,0.54814,0.00574,2,1,1,1,1,1.8018,0.0044,0.00678,0.00599
+Mirror/Female_mirror/24-FemaleNoGlasses-Normal.avi,mirror,mirror-F24,F,none,none,normal,29.97003,14.98501,632,632,316,0,0.35146,0.03789,0.00267,1,0,0,0,0,0.0,0.0015,0.00097,0.00093
+Mirror/Female_mirror/24-FemaleNoGlasses-Talking.avi,mirror,mirror-F24,F,none,none,talking,29.97003,14.98501,680,680,340,0,0.37816,0.17262,0.01585,1,0,0,0,0,0.0,0.00272,0.00298,0.00324
+Mirror/Female_mirror/24-FemaleNoGlasses-Yawning.avi,mirror,mirror-F24,F,none,none,yawning,29.97003,14.98501,646,646,323,0,0.35925,0.53631,0.00252,1,1,2,1,2,2.2022,0.00204,0.00221,0.00223
+Mirror/Female_mirror/25-FemaleNoGlasses-Normal.avi,mirror,mirror-F25,F,none,none,normal,29.97003,14.98501,308,308,154,0,0.17128,0.01201,0.00425,3,0,0,0,0,0.0,0.00478,0.00362,0.00378
+Mirror/Female_mirror/25-FemaleNoGlasses-Yawning.avi,mirror,mirror-F25,F,none,none,yawning,29.97003,14.98501,268,268,134,11,0.14904,0.48521,0.13316,3,1,1,1,1,2.06873,0.0038,0.00524,0.21177
+Mirror/Female_mirror/25-FemaleSunGlasses-Normal.avi,mirror,mirror-F25,F,sunglasses,none,normal,29.97003,14.98501,505,505,253,0,0.28084,0.04228,0.00406,3,0,0,0,0,0.0,0.01153,0.00397,0.00202
+Mirror/Female_mirror/25-FemaleSunGlasses-Talking.avi,mirror,mirror-F25,F,sunglasses,none,talking,29.97003,14.98501,840,840,420,0,0.46713,0.12981,0.03985,3,0,0,0,0,0.0,0.0017,0.00232,0.00252
+Mirror/Female_mirror/25-FemaleSunGlasses-Yawning.avi,mirror,mirror-F25,F,sunglasses,none,yawning,29.97003,14.98501,612,612,306,34,0.34034,0.54575,0.0246,3,0,3,1,3,1.46813,0.00237,0.0036,0.08686
+Mirror/Female_mirror/26-FemaleGlasses-Normal.avi,mirror,mirror-F26,F,glasses,none,normal,29.97003,14.98501,634,634,317,0,0.35257,0.08136,0.00297,0,0,0,0,0,0.0,0.08003,0.01381,0.0075
+Mirror/Female_mirror/26-FemaleGlasses-Talking.avi,mirror,mirror-F26,F,glasses,none,talking,29.97003,14.98501,961,961,481,0,0.53442,0.21516,0.07109,0,0,0,0,0,0.0,0.06879,0.05563,0.04349
+Mirror/Female_mirror/26-FemaleGlasses-Yawning.avi,mirror,mirror-F26,F,glasses,none,yawning,29.97003,14.98501,338,338,169,2,0.18797,0.64845,0.1365,0,1,1,1,1,4.27093,0.00302,0.03865,0.0667
+Mirror/Female_mirror/26-FemaleSunGlasses-Normal.avi,mirror,mirror-F26,F,sunglasses,none,normal,29.97003,14.98501,464,464,232,0,0.25804,0.00811,0.00244,0,0,0,0,0,0.0,0.00117,0.00129,0.00163
+Mirror/Female_mirror/26-FemaleSunGlasses-Yawning.avi,mirror,mirror-F26,F,sunglasses,none,yawning,29.97003,14.98501,495,495,248,27,0.27528,0.53043,0.09314,0,2,0,2,0,2.33567,0.00616,0.32505,0.4532
+Mirror/Female_mirror/27-FemaleNoGlasses-Normal.avi,mirror,mirror-F27,F,none,none,normal,29.97003,14.98501,904,904,452,59,0.50272,0.39075,0.01656,0,0,1,0,1,0.2002,0.00168,0.00284,0.00268
+Mirror/Female_mirror/27-FemaleNoGlasses-Talking&Yawning.avi,mirror,mirror-F27,F,none,none,talking_yawning,29.97003,14.98501,705,705,353,0,0.39206,0.50256,0.02621,0,1,1,1,1,1.66833,0.11819,0.10972,0.12811
+Mirror/Female_mirror/27-FemaleSunGlasses-Normal.avi,mirror,mirror-F27,F,sunglasses,none,normal,29.97003,14.98501,776,776,388,0,0.43154,0.11293,0.00365,0,0,0,0,0,0.0,0.08974,0.04908,0.00792
+Mirror/Female_mirror/27-FemaleSunGlasses-Talking.avi,mirror,mirror-F27,F,sunglasses,none,talking,29.97003,14.98501,724,724,362,0,0.40262,0.1989,0.07094,0,0,0,0,0,0.0,0.00443,0.00457,0.0093
+Mirror/Female_mirror/27-FemaleSunGlasses-Yawning.avi,mirror,mirror-F27,F,sunglasses,none,yawning,29.97003,14.98501,429,429,215,1,0.23857,0.43756,0.00603,0,1,1,1,1,2.73607,0.00612,0.00575,0.00552
+Mirror/Female_mirror/28-FemaleNoGlasses-Normal.avi,mirror,mirror-F28,F,none,none,normal,29.97003,14.98501,499,499,250,17,0.2775,0.1517,0.00365,2,0,0,0,0,0.0,0.00107,0.00136,0.00142
+Mirror/Female_mirror/28-FemaleNoGlasses-Talking.avi,mirror,mirror-F28,F,none,none,talking,29.97003,14.98501,848,848,424,0,0.47158,0.32258,0.06871,2,0,0,0,0,0.06673,0.00144,0.00238,0.02634
+Mirror/Female_mirror/28-FemaleNoGlasses-Yawning.avi,mirror,mirror-F28,F,none,none,yawning,29.97003,14.98501,472,472,236,1,0.26248,0.68307,0.00785,2,1,1,1,1,4.27093,0.0007,0.00092,0.00127
+Mirror/Female_mirror/29-FemaleNoGlasses-Normal.avi,mirror,mirror-F29,F,none,none,normal,29.97003,14.98501,599,599,300,0,0.33311,0.01294,0.00376,3,0,0,0,0,0.0,0.00347,0.00349,0.00297
+Mirror/Female_mirror/29-FemaleNoGlasses-Talking.avi,mirror,mirror-F29,F,none,none,talking,29.97003,14.98501,928,928,464,0,0.51607,0.36656,0.15128,3,0,4,1,5,1.2012,0.00056,0.0008,0.0011
+Mirror/Female_mirror/29-FemaleNoGlasses-Yawning.avi,mirror,mirror-F29,F,none,none,yawning,29.97003,14.98501,390,390,195,0,0.21688,0.44013,0.12452,3,1,0,1,1,2.06873,0.09261,0.12864,0.1299
+Mirror/Female_mirror/30-FemaleNoGlasses-Normal.avi,mirror,mirror-F30,F,none,none,normal,29.97003,14.98501,499,499,250,0,0.2775,0.0518,0.00983,4,0,0,0,0,0.0,0.03179,0.03578,0.03887
+Mirror/Female_mirror/30-FemaleNoGlasses-Talking.avi,mirror,mirror-F30,F,none,none,talking,29.97003,14.98501,996,996,498,0,0.55389,0.32091,0.13582,4,0,0,0,0,0.06673,0.13407,0.1532,0.15867
+Mirror/Female_mirror/30-FemaleNoGlasses-Yawning.avi,mirror,mirror-F30,F,none,none,yawning,29.97003,14.98501,568,568,284,0,0.31587,0.35709,0.05223,4,2,2,2,2,1.46813,0.05321,0.04943,0.05735
+Mirror/Female_mirror/31-FemaleGlasses-Normal.avi,mirror,mirror-F31,F,glasses,none,normal,29.97003,14.98501,657,657,329,0,0.36537,0.05667,0.00423,3,0,0,0,0,0.0,0.00207,0.00278,0.00276
+Mirror/Female_mirror/31-FemaleGlasses-Talking.avi,mirror,mirror-F31,F,glasses,none,talking,29.97003,14.98501,1154,1154,577,0,0.64175,0.16581,0.0602,3,0,0,0,0,0.0,0.05257,0.05478,0.0679
+Mirror/Female_mirror/31-FemaleGlasses-Yawning.avi,mirror,mirror-F31,F,glasses,none,yawning,29.97003,14.98501,588,588,294,0,0.32699,0.51052,0.00509,3,1,1,1,1,3.33667,0.04286,0.01074,0.00842
+Mirror/Female_mirror/31-FemaleNoGlasses-Normal.avi,mirror,mirror-F31,F,none,none,normal,29.97003,14.98501,800,800,400,0,0.44489,0.01005,0.00607,3,0,0,0,0,0.0,0.00551,0.00649,0.0069
+Mirror/Female_mirror/31-FemaleNoGlasses-Talking.avi,mirror,mirror-F31,F,none,none,talking,29.97003,14.98501,1247,1247,624,0,0.69347,0.39512,0.1271,3,1,0,0,0,0.53387,0.12673,0.11608,0.11261
+Mirror/Female_mirror/31-FemaleNoGlasses-Yawning.avi,mirror,mirror-F31,F,none,none,yawning,29.97003,14.98501,541,541,271,0,0.30086,0.48738,0.00581,3,1,1,1,1,3.33667,0.00325,0.00418,0.00425
+Mirror/Female_mirror/32-FemaleSunGlasses-Normal.avi,mirror,mirror-F32,F,sunglasses,none,normal,29.97003,14.98501,666,666,333,3,0.37037,0.05883,0.00273,4,0,0,0,0,0.0,0.00287,0.00258,0.0028
+Mirror/Female_mirror/32-FemaleSunGlasses-Talking.avi,mirror,mirror-F32,F,sunglasses,none,talking,29.97003,14.98501,758,758,379,0,0.42153,0.21586,0.06143,4,0,0,0,0,0.0,0.13644,0.06932,0.07361
+Mirror/Female_mirror/32-FemaleSunGlasses-Yawning.avi,mirror,mirror-F32,F,sunglasses,none,yawning,29.97003,14.98501,892,892,446,16,0.49605,0.24532,0.02202,4,0,2,0,2,0.0,0.00746,0.01526,0.00881
+Mirror/Female_mirror/33-FemaleNoGlasses-Normal.avi,mirror,mirror-F33,F,none,none,normal,29.97003,14.98501,792,792,396,0,0.44044,0.00819,0.0025,0,0,0,0,0,0.0,0.00168,0.00258,0.00204
+Mirror/Female_mirror/33-FemaleNoGlasses-Talking.avi,mirror,mirror-F33,F,none,none,talking,29.97003,14.98501,1087,1087,544,0,0.60449,0.1477,0.06024,0,0,0,0,0,0.0,0.04498,0.0323,0.03028
+Mirror/Female_mirror/33-FemaleNoGlasses-Yawning.avi,mirror,mirror-F33,F,none,none,yawning,29.97003,14.98501,713,713,357,0,0.39651,0.25248,0.01649,0,0,1,0,1,0.0,0.00707,0.00647,0.00716
+Mirror/Female_mirror/34-FemaleNoGlasses-Normal.avi,mirror,mirror-F34,F,none,none,normal,29.97003,14.98501,643,643,322,0,0.35758,0.01146,0.00258,0,0,0,0,0,0.0,0.00389,0.00329,0.00316
+Mirror/Female_mirror/34-FemaleNoGlasses-Talking&Yawning.avi,mirror,mirror-F34,F,none,none,talking_yawning,29.97003,14.98501,576,576,288,0,0.32032,0.46087,0.00345,0,1,1,1,1,2.6026,0.00511,0.00417,0.00422
+Mirror/Female_mirror/34-FemaleNoGlasses-Talking.avi,mirror,mirror-F34,F,none,none,talking,29.97003,14.98501,1448,1448,724,0,0.80525,0.38231,0.12718,0,1,0,1,0,1.06773,0.14255,0.13875,0.13693
+Mirror/Female_mirror/34-FemaleNoGlasses-Yawning.avi,mirror,mirror-F34,F,none,none,yawning,29.97003,14.98501,474,474,237,0,0.2636,0.47291,0.00394,0,1,2,1,2,1.73507,0.0033,0.003,0.00276
+Mirror/Female_mirror/35-FemaleNoGlasses-Normal.avi,mirror,mirror-F35,F,none,none,normal,29.97003,14.98501,804,804,402,0,0.44711,0.02144,0.00543,3,0,0,0,0,0.0,0.00494,0.00453,0.00562
+Mirror/Female_mirror/35-FemaleNoGlasses-Talking&Yawning.avi,mirror,mirror-F35,F,none,none,talking_yawning,29.97003,14.98501,679,679,340,0,0.3776,0.46391,0.00612,3,1,1,1,1,1.4014,0.00367,0.00409,0.0041
+Mirror/Female_mirror/35-FemaleNoGlasses-Talking.avi,mirror,mirror-F35,F,none,none,talking,29.97003,14.98501,969,969,485,0,0.53887,0.24012,0.02057,3,0,0,0,0,0.0,0.00513,0.00819,0.03595
+Mirror/Female_mirror/35-FemaleNoGlasses-Yawning.avi,mirror,mirror-F35,F,none,none,yawning,29.97003,14.98501,596,596,298,0,0.33144,0.4401,0.00754,3,2,2,2,2,1.8018,0.00454,0.00495,0.29469
+Mirror/Female_mirror/36-FemaleNoGlasses-Normal.avi,mirror,mirror-F36,F,none,none,normal,29.97003,14.98501,714,714,357,4,0.39706,0.05316,0.00265,1,0,0,0,0,0.0,0.00204,0.0021,0.00237
+Mirror/Female_mirror/36-FemaleNoGlasses-Talking&Yawning.avi,mirror,mirror-F36,F,none,none,talking_yawning,29.97003,14.98501,607,607,304,0,0.33756,0.37518,0.01166,1,1,1,1,1,1.2012,0.00291,0.02165,0.04124
+Mirror/Female_mirror/36-FemaleNoGlasses-Talking.avi,mirror,mirror-F36,F,none,none,talking,29.97003,14.98501,790,790,395,11,0.43933,0.16551,0.0057,1,0,0,0,0,0.0,0.00564,0.00989,0.01096
+Mirror/Female_mirror/36-FemaleNoGlasses-Yawning.avi,mirror,mirror-F36,F,none,none,yawning,29.97003,14.98501,545,545,273,0,0.30308,0.39053,0.00368,1,0,1,1,1,1.06773,0.00318,0.00357,0.00347
+Mirror/Female_mirror/37-FemaleNoGlasses-Normal.avi,mirror,mirror-F37,F,none,none,normal,29.97003,14.98501,646,646,323,0,0.35925,0.09444,0.00443,1,0,0,0,0,0.0,0.00494,0.00502,0.00471
+Mirror/Female_mirror/37-FemaleNoGlasses-Talking&Yawning.avi,mirror,mirror-F37,F,none,none,talking_yawning,29.97003,14.98501,750,750,375,0,0.41708,0.32854,0.06305,1,0,0,0,0,0.13347,0.00397,0.00545,0.01363
+Mirror/Female_mirror/37-FemaleNoGlasses-Talking.avi,mirror,mirror-F37,F,none,none,talking,29.97003,14.98501,929,929,465,0,0.51663,0.21251,0.08404,1,0,1,0,0,0.0,0.00755,0.01081,0.01123
+Mirror/Female_mirror/37-FemaleNoGlasses-Yawning.avi,mirror,mirror-F37,F,none,none,yawning,29.97003,14.98501,457,457,229,0,0.25414,0.27895,0.00366,1,0,0,0,0,0.26693,0.00391,0.00364,0.00509
+Mirror/Female_mirror/38-FemaleNoGlasses-Normal.avi,mirror,mirror-F38,F,none,none,normal,29.97003,14.98501,582,582,291,0,0.32366,0.10947,0.00162,4,0,0,0,0,0.0,0.07557,0.01335,0.00594
+Mirror/Female_mirror/38-FemaleNoGlasses-Talking.avi,mirror,mirror-F38,F,none,none,talking,29.97003,14.98501,979,979,490,0,0.54443,0.14994,0.02997,4,0,0,0,0,0.0,0.06427,0.08214,0.08325
+Mirror/Female_mirror/38-FemaleNoGlasses-Yawning.avi,mirror,mirror-F38,F,none,none,yawning,29.97003,14.98501,501,501,251,0,0.27861,0.11097,0.00372,4,0,0,0,0,0.0,0.00166,0.00179,0.0018
+Mirror/Female_mirror/39-FemaleNoGlasses-Normal.avi,mirror,mirror-F39,F,none,none,normal,29.97003,14.98501,660,660,330,0,0.36703,0.29531,0.13928,4,0,0,0,0,0.86753,0.12247,0.11781,0.12765
+Mirror/Female_mirror/39-FemaleNoGlasses-Talking&Yawning.avi,mirror,mirror-F39,F,none,none,talking_yawning,29.97003,14.98501,831,831,416,0,0.46213,0.45109,0.07296,4,1,1,1,1,1.4014,0.00278,0.00319,0.00355
+Mirror/Female_mirror/39-FemaleNoGlasses-Talking.avi,mirror,mirror-F39,F,none,none,talking,29.97003,14.98501,1021,1021,511,0,0.56779,0.23867,0.07935,4,0,0,0,0,0.0,0.15708,0.1289,0.13122
+Mirror/Female_mirror/39-FemaleNoGlasses-Yawning.avi,mirror,mirror-F39,F,none,none,yawning,29.97003,14.98501,464,464,232,0,0.25804,0.50805,0.00744,4,1,1,1,1,1.8018,0.00742,0.00758,0.00759
+Mirror/Female_mirror/40-FemaleNoGlasses-Normal.avi,mirror,mirror-F40,F,none,none,normal,29.97003,14.98501,525,525,263,0,0.29196,0.03038,0.00738,1,0,0,0,0,0.0,0.00576,0.00648,0.00602
+Mirror/Female_mirror/40-FemaleNoGlasses-Talking.avi,mirror,mirror-F40,F,none,none,talking,29.97003,14.98501,830,830,415,0,0.46157,0.2595,0.15513,1,0,0,0,0,0.0,0.02577,0.03521,0.04732
+Mirror/Female_mirror/40-FemaleNoGlasses-Yawning.avi,mirror,mirror-F40,F,none,none,yawning,29.97003,14.98501,682,682,341,24,0.37927,0.35684,0.04685,1,1,1,1,1,1.73507,0.0091,0.01019,0.01332
+Mirror/Female_mirror/41-FemaleGlasses-Normal.avi,mirror,mirror-F41,F,glasses,none,normal,29.97003,14.98501,506,506,253,0,0.28139,0.01168,0.00579,4,0,0,0,0,0.0,0.00571,0.00543,0.00577
+Mirror/Female_mirror/41-FemaleGlasses-Talking.avi,mirror,mirror-F41,F,glasses,none,talking,29.97003,14.98501,678,678,339,0,0.37704,0.27937,0.09199,4,0,0,0,0,0.06673,0.16166,0.13579,0.12785
+Mirror/Female_mirror/41-FemaleGlasses-Yawning.avi,mirror,mirror-F41,F,glasses,none,yawning,29.97003,14.98501,569,569,285,0,0.31643,0.37145,0.02472,4,1,1,1,1,1.6016,0.05367,0.05303,0.05272
+Mirror/Female_mirror/42-FemaleSunGlasses-Normal.avi,mirror,mirror-F42,F,sunglasses,none,normal,29.97003,14.98501,652,652,326,0,0.36258,0.06897,0.0072,0,0,0,0,0,0.0,0.00682,0.00733,0.00683
+Mirror/Female_mirror/42-FemaleSunGlasses-Talking.avi,mirror,mirror-F42,F,sunglasses,none,talking,29.97003,14.98501,880,880,440,0,0.48938,0.11145,0.05764,0,0,0,0,0,0.0,0.08546,0.07258,0.06704
+Mirror/Female_mirror/42-FemaleSunGlasses-Yawning.avi,mirror,mirror-F42,F,sunglasses,none,yawning,29.97003,14.98501,650,650,325,2,0.36147,0.65139,0.01963,0,1,1,1,1,2.6026,0.05134,0.04851,0.04843
+Mirror/Female_mirror/43-FemaleNoGlasses-Normal.avi,mirror,mirror-F43,F,none,none,normal,29.97003,14.98501,664,664,332,0,0.36926,0.07261,0.00608,2,0,0,0,0,0.0,0.00536,0.00607,0.00704
+Mirror/Female_mirror/43-FemaleNoGlasses-Talking.avi,mirror,mirror-F43,F,none,none,talking,29.97003,14.98501,931,931,466,0,0.51774,0.17722,0.03449,2,0,0,0,0,0.0,0.00249,0.00317,0.00488
+Mirror/Female_mirror/43-FemaleNoGlasses-Yawning.avi,mirror,mirror-F43,F,none,none,yawning,29.97003,14.98501,627,627,314,0,0.34868,0.40445,0.00497,2,0,1,0,1,0.73407,0.00306,0.00345,0.00357
+Mirror/Male_mirror Avi Videos/1-MaleNoGlasses-Talking.avi,mirror,mirror-M01,M,none,none,talking,29.97003,14.98501,726,726,363,20,0.40374,0.30763,0.11499,4,0,0,0,0,0.53387,0.09481,0.09374,0.0973
+Mirror/Male_mirror Avi Videos/1-MaleNoGlasses-Yawning.avi,mirror,mirror-M01,M,none,none,yawning,29.97003,14.98501,441,441,221,0,0.24525,0.44673,0.00259,4,1,1,1,1,1.93527,0.00283,0.00303,0.00295
+Mirror/Male_mirror Avi Videos/1-MaleSunGlasses-Normal.avi,mirror,mirror-M01,M,sunglasses,none,normal,29.97003,14.98501,503,503,252,0,0.27972,0.15569,0.00474,4,0,0,0,0,0.0,0.00626,0.05259,0.02209
+Mirror/Male_mirror Avi Videos/1-MaleSunGlasses-Yawning.avi,mirror,mirror-M01,M,sunglasses,none,yawning,29.97003,14.98501,442,442,221,0,0.2458,0.34193,0.00654,4,1,2,1,2,2.002,0.00469,0.00361,0.00348
+Mirror/Male_mirror Avi Videos/2-MaleGlasses-Normal.avi,mirror,mirror-M02,M,glasses,none,normal,29.97003,14.98501,451,451,226,0,0.25081,0.01081,0.00519,0,0,0,0,0,0.0,0.00494,0.00485,0.00491
+Mirror/Male_mirror Avi Videos/2-MaleGlasses-Talking.avi,mirror,mirror-M02,M,glasses,none,talking,29.97003,14.98501,552,552,276,0,0.30697,0.14465,0.00442,0,0,0,0,0,0.0,0.0043,0.00418,0.00418
+Mirror/Male_mirror Avi Videos/2-MaleGlasses-Yawning.avi,mirror,mirror-M02,M,glasses,none,yawning,29.97003,14.98501,429,429,215,0,0.23857,0.5446,0.01418,0,1,1,1,1,4.93827,0.00616,0.00536,0.00482
+Mirror/Male_mirror Avi Videos/3-MaleGlasses-Normal.avi,mirror,mirror-M03,M,glasses,none,normal,29.97003,14.98501,766,766,383,0,0.42598,0.18478,0.00666,3,0,0,0,0,0.0,0.1655,0.16162,0.04499
+Mirror/Male_mirror Avi Videos/3-MaleGlasses-Talking.avi,mirror,mirror-M03,M,glasses,none,talking,29.97003,14.98501,1015,1015,508,0,0.56445,0.20661,0.04417,3,0,1,0,0,0.0,0.01072,0.00997,0.00865
+Mirror/Male_mirror Avi Videos/3-MaleGlasses-Yawning.avi,mirror,mirror-M03,M,glasses,none,yawning,29.97003,14.98501,523,523,262,28,0.29085,0.51976,0.00539,3,1,1,1,1,1.86853,0.00273,0.00299,0.00361
+Mirror/Male_mirror Avi Videos/3-MaleNoGlasses-Normal.avi,mirror,mirror-M03,M,none,none,normal,29.97003,14.98501,369,369,185,0,0.20521,0.04057,0.00487,3,0,0,0,0,0.0,0.00864,0.00802,0.00784
+Mirror/Male_mirror Avi Videos/3-MaleNoGlasses-Yawning.avi,mirror,mirror-M03,M,none,none,yawning,29.97003,14.98501,596,596,298,2,0.33144,0.64477,0.02684,3,1,1,1,1,2.73607,0.00597,0.00632,0.00654
+Mirror/Male_mirror Avi Videos/4-MaleNoGlasses-Normal.avi,mirror,mirror-M04,M,none,none,normal,29.97003,14.98501,395,395,198,0,0.21966,0.10243,0.00603,3,0,0,0,0,0.0,0.00484,0.00542,0.00563
+Mirror/Male_mirror Avi Videos/4-MaleNoGlasses-Talking.avi,mirror,mirror-M04,M,none,none,talking,29.97003,14.98501,407,407,204,0,0.22634,0.20609,0.08552,3,0,0,0,0,0.0,0.03428,0.02069,0.03633
+Mirror/Male_mirror Avi Videos/4-MaleNoGlasses-Yawning.avi,mirror,mirror-M04,M,none,none,yawning,29.97003,14.98501,430,430,215,0,0.23913,0.41332,0.00928,3,1,1,1,1,3.67033,0.00695,0.03599,0.08372
+Mirror/Male_mirror Avi Videos/5-MaleNoGlasses-Normal.avi,mirror,mirror-M05,M,none,none,normal,29.97003,14.98501,444,444,222,0,0.24691,0.0534,0.00412,1,0,0,0,0,0.0,0.00299,0.0042,0.00452
+Mirror/Male_mirror Avi Videos/5-MaleNoGlasses-Talking.avi,mirror,mirror-M05,M,none,none,talking,29.97003,14.98501,462,462,231,7,0.25692,0.18271,0.08306,1,0,0,0,0,0.0,0.0106,0.01361,0.0532
+Mirror/Male_mirror Avi Videos/5-MaleNoGlasses-Yawning.avi,mirror,mirror-M05,M,none,none,yawning,29.97003,14.98501,548,548,274,1,0.30475,0.47148,0.01686,1,1,2,1,2,2.86953,0.00388,0.00457,0.00411
+Mirror/Male_mirror Avi Videos/6-MaleNoGlasses-Normal.avi,mirror,mirror-M06,M,none,none,normal,29.97003,14.98501,470,470,235,0,0.26137,0.10694,0.00373,0,0,0,0,0,0.0,0.0045,0.00143,0.00237
+Mirror/Male_mirror Avi Videos/6-MaleNoGlasses-Talking.avi,mirror,mirror-M06,M,none,none,talking,29.97003,14.98501,552,552,276,9,0.30697,0.34561,0.10232,0,0,0,0,0,0.6006,0.00157,0.08651,0.05806
+Mirror/Male_mirror Avi Videos/6-MaleNoGlasses-Yawning.avi,mirror,mirror-M06,M,none,none,yawning,29.97003,14.98501,298,298,149,0,0.16572,0.54089,0.07566,0,1,1,1,1,2.33567,0.00187,0.22986,0.38742
+Mirror/Male_mirror Avi Videos/7-MaleGlasses-Normal.avi,mirror,mirror-M07,M,glasses,none,normal,29.97003,14.98501,521,521,261,0,0.28973,0.06419,0.00951,0,0,0,0,0,0.0,0.00697,0.00661,0.00643
+Mirror/Male_mirror Avi Videos/7-MaleGlasses-Talking.avi,mirror,mirror-M07,M,glasses,none,talking,29.97003,14.98501,507,507,254,6,0.28195,0.17457,0.03028,0,0,0,0,0,0.0,0.00543,0.00623,0.00703
+Mirror/Male_mirror Avi Videos/7-MaleGlasses-Yawning.avi,mirror,mirror-M07,M,glasses,none,yawning,29.97003,14.98501,682,682,341,3,0.37927,0.46305,0.01114,0,2,2,2,2,3.67033,0.00701,0.00712,0.00737
+Mirror/Male_mirror Avi Videos/8-MaleGlassesBeard-Normal.avi,mirror,mirror-M08,M,glasses,beard,normal,29.97003,14.98501,397,397,199,0,0.22078,0.0204,0.00333,1,0,0,0,0,0.0,0.00242,0.00258,0.00223
+Mirror/Male_mirror Avi Videos/8-MaleGlassesBeard-Talking.avi,mirror,mirror-M08,M,glasses,beard,talking,29.97003,14.98501,611,611,306,0,0.33978,0.252,0.01041,1,0,0,0,0,0.0,0.00449,0.00533,0.00504
+Mirror/Male_mirror Avi Videos/8-MaleGlassesBeard-Yawning.avi,mirror,mirror-M08,M,glasses,beard,yawning,29.97003,14.98501,458,458,229,0,0.2547,0.76606,0.00537,1,2,2,2,2,2.46913,0.003,0.00307,0.00364
+Mirror/Male_mirror Avi Videos/9-MaleNoGlasses-Normal.avi,mirror,mirror-M09,M,none,none,normal,29.97003,14.98501,737,737,369,0,0.40985,0.14418,0.01134,0,0,0,0,0,0.0,0.00638,0.00506,0.00522
+Mirror/Male_mirror Avi Videos/9-MaleNoGlasses-Talking.avi,mirror,mirror-M09,M,none,none,talking,29.97003,14.98501,1124,1124,562,1,0.62507,0.24567,0.06846,0,0,0,0,0,0.0,0.04927,0.04924,0.04922
+Mirror/Male_mirror Avi Videos/9-MaleNoGlasses-Yawning.avi,mirror,mirror-M09,M,none,none,yawning,29.97003,14.98501,737,737,369,0,0.40985,0.23308,0.00511,0,0,1,0,1,0.0,0.00474,0.00503,0.0053
+Mirror/Male_mirror Avi Videos/10-MaleNoGlasses-Normal.avi,mirror,mirror-M10,M,none,none,normal,29.97003,14.98501,559,559,280,0,0.31087,0.01308,0.00139,1,0,0,0,0,0.0,0.00086,0.00104,0.00116
+Mirror/Male_mirror Avi Videos/10-MaleNoGlasses-Talking.avi,mirror,mirror-M10,M,none,none,talking,29.97003,14.98501,828,828,414,7,0.46046,0.20199,0.06582,1,0,0,0,0,0.0,0.11927,0.13929,0.09976
+Mirror/Male_mirror Avi Videos/10-MaleNoGlasses-Yawning.avi,mirror,mirror-M10,M,none,none,yawning,29.97003,14.98501,434,434,217,0,0.24135,0.46183,0.00317,1,2,2,2,2,2.2022,0.00148,0.00129,0.00159
+Mirror/Male_mirror Avi Videos/11-MaleGlasses-Normal.avi,mirror,mirror-M11,M,glasses,none,normal,29.97003,14.98501,587,587,294,0,0.32644,0.17857,0.00728,0,0,0,0,0,0.0,0.00995,0.08186,0.12628
+Mirror/Male_mirror Avi Videos/11-MaleGlasses-Talking.avi,mirror,mirror-M11,M,glasses,none,talking,29.97003,14.98501,852,852,426,0,0.47381,0.19358,0.11194,0,0,0,0,0,0.0,0.06324,0.06392,0.07768
+Mirror/Male_mirror Avi Videos/11-MaleGlasses-Yawning.avi,mirror,mirror-M11,M,glasses,none,yawning,29.97003,14.98501,770,770,385,0,0.42821,0.52363,0.01164,0,1,1,1,1,4.47113,0.12234,0.1245,0.12443
+Mirror/Male_mirror Avi Videos/12-MaleGlasses-Normal.avi,mirror,mirror-M12,M,glasses,none,normal,29.97003,14.98501,644,644,322,31,0.35814,0.12868,0.00354,2,0,0,0,0,0.0,0.00254,0.00442,0.00543
+Mirror/Male_mirror Avi Videos/12-MaleGlasses-Talking.avi,mirror,mirror-M12,M,glasses,none,talking,29.97003,14.98501,1124,1124,562,6,0.62507,0.26958,0.0612,2,0,0,0,0,0.13347,0.09148,0.08681,0.08498
+Mirror/Male_mirror Avi Videos/12-MaleGlasses-Yawning.avi,mirror,mirror-M12,M,glasses,none,yawning,29.97003,14.98501,980,980,490,0,0.54499,0.36871,0.10109,2,2,4,2,4,5.67233,0.11416,0.11467,0.11247
+Mirror/Male_mirror Avi Videos/13-MaleGlasses-Normal.avi,mirror,mirror-M13,M,glasses,none,normal,29.97003,14.98501,554,554,277,0,0.30809,0.07085,0.01866,3,0,0,0,0,0.0,0.04844,0.02562,0.02304
+Mirror/Male_mirror Avi Videos/13-MaleGlasses-Talking.avi,mirror,mirror-M13,M,glasses,none,talking,29.97003,14.98501,753,753,377,0,0.41875,0.2155,0.0836,3,0,0,0,0,0.0,0.01239,0.02406,0.03304
+Mirror/Male_mirror Avi Videos/13-MaleGlasses-Yawning.avi,mirror,mirror-M13,M,glasses,none,yawning,29.97003,14.98501,213,213,107,0,0.11845,0.26545,0.05321,3,1,1,1,1,1.86853,0.01698,0.0168,0.02598
+Mirror/Male_mirror Avi Videos/14-MaleGlasses-Normal.avi,mirror,mirror-M14,M,glasses,none,normal,29.97003,14.98501,552,552,276,2,0.30697,0.05946,0.01602,4,0,0,0,0,0.0,0.01314,0.0062,0.00812
+Mirror/Male_mirror Avi Videos/14-MaleGlasses-Talking.avi,mirror,mirror-M14,M,glasses,none,talking,29.97003,14.98501,921,921,461,14,0.51218,0.15448,0.06848,4,0,0,0,0,0.0,0.07706,0.05482,0.05834
+Mirror/Male_mirror Avi Videos/15-MaleNoGlasses-Normal.avi,mirror,mirror-M15,M,none,none,normal,29.97003,14.98501,639,639,320,12,0.35536,0.16036,0.04904,2,0,0,0,0,0.0,0.08054,0.0791,0.07722
+Mirror/Male_mirror Avi Videos/15-MaleNoGlasses-Talking.avi,mirror,mirror-M15,M,none,none,talking,29.97003,14.98501,763,763,382,0,0.42431,0.24665,0.12887,2,0,0,0,0,0.0,0.09001,0.10826,0.10929
+Mirror/Male_mirror Avi Videos/15-MaleNoGlasses-Yawning.avi,mirror,mirror-M15,M,none,none,yawning,29.97003,14.98501,561,561,281,0,0.31198,0.47391,0.08495,2,2,2,2,2,4.07073,0.04427,0.05023,0.05562
+Mirror/Male_mirror Avi Videos/16-MaleNoGlasses-Normal.avi,mirror,mirror-M16,M,none,none,normal,29.97003,14.98501,576,576,288,0,0.32032,0.12907,0.05572,2,0,0,0,0,0.0,0.0383,0.03923,0.0384
+Mirror/Male_mirror Avi Videos/16-MaleNoGlasses-Talking.avi,mirror,mirror-M16,M,none,none,talking,29.97003,14.98501,263,263,132,1,0.14626,0.20239,0.1058,2,0,0,0,0,0.0,0.11398,0.09649,0.09466
+Mirror/Male_mirror Avi Videos/17-MaleNoGlasses-Normal.avi,mirror,mirror-M17,M,none,none,normal,29.97003,14.98501,532,532,266,0,0.29585,0.02541,0.00426,1,0,0,0,0,0.0,0.00597,0.00511,0.00614
+Mirror/Male_mirror Avi Videos/17-MaleNoGlasses-Talking.avi,mirror,mirror-M17,M,none,none,talking,29.97003,14.98501,956,956,478,0,0.53164,0.10829,0.02835,1,0,0,0,0,0.0,0.05323,0.04216,0.04147
+Mirror/Male_mirror Avi Videos/17-MaleNoGlasses-Yawning.avi,mirror,mirror-M17,M,none,none,yawning,29.97003,14.98501,570,570,285,0,0.31698,0.69258,0.04577,1,1,1,1,1,2.93627,0.00525,0.00883,0.00729
+Mirror/Male_mirror Avi Videos/18-MaleNoGlasses-Normal.avi,mirror,mirror-M18,M,none,none,normal,29.97003,14.98501,571,571,286,0,0.31754,0.03238,0.00907,0,0,0,0,0,0.0,0.00831,0.00865,0.01076
+Mirror/Male_mirror Avi Videos/18-MaleNoGlasses-Talking.avi,mirror,mirror-M18,M,none,none,talking,29.97003,14.98501,1029,1029,515,0,0.57224,0.19713,0.08734,0,0,0,0,0,0.0,0.07007,0.057,0.08067
+Mirror/Male_mirror Avi Videos/18-MaleNoGlasses-Yawning.avi,mirror,mirror-M18,M,none,none,yawning,29.97003,14.98501,525,525,263,0,0.29196,0.49503,0.01572,0,1,1,1,1,4.33767,0.00337,0.00372,0.0152
+Mirror/Male_mirror Avi Videos/19-MaleGlassesmoustache-Normal.avi,mirror,mirror-M19,M,glasses,moustache,normal,29.97003,14.98501,708,708,354,0,0.39373,0.12213,0.00652,3,0,0,0,0,0.0,0.00486,0.00704,0.00879
+Mirror/Male_mirror Avi Videos/19-MaleGlassesmoustache-Talking.avi,mirror,mirror-M19,M,glasses,moustache,talking,29.97003,14.98501,1207,1207,604,0,0.67123,0.20183,0.08552,3,0,0,0,0,0.0,0.10273,0.08251,0.0687
+Mirror/Male_mirror Avi Videos/19-MaleGlassesmoustache-Yawning.avi,mirror,mirror-M19,M,glasses,moustache,yawning,29.97003,14.98501,481,481,241,0,0.26749,0.6494,0.06064,3,1,1,1,1,2.4024,0.09259,0.08886,0.09442
+Mirror/Male_mirror Avi Videos/20-MaleGlasses-Normal.avi,mirror,mirror-M20,M,glasses,none,normal,29.97003,14.98501,808,808,404,0,0.44934,0.10314,0.00607,1,0,0,0,0,0.0,0.00227,0.00237,0.00954
+Mirror/Male_mirror Avi Videos/20-MaleGlasses-Talking&yawning.avi,mirror,mirror-M20,M,glasses,none,talking_yawning,29.97003,14.98501,1304,1304,652,0,0.72517,0.44517,0.016,1,2,2,2,2,2.53587,0.06926,0.05774,0.06913
+Mirror/Male_mirror Avi Videos/20-MaleGlasses-Talking.avi,mirror,mirror-M20,M,glasses,none,talking,29.97003,14.98501,832,832,416,0,0.46268,0.14021,0.02346,1,0,0,0,0,0.0,0.00152,0.00297,0.0037
+Mirror/Male_mirror Avi Videos/21-MaleGlasses-Normal.avi,mirror,mirror-M21,M,glasses,none,normal,29.97003,14.98501,592,592,296,0,0.32922,0.01352,0.00221,1,0,0,0,0,0.0,0.00358,0.00288,0.00258
+Mirror/Male_mirror Avi Videos/21-MaleGlasses-Talking.avi,mirror,mirror-M21,M,glasses,none,talking,29.97003,14.98501,1465,1465,733,0,0.8147,0.25389,0.05598,1,0,0,0,0,0.0,0.11458,0.10152,0.06333
+Mirror/Male_mirror Avi Videos/21-MaleGlasses-Yawning.avi,mirror,mirror-M21,M,glasses,none,yawning,29.97003,14.98501,585,585,293,2,0.32533,0.44734,0.00377,1,1,1,1,1,3.06973,0.00318,0.00246,0.00307
+Mirror/Male_mirror Avi Videos/22-MaleGlassesmoustache-Normal.avi,mirror,mirror-M22,M,glasses,moustache,normal,29.97003,14.98501,806,806,403,0,0.44823,0.0822,0.00798,3,0,0,0,0,0.0,0.00641,0.00662,0.00644
+Mirror/Male_mirror Avi Videos/22-MaleGlassesmoustache-Talking.avi,mirror,mirror-M22,M,glasses,moustache,talking,29.97003,14.98501,1023,1023,512,0,0.5689,0.14305,0.05528,3,0,0,0,0,0.0,0.00724,0.00667,0.00762
+Mirror/Male_mirror Avi Videos/22-MaleGlassesmoustache-Yawning.avi,mirror,mirror-M22,M,glasses,moustache,yawning,29.97003,14.98501,973,973,487,3,0.5411,0.57199,0.2579,3,4,3,4,3,6.33967,0.00751,0.00897,0.00935
+Mirror/Male_mirror Avi Videos/23-MaleGlassesBeard-Normal.avi,mirror,mirror-M23,M,glasses,beard,normal,29.97003,14.98501,682,682,341,0,0.37927,0.06865,0.00546,4,0,0,0,0,0.0,0.00633,0.00613,0.00611
+Mirror/Male_mirror Avi Videos/23-MaleGlassesBeard-Talking&Yawning.avi,mirror,mirror-M23,M,glasses,beard,talking_yawning,29.97003,14.98501,461,461,231,0,0.25637,0.43408,0.02816,4,1,1,1,1,1.93527,0.00512,0.10845,0.2831
+Mirror/Male_mirror Avi Videos/23-MaleGlassesBeard-Talking.avi,mirror,mirror-M23,M,glasses,beard,talking,29.97003,14.98501,703,703,352,0,0.39095,0.08726,0.01132,4,0,0,0,0,0.0,0.00581,0.0305,0.00874
+Mirror/Male_mirror Avi Videos/23-MaleGlassesBeard-Yawning.avi,mirror,mirror-M23,M,glasses,beard,yawning,29.97003,14.98501,734,734,367,0,0.40819,0.51369,0.01968,4,3,3,3,3,2.53587,0.00388,0.00364,0.00365
+Mirror/Male_mirror Avi Videos/23-MaleNoGlasses-Normal.avi,mirror,mirror-M23,M,none,none,normal,29.97003,14.98501,620,620,310,0,0.34479,0.09131,0.00415,4,0,0,0,0,0.0,0.00392,0.00448,0.00508
+Mirror/Male_mirror Avi Videos/23-MaleNoGlasses-Talking.avi,mirror,mirror-M23,M,none,none,talking,29.97003,14.98501,761,761,381,0,0.4232,0.20069,0.05437,4,0,0,0,0,0.0,0.04399,0.05812,0.0656
+Mirror/Male_mirror Avi Videos/23-MaleNoGlasses-Yawning.avi,mirror,mirror-M23,M,none,none,yawning,29.97003,14.98501,775,775,388,0,0.43099,0.60089,0.01854,4,2,2,2,2,1.93527,0.00256,0.00261,0.00255
+Mirror/Male_mirror Avi Videos/24-MaleGlasses-Normal.avi,mirror,mirror-M24,M,glasses,none,normal,29.97003,14.98501,794,794,397,3,0.44155,0.07796,0.00425,4,0,0,0,0,0.0,0.00364,0.00351,0.00388
+Mirror/Male_mirror Avi Videos/24-MaleGlasses-Talking.avi,mirror,mirror-M24,M,glasses,none,talking,29.97003,14.98501,1248,1248,624,0,0.69403,0.32487,0.10895,4,0,1,0,0,0.4004,0.00362,0.04933,0.05367
+Mirror/Male_mirror Avi Videos/24-MaleGlasses-Yawning.avi,mirror,mirror-M24,M,glasses,none,yawning,29.97003,14.98501,774,774,387,0,0.43043,0.35912,0.00249,4,1,2,1,2,1.33467,0.00312,0.00284,0.00277
+Mirror/Male_mirror Avi Videos/25-MaleGlasses-Normal.avi,mirror,mirror-M25,M,glasses,none,normal,29.97003,14.98501,804,804,402,0,0.44711,0.01838,0.00454,1,0,0,0,0,0.0,0.00348,0.00401,0.00554
+Mirror/Male_mirror Avi Videos/25-MaleGlasses-Talking.avi,mirror,mirror-M25,M,glasses,none,talking,29.97003,14.98501,1127,1127,564,0,0.62674,0.32926,0.14669,1,0,0,0,0,0.06673,0.09063,0.10776,0.11666
+Mirror/Male_mirror Avi Videos/25-MaleGlasses-Yawning.avi,mirror,mirror-M25,M,glasses,none,yawning,29.97003,14.98501,509,509,255,0,0.28306,0.52528,0.00646,1,1,1,1,1,1.66833,0.00537,0.00677,0.00663
+Mirror/Male_mirror Avi Videos/25-MaleSunGlasses-Normal.avi,mirror,mirror-M25,M,sunglasses,none,normal,29.97003,14.98501,530,530,265,0,0.29474,0.01966,0.00644,1,0,0,0,0,0.0,0.00707,0.00814,0.00683
+Mirror/Male_mirror Avi Videos/25-MaleSunGlasses-Talking.avi,mirror,mirror-M25,M,sunglasses,none,talking,29.97003,14.98501,866,866,433,0,0.48159,0.20064,0.08724,1,0,0,0,0,0.0,0.00934,0.02844,0.03199
+Mirror/Male_mirror Avi Videos/25-MaleSunGlasses-Yawning.avi,mirror,mirror-M25,M,sunglasses,none,yawning,29.97003,14.98501,464,464,232,1,0.25804,0.46823,0.00755,1,1,1,1,1,3.87053,0.00654,0.0069,0.00784
+Mirror/Male_mirror Avi Videos/26-MaleNoGlasses-Normal.avi,mirror,mirror-M26,M,none,none,normal,29.97003,14.98501,544,544,272,0,0.30252,0.00851,0.00292,4,0,0,0,0,0.0,0.0025,0.00181,0.0025
+Mirror/Male_mirror Avi Videos/26-MaleNoGlasses-Talking.avi,mirror,mirror-M26,M,none,none,talking,29.97003,14.98501,1057,1057,529,0,0.58781,0.15438,0.04474,4,0,0,0,0,0.0,0.00213,0.03268,0.04836
+Mirror/Male_mirror Avi Videos/26-MaleNoGlasses-Yawning.avi,mirror,mirror-M26,M,none,none,yawning,29.97003,14.98501,549,549,275,0,0.30531,0.52007,0.00325,4,1,1,1,1,3.003,0.00145,0.00169,0.00231
+Mirror/Male_mirror Avi Videos/27-MaleGlasses-Normal.avi,mirror,mirror-M27,M,glasses,none,normal,29.97003,14.98501,527,527,264,0,0.29307,0.04232,0.00624,4,0,0,0,0,0.0,0.00432,0.00141,0.00324
+Mirror/Male_mirror Avi Videos/27-MaleGlasses-Talking.avi,mirror,mirror-M27,M,glasses,none,talking,29.97003,14.98501,684,684,342,0,0.38038,0.26455,0.09796,4,0,1,0,1,0.13347,0.00576,0.00619,0.05555
+Mirror/Male_mirror Avi Videos/27-MaleGlasses-Yawning.avi,mirror,mirror-M27,M,glasses,none,yawning,29.97003,14.98501,500,500,250,0,0.27806,0.5076,0.02372,4,1,1,1,1,2.4024,0.02683,0.06425,0.03769
+Mirror/Male_mirror Avi Videos/27-MaleNoGlasses-Normal.avi,mirror,mirror-M27,M,none,none,normal,29.97003,14.98501,512,512,256,0,0.28473,0.06506,0.00685,4,0,0,0,0,0.0,0.04569,0.02067,0.01936
+Mirror/Male_mirror Avi Videos/27-MaleNoGlasses-Talking.avi,mirror,mirror-M27,M,none,none,talking,29.97003,14.98501,530,530,265,0,0.29474,0.24032,0.06722,4,0,0,0,0,0.0,0.00396,0.0068,0.01637
+Mirror/Male_mirror Avi Videos/27-MaleNoGlasses-Yawning.avi,mirror,mirror-M27,M,none,none,yawning,29.97003,14.98501,514,514,257,0,0.28584,0.47247,0.01823,4,1,1,1,1,2.26893,0.00546,0.00537,0.00546
+Mirror/Male_mirror Avi Videos/28-MaleGlasses-Normal.avi,mirror,mirror-M28,M,glasses,none,normal,29.97003,14.98501,655,655,328,4,0.36425,0.18873,0.00488,1,0,0,0,0,0.0,0.00453,0.00481,0.0048
+Mirror/Male_mirror Avi Videos/28-MaleGlasses-Talking.avi,mirror,mirror-M28,M,glasses,none,talking,29.97003,14.98501,655,655,328,0,0.36425,0.16869,0.00594,1,0,0,0,0,0.0,0.00541,0.00531,0.00554
+Mirror/Male_mirror Avi Videos/28-MaleGlasses-Yawning.avi,mirror,mirror-M28,M,glasses,none,yawning,29.97003,14.98501,794,794,397,5,0.44155,0.66437,0.00679,1,1,2,1,3,3.4034,0.00616,0.0058,0.0058
+Mirror/Male_mirror Avi Videos/28-MaleNoGlasses-Normal.avi,mirror,mirror-M28,M,none,none,normal,29.97003,14.98501,540,540,270,0,0.3003,0.21014,0.00329,1,0,0,0,0,0.0,0.10121,0.127,0.08624
+Mirror/Male_mirror Avi Videos/28-MaleNoGlasses-Talking.avi,mirror,mirror-M28,M,none,none,talking,29.97003,14.98501,842,842,421,0,0.46825,0.23268,0.00484,1,0,0,0,0,0.0,0.00287,0.00291,0.00296
+Mirror/Male_mirror Avi Videos/28-MaleNoGlasses-Yawning.avi,mirror,mirror-M28,M,none,none,yawning,29.97003,14.98501,483,483,242,4,0.2686,0.69019,0.00428,1,1,1,1,1,3.26993,0.0029,0.00304,0.00307
+Mirror/Male_mirror Avi Videos/29-MaleNoGlasses-Normal.avi,mirror,mirror-M29,M,none,none,normal,29.97003,14.98501,712,712,356,0,0.39595,0.06803,0.00388,1,0,0,0,0,0.0,0.00592,0.00505,0.00442
+Mirror/Male_mirror Avi Videos/29-MaleNoGlasses-Talking.avi,mirror,mirror-M29,M,none,none,talking,29.97003,14.98501,899,899,450,11,0.49994,0.2835,0.09404,1,0,1,0,0,0.73407,0.02866,0.09875,0.0907
+Mirror/Male_mirror Avi Videos/29-MaleNoGlasses-Yawning.avi,mirror,mirror-M29,M,none,none,yawning,29.97003,14.98501,559,559,280,0,0.31087,0.53489,0.00421,1,1,2,2,2,1.53487,0.00279,0.00262,0.00253
+Mirror/Male_mirror Avi Videos/30-MaleGlasses-Normal.avi,mirror,mirror-M30,M,glasses,none,normal,29.97003,14.98501,616,616,308,0,0.34256,0.02061,0.00354,2,0,0,0,0,0.0,0.0045,0.00464,0.00527
+Mirror/Male_mirror Avi Videos/30-MaleGlasses-Talking&Yawning.avi,mirror,mirror-M30,M,glasses,none,talking_yawning,29.97003,14.98501,624,624,312,0,0.34701,0.55845,0.03151,2,1,1,1,1,3.53687,0.00507,0.00374,0.00375
+Mirror/Male_mirror Avi Videos/30-MaleGlasses-Talking.avi,mirror,mirror-M30,M,glasses,none,talking,29.97003,14.98501,982,982,491,0,0.5461,0.17249,0.0498,2,0,0,0,0,0.0,0.03787,0.00958,0.02609
+Mirror/Male_mirror Avi Videos/30-MaleGlasses-Yawning.avi,mirror,mirror-M30,M,glasses,none,yawning,29.97003,14.98501,536,536,268,8,0.29808,0.57149,0.00544,2,1,1,1,1,2.002,0.04164,0.0265,0.00864
+Mirror/Male_mirror Avi Videos/31-MaleGlasses-Normal.avi,mirror,mirror-M31,M,glasses,none,normal,29.97003,14.98501,636,636,318,34,0.35369,0.26185,0.04044,3,0,1,0,1,0.2002,0.00977,0.0076,0.01059
+Mirror/Male_mirror Avi Videos/31-MaleGlasses-Talking.avi,mirror,mirror-M31,M,glasses,none,talking,29.97003,14.98501,886,886,443,0,0.49271,0.26634,0.10273,3,0,0,0,0,0.06673,0.12119,0.10916,0.10668
+Mirror/Male_mirror Avi Videos/31-MaleGlasses-Yawning.avi,mirror,mirror-M31,M,glasses,none,yawning,29.97003,14.98501,499,499,250,0,0.2775,0.46385,0.29899,3,1,1,1,1,8.87553,0.05483,0.18654,0.25965
+Mirror/Male_mirror Avi Videos/32-MaleGlasses-Normal.avi,mirror,mirror-M32,M,glasses,none,normal,29.97003,14.98501,733,733,367,0,0.40763,0.01575,0.00224,2,0,0,0,0,0.0,0.00236,0.00261,0.00255
+Mirror/Male_mirror Avi Videos/32-MaleGlasses-Talking&Yawning.avi,mirror,mirror-M32,M,glasses,none,talking_yawning,29.97003,14.98501,636,636,318,0,0.35369,0.43462,0.03591,2,1,1,1,1,5.4054,0.0039,0.00374,0.00437
+Mirror/Male_mirror Avi Videos/32-MaleGlasses-Talking.avi,mirror,mirror-M32,M,glasses,none,talking,29.97003,14.98501,516,516,258,0,0.28695,0.17642,0.06451,2,0,0,0,0,0.0,0.00256,0.00565,0.03302
+Mirror/Male_mirror Avi Videos/32-MaleGlasses-Yawning.avi,mirror,mirror-M32,M,glasses,none,yawning,29.97003,14.98501,633,633,317,0,0.35202,0.51909,0.00356,2,1,1,1,1,5.93927,0.00182,0.0023,0.00216
+Mirror/Male_mirror Avi Videos/33-MaleGlasses-Normal.avi,mirror,mirror-M33,M,glasses,none,normal,29.97003,14.98501,736,736,368,0,0.4093,0.05865,0.00281,2,0,0,0,0,0.0,0.03408,0.02079,0.00953
+Mirror/Male_mirror Avi Videos/33-MaleGlasses-Talking&Yawning.avi,mirror,mirror-M33,M,glasses,none,talking_yawning,29.97003,14.98501,504,504,252,0,0.28028,0.26347,0.01925,2,0,1,0,1,0.73407,0.00206,0.00188,0.00278
+Mirror/Male_mirror Avi Videos/33-MaleGlasses-Talking.avi,mirror,mirror-M33,M,glasses,none,talking,29.97003,14.98501,875,875,438,0,0.4866,0.14208,0.03246,2,0,0,0,0,0.0,0.06028,0.06375,0.05543
+Mirror/Male_mirror Avi Videos/33-MaleGlasses-Yawning.avi,mirror,mirror-M33,M,glasses,none,yawning,29.97003,14.98501,590,590,295,0,0.32811,0.40964,0.00473,2,1,1,1,1,2.2022,0.0019,0.00344,0.00389
+Mirror/Male_mirror Avi Videos/34-MaleNoGlasses-Normal.avi,mirror,mirror-M34,M,none,none,normal,29.97003,14.98501,689,689,345,0,0.38316,0.10058,0.00796,2,0,0,0,0,0.0,0.06648,0.02992,0.00291
+Mirror/Male_mirror Avi Videos/34-MaleNoGlasses-Talking.avi,mirror,mirror-M34,M,none,none,talking,29.97003,14.98501,1224,1224,612,0,0.68068,0.20601,0.06144,2,0,0,0,0,0.0,0.00713,0.05182,0.04366
+Mirror/Male_mirror Avi Videos/34-MaleNoGlasses-Yawning.avi,mirror,mirror-M34,M,none,none,yawning,29.97003,14.98501,670,670,335,0,0.37259,0.31933,0.06354,2,1,1,1,1,1.66833,0.09191,0.09648,0.1208
+Mirror/Male_mirror Avi Videos/35-MaleNoGlasses-Normal.avi,mirror,mirror-M35,M,none,none,normal,29.97003,14.98501,474,474,237,0,0.2636,0.08341,0.0052,4,0,0,0,0,0.0,0.00386,0.00512,0.00386
+Mirror/Male_mirror Avi Videos/35-MaleNoGlasses-Talking.avi,mirror,mirror-M35,M,none,none,talking,29.97003,14.98501,875,875,438,0,0.4866,0.22178,0.07473,4,0,0,0,0,0.0,0.20777,0.19509,0.18997
+Mirror/Male_mirror Avi Videos/35-MaleNoGlasses-Yawning.avi,mirror,mirror-M35,M,none,none,yawning,29.97003,14.98501,520,520,260,0,0.28918,0.37395,0.00572,4,0,0,0,1,0.73407,0.00708,0.00695,0.00594
+Mirror/Male_mirror Avi Videos/36-MaleNoGlasses-Normal.avi,mirror,mirror-M36,M,none,none,normal,29.97003,14.98501,516,516,258,0,0.28695,0.1028,0.04035,3,0,0,0,0,0.0,0.00425,0.016,0.04668
+Mirror/Male_mirror Avi Videos/36-MaleNoGlasses-Talking.avi,mirror,mirror-M36,M,none,none,talking,29.97003,14.98501,608,608,304,0,0.33812,0.19701,0.09995,3,0,0,0,0,0.0,0.08,0.07947,0.07961
+Mirror/Male_mirror Avi Videos/36-MaleNoGlasses-Yawning.avi,mirror,mirror-M36,M,none,none,yawning,29.97003,14.98501,429,429,215,0,0.23857,0.36629,0.00985,3,1,1,1,1,1.53487,0.07405,0.031,0.02473
+Mirror/Male_mirror Avi Videos/36-MaleSunGlasses-Normal.avi,mirror,mirror-M36,M,sunglasses,none,normal,29.97003,14.98501,740,740,370,0,0.41152,0.07952,0.00329,3,0,0,0,0,0.0,0.07226,0.06307,0.03962
+Mirror/Male_mirror Avi Videos/36-MaleSunGlasses-Talking.avi,mirror,mirror-M36,M,sunglasses,none,talking,29.97003,14.98501,973,973,487,0,0.5411,0.20551,0.07292,3,0,0,0,0,0.0,0.07649,0.0855,0.08218
+Mirror/Male_mirror Avi Videos/36-MaleSunGlasses-Yawning.avi,mirror,mirror-M36,M,sunglasses,none,yawning,29.97003,14.98501,446,446,223,0,0.24803,0.37006,0.06873,3,1,1,1,1,2.002,0.04942,0.04817,0.04545
+Mirror/Male_mirror Avi Videos/37-MaleNoGlasses-Normal.avi,mirror,mirror-M37,M,none,none,normal,29.97003,14.98501,540,540,270,0,0.3003,0.13506,0.00855,2,0,0,0,0,0.0,0.06804,0.03969,0.02468
+Mirror/Male_mirror Avi Videos/37-MaleNoGlasses-Talking.avi,mirror,mirror-M37,M,none,none,talking,29.97003,14.98501,1108,1108,554,0,0.61617,0.26206,0.05784,2,0,0,0,0,0.06673,0.11334,0.125,0.1117
+Mirror/Male_mirror Avi Videos/37-MaleNoGlasses-Yawning.avi,mirror,mirror-M37,M,none,none,yawning,29.97003,14.98501,459,459,230,6,0.25526,0.57034,0.02656,2,1,1,1,1,5.2052,0.10446,0.08043,0.01486
+Mirror/Male_mirror Avi Videos/38-MaleNoGlasses-Normal.avi,mirror,mirror-M38,M,none,none,normal,29.97003,14.98501,618,618,309,0,0.34368,0.04599,0.00426,4,0,0,0,0,0.0,0.0031,0.00291,0.0031
+Mirror/Male_mirror Avi Videos/38-MaleNoGlasses-Talking.avi,mirror,mirror-M38,M,none,none,talking,29.97003,14.98501,759,759,380,0,0.42209,0.12837,0.0446,4,0,0,0,0,0.0,0.00294,0.00376,0.00353
+Mirror/Male_mirror Avi Videos/38-MaleNoGlasses-Yawning.avi,mirror,mirror-M38,M,none,none,yawning,29.97003,14.98501,460,460,230,0,0.25581,0.4215,0.04282,4,1,1,1,1,2.46913,0.05537,0.03946,0.04055
+Mirror/Male_mirror Avi Videos/38-MaleSunGlasses-Normal.avi,mirror,mirror-M38,M,sunglasses,none,normal,29.97003,14.98501,567,567,284,0,0.31532,0.01488,0.0033,4,0,0,0,0,0.0,0.00372,0.00458,0.00429
+Mirror/Male_mirror Avi Videos/38-MaleSunGlasses-Talking.avi,mirror,mirror-M38,M,sunglasses,none,talking,29.97003,14.98501,877,877,439,0,0.48771,0.10069,0.03389,4,0,0,0,0,0.0,0.00191,0.00551,0.00686
+Mirror/Male_mirror Avi Videos/38-MaleSunGlasses-Yawning.avi,mirror,mirror-M38,M,sunglasses,none,yawning,29.97003,14.98501,447,447,224,0,0.24858,0.33559,0.02362,4,1,1,1,1,2.002,0.0525,0.04004,0.0329
+Mirror/Male_mirror Avi Videos/39-MaleGlasses-Normal.avi,mirror,mirror-M39,M,glasses,none,normal,29.97003,14.98501,797,797,399,0,0.44322,0.05465,0.00351,0,0,0,0,0,0.0,0.00596,0.00849,0.00456
+Mirror/Male_mirror Avi Videos/39-MaleGlasses-Talking.avi,mirror,mirror-M39,M,glasses,none,talking,29.97003,14.98501,1519,1519,760,0,0.84473,0.15586,0.02412,0,0,0,0,0,0.0,0.00213,0.00242,0.00253
+Mirror/Male_mirror Avi Videos/39-MaleGlasses-Yawning.avi,mirror,mirror-M39,M,glasses,none,yawning,29.97003,14.98501,800,800,400,0,0.44489,0.4744,0.01234,0,2,2,2,2,2.6026,0.00304,0.00253,0.00243
+Mirror/Male_mirror Avi Videos/40-MaleNoGlasses-Normal.avi,mirror,mirror-M40,M,none,none,normal,29.97003,14.98501,726,726,363,0,0.40374,0.03143,0.008,2,0,0,0,0,0.0,0.00891,0.00906,0.00861
+Mirror/Male_mirror Avi Videos/40-MaleNoGlasses-Talking.avi,mirror,mirror-M40,M,none,none,talking,29.97003,14.98501,1208,1208,604,0,0.67178,0.27504,0.02312,2,0,0,0,0,0.73407,0.14075,0.13194,0.1168
+Mirror/Male_mirror Avi Videos/40-MaleNoGlasses-Yawning.avi,mirror,mirror-M40,M,none,none,yawning,29.97003,14.98501,657,657,329,0,0.36537,0.42056,0.01077,2,1,1,1,1,3.67033,0.01077,0.00686,0.01077
+Mirror/Male_mirror Avi Videos/41-MaleNoGlasses-Normal.avi,mirror,mirror-M41,M,none,none,normal,29.97003,14.98501,896,896,448,0,0.49828,0.13847,0.00958,0,0,0,0,0,0.0,0.08277,0.01548,0.00505
+Mirror/Male_mirror Avi Videos/41-MaleNoGlasses-Talking.avi,mirror,mirror-M41,M,none,none,talking,29.97003,14.98501,1002,1002,501,0,0.55722,0.13347,0.04509,0,0,0,0,0,0.0,0.10564,0.07594,0.07015
+Mirror/Male_mirror Avi Videos/41-MaleNoGlasses-Yawning.avi,mirror,mirror-M41,M,none,none,yawning,29.97003,14.98501,600,600,300,0,0.33367,0.38779,0.01532,0,1,1,1,1,2.4024,0.05193,0.05069,0.0371
+Mirror/Male_mirror Avi Videos/42-MaleNoGlasses-Normal.avi,mirror,mirror-M42,M,none,none,normal,29.97003,14.98501,692,692,346,0,0.38483,0.0376,0.00453,4,0,0,0,0,0.0,0.00302,0.00313,0.00312
+Mirror/Male_mirror Avi Videos/42-MaleNoGlasses-Talking.avi,mirror,mirror-M42,M,none,none,talking,29.97003,14.98501,1367,1367,684,20,0.7602,0.18345,0.01361,4,0,1,0,0,0.0,0.00214,0.00324,0.00322
+Mirror/Male_mirror Avi Videos/42-MaleNoGlasses-Yawning.avi,mirror,mirror-M42,M,none,none,yawning,29.97003,14.98501,685,685,343,0,0.38094,0.40391,0.00561,4,1,1,1,1,2.6026,0.00537,0.00572,0.00576
+Mirror/Male_mirror Avi Videos/43-MaleNoGlasses-Normal.avi,mirror,mirror-M43,M,none,none,normal,29.97003,14.98501,754,754,377,5,0.41931,0.13079,0.00282,0,0,0,0,0,0.0,0.00565,0.00224,0.0056
+Mirror/Male_mirror Avi Videos/43-MaleNoGlasses-Talking.avi,mirror,mirror-M43,M,none,none,talking,29.97003,14.98501,1140,1140,570,0,0.63397,0.16204,0.0198,0,0,0,0,0,0.0,0.00505,0.02691,0.03688
+Mirror/Male_mirror Avi Videos/43-MaleNoGlasses-Yawning.avi,mirror,mirror-M43,M,none,none,yawning,29.97003,14.98501,640,640,320,0,0.35591,0.33885,0.0042,0,0,1,0,1,0.66733,0.00294,0.00305,0.00317
+Mirror/Male_mirror Avi Videos/44-MaleNoGlasses-Normal.avi,mirror,mirror-M44,M,none,none,normal,29.97003,14.98501,696,696,348,11,0.38705,0.03734,0.00704,4,0,0,0,0,0.0,0.00605,0.00602,0.00634
+Mirror/Male_mirror Avi Videos/44-MaleNoGlasses-Talking.avi,mirror,mirror-M44,M,none,none,talking,29.97003,14.98501,803,803,402,0,0.44656,0.18237,0.02289,4,0,0,0,0,0.0,0.00722,0.00944,0.00937
+Mirror/Male_mirror Avi Videos/44-MaleNoGlasses-Yawning.avi,mirror,mirror-M44,M,none,none,yawning,29.97003,14.98501,729,729,365,3,0.40541,0.49782,0.01021,4,2,2,2,2,2.6026,0.01679,0.00799,0.0155
+Mirror/Male_mirror Avi Videos/45-MaleNoGlasses-Normal.avi,mirror,mirror-M45,M,none,none,normal,29.97003,14.98501,661,661,331,18,0.36759,0.11659,0.00393,3,0,0,0,0,0.0,0.08115,0.05324,0.01585
+Mirror/Male_mirror Avi Videos/45-MaleNoGlasses-Talking.avi,mirror,mirror-M45,M,none,none,talking,29.97003,14.98501,1032,1032,516,33,0.57391,0.37449,0.14192,3,0,0,0,0,0.53387,0.00294,0.07419,0.13358
+Mirror/Male_mirror Avi Videos/45-MaleNoGlasses-Yawning.avi,mirror,mirror-M45,M,none,none,yawning,29.97003,14.98501,668,668,334,0,0.37148,0.73277,0.00677,3,2,2,2,2,2.4024,0.00225,0.00379,0.00525
+Mirror/Male_mirror Avi Videos/46-MaleGlasses-Normal.avi,mirror,mirror-M46,M,glasses,none,normal,29.97003,14.98501,614,614,307,18,0.34145,0.27567,0.07179,3,0,0,0,0,0.13347,0.15996,0.09167,0.09439
+Mirror/Male_mirror Avi Videos/46-MaleGlasses-Talking.avi,mirror,mirror-M46,M,glasses,none,talking,29.97003,14.98501,493,493,247,20,0.27416,0.33676,0.09607,3,0,0,0,0,0.0,0.1143,0.1281,0.11121
+Mirror/Male_mirror Avi Videos/46-MaleGlasses-Yawning.avi,mirror,mirror-M46,M,glasses,none,yawning,29.97003,14.98501,581,581,291,15,0.3231,0.5906,0.02893,3,1,1,1,1,2.6026,0.00568,0.00519,0.0083
+Mirror/Male_mirror Avi Videos/47-MaleNoGlasses-Normal.avi,mirror,mirror-M47,M,none,none,normal,29.97003,14.98501,711,711,356,36,0.3954,0.24222,0.00414,3,0,0,0,0,0.0,0.00843,0.00949,0.00929
+Mirror/Male_mirror Avi Videos/47-MaleNoGlasses-Talking.avi,mirror,mirror-M47,M,none,none,talking,29.97003,14.98501,1110,1110,555,23,0.61728,0.39005,0.03149,3,0,0,0,0,0.06673,0.00282,0.00423,0.00442
+Mirror/Male_mirror Avi Videos/47-MaleNoGlasses-Yawning.avi,mirror,mirror-M47,M,none,none,yawning,29.97003,14.98501,543,543,272,3,0.30197,0.57329,0.00529,3,1,1,1,1,1.8018,0.00391,0.00427,0.0043

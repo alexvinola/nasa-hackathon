@@ -166,10 +166,13 @@
     },
     "yawdd": {
       "type": "dataset",
-      "title": "YawDD yawning detection dataset",
+      "title": "Abtahi, Omidyeganeh, Shirmohammadi & Hariri (2014), YawDD: A Yawning Detection Dataset, Proc. ACM Multimedia Systems, Singapore",
       "url": "https://ieee-dataport.org/open-access/yawdd-yawning-detection-dataset",
       "findings": [
-        "Videos of drivers talking, singing and yawning; validates yawn detection"
+        "349 videos as downloaded: 320 Mirror with one label per video (105 Normal, 100 Talking, 102 Yawning, 13 Talking&Yawning; 90 participants) and 29 Dash without time labels; 640x480, 30 fps, no audio",
+        "Licence: non-commercial research only; the publication must be cited; screenshots only for videos whose table row allows it",
+        "Yawn detector calibrated on the Mirror set with leave-subject-out validation (make yawns, data/out/yawn_metrics.json): mouth opening ratio >= 0.26 held for >= 1.0 s; out of fold 88/102 Yawning videos detected, 3/100 Talking and 0/105 Normal videos with a false yawn",
+        "Acted yawns by drivers in cars with per-video labels: it measures yawn-vs-talking separation, not drowsiness, and not laptop-webcam geometry"
       ]
     },
     "mrl-eye": {

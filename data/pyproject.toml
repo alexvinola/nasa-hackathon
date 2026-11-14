@@ -1,0 +1,27 @@
+[project]
+name = "pulsar-data"
+version = "0.1.0"
+description = "PULSAR data pipelines: MediaPipe feature extraction in Python, mirroring the browser worker."
+requires-python = ">=3.12,<3.13"
+# Exact pins: the measured numbers in out/ were produced with these versions (uv.lock pins the rest).
+# mediapipe itself depends on opencv-contrib-python; both OpenCV wheels provide the same `cv2`
+# module, so they are pinned to the same version.
+dependencies = [
+    "mediapipe==1.2.3",
+    "numpy==2.5.4",
+    "opencv-python==5.0.0.93",
+    "opencv-contrib-python==5.0.0.93",
+    "pandas==3.1.1",
+]
+
+[tool.uv]
+package = false
+
+[dependency-groups]
+dev = [
+    "pytest==9.2.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

@@ -11,7 +11,7 @@ SHELL := $(GIT_BASH)
 endif
 endif
 .SHELLFLAGS := -eu -o pipefail -c
-.PHONY: goals contract sources model start prefetch $(addprefix check-G,0 1 2 3 4 5 6 7 8)
+.PHONY: goals contract sources model yawns start prefetch $(addprefix check-G,0 1 2 3 4 5 6 7 8)
 
 BACKEND_TEST := cd backend && uv run --quiet pytest -q -p no:cacheprovider
 FRONT_UNIT   := cd frontend && pnpm -s vitest run
@@ -69,6 +69,11 @@ check-G8:
 model:
 	@$(call need,data/pyproject.toml data/pipeline.py)
 	@cd data && uv run --quiet python pipeline.py
+
+# Yawn detector calibrated on YawDD (data/raw/yawdd/, downloaded by hand): writes data/out/yawn_*.
+yawns:
+	@$(call need,data/pyproject.toml data/raw/yawdd)
+	@cd data && uv run --quiet python -m pulsar_vision.yawdd
 
 start:
 	@./start_synapse

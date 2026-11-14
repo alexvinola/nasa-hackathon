@@ -7,6 +7,9 @@ __pycache__/
 node_modules/
 .next/
 out/
+# measured results the pitch may quote (yawn calibration, G2 metrics) are versioned; smoke runs are not
+!data/out/
+data/out/smoke/
 frontend/test-results/
 frontend/playwright-report/
 
