@@ -19,9 +19,11 @@ export async function transcribe(audio: Blob): Promise<string> {
 
 let playing: HTMLAudioElement | null = null;
 let turn = 0;
+let request: AbortController | null = null;
 
 export function stopSpeaking() {
   turn++;
+  request?.abort(); // do not leave Piper synthesising a line nobody will hear
   playing?.pause();
   playing = null;
 }
@@ -30,12 +32,21 @@ export function stopSpeaking() {
 export async function speak(text: string): Promise<void> {
   stopSpeaking();
   const mine = turn;
-  const response = await call("/tts", {
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ text: text.slice(0, 600) }), // the backend's limit
-  });
-  const url = URL.createObjectURL(await response.blob());
-  if (mine !== turn) return URL.revokeObjectURL(url); // superseded while Piper was synthesising
+  request = new AbortController();
+  let wav: Blob;
+  try {
+    const response = await call("/tts", {
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: text.slice(0, 600) }), // the backend's limit
+      signal: request.signal,
+    });
+    wav = await response.blob();
+  } catch (error) {
+    if (mine !== turn) return; // superseded: the abort is ours, not a backend failure
+    throw error;
+  }
+  if (mine !== turn) return;
+  const url = URL.createObjectURL(wav);
   playing = new Audio(url);
   playing.onended = playing.onpause = () => URL.revokeObjectURL(url);
   await playing.play().catch((error: DOMException) => {
@@ -67,7 +78,9 @@ export async function describeFrame(video: HTMLVideoElement): Promise<string> {
   const canvas = document.createElement("canvas");
   canvas.width = 640; // enough for a scene description and keeps the model fast
   canvas.height = Math.round((640 * video.videoHeight) / video.videoWidth);
-  canvas.getContext("2d")!.drawImage(video, 0, 0, canvas.width, canvas.height);
+  const ctx = canvas.getContext("2d")!;
+  ctx.setTransform(-1, 0, 0, 1, canvas.width, 0); // mirrored like the HUD, so "left" and "right" match what the user sees
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
   const frame = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.7));
   if (!frame) throw new Error("Could not read the camera frame");
   return (await (await call("/vision/describe", { body: frame })).json()).description;
