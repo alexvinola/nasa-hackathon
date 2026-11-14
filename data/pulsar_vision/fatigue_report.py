@@ -56,6 +56,184 @@ def confusion(matrix: list[list[int]]) -> str:
     return table(header, rows)
 
 
+def signed(value, digits: int = 2) -> str:
+    return "n/a" if value is None else f"{value:+.{digits}f}"
+
+
+def pvt_summary(metrics: dict) -> str:
+    """The PVT line of "In short"."""
+    dz = metrics.get("drozy_validation")
+    if not dz:
+        return f"- **PVT.** Not measured: {metrics['pvt_correlation_note']}\n"
+    h = dz["headline"]
+    recording = dz["results"]["per_recording"]
+    within = dz["results"]["within_subject"]
+    pvt = "pvt_mean_rt_ms"
+
+    def per_test(signal: str) -> str:
+        c = recording[signal][pvt]
+        return f"{signed(c['spearman'])} (Pearson {signed(c['r'])})"
+
+    w = within["fatigue_score"][pvt]["r"]
+    return (
+        f"- **PVT, on people the model never saw (DROZY, {CITATION_SHORT}).** `pvt_correlation` = **{signed(h['value'])}**: Spearman correlation, one point per "
+        f"test ({h['n_recordings']} tests of {dz['dataset']['subjects_scored']} people), between the mean `fatigueScore` and the mean PVT reaction time "
+        f"(Pearson {signed(h['pearson_r'])}). PERCLOS alone: {per_test('perclos')}; the former formula: {per_test('browser_formula')}. "
+        f"Within each person, window by window, the score's correlation with reaction time has median {signed(w['median'])} "
+        f"({signed(w['min'])} to {signed(w['max'])}), positive in {w['positive']} of {w['subjects']} people. Near-infrared video and no interval: see the DROZY section.\n"
+    )
+
+
+CITATION_SHORT = "Massoz et al. 2016, WACV"
+SIGNAL_TITLE = {"fatigue_score": "model `fatigueScore`", "perclos": "PERCLOS alone", "browser_formula": "former browser formula"}
+
+
+def drozy_section(dz: dict, rldd_score: dict) -> list[str]:
+    """The DROZY validation: every number from ``drozy_validation``; KSS figures carry the note that KSS is not registered."""
+    out: list[str] = []
+    add = out.append
+    data = dz["dataset"]
+    results = dz["results"]
+    h = dz["headline"]
+    pvt, kss = "pvt_mean_rt_ms", "kss"
+    signals = list(dz["signals"])
+    add("## Reaction time and sleepiness on DROZY (held out)\n")
+    add(f"DROZY: {dz['citation']} (source `{dz['source']}`). {dz['what']} {dz['licence']}\n")
+    faces = data["face_found"]
+    fps = data["processed_fps"]
+    add(
+        f"- **Data.** {data['tests_scored']} tests of {data['subjects_scored']} people, about 10 minutes each ({data['tests_found']} found, "
+        f"{len(data['tests_failed'])} failed). Frame times: {data['frame_times']}; processed rate {num(fps.get('min'), 1)} to {num(fps.get('max'), 1)} "
+        f"per second (median {num(fps.get('median'), 1)}). Face found in {pct(faces['overall'], 2)} of the frames, lowest test {pct(faces['min_per_test'], 2)}.\n"
+        f"- **Windows.** {data['window_rule']} {data['windows']} windows, {data['windows_rejected']} rejected, {data['windows_scored']} scored "
+        f"({data['windows_scored_without_stimulus']} of them without a PVT stimulus, left out of the window-level PVT figures).\n"
+        f"- **Targets.** Reaction time: {dz['targets'][pvt]}. {dz['targets'][kss]}\n"
+        f"- **Headline.** `pvt_correlation` = {signed(h['value'])} (n = {h['n_recordings']} tests). {h['why']}\n"
+    )
+    rows = []
+    for signal in signals:
+        p, k = results["per_recording"][signal][pvt], results["per_recording"][signal][kss]
+        rows.append([SIGNAL_TITLE.get(signal, signal), f"{signed(p['r'])} / {signed(p['spearman'])}", p["n"], f"{signed(k['r'])} / {signed(k['spearman'])}", k["n"]])
+    add("**One point per test** (mean of the signal over the test's scored windows):\n")
+    add(table(["signal", "vs mean PVT reaction time, Pearson / Spearman", "tests", "vs KSS, Pearson / Spearman *", "tests"], rows) + "\n")
+
+    def spread(block: dict) -> str:
+        return f"{signed(block['median'])} ({signed(block['min'])} to {signed(block['max'])})"
+
+    rows = []
+    for signal in signals:
+        w = results["within_subject"][signal]
+        rows.append(
+            [
+                SIGNAL_TITLE.get(signal, signal),
+                spread(w[pvt]["r"]),
+                f"{w[pvt]['r']['positive']} of {w[pvt]['r']['subjects']}",
+                spread(w[kss]["r"]),
+                f"{w[kss]['r']['positive']} of {w[kss]['r']['subjects']}",
+            ]
+        )
+    add(
+        "**Within each person** (Pearson r over that person's windows; median across people, lowest to highest, and in how many it is positive). "
+        "A person's own level is a constant here, so differences between people cannot drive it:\n"
+    )
+    add(table(["signal", "vs PVT reaction time of the window", "people positive", "vs KSS *", "people positive"], rows) + "\n")
+    rows = []
+    for signal in signals:
+        p, k = results["pooled_windows"][signal][pvt], results["pooled_windows"][signal][kss]
+        rows.append([SIGNAL_TITLE.get(signal, signal), f"{signed(p['r'])} / {signed(p['spearman'])}", p["n"], f"{signed(k['r'])} / {signed(k['spearman'])}", k["n"]])
+    add("Every scored window pooled (overlapping windows: the counts are not sample sizes):\n")
+    add(table(["signal", "vs PVT reaction time, Pearson / Spearman", "windows", "vs KSS, Pearson / Spearman *", "windows"], rows) + "\n")
+    add(f"\\* {dz['targets'][kss]}\n")
+
+    model_s = results["per_recording"]["fatigue_score"][pvt]["spearman"]
+    lines = []
+    for other in ("perclos", "browser_formula"):
+        value = results["per_recording"][other][pvt]["spearman"]
+        if model_s is not None and value is not None:
+            lines.append(f"{'above' if model_s > value else 'below' if model_s < value else 'equal to'} that of {SIGNAL_TITLE[other].replace('former', 'the former')} ({signed(value)})")
+    if lines:
+        add(
+            f"**Reading.** Per test against reaction time, the model's Spearman ({signed(model_s)}) is {' and '.join(lines)}. With 36 tests and no interval, "
+            "these differences are not evidence that one signal is better than another. A positive sign means the signal rises as reactions slow down.\n"
+        )
+    d = dz["score_distribution"]["fatigue_score"]
+    if d:
+        add(
+            f"The model's `fatigueScore` on DROZY windows runs from {num(d['min'], 2)} to {num(d['max'], 2)} (middle half {num(d['p25'], 2)} to "
+            f"{num(d['p75'], 2)}); out of fold on RLDD it ran from {num(rldd_score['min'], 2)} to {num(rldd_score['max'], 2)}. A threshold on the score "
+            "cannot be read off DROZY: its video is not the demo's.\n"
+        )
+    add("Limits of this validation:\n")
+    add("\n".join(f"- {text}" for text in dz["limits"]) + "\n")
+    rows = [
+        [
+            c["recording"],
+            num(c["processed_fps"], 1),
+            pct(c["face_found"], 2),
+            num(c["longest_no_face_s"], 1),
+            f"{c['windows'] - c['windows_rejected']} of {c['windows']}",
+        ]
+        for c in dz["recordings"]
+    ]
+    add("Every DROZY test (coverage only: no test's reaction times or KSS are listed, per the licence):\n")
+    add(table(["test", "processed per second", "face found", "longest no-face (s)", "windows scored"], rows) + "\n")
+    if data["tests_failed"]:
+        add("Failed: " + "; ".join(f"{f['recording']}: {f['error']}" for f in data["tests_failed"]) + "\n")
+    return out
+
+
+SIGNAL_TITLE = {"perclos": "PERCLOS", "browser_formula": "browser formula", "model_fatigue_score": "model fatigueScore"}
+
+
+def thresholds_section(th: dict) -> list[str]:
+    """Where a threshold would sit on each camera signal and what it would cost: every number from ``thresholds``."""
+    lines = ["## Where a threshold would sit\n"]
+    lines.append(
+        "The rules engine decides with thresholds on PERCLOS and on `fatigueScore`. This section does not choose them: it shows what each "
+        f"cut costs, and the last table shows what the rules in force do on the same windows. {th['how']}\n"
+    )
+    rows = []
+    for name, points in th["signals"].items():
+        for point in points:
+            fold = point["out_of_fold"]
+            alert, drowsy = fold["alert_per_subject"], fold["drowsy_per_subject"]
+            rows.append([
+                SIGNAL_TITLE.get(name, name),
+                pct(point["false_alarm_rate"], 0),
+                num(point["cut"]),
+                " / ".join(pct(fold["windows"][state]) for state in STATES),
+                f"{pct(alert['median'])} ({pct(alert['min'])} to {pct(alert['max'])})",
+                f"{pct(drowsy['median'])} ({pct(drowsy['min'])} to {pct(drowsy['max'])}), {drowsy['subjects_with_any']} of {drowsy['subjects']}",
+            ])
+    lines.append(
+        table(
+            ["signal", "alert windows allowed to fire", "cut (fires above it)", "windows firing out of fold (alert / low / drowsy)",
+             "per person, alert windows firing: median (range)", "per person, drowsy windows firing: median (range), people with any"],
+            rows,
+        )
+        + "\n"
+    )
+    if th["engine_rules"]:
+        lines.append("**The thresholds the engine applies today**, on the same windows:\n")
+        rows = []
+        for entry in th["engine_rules"].values():
+            rule, drowsy = entry["rule"], entry["drowsy_per_subject"]
+            rows.append([
+                f"`{rule['id']}` ({rule['status']})",
+                SIGNAL_TITLE.get(entry["signal"], entry["signal"]),
+                f"{rule['operator']} {num(rule['threshold'], 2)}",
+                str(entry["windows_firing"]),
+                " / ".join(pct(entry["windows"][state]) for state in STATES),
+                f"{drowsy['subjects_with_any']} of {drowsy['subjects']}",
+            ])
+        lines.append(
+            table(["rule", "compared with", "fires when", "windows firing", "share firing (alert / low / drowsy)", "people whose drowsy video fires at all"], rows)
+            + "\n"
+        )
+    lines.append("\n".join(f"- {text}" for text in th["limits"]) + "\n")
+    return lines
+
+
 def render(metrics: dict, model: dict) -> str:
     chosen = metrics["chosen"]
     name = chosen["configuration"]
@@ -132,7 +310,7 @@ def render(metrics: dict, model: dict) -> str:
         f"{num(sens['blendshape_absolute_same_windows']['score_auc_alert_vs_drowsy'])} on the same windows. Features calibrated per person go from "
         f"{num(sens['calibrated_features']['reference_from_alert_video']['score_auc_alert_vs_drowsy'])} to "
         f"{num(sens['calibrated_features']['reference_from_scored_video']['score_auc_alert_vs_drowsy'])} the same way.\n"
-        f"- **PVT.** Not measured: {metrics['pvt_correlation_note']}\n"
+        + pvt_summary(metrics)
     )
 
     # ------------------------------------------------------------------ pitch
@@ -176,7 +354,25 @@ def render(metrics: dict, model: dict) -> str:
             "here. They stay in the model: features are not dropped after looking at results."
         )
     may_not.append("That a personal calibration or the EAR method makes it better: RLDD cannot show it (see \"What a rested calibration is worth\").")
-    may_not.append("That the score equals alertness, performance or reaction time: the labels are the person's own rating and no PVT was measured.")
+    dz = metrics.get("drozy_validation")
+    if dz:
+        h = dz["headline"]
+        if h["value"] is not None:
+            may.append(
+                f"\"On {dz['dataset']['subjects_scored']} people it never saw (DROZY, near-infrared video), the score's correlation with mean PVT reaction time "
+                f"per test is {signed(h['value'])} (Spearman, {h['n_recordings']} tests).\" Always with that wording, its Pearson value ({signed(h['pearson_r'])}) and "
+                "\"no interval was computed\"; cite Massoz et al. (2016), WACV."
+            )
+        may_not.append(
+            "That the score equals alertness, performance or reaction time: the RLDD labels are the person's own rating, and on DROZY the score "
+            "only correlates with reaction time (see \"Reaction time and sleepiness on DROZY\")."
+        )
+        may_not.append(
+            "That the model tracks reaction time or sleepiness better (or worse) than PERCLOS alone or the former formula: DROZY gives one number "
+            "per signal over 36 tests and no interval, so the three cannot be ranked."
+        )
+    else:
+        may_not.append("That the score equals alertness, performance or reaction time: the labels are the person's own rating and no PVT was measured.")
     may_not.append("\"Detects fatigue\", \"microsleep\", a diagnosis, or anything about spaceflight: none of it was measured.")
     add("May be said:\n")
     add("\n".join(f"- {text}" for text in may) + "\n")
@@ -385,6 +581,14 @@ def render(metrics: dict, model: dict) -> str:
         + "\n"
     )
 
+    # ------------------------------------------------------------------ DROZY
+    if dz:
+        parts += drozy_section(dz, score)
+
+    # ------------------------------------------------------------------ thresholds
+    if metrics.get("thresholds"):
+        parts += thresholds_section(metrics["thresholds"])
+
     # ------------------------------------------------------------------ final model
     add("## The model the browser gets\n")
     final = metrics["final_model"]
@@ -531,7 +735,11 @@ def render(metrics: dict, model: dict) -> str:
         f"**The first 120 s of every alert video are left out** of training and scoring, because the alternatives calibrate on them; the other two videos keep theirs. The shipped model would not need that, and the three states therefore have unequal window counts ({windows['by_state']['alert']['evaluated']} / {windows['by_state']['low_vigilance']['evaluated']} / {windows['by_state']['drowsy']['evaluated']}).",
         "**Assumptions.** The 0.5 s long-closure boundary, the nod levels and the window rule have no registered source. They were not tuned against these results.",
         "**Yawns** use a detector calibrated on acted yawns of drivers (YawDD). Nobody labelled yawns in RLDD, so its counts here are unchecked.",
-        "**No reaction-time ground truth.** `pvt_correlation` is null until DROZY is available.",
+        (
+            "**Reaction time only on DROZY**, which is near-infrared video of 14 people with no interval computed; RLDD has no PVT. See the DROZY section for its own limits."
+            if dz
+            else "**No reaction-time ground truth.** `pvt_correlation` is null until DROZY is available."
+        ),
         "**Not validated for spaceflight**, and head nods rely on gravity: in microgravity we expect the eye features to carry the signal (our hypothesis, no source).",
     ]
     add("\n".join(f"- {text}" for text in limits) + "\n")
@@ -552,6 +760,13 @@ def render(metrics: dict, model: dict) -> str:
         f"{extraction['note']}\n"
         f"- Validation: {metrics['validation']['scheme']}; {metrics['validation']['inner']}; seed {metrics['validation']['seed']}. "
         "The scaler, C and the weights never see the test subject. The configuration is a constant of the pipeline (`SHIPPED`), not an output of it.\n"
+        + (
+            "- DROZY: the same extractor and window code, with DROZY's own frame times; `fatigue_model.json` applied unchanged. Nothing from DROZY is cached "
+            "(its licence): every run extracts it again, and only aggregate numbers are written. Without RLDD on the machine, `make model` validates the "
+            "existing model on DROZY and merges the result into `metrics.json` and this report, leaving the model and the RLDD numbers unchanged.\n"
+            if dz
+            else ""
+        )
     )
 
     # ------------------------------------------------------------------ every video

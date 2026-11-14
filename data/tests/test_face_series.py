@@ -1,4 +1,6 @@
-"""Time-based frame sampling and the face series cache (no video and no MediaPipe needed)."""
+"""Time-based frame sampling and the face series cache (no video and no MediaPipe needed, except one test on a blank video)."""
+
+from pathlib import Path
 
 import numpy as np
 import pytest
@@ -121,3 +123,56 @@ def test_a_cache_from_another_mediapipe_is_not_reused(tmp_path, monkeypatch):
     assert face_series.load_series(path, face_series.cache_signature("abc", 1234)) is not None
     monkeypatch.setattr(face_series, "installed_version", lambda package: "9.9.9")
     assert face_series.load_series(path, face_series.cache_signature("abc", 1234)) is None
+
+
+def test_a_dataset_clock_gives_each_frame_its_measured_time():
+    clock = face_series.DatasetClock([23.0, 57.0, 140.0])
+    assert [clock.time_ms(0.0) for _ in range(3)] == [23.0, 57.0, 140.0]  # the container's time is ignored
+    assert clock.fallbacks == 0
+    clock.check_complete()
+    with pytest.raises(OSError, match="more frames"):
+        clock.time_ms(0.0)
+
+
+def test_a_dataset_clock_refuses_times_that_do_not_match_the_video():
+    short = face_series.DatasetClock([0.0, 40.0, 80.0])
+    short.time_ms(0.0)
+    with pytest.raises(OSError, match="1 frames but 3"):
+        short.check_complete()
+    for bad in ([], [0.0, 40.0, 40.0], [0.0, float("nan")]):
+        with pytest.raises(ValueError):
+            face_series.DatasetClock(bad)
+
+
+def test_dropped_frames_keep_their_real_times_when_sampled():
+    # 30 fps with a dropped stretch, as DROZY's timestamps show: sampling goes by those times, not by frame count.
+    stamps = [i * 1000.0 / 30 for i in range(10)] + [600.0 + i * 1000.0 / 30 for i in range(10)]
+    clock = face_series.DatasetClock(stamps)
+    picked = face_series.sample_indices([clock.time_ms(0.0) for _ in stamps])
+    assert picked == [0, 2, 4, 6, 8, 10, 12, 14, 16, 18]
+    assert np.array(stamps)[picked][5] == pytest.approx(600.0)
+
+
+LANDMARKER = Path(__file__).resolve().parents[2] / "frontend" / "public" / "mediapipe" / "face_landmarker.task"
+
+
+@pytest.mark.skipif(not LANDMARKER.is_file(), reason="face_landmarker.task is not downloaded (make prefetch)")
+def test_the_extractor_uses_the_dataset_times_and_checks_the_frame_count(tmp_path):
+    import cv2
+
+    model = LANDMARKER.read_bytes()
+    video = tmp_path / "blank.avi"
+    writer = cv2.VideoWriter(str(video), cv2.VideoWriter_fourcc(*"MJPG"), 30.0, (64, 48))
+    for _ in range(6):
+        writer.write(np.zeros((48, 64, 3), dtype=np.uint8))  # no face: only the times are under test
+    writer.release()
+    times = [10.0, 43.0, 200.0, 233.0, 266.0, 400.0]
+    series = face_series.extract_face_series(video, model, frame_times_ms=times)
+    assert series.meta["frame_times"] == "dataset" and series.meta["frames_read"] == 6
+    assert series.frame_index.tolist() == [0, 2, 4, 5]  # 43 ms is too close to 10 ms; 233 too close to 200
+    assert series.time_s == pytest.approx([0.010, 0.200, 0.266, 0.400])
+    assert not series.face_found.any()
+    with pytest.raises(OSError, match="frame times"):
+        face_series.extract_face_series(video, model, frame_times_ms=times[:5])
+    with pytest.raises(OSError, match="frame times"):
+        face_series.extract_face_series(video, model, frame_times_ms=times + [500.0])

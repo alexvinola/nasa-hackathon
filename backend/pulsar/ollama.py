@@ -1,9 +1,11 @@
 """The one way the backend talks to Gemma: the local Ollama in `pulsar.voice.config` (localhost only)."""
 
 import json
+import time
 import urllib.request
 from typing import Any
 
+from pulsar import debug
 from pulsar.voice.config import load_voice_settings
 
 
@@ -24,5 +26,12 @@ def chat(messages: list[dict[str, Any]], *, options: dict[str, Any] | None = Non
         payload["format"] = fmt
     request = urllib.request.Request(f"{settings.ollama_url}/api/chat", data=json.dumps(payload).encode(),
                                      headers={"Content-Type": "application/json"})
-    with urllib.request.urlopen(request, timeout=timeout) as response:
-        return json.load(response)["message"]["content"].strip()
+    started = time.perf_counter()
+    try:
+        with urllib.request.urlopen(request, timeout=timeout) as response:
+            content = json.load(response)["message"]["content"].strip()
+    except OSError as error:
+        debug.record("error", f"Gemma did not answer after {time.perf_counter() - started:.1f} s: {error}")
+        raise
+    debug.record("gemma", f"{round((time.perf_counter() - started) * 1000)} ms → {content}")
+    return content

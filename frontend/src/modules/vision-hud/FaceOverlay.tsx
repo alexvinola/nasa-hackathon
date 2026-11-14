@@ -129,6 +129,8 @@ function Row({ label, mp, ai, ok, tally }: { label: string; mp: string; ai: stri
   );
 }
 
+const MODEL_LABEL = { alert: "ALERTA", low_vigilance: "POCA VIGILANCIA", drowsy: "SOMNOLIENTO" } as const;
+
 function draw(ctx: CanvasRenderingContext2D, f: FaceFrame, fps: number) {
   const { width: w, height: h } = f;
   ctx.clearRect(0, 0, w, h);
@@ -192,6 +194,12 @@ function draw(ctx: CanvasRenderingContext2D, f: FaceFrame, fps: number) {
   label(ctx, fx, fy - 28 * unit, `CABECEO ${sign(f.pitch)}°  GUIÑADA ${sign(f.yaw)}°  ALABEO ${sign(f.roll)}°`, `rgba(${PULSE}, 0.9)`, unit, 0);
   label(ctx, fx, fy - 44 * unit, `MALLA FACIAL · 478 PUNTOS · ${Math.round(fps)} FPS`, `rgba(${PULSE}, 0.5)`, unit, 0);
   label(ctx, fx, fy - 58 * unit, `${f.delegate} · FACE ${f.faceMs.toFixed(0)} MS`, `rgba(${PULSE}, 0.5)`, unit, 0);
+  // The RLDD model's reading of the last minute: evidence next to the score, the rules engine does not see it.
+  const drowsy = f.model?.label === "drowsy";
+  const reading = f.model
+    ? `${MODEL_LABEL[f.model.label]} · PUNTUACIÓN ${f.model.score.toFixed(2)} · ${f.model.probabilities.map((p) => Math.round(p * 100)).join("/")} %`
+    : f.modelWaitS > 0 ? `FALTAN ${Math.ceil(f.modelWaitS)} S` : "MINUTO NO UTILIZABLE";
+  label(ctx, fx, fy - 72 * unit, `MODELO RLDD · ${reading}`, `rgba(${drowsy ? AMBER : ORBIT}, 0.95)`, unit, 0);
 
   if (f.axes) {
     const [nx, ny] = at(NOSE_TIP);

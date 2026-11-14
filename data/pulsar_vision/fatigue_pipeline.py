@@ -2,12 +2,23 @@
 
     uv run python pipeline.py              # full run: writes fatigue_model.json, out/metrics.json, out/fatigue_report.md
     uv run python pipeline.py --limit 6    # smoke run on the first 6 subjects: writes everything under out/smoke/
+    uv run python pipeline.py --no-drozy   # the same without the DROZY validation
 
 Steps: find the RLDD videos, extract the face series with MediaPipe (cached per video in
 ``features/rldd/``; a second run reads the cache and never runs MediaPipe again), compute the window
 features of ``fatigue_features.py``, validate the SHIPPED configuration (``SHIPPED`` below: a fixed setting,
 not a choice made by any score) with subject-grouped folds, compare it with the browser's current formula,
 refit it on every subject and write the outputs.
+
+Then, when DROZY is on this machine (``data/raw/drozy/DROZY``), the refit model is applied unchanged to
+DROZY's 14 people and its score is correlated with their PVT reaction times and KSS (``drozy.py``): that is
+``pvt_correlation`` and ``drozy_validation`` in ``metrics.json``. Nothing is fitted on DROZY, and nothing
+from it is cached: every run extracts it again (about 6 minutes with 5 processes on a 10-CPU laptop).
+
+Without RLDD (no raw videos and no cache) there is nothing to train. If the shipped model and its metrics
+are present and DROZY is here, the run validates THAT model on DROZY and merges the result into the
+existing ``metrics.json`` and report, leaving ``fatigue_model.json`` and every RLDD number as they are.
+With neither dataset it stops with an error and writes nothing.
 
 Secondary analyses, kept because they are the evidence behind that setting: the same validation for the
 three alternative combinations of eye method x normalisation, what a fold-internal choice among the four
@@ -30,7 +41,7 @@ import numpy as np
 import pandas as pd
 from threadpoolctl import threadpool_limits
 
-from . import fatigue_features as ff, fatigue_model as fm, fatigue_report, landmarks, rldd
+from . import drozy, fatigue_features as ff, fatigue_model as fm, fatigue_report, fatigue_thresholds, landmarks, rldd
 from .detector import YawnParams
 
 DATA_DIR = Path(__file__).resolve().parents[1]
@@ -40,6 +51,7 @@ DEFAULT_CACHE = DATA_DIR / "features" / "rldd"
 DEFAULT_OUT = DATA_DIR / "out"
 DEFAULT_MODEL_FILE = DATA_DIR / "fatigue_model.json"
 DEFAULT_LANDMARKER = REPO_DIR / "frontend" / "public" / "mediapipe" / "face_landmarker.task"
+RULES_FILE = REPO_DIR / "backend" / "assets" / "rules.json"  # read only: the thresholds the engine applies today
 YAWN_PARAMS_FILE = DATA_DIR / "out" / "yawn_params.json"
 
 SOURCE_ID = "uta-rldd"  # key in shared/sources.json
@@ -123,6 +135,13 @@ def load_yawn_params(path: Path) -> tuple[YawnParams, dict]:
 
 
 # --------------------------------------------------------------------------- datasets
+
+
+def engine_camera_rules(rules_file: Path) -> dict[str, dict]:
+    """The rules engine's thresholds on the camera signals; empty when the backend's rules file is not there."""
+    if not rules_file.is_file():
+        return {}
+    return fatigue_thresholds.engine_rules(json.loads(rules_file.read_text(encoding="utf-8"))["rules"])
 
 
 def feature_columns(method: str, normalisation: str) -> list[str]:
@@ -245,7 +264,9 @@ def run(args: argparse.Namespace) -> int:
         origin += f"; {len(cache_only)} more only in the cache {cache_dir}"
     if not videos:
         log(f"MISSING: no RLDD video under {root} and no cache in {cache_dir}. Download UTA-RLDD (docs/PREP.md) into data/raw/rldd/.")
-        return 1
+        if smoke or not use_drozy(args):
+            return 1
+        return validate_existing(args, model_file, out_dir, landmarker, yawn_params, yawn_raw)
     log(f"RLDD: {origin}")
     if others:
         log(f"  ignored files that are not dataset videos: {others[:10]}{' ...' if len(others) > 10 else ''}")
@@ -773,6 +794,18 @@ def run(args: argparse.Namespace) -> int:
         "feature_statistics": {
             name: feature_statistics(evaluated, feature_columns(*name.split("/"))) for name in configurations
         },
+        "thresholds": fatigue_thresholds.report(
+            classes,
+            groups,
+            {
+                "perclos": evaluated[rldd.column(ff.BLENDSHAPE, "perclos")].to_numpy(dtype=np.float64),
+                "browser_formula": baseline_score,
+                "model_fatigue_score": score,
+            },
+            outer,
+            engine_camera_rules(RULES_FILE),
+            {"biometrics.perclos": ["perclos"], "biometrics.fatigueScore": ["browser_formula", "model_fatigue_score"]},
+        ),
         "final_model": {
             "file": "data/fatigue_model.json" if model_file == DEFAULT_MODEL_FILE else str(model_file),
             "C": final["C"],
@@ -796,6 +829,14 @@ def run(args: argparse.Namespace) -> int:
         },
     }
 
+    # --- DROZY: the refit model, unchanged, against reaction times and KSS of people it never saw
+    block = None
+    if smoke or args.no_drozy:
+        log("DROZY validation skipped (" + ("smoke run" if smoke else "--no-drozy") + ")")
+    else:
+        block = drozy_block(args, clean(model_payload), landmarker, yawn_params, yawn_raw)
+    metrics_payload = drozy.merge(metrics_payload, block)
+
     write_json(model_file, model_payload)
     write_json(out_dir / "metrics.json", metrics_payload)
     report = fatigue_report.render(clean(metrics_payload), clean(model_payload))
@@ -811,6 +852,64 @@ def run(args: argparse.Namespace) -> int:
     return 0
 
 
+# --------------------------------------------------------------------------- DROZY
+
+
+def use_drozy(args: argparse.Namespace) -> bool:
+    return not args.no_drozy and drozy.available(Path(args.drozy_root))
+
+
+def drozy_block(args: argparse.Namespace, model: dict, landmarker: Path, yawn_params: YawnParams, yawn_raw: dict) -> dict | None:
+    """The ``drozy_validation`` block, or ``None`` when DROZY is not here (``pvt_correlation`` stays null)."""
+    root = Path(args.drozy_root)
+    try:
+        return clean(drozy.validate_model(model, yawn_params, yawn_raw, root, landmarker, args.workers, log))
+    except drozy.DatasetMissing as missing:
+        log(f"DROZY validation skipped: {missing}")
+        return None
+
+
+def validate_existing(args: argparse.Namespace, model_file: Path, out_dir: Path, landmarker: Path, yawn_params: YawnParams, yawn_raw: dict) -> int:
+    """No RLDD here: validate the model already in ``model_file`` on DROZY and merge into the existing outputs.
+
+    ``fatigue_model.json`` is only read. ``metrics.json`` keeps every RLDD number and gets ``pvt_correlation`` and
+    ``drozy_validation``; the report is rendered again from it. Refuses smoke outputs and a metrics file that does
+    not describe that model.
+    """
+    metrics_file = out_dir / "metrics.json"
+    if not (model_file.is_file() and metrics_file.is_file()):
+        log(f"MISSING: no {model_file} and {metrics_file} to validate either; nothing to train and nothing to validate.")
+        return 1
+    model = json.loads(model_file.read_text(encoding="utf-8"))
+    metrics = json.loads(metrics_file.read_text(encoding="utf-8"))
+    if model.get("limit") is not None or metrics.get("limit") is not None:
+        log(f"FAIL: {model_file} or {metrics_file} comes from a smoke run (--limit): not validated")
+        return 1
+    if model.get("validated", {}).get("auc") != metrics.get("auc") or model.get("regularisation", {}).get("C") != metrics.get("final_model", {}).get("C"):
+        log(f"FAIL: {metrics_file} does not describe {model_file} (AUC or C differ): run `make model` where RLDD is")
+        return 1
+    log(f"RLDD is not here: training skipped. The existing {model_file.name} is validated on DROZY and left unchanged.")
+    try:
+        block = drozy_block(args, model, landmarker, yawn_params, yawn_raw)
+    except ValueError as mismatch:
+        log(f"FAIL: {mismatch}")
+        return 1
+    if block is None:
+        return 1
+    merged = drozy.merge(metrics, block)
+    write_json(metrics_file, merged)
+    (out_dir / "fatigue_report.md").write_text(fatigue_report.render(clean(merged), clean(model)), encoding="utf-8")
+    log(
+        f"DROZY ({drozy.CITATION}): pvt_correlation = {num(merged['pvt_correlation'])} (Spearman, {block['headline']['n_recordings']} tests); "
+        f"wrote {metrics_file} and {out_dir / 'fatigue_report.md'}; {model_file} unchanged"
+    )
+    return 0
+
+
+def num(value) -> str:
+    return "n/a" if value is None else f"{value:+.3f}"
+
+
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Train and validate the PULSAR fatigue model on UTA-RLDD.")
     parser.add_argument("--limit", type=int, default=None, help="smoke run on the first N subjects; writes under out/smoke/")
@@ -822,6 +921,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--landmarker", default=str(DEFAULT_LANDMARKER), help="face_landmarker.task")
     parser.add_argument("--out", default=None, help="output folder (default: out/, or out/smoke/ with --limit)")
     parser.add_argument("--force-extract", action="store_true", help="ignore the cache and run MediaPipe again")
+    parser.add_argument("--drozy-root", default=str(drozy.DEFAULT_ROOT), help="DROZY folder (validation only, never cached)")
+    parser.add_argument("--no-drozy", action="store_true", help="skip the DROZY validation")
     args = parser.parse_args(argv)
     if args.limit is not None and args.limit < MIN_SUBJECTS:
         parser.error(f"--limit needs at least {MIN_SUBJECTS} subjects")

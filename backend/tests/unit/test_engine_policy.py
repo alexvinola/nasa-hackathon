@@ -73,7 +73,7 @@ def test_no_trigger_is_green_self_care_without_countermeasure():
 
 def test_status_and_escalation_follow_the_most_severe_rule():
     eng = engine(
-        rule("a", "biometrics.perclos", 0.1, "AMBER", cm="CM-A"),
+        rule("a", "biometrics.perclos", 0.01, "AMBER", cm="CM-A"),
         rule("r", "biometrics.armAsymmetry", 0.05, "RED", cm="CM-B"),
     )
     decision = eng.evaluate(NOMINAL)
@@ -100,7 +100,7 @@ def test_nested_nullable_signal():
 
 def test_affected_systems_is_the_union():
     eng = engine(
-        rule("a", "biometrics.perclos", 0.1, systems=["NERVOUS"]),
+        rule("a", "biometrics.perclos", 0.01, systems=["NERVOUS"]),
         rule("b", "biometrics.fatigueScore", 0.1, systems=["NERVOUS", "METABOLIC"]),
         rule("c", "environment.cabinCo2_mmHg", 1, systems=[]),
     )
@@ -110,7 +110,7 @@ def test_affected_systems_is_the_union():
 
 def test_hrp_risk_ignores_less_severe_findings():
     eng = engine(
-        rule("a1", "biometrics.perclos", 0.1, "AMBER", risk="SLEEP_AND_SCHEDULES"),
+        rule("a1", "biometrics.perclos", 0.01, "AMBER", risk="SLEEP_AND_SCHEDULES"),
         rule("a2", "biometrics.fatigueScore", 0.1, "AMBER", risk="SLEEP_AND_SCHEDULES"),
         rule("r", "biometrics.armAsymmetry", 0.05, "RED", risk="SENSORIMOTOR_VESTIBULAR"),
     )
@@ -121,7 +121,7 @@ def test_hrp_risk_ignores_less_severe_findings():
 def test_hrp_risk_skips_findings_that_name_none():
     eng = engine(
         rule("r", "biometrics.armAsymmetry", 0.05, "RED", risk=None),
-        rule("a", "biometrics.perclos", 0.1, "AMBER", risk="SLEEP_AND_SCHEDULES"),
+        rule("a", "biometrics.perclos", 0.01, "AMBER", risk="SLEEP_AND_SCHEDULES"),
     )
 
     assert eng.evaluate(NOMINAL)["hrpRisk"] == "SLEEP_AND_SCHEDULES"
@@ -130,7 +130,7 @@ def test_hrp_risk_skips_findings_that_name_none():
 def test_hrp_risk_most_corroborated_then_file_order():
     first = rule("rad", "environment.radiation_mSv", 0.1, risk="RADIATION_CANCER")
     sleep = [
-        rule("s1", "biometrics.perclos", 0.1, risk="SLEEP_AND_SCHEDULES"),
+        rule("s1", "biometrics.perclos", 0.01, risk="SLEEP_AND_SCHEDULES"),
         rule("s2", "biometrics.fatigueScore", 0.1, risk="SLEEP_AND_SCHEDULES"),
     ]
 
