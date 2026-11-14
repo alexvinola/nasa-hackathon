@@ -1,13 +1,16 @@
 [project]
 name = "pulsar-backend"
 version = "0.1.0"
-description = "PULSAR backend: rules engine (decides) and offline voice pipeline (phrases). Runs on localhost only."
+description = "PULSAR backend: rules engine (decides), speech and vision (perceive and phrase). Runs on localhost only."
 requires-python = ">=3.12,<3.13"
 dependencies = [
     "fastapi>=0.162.7",
     "jsonschema>=4.26.0",
     "pydantic>=2.14.3",
     "uvicorn>=0.54.0",
+    "faster-whisper",
+    "piper-tts",
+    "av<19",  # faster-whisper 1.2 passes metadata_errors= to av.open, which av 19 removed
 ]
 
 [dependency-groups]

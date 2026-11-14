@@ -18,5 +18,7 @@ The latency figures produced here are the only ones that may be quoted in the pi
 - The model tag comes from config (`PULSAR_LLM_MODEL`, default `gemma4:e4b-it-qat`, 6.1 GB). If the bench is too slow on
   the demo laptop with whisper, Piper and the browser running, fall back to `gemma4:e2b-it-qat` (4.3 GB).
 - Gemma 4 supports the system role natively: the PULSAR prompt goes in the system message, the verdict in the user message.
-- Gemma 4 E2B/E4B accept audio in Google's release, but Ollama lists text and image input only: speech-to-text stays
-  with faster-whisper.
+- Gemma 4 E4B transcribes speech itself through Ollama (audio in the `images` field; `research/llm/README.md`). It can
+  replace faster-whisper if it holds up with a real microphone in the venue; until then whisper stays as the fallback.
+  Keep transcription and phrasing as separate calls: the rules engine decides in between.
+- Call Ollama with `think: false`; thinking is on by default and only adds latency.
