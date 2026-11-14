@@ -1,0 +1,128 @@
+{
+  "$comment": "PULSAR rules engine. Each rule compares one contract signal with one threshold. Every threshold cites an id in shared/sources.json or explains, in `assumption`, why it is a team placeholder. Rule order is priority: it breaks ties for the countermeasure and the HRP risk. Hazard, HRP-risk and body-system ids are the official ones in shared/hrp.json and the contract. Served by GET /rules and GET /rules/policy.",
+  "policy": {
+    "levels": ["GREEN", "AMBER", "RED"],
+    "escalation": {
+      "GREEN": "SELF_CARE",
+      "AMBER": "CREW",
+      "RED": "FLIGHT_SURGEON"
+    },
+    "assumption": "Team decision on escalation policy, the mapping from signal to body-twin system and the hazard each rule is filed under; not taken from a NASA source.",
+    "description": [
+      "Status: the most severe status among the triggered rules; GREEN when none triggers. A signal with no value (null) triggers nothing.",
+      "Escalation: follows the status (GREEN self-care, AMBER notify the crew, RED notify the flight surgeon).",
+      "Affected systems: the union of the body systems of every triggered rule.",
+      "HRP risk: among triggered rules that name an official HRP risk, keep the most severe ones and pick the risk most of them name; ties go to the rule listed first. Null when no triggered rule names a risk.",
+      "Countermeasure: the one of the most severe triggered rule (the first listed on a tie).",
+      "Factors: every triggered rule, most severe first."
+    ]
+  },
+  "rules": [
+    {
+      "id": "arm-asymmetry",
+      "signal": "biometrics.armAsymmetry",
+      "operator": ">=",
+      "threshold": 0.35,
+      "unit": "",
+      "status": "RED",
+      "hazard": null,
+      "hrpRisk": null,
+      "bodySystems": ["MUSCULOSKELETAL"],
+      "countermeasureId": "CM-MOTOR-01",
+      "source": null,
+      "assumption": "Team placeholder: no labelled posture data exists, so 0.35 is not calibrated. Arm asymmetry is a secondary rule-based camera signal. RED because a one-sided change in movement is for the flight surgeon to judge, not the app. No official HRP risk is about it, so none is named.",
+      "message": "One arm is moving differently from the other (asymmetry {value}, limit {threshold})."
+    },
+    {
+      "id": "perclos-high",
+      "signal": "biometrics.perclos",
+      "operator": ">=",
+      "threshold": 0.3,
+      "unit": "",
+      "display": "percent",
+      "status": "AMBER",
+      "hazard": "ISOLATION",
+      "hrpRisk": "SLEEP_AND_SCHEDULES",
+      "bodySystems": ["NERVOUS"],
+      "countermeasureId": "CM-DROWSY-01",
+      "source": null,
+      "assumption": "Team placeholder until G2 calibrates fatigue on RLDD/DROZY (uta-rldd, drozy): 0.30 is not a validated PERCLOS cut-off.",
+      "message": "Eyes closed {value} of the time, above {threshold}."
+    },
+    {
+      "id": "sleep-under-6h",
+      "signal": "selfReport.sleepHoursLast24h",
+      "operator": "<",
+      "threshold": 6,
+      "unit": "h",
+      "status": "AMBER",
+      "hazard": "ISOLATION",
+      "hrpRisk": "SLEEP_AND_SCHEDULES",
+      "bodySystems": ["NERVOUS"],
+      "countermeasureId": "CM-FATIGUE-01",
+      "source": "jones-2022-sleep",
+      "assumption": null,
+      "message": "Slept {value} {unit} in the last 24 h, under {threshold} {unit}: in astronauts this went with slower reactions."
+    },
+    {
+      "id": "pvt-mean-slow",
+      "signal": "biometrics.lastPvtMeanMs",
+      "operator": ">",
+      "threshold": 320,
+      "unit": "ms",
+      "status": "AMBER",
+      "hazard": "ISOLATION",
+      "hrpRisk": "SLEEP_AND_SCHEDULES",
+      "bodySystems": ["NERVOUS"],
+      "countermeasureId": "CM-FATIGUE-01",
+      "source": null,
+      "assumption": "No sourced cut-off for mean reaction time: basner-2011-pvtb defines a lapse (355 ms or more) but does not use the mean as a metric. 320 ms is a placeholder about halfway between the team's nominal 284 ms and that lapse cut-off.",
+      "message": "Reaction test average {value} {unit}, slower than {threshold} {unit}."
+    },
+    {
+      "id": "mood-low",
+      "signal": "selfReport.mood",
+      "operator": "<=",
+      "threshold": 2,
+      "unit": "",
+      "status": "AMBER",
+      "hazard": "ISOLATION",
+      "hrpRisk": "BEHAVIORAL_PSYCHIATRIC",
+      "bodySystems": ["NERVOUS"],
+      "countermeasureId": "CM-MOOD-01",
+      "source": null,
+      "assumption": "The 1-5 daily mood scale is a SYNAPSE design choice; treating 2 or less as the point to talk to the crew is a team assumption.",
+      "message": "Mood {value} out of 5, at or below {threshold}."
+    },
+    {
+      "id": "cabin-co2-high",
+      "signal": "environment.cabinCo2_mmHg",
+      "operator": ">",
+      "threshold": 4.0,
+      "unit": "mmHg",
+      "status": "AMBER",
+      "hazard": "HOSTILE_ENVIRONMENT",
+      "hrpRisk": null,
+      "bodySystems": ["RESPIRATORY"],
+      "countermeasureId": "CM-CO2-01",
+      "source": null,
+      "assumption": "No source yet for a cabin CO2 limit (candidate: NASA-STD-3001 Vol. 2, not yet in shared/sources.json): 4.0 mmHg is a team placeholder to replace once the source is added. None of the 17 HRP risks covers cabin CO2 (hrp-risks), so no risk is named.",
+      "message": "Cabin CO2 at {value} {unit}, above {threshold} {unit}."
+    },
+    {
+      "id": "radiation-dose-high",
+      "signal": "environment.radiation_mSv",
+      "operator": ">=",
+      "threshold": 5,
+      "unit": "mSv",
+      "status": "AMBER",
+      "hazard": "RADIATION",
+      "hrpRisk": "RADIATION_CANCER",
+      "bodySystems": [],
+      "countermeasureId": "CM-RAD-01",
+      "source": null,
+      "assumption": "The dose is simulated (CSA widget); csa-radiation gives context, not dose limits. 5 mSv is a demo placeholder, not a radiation limit. No body-twin zone lights up: the official risk is long-term (Radiation-Induced Cancers), not an acute effect the twin could show.",
+      "message": "Simulated radiation dose {value} {unit}, at or above {threshold} {unit}."
+    }
+  ]
+}

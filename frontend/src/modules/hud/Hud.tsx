@@ -7,7 +7,7 @@ import type { Mood } from "./PulsarSprite3D";
 import { useWebcam, type CamState } from "./useWebcam";
 import { SensesBar } from "@/modules/voice-ai/SensesBar";
 import { useFaceMetrics } from "@/modules/vision-hud/useFaceMetrics";
-import { direct, type Direction, type Spot } from "@/modules/voice-ai/pulsarApi";
+import { direct, frameBase64, type Direction, type Spot } from "@/modules/voice-ai/pulsarApi";
 
 // shortcut: canned lines so the mascot can be reviewed, replace with the rules-engine verdict once it is wired in.
 // `at` is where PULSAR flies to, as a fraction of the free screen; [0, 0] is its home corner.
@@ -75,7 +75,10 @@ export function Hud() {
   const asked = useRef(0);
   const ask = useCallback((seenNow: string | null, order: string, userSpoke: boolean) => {
     const mine = ++asked.current;
-    direct({ seen: seenNow ?? "", instruction: order, userSpoke, said: said.current, spot: spot.current })
+    // WATCH is off, so there is no description: let Gemma look at the frame itself rather than answer blind.
+    const frame = userSpoke && !seenNow ? frameBase64(videoRef.current).catch(() => undefined) : undefined;
+    Promise.resolve(frame)
+      .then((image) => direct({ image, seen: seenNow ?? "", instruction: order, userSpoke, said: said.current, spot: spot.current }))
       .then((d) => {
         if (mine !== asked.current || !d.speak || !d.spot) return;
         spot.current = d.spot;
@@ -83,7 +86,7 @@ export function Hud() {
         setDirected(d);
       })
       .catch(() => mine === asked.current && setDirected(null)); // backend or model down: back to the plain line
-  }, []);
+  }, [videoRef]);
 
   // The camera changed: Gemma speaks only if it matters for the standing instruction.
   const lastSeen = useRef<string | null>(null);
