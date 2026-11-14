@@ -158,7 +158,7 @@ def test_director_respects_the_rules_engines_health_check(monkeypatch):
 
     assert client.post("/pulsar/act", json=scene).json()["say"] == "Let us pause the task for now."
     prompt = sent["body"]["messages"][1]["content"]
-    assert "Health check (final)" in prompt and "Pause any task" in prompt  # the engine's verdict and its first step
+    assert "Health check (final)" in prompt and "Pausa cualquier tarea" in prompt  # the engine's verdict and its first step
 
     # asked about health with readings: the engine decides, Gemma only phrases its verdict
     answering(monkeypatch, "Your eyes have been closed a lot. Pause any task that needs fast reactions.", sent)
@@ -174,7 +174,7 @@ def test_director_respects_the_rules_engines_health_check(monkeypatch):
     answering(monkeypatch, "No es seguro seguir con la tarea. Contacta con el cirujano de vuelo y para lo que estás haciendo.", sent)
     told = client.post("/pulsar/act", json={**scene, "instruction": "Tell me a joke.", "telemetry": exhausted}).json()
     assert "cirujano de vuelo" in told["say"] and told["reaction"] == "alert"
-    assert "Stop what you are doing" in sent["body"]["messages"][1]["content"]  # the required step reached Gemma
+    assert "Deja lo que haces" in sent["body"]["messages"][1]["content"]  # the required step reached Gemma
 
 
 def test_director_survives_a_line_in_the_wrong_shape(monkeypatch):
@@ -226,6 +226,6 @@ def test_biometrics_are_checked_against_the_contract():
 def test_sensor_questions_go_through_the_mcp_readings(monkeypatch):
     import director
 
-    monkeypatch.setattr(director, "read_sensors", lambda question: ("El CO2 de la cabina está en 6,5 mmHg.", True))
+    monkeypatch.setattr(director, "read_sensors", lambda question, telemetry: ("El CO2 de la cabina está en 6,5 mmHg.", True))
     told = client.post("/pulsar/act", json={"user_spoke": True, "instruction": "¿Cómo está el CO2?"}).json()
     assert told["say"] == "El CO2 de la cabina está en 6,5 mmHg." and told["reaction"] == "alert" and told["speak"]

@@ -8,8 +8,8 @@ const BUTTON = "border px-2 py-1";
 const OFF = "border-shell/40 text-shell/80";
 
 /**
- * Hand controls for the demo: raise a false warning or a false danger, loop the whole simulated shift, and mute the
- * alarm sounds. A false alarm is not drawn here: it changes the simulated readings, so it goes through the rules
+ * Hand controls for the demo: raise a false warning or a false danger, push the cabin CO2 or the radiation dose over their limit, loop the
+ * whole simulated shift, and mute the alarm sounds. A false alarm is not drawn here: it changes the simulated readings, so it goes through the rules
  * engine like a real one. Pressing the button of an alarm that is already on switches it off; it never starts a
  * second one. Each label names the key that does the same.
  */
@@ -29,9 +29,11 @@ export function DebugPanel({
   useHotkey("2", () => toggle("danger"));
   useHotkey("3", () => toggle("loop"));
   useHotkey("4", () => onSound(!sound));
+  useHotkey("5", () => toggle("co2"));
+  useHotkey("6", () => toggle("radiation"));
 
   return (
-    <HudPanel title="DEPURACIÓN · FALSAS ALARMAS (1-4)" defaultOpen={false}>
+    <HudPanel title="DEPURACIÓN · FALSAS ALARMAS (1-6)" defaultOpen={false}>
       <div className="grid grid-cols-2 gap-2">
         <button type="button" aria-pressed={mode === "rest"} onClick={() => toggle("rest")} className={`${BUTTON} ${mode === "rest" ? "border-amber-400 bg-amber-400/20 text-amber-300" : OFF}`}>
           AVISO {mode === "rest" ? "SÍ" : "NO"} (1)
@@ -44,6 +46,12 @@ export function DebugPanel({
         </button>
         <button type="button" aria-pressed={sound} onClick={() => onSound(!sound)} className={`${BUTTON} ${sound ? "border-pulse bg-pulse/20 text-pulse" : OFF}`}>
           SONIDO {sound ? "SÍ" : "NO"} (4)
+        </button>
+        <button type="button" aria-pressed={mode === "co2"} onClick={() => toggle("co2")} className={`${BUTTON} ${mode === "co2" ? "border-amber-400 bg-amber-400/20 text-amber-300" : OFF}`}>
+          SUBIR CO2 {mode === "co2" ? "SÍ" : "NO"} (5)
+        </button>
+        <button type="button" aria-pressed={mode === "radiation"} onClick={() => toggle("radiation")} className={`${BUTTON} ${mode === "radiation" ? "border-amber-400 bg-amber-400/20 text-amber-300" : OFF}`}>
+          RADIACIÓN {mode === "radiation" ? "SÍ" : "NO"} (6)
         </button>
       </div>
     </HudPanel>

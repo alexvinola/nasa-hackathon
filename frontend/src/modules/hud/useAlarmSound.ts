@@ -3,10 +3,10 @@
 import { useEffect } from "react";
 import { isSpeaking } from "@/modules/voice-ai/pulsarApi";
 
-export type AlarmLevel = "rest" | "danger" | null;
+export type AlarmLevel = "rest" | "warn" | "danger" | null;
 
 /**
- * The alarm you hear, made with the Web Audio API so it needs no sound file. "Time to rest" is one soft falling
+ * The alarm you hear, made with the Web Audio API so it needs no sound file. "Time to rest" and the amber "warn" (cabin air) are one soft falling
  * chime. "Danger" is the klaxon of docs/brand/pulsar-intro.html (a square wave rising from 520 to 900 Hz every
  * 0.9 s, behind a 1900 Hz low-pass), repeated until the alarm clears or `silenced` is set.
  * Browsers keep a page silent until the user has clicked or typed on it once; until then nothing plays.

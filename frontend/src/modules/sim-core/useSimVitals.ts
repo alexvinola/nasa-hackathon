@@ -9,14 +9,21 @@ export const SIM_LOOP_S = 80;
 /**
  * What the debug panel can force on top of the real readings:
  * "live" nothing (camera readings, or calm ones without a camera), "loop" the whole simulated shift again and
- * again, "rest" a false warning, "danger" a false danger.
+ * again, "rest" a false warning, "danger" a false danger, "co2" the cabin CO2 above the engine's limit, "radiation" the
+ * radiation dose above it.
  */
-export type SimMode = "live" | "loop" | "rest" | "danger";
+export type SimMode = "live" | "loop" | "rest" | "danger" | "co2" | "radiation";
 
 const unit = (value: number) => Math.min(1, Math.max(0, value));
 
 /** How tired the simulated astronaut is, 0 rested to 1 exhausted, for each forced state. */
-const TIRED: Record<Exclude<SimMode, "loop">, number> = { live: 0, rest: 0.75, danger: 1 };
+const TIRED: Record<Exclude<SimMode, "loop">, number> = { live: 0, rest: 0.75, danger: 1, co2: 0, radiation: 0 };
+
+/** Cabin CO2 forced by the "co2" mode, in mmHg: over the 4 mmHg limit of the rules. */
+export const HIGH_CO2 = 6.5;
+
+/** Radiation dose forced by the "radiation" mode, in mSv: over the rules' 5 mSv placeholder. */
+export const HIGH_RADIATION = 6.2;
 
 /**
  * Simulated readings for a tiredness between 0 and 1, at second `t` (only the pulse depends on time). Nothing here
@@ -49,13 +56,20 @@ export function loopTiredness(t: number): number {
 /** Simulated cabin CO2 in mmHg: a slow swing that stays under the engine's limit (it is here to be watched). */
 export const simCabinCo2 = (t: number) => Math.round((3 + 0.4 * Math.sin(t / 20)) * 10) / 10;
 
+/** Simulated radiation dose in mSv: a quiet background that stays under the engine's limit (like the CO2, it is there to be watched). */
+export const simRadiation = (t: number) => Math.round((0.8 + 0.1 * Math.sin(t / 30)) * 10) / 10;
+
 /** The simulated readings for `mode`, refreshed twice a second. */
-export function useSimVitals(mode: SimMode): { vitals: Biometrics; cabinCo2: number } {
+export function useSimVitals(mode: SimMode): { vitals: Biometrics; cabinCo2: number; radiation: number } {
   const [t, setT] = useState(0);
   useEffect(() => {
     const started = performance.now();
     const id = setInterval(() => setT((performance.now() - started) / 1000), 500);
     return () => clearInterval(id);
   }, [mode]); // a looped shift starts from the beginning each time it is switched on
-  return { vitals: simVitals(mode === "loop" ? loopTiredness(t) : TIRED[mode], t), cabinCo2: simCabinCo2(t) };
+  return {
+    vitals: simVitals(mode === "loop" ? loopTiredness(t) : TIRED[mode], t),
+    cabinCo2: mode === "co2" ? HIGH_CO2 : simCabinCo2(t),
+    radiation: mode === "radiation" ? HIGH_RADIATION : simRadiation(t),
+  };
 }

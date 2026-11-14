@@ -14,6 +14,8 @@ import { useVerdict } from "@/modules/voice-ai/useVerdict";
 import { countermeasureSteps, listRules, telemetryFrom, type Rule } from "@/modules/voice-ai/verdictApi";
 import { GuidePanel } from "@/modules/guides/GuidePanel";
 import { MiniTwin } from "@/modules/guides/MiniTwin";
+import { HealthPanel } from "@/modules/guides/HealthPanel";
+import { HEALTH_POINTS } from "@/modules/guides/healthPoints";
 import { GUIDES, currentValue, statusOf } from "@/modules/guides/guides";
 import { useFaceMetrics } from "@/modules/vision-hud/useFaceMetrics";
 import { FaceOverlay } from "@/modules/vision-hud/FaceOverlay";
@@ -49,6 +51,7 @@ const CENTER: [number, number] = [0.5, 0.5];
 const DROWSY_SIGNAL = "biometrics.perclos";
 const EXHAUSTED_SIGNAL = "biometrics.fatigueScore";
 const CO2_SIGNAL = "environment.cabinCo2_mmHg";
+const RADIATION_SIGNAL = "environment.radiation_mSv";
 // With nothing to react to, PULSAR drifts to the next of these every so often instead of sitting in its corner.
 const WANDER: Spot[] = ["top_right", "bottom_right", "bottom_left", "home"];
 const WANDER_EVERY_MS = 20_000;
@@ -84,25 +87,31 @@ export function Hud() {
     () => (measured && simMode === "live" ? { ...measured, heartRateBpm: sim.vitals.heartRateBpm, heartRateConfidence: 0 } : sim.vitals),
     [measured, simMode, sim.vitals],
   );
-  const telemetryNow = useRef(telemetryFrom(reading, sim.cabinCo2));
-  telemetryNow.current = telemetryFrom(reading, sim.cabinCo2);
+  const telemetryNow = useRef(telemetryFrom(reading, sim.cabinCo2, sim.radiation));
+  telemetryNow.current = telemetryFrom(reading, sim.cabinCo2, sim.radiation);
   // The rules engine decides on those readings and Gemma phrases its verdict.
-  const { decision, advice, error } = useVerdict(reading, sim.cabinCo2);
+  const { decision, advice, error } = useVerdict(reading, sim.cabinCo2, sim.radiation);
   // The engine's own CO2 limit, for the cabin-air gauge: the HUD never hard-codes a threshold.
   const [rules, setRules] = useState<Rule[]>([]);
   useEffect(() => {
     listRules().then(setRules).catch(() => undefined);
   }, []);
   const co2Limit = rules.find((rule) => rule.signal === CO2_SIGNAL)?.threshold ?? null;
+  const radiationLimit = rules.find((rule) => rule.signal === RADIATION_SIGNAL)?.threshold ?? null;
   // The indicator guide that is open (G9), by contract signal, and the engine's status for each indicator.
   const [guideSignal, setGuideSignal] = useState<string | null>(null);
   const guide = GUIDES.find((candidate) => candidate.signal === guideSignal);
+  // The SALUD point whose panel is open (id in guides/healthPoints.ts); it shares the place of the guides, so one at a time.
+  const [healthId, setHealthId] = useState<string | null>(null);
+  const healthPoint = HEALTH_POINTS.find((candidate) => candidate.id === healthId);
   const guideStatuses = Object.fromEntries(GUIDES.map((candidate) => [candidate.signal, statusOf(candidate, decision, rules)]));
 
   // Two alarm levels, both read off the engine's verdict and never decided here: amber "time to rest" when it
   // finds the astronaut drowsy, red "danger" for anything it rates RED (exhaustion included).
   const flagged = (signal: string) => !!decision?.factors.some((f) => f.signal === signal);
-  const level: AlarmLevel = decision?.status === "RED" ? "danger" : flagged(DROWSY_SIGNAL) ? "rest" : null;
+  // Amber with a finding about the surroundings (cabin air) is a "warn": a warning with its steps, no reaction test.
+  const surroundings = decision?.status === "AMBER" && decision.factors.some((f) => f.signal.startsWith("environment."));
+  const level: AlarmLevel = decision?.status === "RED" ? "danger" : flagged(DROWSY_SIGNAL) ? "rest" : surroundings ? "warn" : null;
   // The astronaut stops an alarm by acknowledging it: the sound and the pulsing frame end, the indicator stays
   // until the readings clear. It rings again only for a later alarm, or if this one worsens from rest to danger.
   const [ackedLevel, setAckedLevel] = useState<AlarmLevel>(null);
@@ -113,6 +122,8 @@ export function Hud() {
   }, [level]);
   // A forced alarm switched off and on again is a new alarm, even when the engine never saw the gap between them.
   useEffect(() => setAckedLevel(null), [simMode]);
+  // A radiation or cabin-air alarm has nothing to do with reactions: pressing the button just acknowledges it.
+  const radiationOnly = (flagged(RADIATION_SIGNAL) || level === "warn") && !flagged(EXHAUSTED_SIGNAL) && !flagged(DROWSY_SIGNAL);
   const acknowledged = !!level && (ackedLevel === level || ackedLevel === "danger");
   const ringing: AlarmLevel = acknowledged ? null : level;
   // One sound per alarm level: forcing an alarm that is already on changes nothing here, so it cannot start another.
@@ -120,7 +131,10 @@ export function Hud() {
   useAlarmSound(sound && !testing ? ringing : null);
   // An alarm outranks a guide: the open guide closes so it never covers the alert and its steps.
   useEffect(() => {
-    if (ringing) setGuideSignal(null);
+    if (ringing) {
+      setGuideSignal(null);
+      setHealthId(null);
+    }
   }, [ringing]);
   // What to do about it: the steps of the countermeasure the engine picked, shown on the alert indicator.
   const [steps, setSteps] = useState<string[]>([]);
@@ -245,7 +259,7 @@ export function Hud() {
     setPos(next);
   }, [tx, ty, still, level, ringing, steps, reason, state, guideSignal]); // the panels come and go with the alarm and the camera
 
-  const edge = ringing === "danger" ? "border-red-500" : ringing === "rest" ? "border-amber-400" : "border-pulse/80";
+  const edge = ringing === "danger" ? "border-red-500" : (ringing === "rest" || ringing === "warn") ? "border-amber-400" : "border-pulse/80";
 
   return (
     <main className="relative h-screen w-screen overflow-hidden bg-space">
@@ -255,7 +269,19 @@ export function Hud() {
       {/* Below xl the centred text box (42rem wide, 12.5rem off the bottom) reaches under this column, so the column
           stops above it and scrolls. shortcut: assumes the box's usual height, measure it if the box grows. */}
       <div id={LEFT_COLUMN_ID} className="absolute left-8 top-60 z-[1] flex max-h-[calc(100vh-28.5rem)] w-64 flex-col gap-2 overflow-y-auto [scrollbar-color:var(--color-pulse)_transparent] [scrollbar-width:thin] xl:max-h-[calc(100vh-18rem)]">
-        <MiniTwin statuses={guideStatuses} open={guideSignal} onOpen={setGuideSignal} />
+        <MiniTwin
+          statuses={guideStatuses}
+          open={guideSignal}
+          onOpen={(signal) => {
+            setHealthId(null);
+            setGuideSignal(signal);
+          }}
+          healthOpen={healthId}
+          onOpenHealth={(id) => {
+            setGuideSignal(null);
+            setHealthId(id);
+          }}
+        />
         <DebugPanel mode={simMode} onMode={setSimMode} sound={sound} onSound={setSound} />
       </div>
       {state === "live" && <FaceOverlay frameRef={faceFrame} videoRef={videoRef} problem={faceProblem} />}
@@ -268,7 +294,7 @@ export function Hud() {
       <div className="hud-scanlines pointer-events-none absolute inset-0" />
       <div className="hud-vignette pointer-events-none absolute inset-0" />
 
-      {ringing === "rest" && <div className="hud-rest pointer-events-none absolute inset-0 border-4 border-amber-400" />}
+      {(ringing === "rest" || ringing === "warn") && <div className="hud-rest pointer-events-none absolute inset-0 border-4 border-amber-400" />}
       {ringing === "danger" && <div className="hud-danger pointer-events-none absolute inset-0 border-8 border-red-600" />}
 
       <div className="pointer-events-none absolute inset-4">
@@ -297,11 +323,14 @@ export function Hud() {
 
       <AlertIndicator
         level={level}
-        detail={level === "danger" && flagged(EXHAUSTED_SIGNAL) ? "NO ES SEGURO SEGUIR DESPIERTO" : undefined}
+        detail={
+          level === "danger" && flagged(EXHAUSTED_SIGNAL) ? "NO ES SEGURO SEGUIR DESPIERTO" : level === "danger" && radiationOnly ? "RADIACIÓN ALTA" : level === "warn" && flagged(CO2_SIGNAL) ? "CO2 ALTO EN LA CABINA" : undefined
+        }
         steps={steps}
         acknowledged={acknowledged}
         testing={testing}
-        onTest={() => setTesting(true)}
+        needsTest={!radiationOnly}
+        onTest={() => (radiationOnly ? setAckedLevel(level) : setTesting(true))}
       />
 
       <VerdictPanel
@@ -312,6 +341,8 @@ export function Hud() {
         simulated={!measured || simMode !== "live"}
         cabinCo2={sim.cabinCo2}
         cabinCo2Limit={co2Limit}
+        radiation={sim.radiation}
+        radiationLimit={radiationLimit}
         onOpenGuide={setGuideSignal}
       />
 
@@ -324,6 +355,8 @@ export function Hud() {
           onClose={() => setGuideSignal(null)}
         />
       )}
+
+      {healthPoint && <HealthPanel key={healthPoint.id} point={healthPoint} onClose={() => setHealthId(null)} />}
 
       <SensesBar line={bubble} onInstruction={instruct} />
 

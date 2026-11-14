@@ -23,6 +23,8 @@ export function VerdictPanel({
   simulated,
   cabinCo2,
   cabinCo2Limit,
+  radiation,
+  radiationLimit,
   onOpenGuide,
 }: {
   biometrics: Biometrics | null;
@@ -33,6 +35,9 @@ export function VerdictPanel({
   /** Cabin CO2 in mmHg and the engine's limit for it; the gauge is hidden without a reading. */
   cabinCo2?: number;
   cabinCo2Limit?: number | null;
+  /** Radiation dose in mSv and the engine's limit for it. */
+  radiation?: number;
+  radiationLimit?: number | null;
   /** Opens the indicator guide (G9) for a reading, by its contract signal. */
   onOpenGuide?: (signal: string) => void;
 }) {
@@ -103,6 +108,26 @@ export function VerdictPanel({
                 />
               </div>
               <div className="mt-1 text-right text-[11px] text-shell/80">LÍMITE {cabinCo2Limit.toFixed(1)} mmHg</div>
+            </>
+          )}
+        </div>
+      )}
+
+      {radiation != null && (
+        <div className="mt-3">
+          <div className="flex justify-between text-xs text-shell/90">
+            <span>RADIACIÓN · SIMULADA</span>
+            <span className="text-base text-shell">{radiation.toFixed(1)}<span className="ml-1 text-xs text-shell/90">mSv</span></span>
+          </div>
+          {radiationLimit != null && (
+            <>
+              <div className="mt-1 h-2 overflow-hidden rounded bg-shell/15" role="meter" aria-label="Dosis de radiación" aria-valuemin={0} aria-valuemax={radiationLimit} aria-valuenow={radiation}>
+                <div
+                  className={`h-full ${radiation >= radiationLimit ? "bg-amber-400" : "bg-pulse"}`}
+                  style={{ width: `${Math.min(100, (radiation / radiationLimit) * 100)}%` }}
+                />
+              </div>
+              <div className="mt-1 text-right text-[11px] text-shell/80">LÍMITE {radiationLimit.toFixed(1)} mSv</div>
             </>
           )}
         </div>

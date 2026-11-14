@@ -27,8 +27,46 @@
       "url": "https://www.nasa.gov/hrp/risks/",
       "findings": [
         "17 official risks in three groups: human physiology, behavioral performance and human factors, space radiation",
-        "None of them is about cabin CO2",
-        "No numeric thresholds"
+        "Risks Involving Human Physiology (11): Altered Immune System Responses; Altered Sensorimotor and Vestibular Function; Cardiovascular Adaptations; Decompression Sickness; Host-Microorganism Interactions; Hypoxia; Inadequate Food and Nutrition; Injury and Compromised Performance from Spacewalks; Reduced Cardiorespiratory and Musculoskeletal Fitness; Spaceflight Associated Neuro-ocular Syndrome (SANS); Spaceflight-Induced Bone Changes",
+        "Risks Involving Space Radiation (1): Radiation-Induced Cancers; the page lists no radiation countermeasure or dose limit",
+        "None of them is about cabin CO2; high CO2 is only named among the hazards of spacewalks (Injury and Compromised Performance from Spacewalks)",
+        "No numeric thresholds",
+        "Page checked 2026-11-14 (it shows 'last updated Jul 21, 2026')"
+      ]
+    },
+    "hrp-risk-pages-physiology": {
+      "type": "official",
+      "title": "NASA HRP: detail pages of the 11 Risks Involving Human Physiology (nasa.gov/reference/...)",
+      "url": "https://www.nasa.gov/hrp/risks/",
+      "findings": [
+        "Problems named per risk: motion sickness and disorientation (vestibular); optic nerve swelling (SANS); arrhythmia, clots and fainting (cardiovascular); confusion and headache (hypoxia); the bends (decompression); rashes and reactivated viruses (immune); bone density loss of 1% to 1.5% per month on 4 to 6 month missions; strength and aerobic fitness loss of 10% to 12%",
+        "Tools and countermeasures named: lower-body compression garments, ultrasound device, exercise, prebreathe of pure oxygen before spacewalks, redesigned spacesuits, a fundoscope, bisphosphonate medication, an improved food system (more than 200 foods and drinks on the ISS)",
+        "Several pages name no countermeasure (vestibular, SANS and immune are research only); none gives a first-aid procedure",
+        "Pages checked 2026-11-14; detail pages show 'last updated' dates between May 16, 2025 and Dec 02, 2025"
+      ]
+    },
+    "hrp-hazard-space-radiation": {
+      "type": "official",
+      "title": "NASA HRP: Hazard: Space Radiation",
+      "url": "https://www.nasa.gov/hrp/hazard-space-radiation/",
+      "findings": [
+        "Space radiation cannot be felt; sources named are galactic cosmic rays and solar storms (solar particle events, coronal mass ejections)",
+        "Effects listed: higher cancer risk, central nervous system damage, altered cognitive function, reduced motor function, behavioral changes",
+        "NASA says it continuously monitors space radiation and astronaut exposure and develops ways to protect against it, without describing procedures",
+        "No shielding design, storm shelter procedure or dose limit on the page; no numbers",
+        "Page checked 2026-11-14 (it shows 'last updated Jun 05, 2025')"
+      ]
+    },
+    "hrp-risk-radiation-cancers": {
+      "type": "official",
+      "title": "NASA HRP: Risk of Radiation-Induced Cancers",
+      "url": "https://www.nasa.gov/reference/risk-of-radiation-induced-cancers/",
+      "findings": [
+        "Astronauts receive more radiation than on Earth, which can lead to certain cancers; also possible effects on heart, blood vessels, eyes and the central nervous system",
+        "Instruments that measure radiation exposure are in place aboard the ISS; NASA is building shielding for Artemis and Gateway and studying it for Mars",
+        "NASA is developing best practices for health surveillance and medicines against radiation effects; no schedule or protocol given",
+        "No dose limit, storm shelter procedure or numbers on the page",
+        "Page checked 2026-11-14 (it shows 'last updated May 16, 2025')"
       ]
     },
     "hrp-ongoing-research": {

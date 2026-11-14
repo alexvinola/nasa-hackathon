@@ -14,9 +14,11 @@ const reasonOf = (d: Decision) => `${d.status}|${d.factors.map((f) => f.signal).
  * change, it asks Gemma for the sentence that phrases the new verdict and returns it as `advice`. Requests never
  * overlap; a backend that is down leaves the last verdict on screen with `error` set.
  */
-export function useVerdict(biometrics: Biometrics | null, cabinCo2?: number) {
+export function useVerdict(biometrics: Biometrics | null, cabinCo2?: number, radiation?: number) {
   const co2 = useRef(cabinCo2);
   co2.current = cabinCo2;
+  const dose = useRef(radiation);
+  dose.current = radiation;
   const [decision, setDecision] = useState<Decision | null>(null);
   const [advice, setAdvice] = useState<Advice | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -32,7 +34,7 @@ export function useVerdict(biometrics: Biometrics | null, cabinCo2?: number) {
       if (busy.current || !latest.current) return;
       busy.current = true;
       try {
-        const telemetry = telemetryFrom(latest.current, co2.current);
+        const telemetry = telemetryFrom(latest.current, co2.current, dose.current);
         const next = await evaluate(telemetry);
         setDecision(next);
         setError(null);

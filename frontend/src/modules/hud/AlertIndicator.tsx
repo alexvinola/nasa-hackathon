@@ -6,6 +6,7 @@ import { useHotkey } from "./useHotkey";
 const LOOK = {
   clear: { box: "border-pulse text-pulse", label: "TODO EN ORDEN" },
   rest: { box: "border-amber-400 text-amber-300", label: "HORA DE DESCANSAR" },
+  warn: { box: "border-amber-400 text-amber-300", label: "AVISO" },
   danger: { box: "border-red-500 text-red-200", label: "PELIGRO" },
 } as const;
 
@@ -14,6 +15,14 @@ function Icon({ level }: { level: AlarmLevel }) {
   if (level === "danger") {
     return (
       <svg {...common} className="hud-beat h-8 w-8 shrink-0" style={{ animationDuration: "0.9s" }}>
+        <path d="M12 3 2 20h20L12 3Z" />
+        <path d="M12 10v5M12 18h.01" />
+      </svg>
+    );
+  }
+  if (level === "warn") {
+    return (
+      <svg {...common} className="h-7 w-7 shrink-0">
         <path d="M12 3 2 20h20L12 3Z" />
         <path d="M12 10v5M12 18h.01" />
       </svg>
@@ -44,6 +53,7 @@ export function AlertIndicator({
   steps,
   acknowledged,
   testing,
+  needsTest = true,
   onTest,
 }: {
   level: AlarmLevel;
@@ -53,6 +63,8 @@ export function AlertIndicator({
   acknowledged: boolean;
   /** The reaction test is open: it owns the screen until it ends. */
   testing: boolean;
+  /** False for an alarm the reaction test says nothing about (radiation): one press acknowledges it. */
+  needsTest?: boolean;
   /** Opens the reaction test, the way to stop the alarm. */
   onTest: () => void;
 }) {
@@ -84,7 +96,7 @@ export function AlertIndicator({
           onClick={onTest}
           className={`mt-3 w-full border-2 px-3 py-2 text-sm text-white disabled:opacity-60 ${level === "danger" ? "border-red-400 bg-red-600 font-bold" : "border-amber-300 bg-amber-400 font-bold !text-space"}`}
         >
-          {acknowledged ? "ENTENDIDO · ALARMA DETENIDA" : "HAZ EL TEST DE REACCIÓN PARA DETENER LA ALARMA (ESC)"}
+          {acknowledged ? "ENTENDIDO · ALARMA DETENIDA" : needsTest ? "HAZ EL TEST DE REACCIÓN PARA DETENER LA ALARMA (ESC)" : "ENTENDIDO · DETENER LA ALARMA (ESC)"}
         </button>
       )}
     </section>

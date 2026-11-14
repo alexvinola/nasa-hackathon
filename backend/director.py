@@ -178,8 +178,8 @@ def direct(scene: Scene, engine: RulesEngine | None = None) -> dict:
         reaction = "alert" if decision and decision["status"] != "GREEN" else "calm"
         return {"say": say, "spot": scene.spot if scene.spot in SPOTS else "home", "reaction": reaction, "speak": True}
     if scene.user_spoke and ASKS_READINGS.search(scene.instruction):
-        # Heart rate and cabin CO2 come from the sensor MCP server: Gemma calls its tools and phrases the readings.
-        say, out_of_limits = read_sensors(scene.instruction)
+        # Vitals come from the sensor MCP server (fed with the readings the HUD shows): Gemma calls its tools and phrases them.
+        say, out_of_limits = read_sensors(scene.instruction, scene.telemetry)
         return {"say": say, "spot": scene.spot if scene.spot in SPOTS else "home",
                 "reaction": "alert" if out_of_limits else "calm", "speak": True}
     facts = []

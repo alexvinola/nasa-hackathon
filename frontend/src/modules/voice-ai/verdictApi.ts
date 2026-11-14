@@ -21,8 +21,12 @@ export type Telemetry = typeof nominal;
  * The full contract the engine needs. Only `biometrics` is measured (the camera); sleep, mood, cabin and the PVT
  * keep shared/examples/nominal.json until the judge sliders (G6) and the PVT-B (G3) fill them.
  */
-export function telemetryFrom(biometrics: Biometrics, cabinCo2?: number): Telemetry {
-  const environment = cabinCo2 == null ? nominal.environment : { ...nominal.environment, cabinCo2_mmHg: cabinCo2 };
+export function telemetryFrom(biometrics: Biometrics, cabinCo2?: number, radiation?: number): Telemetry {
+  const environment = {
+    ...nominal.environment,
+    ...(cabinCo2 == null ? {} : { cabinCo2_mmHg: cabinCo2 }),
+    ...(radiation == null ? {} : { radiation_mSv: radiation }),
+  };
   return { ...nominal, timestamp: Math.floor(Date.now() / 1000), biometrics, environment } as Telemetry;
 }
 

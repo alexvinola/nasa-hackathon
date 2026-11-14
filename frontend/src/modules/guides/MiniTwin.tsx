@@ -3,8 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { HudPanel } from "@/modules/hud/HudPanel";
+import { HEALTH_POINTS } from "./healthPoints";
 import { GUIDES, type GuideStatus } from "./guides";
-import { FIGURE_ASPECT, FIGURE_HALF_HEIGHT, SITE, disposeScene, lightScene, standingFigure } from "./mannequin";
+import { FIGURE_ASPECT, FIGURE_HALF_HEIGHT, SITE, disposeScene, lightScene, standingFigure, type V3 } from "./mannequin";
 
 const HEIGHT = 288; // CSS pixels
 const WIDTH = HEIGHT * FIGURE_ASPECT;
@@ -63,37 +64,75 @@ export function MiniTwin({
   statuses,
   open,
   onOpen,
+  healthOpen,
+  onOpenHealth,
 }: {
   statuses: Record<string, GuideStatus>;
   /** Signal of the guide currently open, if any. */
   open: string | null;
   onOpen: (signal: string) => void;
+  /** Id of the SALUD point whose panel is open, if any. */
+  healthOpen: string | null;
+  onOpenHealth: (id: string) => void;
 }) {
+  // "measure": a marker where each instrument is used. "health": a marker for each body zone NASA lists risks for.
+  const [tab, setTab] = useState<"measure" | "health">("measure");
+  const TAB = "flex-1 border px-1 py-1 text-[11px] tracking-[0.08em]";
+  const place = ([x, y]: V3) => ({
+    left: `${((x / (FIGURE_HALF_HEIGHT * FIGURE_ASPECT) + 1) / 2) * 100}%`,
+    top: `${((1 - y / FIGURE_HALF_HEIGHT) / 2) * 100}%`,
+  });
   return (
     <HudPanel title="CÓMO MEDIR" data-twin>
+      <div role="tablist" aria-label="Medir o salud" className="mb-2 flex gap-1">
+        {([["measure", "MEDIR"], ["health", "SALUD"]] as const).map(([id, label]) => (
+          <button
+            key={id}
+            type="button"
+            role="tab"
+            aria-selected={tab === id}
+            onClick={() => setTab(id)}
+            className={`${TAB} ${tab === id ? "border-pulse bg-pulse/20 text-pulse" : "border-shell/40 text-shell/80"}`}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+      {tab === "health" && <p className="mb-1 text-[11px] normal-case tracking-normal text-shell/80">Toca un punto del cuerpo: riesgos, herramientas y qué hacer, a ti o a un compañero.</p>}
       <div className="relative mx-auto" style={{ width: WIDTH, height: HEIGHT }}>
         <Figure />
-        {GUIDES.map((guide) => {
-          const [x, y] = SITE[guide.signal];
-          const status = statuses[guide.signal];
-          return (
+        {tab === "measure" &&
+          GUIDES.map((guide) => {
+            const status = statuses[guide.signal];
+            return (
+              <button
+                key={guide.signal}
+                type="button"
+                data-indicator={guide.signal}
+                aria-pressed={open === guide.signal}
+                aria-label={`Abrir la guía: ${guide.label} (${status.toLowerCase()})`}
+                title={guide.label}
+                onClick={() => onOpen(guide.signal)}
+                // The figure is drawn with a front orthographic camera, so a site maps straight to the box.
+                style={place(SITE[guide.signal])}
+                className={`absolute h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 ${DOT[status]} ${open === guide.signal ? "ring-2 ring-shell" : ""} hover:ring-2 hover:ring-shell focus-visible:ring-2 focus-visible:ring-shell`}
+              />
+            );
+          })}
+        {tab === "health" &&
+          HEALTH_POINTS.map((point) => (
             <button
-              key={guide.signal}
+              key={point.id}
               type="button"
-              data-indicator={guide.signal}
-              aria-pressed={open === guide.signal}
-              aria-label={`Abrir la guía: ${guide.label} (${status.toLowerCase()})`}
-              title={guide.label}
-              onClick={() => onOpen(guide.signal)}
-              // The figure is drawn with a front orthographic camera, so a site maps straight to the box.
-              style={{
-                left: `${((x / (FIGURE_HALF_HEIGHT * FIGURE_ASPECT) + 1) / 2) * 100}%`,
-                top: `${((1 - y / FIGURE_HALF_HEIGHT) / 2) * 100}%`,
-              }}
-              className={`absolute h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 ${DOT[status]} ${open === guide.signal ? "ring-2 ring-shell" : ""} hover:ring-2 hover:ring-shell focus-visible:ring-2 focus-visible:ring-shell`}
+              data-health-point={point.id}
+              aria-pressed={healthOpen === point.id}
+              aria-label={`Abrir salud: ${point.label}`}
+              title={point.label}
+              onClick={() => onOpenHealth(point.id)}
+              style={place(point.site)}
+              className={`absolute h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-orbit bg-orbit/70 ${healthOpen === point.id ? "ring-2 ring-shell" : ""} hover:ring-2 hover:ring-shell focus-visible:ring-2 focus-visible:ring-shell`}
             />
-          );
-        })}
+          ))}
       </div>
     </HudPanel>
   );
