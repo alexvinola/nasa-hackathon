@@ -1,0 +1,124 @@
+{
+  "$comment": "G9 indicator guides: how a non-doctor takes each measurement, why it matters in spaceflight and what to do when it looks wrong. `how` steps follow the cited sources (ids in shared/sources.json) or are declared team wording in `assumption`; each step's `focus` is the part of the guide animation it highlights. `why` names an official HRP risk or hazard (shared/hrp.json). Guides quote no ranges: `whenAbnormal` lists the engine's rule ids (backend/assets/rules.json) and countermeasure ids, and an indicator with no rule says so. Not clinical guidance; not a medical device.",
+  "indicators": [
+    {
+      "signal": "biometrics.heartRateBpm",
+      "label": "Heart rate",
+      "instrument": "Two fingers and a timer",
+      "how": [
+        { "text": "For a resting reading, rest for at least 10 minutes first.", "focus": "arm" },
+        { "text": "Turn one hand palm up and find the underside of the wrist, just below the base of the thumb.", "focus": "arm" },
+        { "text": "Place the tips of your index and middle fingers there. Do not use your thumb.", "focus": "fingers" },
+        { "text": "Press lightly with flat fingertips until you feel the pulse.", "focus": "beat" },
+        { "text": "Count the beats for 30 seconds and multiply by 2, or count for one full minute.", "focus": "timer" }
+      ],
+      "why": "Your pulse is the simplest sign of how the heart is coping. NASA tracks the Risk of Cardiovascular Adaptations in spaceflight, and far from Earth a pulse you count yourself is the first thing the crew medical officer will ask for.",
+      "whenAbnormal": {
+        "text": "PULSAR does not judge this value yet: tell the crew medical officer. Give them the number, when you took it and how you feel; do not decide by yourself whether it is normal.",
+        "ruleIds": [],
+        "countermeasureIds": []
+      },
+      "sources": ["medlineplus-pulse", "hrp-risks"],
+      "assumption": null
+    },
+    {
+      "signal": "selfReport.bloodPressure",
+      "label": "Blood pressure",
+      "instrument": "Automatic upper-arm cuff",
+      "how": [
+        { "text": "Do not eat or drink for 30 minutes before, and empty your bladder.", "focus": "arm" },
+        { "text": "Sit with your back supported for at least 5 minutes, feet flat and legs uncrossed.", "focus": "arm" },
+        { "text": "Put the cuff on your bare upper arm, snug but comfortable.", "focus": "cuff" },
+        { "text": "Rest the arm so the cuff is at chest height.", "focus": "arm" },
+        { "text": "Start the monitor and do not talk while it measures.", "focus": "monitor" },
+        { "text": "Take at least two readings, 1 to 2 minutes apart, and log each one.", "focus": "monitor" }
+      ],
+      "why": "Blood pressure shows how the heart and blood vessels are adapting. It is one of the readings behind NASA's Risk of Cardiovascular Adaptations, and a careful log lets the flight surgeon see a trend instead of a single number.",
+      "whenAbnormal": {
+        "text": "PULSAR does not judge this value yet: tell the crew medical officer. Give them both numbers, when you took them and how you feel; do not decide by yourself whether they are normal.",
+        "ruleIds": [],
+        "countermeasureIds": []
+      },
+      "sources": ["cdc-blood-pressure-measure", "hrp-risks"],
+      "assumption": null
+    },
+    {
+      "signal": "selfReport.glucoseMgDl",
+      "label": "Blood glucose",
+      "instrument": "Glucose meter, test strip and lancet",
+      "how": [
+        { "text": "Put the meter, a test strip and the lancet device within reach before you start.", "focus": "meter" },
+        { "text": "Wash the fingertip with soap and water, not an alcohol pad, and let it dry completely.", "focus": "hand" },
+        { "text": "Load a lancet into its spring-loaded device and prick the finger.", "focus": "lancet" },
+        { "text": "Place a drop of blood on the test strip.", "focus": "drop" },
+        { "text": "Read the number on the meter's display. If it is unexpected, test again with a new strip.", "focus": "meter" },
+        { "text": "Log the result with the time of day.", "focus": "meter" }
+      ],
+      "why": "Blood glucose reflects how well food is fuelling the body. NASA tracks the Risk of Inadequate Food and Nutrition on long missions, where the menu is fixed and resupply is far away.",
+      "whenAbnormal": {
+        "text": "PULSAR does not judge this value yet: tell the crew medical officer. Give them the number, when you took it and when you last ate; do not decide by yourself whether it is normal.",
+        "ruleIds": [],
+        "countermeasureIds": []
+      },
+      "sources": ["medlineplus-home-blood-sugar", "hrp-risks"],
+      "assumption": null
+    },
+    {
+      "signal": "selfReport.bodyTempC",
+      "label": "Body temperature",
+      "instrument": "Electronic thermometer, in the mouth",
+      "how": [
+        { "text": "Wait 20 to 30 minutes after eating or drinking anything hot or cold, and 1 hour after heavy exercise.", "focus": "head" },
+        { "text": "Clean the thermometer.", "focus": "thermometer" },
+        { "text": "Place the probe under your tongue and bring your lips together.", "focus": "thermometer" },
+        { "text": "Breathe through your nose and hold the thermometer firmly with your lips.", "focus": "head" },
+        { "text": "Keep it in place until it beeps, then read the display.", "focus": "display" },
+        { "text": "Clean the thermometer again.", "focus": "thermometer" }
+      ],
+      "why": "A change in body temperature can be an early sign that the body is fighting something. NASA tracks the Risk of Altered Immune System Responses in spaceflight, and in a closed cabin an illness matters to the whole crew.",
+      "whenAbnormal": {
+        "text": "PULSAR does not judge this value yet: tell the crew medical officer. Give them the number, when you took it and how you feel; do not decide by yourself whether it is normal.",
+        "ruleIds": [],
+        "countermeasureIds": []
+      },
+      "sources": ["medlineplus-temperature", "hrp-risks"],
+      "assumption": null
+    },
+    {
+      "signal": "selfReport.sleepHoursLast24h",
+      "label": "Sleep",
+      "instrument": "Your own sleep log",
+      "how": [
+        { "text": "Think back over the last 24 hours, counting from now.", "focus": "clock" },
+        { "text": "Add up every period you actually slept, naps included. Leave out time spent lying awake.", "focus": "head" },
+        { "text": "Enter the total hours in PULSAR.", "focus": "log" }
+      ],
+      "why": "NASA reports that astronauts commonly experience sleep deprivation, and fatigue leads to task errors. This is the Risk of Inadequate Sleep and Irregular Schedules, and an honest sleep log is how the crew catches it early.",
+      "whenAbnormal": {
+        "text": "The rules engine checks this value. If it raises a flag, follow the countermeasure steps PULSAR shows and tell a crew member before critical work.",
+        "ruleIds": ["sleep-under-6h"],
+        "countermeasureIds": ["CM-FATIGUE-01"]
+      },
+      "sources": ["nasa-sleep-risk", "jones-2022-sleep", "hrp-risks"],
+      "assumption": "The how-steps are PULSAR's own self-report procedure (team wording): no registered source describes how crew log sleep."
+    },
+    {
+      "signal": "selfReport.mood",
+      "label": "Mood",
+      "instrument": "A daily self-check, 1 to 5",
+      "how": [
+        { "text": "Take a quiet moment and ask yourself how you feel overall right now.", "focus": "face" },
+        { "text": "Pick a number from 1 (very low) to 5 (very good). There is no right answer.", "focus": "scale" },
+        { "text": "Enter it in PULSAR as today's mood.", "focus": "scale" }
+      ],
+      "why": "Months of Isolation and Confinement wear on anyone. NASA tracks the Risk of Behavioral Changes and Psychiatric Disorders, and a short daily self-check lets you and the crew notice a slide before it affects the mission.",
+      "whenAbnormal": {
+        "text": "The rules engine checks this value. If it raises a flag, follow the countermeasure steps PULSAR shows and talk to a crew member you trust.",
+        "ruleIds": ["mood-low"],
+        "countermeasureIds": ["CM-MOOD-01"]
+      },
+      "sources": ["nasa-behavioral-health-risk", "hrp-risks"],
+      "assumption": "The how-steps and the 1 to 5 scale are PULSAR's own self-report design (team wording), as in the mood-low rule."
+    }
+  ]
+}

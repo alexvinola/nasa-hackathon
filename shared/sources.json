@@ -234,6 +234,69 @@
         "14 astronauts on 6-month missions destroyed 54% more red blood cells than on Earth",
         "Space anemia resolved within 3-4 months back on Earth; destruction was still 30% above preflight a year later"
       ]
+    },
+    "medlineplus-pulse": {
+      "type": "official",
+      "title": "MedlinePlus Medical Encyclopedia (NIH National Library of Medicine): Pulse",
+      "url": "https://medlineplus.gov/ency/article/003399.htm",
+      "findings": [
+        "Wrist pulse: index and middle fingers, not the thumb, on the underside of the opposite wrist below the base of the thumb; press lightly with flat fingertips",
+        "Count for one full minute, or for 30 seconds and multiply by 2",
+        "For a resting heart rate, rest for at least 10 minutes first",
+        "Used by the G9 heart-rate guide for how to take the measurement, not for any range"
+      ]
+    },
+    "cdc-blood-pressure-measure": {
+      "type": "official",
+      "title": "CDC: Measuring Your Blood Pressure",
+      "url": "https://www.cdc.gov/high-blood-pressure/measure/index.html",
+      "findings": [
+        "Before measuring: no food or drink for 30 minutes, empty the bladder, sit with the back supported for at least 5 minutes",
+        "Feet flat, legs uncrossed, arm resting with the cuff at chest height, cuff on the bare upper arm, snug but comfortable, no talking",
+        "Take at least two readings 1 to 2 minutes apart and keep a log",
+        "Used by the G9 blood-pressure guide for how to take the measurement, not for any range"
+      ]
+    },
+    "medlineplus-home-blood-sugar": {
+      "type": "official",
+      "title": "MedlinePlus Medical Encyclopedia (NIH National Library of Medicine): Home blood sugar testing",
+      "url": "https://medlineplus.gov/ency/patientinstructions/000324.htm",
+      "findings": [
+        "Have all test items within reach; wash the prick area with soap and water, not an alcohol pad, and let it dry completely",
+        "Prick the finger with a lancet in its spring-loaded device, place a drop of blood on a test strip, read the meter's display",
+        "If the value is unexpectedly high or low, test again with a new strip; log the result with the time of day",
+        "Used by the G9 glucose guide for how to take the measurement, not for any range"
+      ]
+    },
+    "medlineplus-temperature": {
+      "type": "official",
+      "title": "MedlinePlus Medical Encyclopedia (NIH National Library of Medicine): Temperature measurement",
+      "url": "https://medlineplus.gov/ency/article/003400.htm",
+      "findings": [
+        "Oral electronic thermometer: clean it, probe under the tongue, mouth closed, breathe through the nose, hold for 3 minutes or until it beeps",
+        "Wait at least 20 to 30 minutes after eating or drinking a hot or cold liquid, and at least 1 hour after heavy exercise or a hot bath",
+        "Used by the G9 body-temperature guide for how to take the measurement, not for any range"
+      ]
+    },
+    "nasa-sleep-risk": {
+      "type": "official",
+      "title": "NASA: Risk of Performance Decrements and Adverse Health Outcomes Resulting from Sleep Loss, Circadian Desynchronization, and Work Overload",
+      "url": "https://www.nasa.gov/directorates/esdmd/hhp/risk-of-performance-decrements-and-adverse-health-outcomes-resulting-from-sleep-loss-circadian-desynchronization-and-work-overload/",
+      "findings": [
+        "Top-tier performance depends on an adequate quantity of daily sleep and appropriate sleep quality",
+        "Spaceflight experience has shown that astronauts commonly experience sleep deprivation; fatigue leads to task errors",
+        "Does not describe how crew sleep is logged: the G9 sleep guide's steps are team wording"
+      ]
+    },
+    "nasa-behavioral-health-risk": {
+      "type": "official",
+      "title": "NASA: Risk of Adverse Cognitive or Behavioral Changes and Psychiatric Disorders (Behavioral Health Risk)",
+      "url": "https://www.nasa.gov/directorates/esdmd/hhp/behavioral-health-risk/",
+      "findings": [
+        "Isolation and confinement can adversely impact individual and crew health, well-being and performance",
+        "Countermeasures for exploration-class missions have not yet been developed and validated",
+        "Does not describe a mood self-report: the G9 mood guide's steps are team wording"
+      ]
     }
   }
 }

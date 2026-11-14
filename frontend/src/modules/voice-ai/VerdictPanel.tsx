@@ -22,6 +22,7 @@ export function VerdictPanel({
   simulated,
   cabinCo2,
   cabinCo2Limit,
+  onOpenGuide,
 }: {
   biometrics: Biometrics | null;
   decision: Decision | null;
@@ -31,6 +32,8 @@ export function VerdictPanel({
   /** Cabin CO2 in mmHg and the engine's limit for it; the gauge is hidden without a reading. */
   cabinCo2?: number;
   cabinCo2Limit?: number | null;
+  /** Opens the indicator guide (G9) for a reading, by its contract signal. */
+  onOpenGuide?: (signal: string) => void;
 }) {
   const bpm = biometrics?.heartRateBpm;
 
@@ -44,12 +47,18 @@ export function VerdictPanel({
 
       {bpm != null && (
         // Everything here keeps time with the heart: one beat of the icon and one sweep of the trace per heartbeat.
-        <div className="mt-3 flex items-center gap-3 rounded border border-red-400/40 bg-red-500/10 px-3 py-2">
+        <button
+          type="button"
+          data-reading="biometrics.heartRateBpm"
+          title="How to take your pulse"
+          onClick={() => onOpenGuide?.("biometrics.heartRateBpm")}
+          className="pointer-events-auto mt-3 flex w-full items-center gap-3 rounded border border-red-400/40 bg-red-500/10 px-3 py-2 text-left tracking-[0.1em] hover:border-red-300"
+        >
           <span aria-hidden className="hud-beat text-3xl leading-none text-red-400" style={{ animationDuration: `${60 / bpm}s` }}>♥</span>
-          <div>
-            <div className="text-2xl leading-none tracking-normal text-shell">{bpm}<span className="ml-1 text-xs text-shell/70">BPM</span></div>
-            <div className="mt-1 text-xs text-red-300">PULSE · SIMULATED</div>
-          </div>
+          <span>
+            <span className="block text-2xl leading-none tracking-normal text-shell">{bpm}<span className="ml-1 text-xs text-shell/70">BPM</span></span>
+            <span className="mt-1 block text-xs text-red-300">PULSE · SIMULATED</span>
+          </span>
           <svg aria-hidden viewBox="0 0 120 32" className="ml-auto h-8 w-28 text-red-400">
             <polyline
               className="hud-ecg"
@@ -62,7 +71,7 @@ export function VerdictPanel({
               pathLength={100}
             />
           </svg>
-        </div>
+        </button>
       )}
 
       {biometrics && (

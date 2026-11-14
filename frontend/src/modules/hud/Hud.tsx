@@ -9,7 +9,10 @@ import { useWebcam, type CamState } from "./useWebcam";
 import { SensesBar } from "@/modules/voice-ai/SensesBar";
 import { VerdictPanel } from "@/modules/voice-ai/VerdictPanel";
 import { useVerdict } from "@/modules/voice-ai/useVerdict";
-import { countermeasureSteps, ruleThreshold, telemetryFrom } from "@/modules/voice-ai/verdictApi";
+import { countermeasureSteps, listRules, telemetryFrom, type Rule } from "@/modules/voice-ai/verdictApi";
+import { GuidePanel } from "@/modules/guides/GuidePanel";
+import { MiniTwin } from "@/modules/guides/MiniTwin";
+import { GUIDES, currentValue, statusOf } from "@/modules/guides/guides";
 import { useFaceMetrics } from "@/modules/vision-hud/useFaceMetrics";
 import { FaceOverlay } from "@/modules/vision-hud/FaceOverlay";
 import type { Biometrics, FaceFrame } from "@/modules/vision-hud/faceWorker";
@@ -83,10 +86,15 @@ export function Hud() {
   // The rules engine decides on those readings and Gemma phrases its verdict.
   const { decision, advice, error } = useVerdict(reading, sim.cabinCo2);
   // The engine's own CO2 limit, for the cabin-air gauge: the HUD never hard-codes a threshold.
-  const [co2Limit, setCo2Limit] = useState<number | null>(null);
+  const [rules, setRules] = useState<Rule[]>([]);
   useEffect(() => {
-    ruleThreshold(CO2_SIGNAL).then(setCo2Limit).catch(() => undefined);
+    listRules().then(setRules).catch(() => undefined);
   }, []);
+  const co2Limit = rules.find((rule) => rule.signal === CO2_SIGNAL)?.threshold ?? null;
+  // The indicator guide that is open (G9), by contract signal, and the engine's status for each indicator.
+  const [guideSignal, setGuideSignal] = useState<string | null>(null);
+  const guide = GUIDES.find((candidate) => candidate.signal === guideSignal);
+  const guideStatuses = Object.fromEntries(GUIDES.map((candidate) => [candidate.signal, statusOf(candidate, decision, rules)]));
 
   // Two alarm levels, both read off the engine's verdict and never decided here: amber "time to rest" when it
   // finds the astronaut drowsy, red "danger" for anything it rates RED (exhaustion included).
@@ -102,6 +110,10 @@ export function Hud() {
   const ringing: AlarmLevel = acknowledged ? null : level;
   // One sound per alarm level: forcing an alarm that is already on changes nothing here, so it cannot start another.
   useAlarmSound(sound ? ringing : null);
+  // An alarm outranks a guide: the open guide closes so it never covers the alert and its steps.
+  useEffect(() => {
+    if (ringing) setGuideSignal(null);
+  }, [ringing]);
   // What to do about it: the steps of the countermeasure the engine picked, shown on the alert indicator.
   const [steps, setSteps] = useState<string[]>([]);
   const countermeasure = level ? decision?.countermeasureId : null;
@@ -223,7 +235,7 @@ export function Hud() {
     setHeading(face.current.front + Math.sign(next.x - face.current.x) * 0.9); // look where it flies
     face.current.x = next.x;
     setPos(next);
-  }, [tx, ty, still, level, ringing, steps, reason, state]); // the panels come and go with the alarm and the camera
+  }, [tx, ty, still, level, ringing, steps, reason, state, guideSignal]); // the panels come and go with the alarm and the camera
 
   const edge = ringing === "danger" ? "border-red-500" : ringing === "rest" ? "border-amber-400" : "border-pulse/80";
 
@@ -283,7 +295,19 @@ export function Hud() {
         simulated={!measured || simMode !== "live"}
         cabinCo2={sim.cabinCo2}
         cabinCo2Limit={co2Limit}
+        onOpenGuide={setGuideSignal}
       />
+
+      <MiniTwin statuses={guideStatuses} open={guideSignal} onOpen={setGuideSignal} />
+      {guide && (
+        <GuidePanel
+          key={guide.signal}
+          guide={guide}
+          value={currentValue(guide.signal, telemetryNow.current)}
+          status={guideStatuses[guide.signal]}
+          onClose={() => setGuideSignal(null)}
+        />
+      )}
 
       <DebugPanel mode={simMode} onMode={setSimMode} sound={sound} onSound={setSound} />
 

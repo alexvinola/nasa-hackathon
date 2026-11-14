@@ -28,10 +28,16 @@ export function telemetryFrom(biometrics: Biometrics, cabinCo2?: number): Teleme
 
 /** The limit the rules engine applies to one signal (GET /rules), so the HUD never hard-codes a threshold. */
 export async function ruleThreshold(signal: string): Promise<number | null> {
+  return (await listRules()).find((rule) => rule.signal === signal)?.threshold ?? null;
+}
+
+export type Rule = { id: string; signal: string; threshold: number; status: Status };
+
+/** Every rule the engine applies (GET /rules). */
+export async function listRules(): Promise<Rule[]> {
   const response = await fetch(`${API}/rules`);
   if (!response.ok) throw new Error(`Backend error ${response.status}`);
-  const rules: { signal: string; threshold: number }[] = await response.json();
-  return rules.find((rule) => rule.signal === signal)?.threshold ?? null;
+  return response.json();
 }
 
 async function post<T>(path: string, body: unknown): Promise<T> {
