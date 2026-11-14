@@ -21,7 +21,8 @@ def goals():
         text = path.read_text(encoding="utf-8")
         title = text.splitlines()[0].lstrip("# ").strip()
         owner = re.search(r"Owner:\s*([^·\n]+)", text)
-        yield path.name.split("-")[0], title, owner.group(1).strip() if owner else "?"
+        optional = re.search(r"Optional:\s*yes", text) is not None
+        yield path.name.split("-")[0], title, owner.group(1).strip() if owner else "?", optional
 
 
 def run(goal_id):
@@ -45,15 +46,19 @@ def main() -> int:
     parser.add_argument("--skip", nargs="*", default=[])
     args = parser.parse_args()
 
-    passed = total = 0
-    for goal_id, title, owner in goals():
+    passed = total = optional_passed = optional_total = 0
+    for goal_id, title, owner, optional in goals():
         if (args.only and goal_id not in args.only) or goal_id in args.skip:
             continue
         status, detail, seconds = run(goal_id)
-        total += 1
-        passed += status == "PASS"
+        if optional:  # listed, but never what makes the scoreboard red
+            optional_total += 1
+            optional_passed += status == "PASS"
+        else:
+            total += 1
+            passed += status == "PASS"
         print(f"{status:<8} {title:<34} {owner:<22} {seconds:5.0f}s  {detail[:90]}", flush=True)
-    print(f"\n{passed}/{total} goals green")
+    print(f"\n{passed}/{total} goals green" + (f", {optional_passed}/{optional_total} optional" if optional_total else ""))
     return 0 if passed == total else 1
 
 
