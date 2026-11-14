@@ -6,17 +6,14 @@ breaks one, a deterministic sentence built from the verdict is spoken instead, s
 the engine did not decide.
 """
 
-import json
 import re
 import time
-import urllib.error
-import urllib.request
 from collections.abc import Mapping
 from dataclasses import dataclass, field
 from typing import Any
 
+from pulsar.ollama import chat
 from pulsar.rules.engine import RulesEngine
-from pulsar.voice.config import load_voice_settings
 
 SYSTEM = """\
 You are PULSAR, the onboard health assistant of a long-duration space mission.
@@ -99,19 +96,8 @@ def fallback(decision: Mapping[str, Any], step: str | None) -> str:
 
 
 def ask_gemma(system: str, user: str) -> str:
-    settings = load_voice_settings()
-    payload = {
-        "model": settings.llm_model,
-        "stream": False,
-        "think": False,  # on by default in Gemma 4; it only adds latency to two sentences
-        "keep_alive": "30m",
-        "options": {"temperature": 0.2, "num_predict": 90},
-        "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}],
-    }
-    request = urllib.request.Request(f"{settings.ollama_url}/api/chat", data=json.dumps(payload).encode(),
-                                     headers={"Content-Type": "application/json"})
-    with urllib.request.urlopen(request, timeout=120) as response:
-        return json.load(response)["message"]["content"].strip()
+    return chat([{"role": "system", "content": system}, {"role": "user", "content": user}],
+                options={"temperature": 0.2, "num_predict": 90})
 
 
 def phrase(decision: Mapping[str, Any], transcript: str, step: str | None) -> Phrasing:
