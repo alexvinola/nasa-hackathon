@@ -58,12 +58,12 @@ def test_describe_says_so_when_ollama_is_down(monkeypatch):
 
 @pytest.mark.skipif(not senses.VOICE.exists(), reason="Piper voice not downloaded: make prefetch")
 def test_what_piper_says_whisper_understands():
-    spoken = client.post("/tts", json={"text": "The quick brown fox jumps over the lazy dog."})
+    spoken = client.post("/tts", json={"text": "El pingüino come pescado en la cocina."})
     assert spoken.status_code == 200 and spoken.content[:4] == b"RIFF"
 
     heard = client.post("/stt", content=spoken.content)
     assert heard.status_code == 200, heard.text
-    assert "fox" in heard.json()["text"].lower()
+    assert "pescado" in heard.json()["text"].lower()
 
     silence = io.BytesIO()
     with wave.open(silence, "wb") as wav:
@@ -221,3 +221,11 @@ def test_biometrics_are_checked_against_the_contract():
     missing = {k: v for k, v in good.items() if k != "perclos"}
     assert client.post("/biometrics", json=missing).status_code == 422
     assert client.post("/biometrics", json=[1, 2]).status_code == 422
+
+
+def test_sensor_questions_go_through_the_mcp_readings(monkeypatch):
+    import director
+
+    monkeypatch.setattr(director, "read_sensors", lambda question: ("El CO2 de la cabina está en 6,5 mmHg.", True))
+    told = client.post("/pulsar/act", json={"user_spoke": True, "instruction": "¿Cómo está el CO2?"}).json()
+    assert told["say"] == "El CO2 de la cabina está en 6,5 mmHg." and told["reaction"] == "alert" and told["speak"]
