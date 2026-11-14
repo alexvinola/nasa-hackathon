@@ -435,31 +435,33 @@ dependencies = [
     { name = "av" },
     { name = "fastapi" },
     { name = "faster-whisper" },
+    { name = "jsonschema" },
     { name = "piper-tts" },
+    { name = "pydantic" },
     { name = "uvicorn" },
 ]
 
 [package.dev-dependencies]
 dev = [
     { name = "httpx" },
-    { name = "jsonschema" },
     { name = "pytest" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "av", specifier = "<19" },
-    { name = "fastapi" },
+    { name = "fastapi", specifier = ">=0.162.7" },
     { name = "faster-whisper" },
+    { name = "jsonschema", specifier = ">=4.26.0" },
     { name = "piper-tts" },
-    { name = "uvicorn" },
+    { name = "pydantic", specifier = ">=2.14.3" },
+    { name = "uvicorn", specifier = ">=0.54.0" },
 ]
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "httpx" },
-    { name = "jsonschema" },
-    { name = "pytest" },
+    { name = "httpx", specifier = ">=0.28.1" },
+    { name = "pytest", specifier = ">=9.2.0" },
 ]
 
 [[package]]
