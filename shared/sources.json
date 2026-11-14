@@ -93,7 +93,8 @@
       "title": "Psychomotor Vigilance Test (PVT) on ISS (data.nasa.gov)",
       "url": "https://data.nasa.gov/dataset/Psychomotor-Vigilance-Test-PVT-on-ISS/s6vw-3v2s",
       "findings": [
-        "Design reference for the PVT-B; link may have changed"
+        "Was the design reference for the PVT-B",
+        "Returns 404 as of 2026-11-14: the dataset is no longer on data.nasa.gov"
       ]
     },
     "nasa-standard-measures": {
@@ -109,7 +110,9 @@
       "title": "NASA ASRS Database Report Sets",
       "url": "https://asrs.arc.nasa.gov/search/reportsets.html",
       "findings": [
-        "Aviation incident narratives, including crew fatigue sets",
+        "Two fatigue sets of 50 reports each: air carrier (FAR 121) and commuter/corporate crews",
+        "Fatigue co-occurs with lost situational awareness in 65 of 100 reports; 46 happen in approach, descent or landing; 82 involve a procedural deviation (research/nasa-data/findings/asrs.txt)",
+        "Voluntary, uncorroborated reports: counts describe the sample, not how often anything happens",
         "Source for the forensic intro script"
       ]
     },
@@ -145,6 +148,43 @@
       "url": "https://mrl.cs.vsb.cz/eyedataset.html",
       "findings": [
         "84,898 infrared eye images, open or closed; optional check of the eye-closed threshold"
+      ]
+    },
+    "osdr-inspiration4": {
+      "type": "paper",
+      "title": "Overbey et al. (2024), Inspiration4 data access through the NASA Open Science Data Repository, npj Microgravity",
+      "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11094041/",
+      "findings": [
+        "First open-access human dataset from a commercial spaceflight: 4 civilian crew, 3-day orbital mission (2021)",
+        "Processed data are public; raw genetic data need an approved application"
+      ]
+    },
+    "osdr-osd-569": {
+      "type": "dataset",
+      "title": "NASA OSDR OSD-569: Whole blood measurements from the SpaceX Inspiration4 mission (includes the complete blood count)",
+      "url": "https://osdr.nasa.gov/bio/repo/data/studies/OSD-569",
+      "findings": [
+        "Complete blood count for 4 crew at 7 draws (L-92, L-44, L-3, R+1, R+45, R+82, R+194) with the lab's reference ranges",
+        "Day after landing, in all 4 crew: white cells about -20%, monocyte share about +26%, red cell size (MCV) about -4%; the white-cell and monocyte shifts persist to R+194, so they are not clearly flight effects (research/nasa-data/findings/labs.txt)"
+      ]
+    },
+    "osdr-osd-575": {
+      "type": "dataset",
+      "title": "NASA OSDR OSD-575: Inspiration4 serum: comprehensive metabolic panel and immune/cardiovascular multiplex panels",
+      "url": "https://osdr.nasa.gov/bio/repo/data/studies/OSD-575",
+      "findings": [
+        "Lab reference ranges: glucose 65-99 mg/dL, potassium 3.5-5.3 mmol/L, sodium 135-146 mmol/L, calcium 8.6-10.2 mg/dL",
+        "Day after landing, in all 4 crew: glucose about +23% (back to baseline later; fasting state unknown), bicarbonate (CO2) about -4%",
+        "The multiplex panel's L-44 draw reads about 10x lower in all crew and some values sit at the assay ceiling: treat that panel's trends as unreliable"
+      ]
+    },
+    "trudel-2022-hemolysis": {
+      "type": "paper",
+      "title": "Trudel et al. (2022), Hemolysis contributes to anemia during long-duration space flight, Nature Medicine",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8799460",
+      "findings": [
+        "14 astronauts on 6-month missions destroyed 54% more red blood cells than on Earth",
+        "Space anemia resolved within 3-4 months back on Earth; destruction was still 30% above preflight a year later"
       ]
     }
   }

@@ -20,3 +20,7 @@ backend/assets/voices/
 
 # secrets
 .env
+
+# NASA raw downloads (research/nasa-data/fetch.sh) and OS clutter
+research/nasa-data/raw/
+.DS_Store
