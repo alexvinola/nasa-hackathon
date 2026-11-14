@@ -8,10 +8,16 @@
  * so it is sent as 0 (not measured by the camera).
  *
  * The score is a fixed-weight proposal (goals/SCOPE-fatigue.md, Tier 0): PERCLOS dominates, yawns and head
- * instability add to it. G2 replaces the weights with a trained model; until then this is a threshold, not a verdict.
+ * instability add to it. It is what the contract carries and what the rules engine sees. Eyes held closed for
+ * seconds raise it at once (./sleep): PERCLOS over a minute alone would need 18 s of closed eyes to be noticed.
+ *
+ * The model trained on RLDD (G2, ./fatigueModel) runs next to it over the last 60 s as a second reading for the
+ * overlay. It does not replace the score: it was not shown to beat the fixed formula, and its scale is different.
  */
 
 import { FaceLandmarker, FilesetResolver } from "@mediapipe/tasks-vision";
+import { estimateFatigue, WINDOW_S, type FatigueEstimate, type Sample } from "./fatigueModel";
+import { SustainedClosure } from "./sleep";
 import { BLINK } from "./thresholds";
 import { mouthOpenRatio, YawnDetector } from "./yawn";
 
@@ -47,6 +53,8 @@ export type FaceFrame = {
   axes: number[] | null; // the head's x, y, z axes projected on the image: [xx, xy, yx, yy, zx, zy]
   delegate: "GPU" | "CPU";
   faceMs: number; // time spent in the face model for this frame
+  model: FatigueEstimate | null; // the RLDD model on the last 60 s; null while there is no usable window
+  modelWaitS: number; // seconds left until a full 60 s window exists; 0 once it does
 };
 
 const scope = self as unknown as {
@@ -56,6 +64,7 @@ const scope = self as unknown as {
 
 const WINDOW_MS = 60_000; // PERCLOS is the share of the last minute with the eyes closed
 const NOD = 0.03; // nose drop, as a fraction of frame height, that counts as a head nod
+const MODEL_EVERY_MS = 1000; // how often the RLDD model is run again over the last 60 s
 
 let face: FaceLandmarker | undefined;
 let busy = false;
@@ -67,6 +76,11 @@ const yawns: number[] = []; // when each yawn was counted, in ms
 const yawnDetector = new YawnDetector(); // calibrated on YawDD: lip ratio ≥ 0.26 held for ≥ 1 s, counted once
 const nods: number[] = [];
 const noseY: number[] = [];
+const closure = new SustainedClosure();
+const samples: Sample[] = []; // every processed frame of the last 60 s, for the RLDD model
+let sampledSince: number | undefined; // when the first frame of this session was processed, in ms
+let modelAt = 0;
+let model: FatigueEstimate | null = null;
 
 /** Loads the model once. Tries the GPU (WebGL in the worker) and falls back to the CPU if the browser refuses. */
 function load(): Promise<void> {
@@ -90,6 +104,7 @@ function load(): Promise<void> {
   return ready;
 }
 
+const DEG = 180 / Math.PI;
 const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
 const mean = (xs: number[]) => (xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : 0);
 
@@ -107,7 +122,8 @@ function score(now: number): Biometrics {
   const spread = Math.sqrt(mean(noseY.map((y) => (y - mean(noseY)) ** 2)));
   const postureStability = clamp01(1 - spread * 12);
   // 0.6 PERCLOS + 0.25 yawns (4 a minute saturates) + 0.15 head instability
-  const fatigueScore = clamp01(0.6 * perclos + 0.25 * Math.min(1, yawnsPerMin / 4) + 0.15 * (1 - postureStability));
+  const overMinute = clamp01(0.6 * perclos + 0.25 * Math.min(1, yawnsPerMin / 4) + 0.15 * (1 - postureStability));
+  const fatigueScore = Math.max(overMinute, closure.score(now / 1000)); // asleep now outweighs the minute's average
   return {
     heartRateBpm: null, // rPPG is a stretch goal (SCOPE-fatigue.md)
     heartRateConfidence: 0,
@@ -121,14 +137,38 @@ function score(now: number): Biometrics {
   };
 }
 
+/**
+ * The RLDD model's reading of the last 60 s. The model was trained on full windows, with rates per minute, so it
+ * says nothing until this session has 60 s of frames: a shorter window would read as fewer blinks and yawns.
+ */
+function readModel(now: number) {
+  sampledSince ??= now;
+  while (samples.length && samples[0].t <= now / 1000 - WINDOW_S) samples.shift();
+  if (now - modelAt < MODEL_EVERY_MS) return;
+  modelAt = now;
+  model = now - sampledSince >= WINDOW_S * 1000 ? estimateFatigue(samples) : null;
+}
+
 function readFace(result: ReturnType<FaceLandmarker["detectForVideo"]>, now: number, width: number, height: number) {
   const landmarks = result.faceLandmarks?.[0];
+  const mouth = mouthOpenRatio(landmarks, width, height);
   // Every frame goes to the detector, with a NaN ratio when there is no face: a lost face must not end a yawn early.
-  if (yawnDetector.push(now / 1000, mouthOpenRatio(landmarks, width, height))) yawns.push(now);
+  if (yawnDetector.push(now / 1000, mouth)) yawns.push(now);
   const shapes = result.faceBlendshapes?.[0]?.categories;
+  const at = (name: string) => shapes?.find((c) => c.categoryName === name)?.score ?? 0;
+  const closed = (at("eyeBlinkLeft") + at("eyeBlinkRight")) / 2 > BLINK;
+  const m = result.facialTransformationMatrixes?.[0]?.data;
+  samples.push({
+    t: now / 1000,
+    face: Boolean(landmarks),
+    closed: landmarks && shapes ? Number(closed) : Number.NaN,
+    pitch: landmarks && m ? Math.atan2(m[6], m[10]) * DEG : Number.NaN,
+    mouth,
+  });
+  readModel(now);
+  closure.push(now / 1000, landmarks && shapes ? closed : null);
   if (!shapes) return;
-  const at = (name: string) => shapes.find((c) => c.categoryName === name)?.score ?? 0;
-  eyes.push({ at: now, closed: (at("eyeBlinkLeft") + at("eyeBlinkRight")) / 2 > BLINK });
+  eyes.push({ at: now, closed });
   if (landmarks) {
     const nose = landmarks[1] ?? landmarks[0];
     const before = noseY[noseY.length - 1];
@@ -136,8 +176,6 @@ function readFace(result: ReturnType<FaceLandmarker["detectForVideo"]>, now: num
     if (before !== undefined && nose.y - before > NOD) nods.push(now);
   }
 }
-
-const DEG = 180 / Math.PI;
 
 function frameOf(
   faceResult: ReturnType<FaceLandmarker["detectForVideo"]>,
@@ -164,6 +202,8 @@ function frameOf(
     axes: m ? [m[0], m[1], m[4], m[5], m[8], m[9]] : null,
     delegate,
     faceMs,
+    model,
+    modelWaitS: sampledSince === undefined ? WINDOW_S : Math.max(0, WINDOW_S - (at - sampledSince) / 1000),
   };
 }
 
@@ -203,5 +243,9 @@ scope.onmessage = (event) => {
     yawnDetector.reset();
     nods.length = 0;
     noseY.length = 0;
+    closure.reset();
+    samples.length = 0;
+    sampledSince = undefined;
+    model = null;
   }
 };
