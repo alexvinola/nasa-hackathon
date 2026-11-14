@@ -28,16 +28,20 @@ export function SensesBar({
   camLive,
   line,
   onSeen,
+  onInstruction,
 }: {
   videoRef: RefObject<HTMLVideoElement | null>;
   camLive: boolean;
   line: string;
   onSeen: (description: string | null) => void;
+  /** The astronaut's order, spoken (TALK) or typed. */
+  onInstruction?: (text: string) => void;
 }) {
   const [voice, setVoice] = useState(false);
   const [watching, setWatching] = useState(false);
   const [talk, setTalk] = useState<"idle" | "recording" | "transcribing">("idle");
   const [heard, setHeard] = useState("");
+  const [typed, setTyped] = useState("");
   const [error, setError] = useState("");
   const recorder = useRef<MediaRecorder | null>(null);
   const fail = (e: unknown) => setError(e instanceof Error ? e.message : String(e));
@@ -97,7 +101,9 @@ export function SensesBar({
         stream.getTracks().forEach((t) => t.stop());
         setTalk("transcribing");
         try {
-          setHeard(await transcribe(new Blob(chunks, { type: rec.mimeType })));
+          const text = await transcribe(new Blob(chunks, { type: rec.mimeType }));
+          setHeard(text);
+          if (text) onInstruction?.(text);
           setError("");
         } catch (e) {
           fail(e);
@@ -112,11 +118,33 @@ export function SensesBar({
     }
   };
 
+  const send = (e: React.FormEvent) => {
+    e.preventDefault();
+    const text = typed.trim();
+    if (!text) return;
+    setHeard(text);
+    setTyped("");
+    onInstruction?.(text);
+  };
+
   return (
     <div className="absolute inset-x-0 bottom-16 flex flex-col items-center gap-2 px-8 text-[11px] tracking-[0.2em]">
       <p role="status" className="min-h-4 max-w-xl text-center tracking-normal text-shell">
         {error ? <span className="text-orbit">{error}</span> : heard && `YOU · ${heard}`}
       </p>
+      <form onSubmit={send} className="flex w-full max-w-xl gap-2">
+        <input
+          value={typed}
+          onChange={(e) => setTyped(e.target.value)}
+          maxLength={400}
+          placeholder="Tell PULSAR what to do..."
+          aria-label="Type an instruction for PULSAR"
+          className="min-w-0 flex-1 border-2 border-shell/40 bg-space/70 px-3 py-1 tracking-normal text-shell outline-none placeholder:text-shell/40 focus:border-pulse"
+        />
+        <button type="submit" disabled={!typed.trim()} className="border-2 border-pulse bg-pulse/20 px-3 py-1 text-pulse disabled:opacity-40">
+          SEND
+        </button>
+      </form>
       <div className="flex gap-2">
         <Toggle on={voice} onClick={() => setVoice(!voice)}>VOICE</Toggle>
         <Toggle on={talk === "recording"} disabled={talk === "transcribing"} onClick={toggleTalk}>
