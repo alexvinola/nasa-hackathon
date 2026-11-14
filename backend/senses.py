@@ -35,6 +35,8 @@ def local_only(request: Request) -> None:
 router = APIRouter(dependencies=[Depends(local_only)])
 
 VOICE = Path(os.environ.get("PULSAR_VOICE", Path(__file__).parent / "assets/voices/en_US-lessac-medium.onnx"))
+# English only. Speech in any other language comes out as nonsense: set PULSAR_WHISPER_MODEL=base (multilingual,
+# about twice as slow) to be understood in Spanish, for example.
 WHISPER_MODEL = os.environ.get("PULSAR_WHISPER_MODEL", "base.en")
 OLLAMA_URL = os.environ.get("PULSAR_OLLAMA_URL", "http://127.0.0.1:11434")
 VISION_MODEL = os.environ.get("PULSAR_LLM_MODEL", "gemma4:e4b-it-qat")
@@ -81,7 +83,8 @@ def voice():
 def transcribe(audio: bytes) -> str:
     model = whisper()
     try:
-        segments, _ = model.transcribe(io.BytesIO(audio))
+        # The VAD drops silence, which whisper otherwise "hears" as short made-up words ("You", "Thank you.").
+        segments, _ = model.transcribe(io.BytesIO(audio), vad_filter=True, condition_on_previous_text=False)
         return " ".join(segment.text.strip() for segment in segments)
     except Exception as error:  # PyAV raises its own family of errors for anything it cannot decode
         raise HTTPException(422, f"could not decode the audio: {error}") from error
@@ -108,6 +111,9 @@ def chat(messages: list[dict], **extra) -> str:
         "keep_alive": KEEP_ALIVE,
         "messages": messages,
         **extra,
+        # Every call must ask for the same context size, or Ollama reloads the model. PULSAR's prompts stay far
+        # below this, and half the default context is memory the laptop gets back.
+        "options": {"num_ctx": 2048, **extra.get("options", {})},
     }
     request = urllib.request.Request(
         f"{OLLAMA_URL}/api/chat", data=json.dumps(payload).encode(), headers={"Content-Type": "application/json"}
@@ -122,11 +128,12 @@ def chat(messages: list[dict], **extra) -> str:
 
 
 def warm_up() -> None:
-    """Loads the model into memory ahead of the first question; an Ollama that is not running is not an error here."""
-    try:
-        chat([])
-    except Exception:
-        pass
+    """Loads the models ahead of the first question (each takes seconds); a missing one is not an error here."""
+    for load in (whisper, lambda: VOICE.exists() and voice(), lambda: chat([])):
+        try:
+            load()
+        except Exception:
+            pass
 
 
 def describe(image: bytes) -> str:

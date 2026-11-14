@@ -30,6 +30,8 @@ const SPOTS: Record<Spot, [number, number]> = {
 // Mascot plus speech bubble plus both screen margins, so it never flies off screen.
 const MASCOT_W = 192 + 12 + 260 + 64;
 const MASCOT_H = 192 + 64;
+// How long after PULSAR speaks the conversation stays open, so a spoken reply needs neither its name nor a question.
+const ENGAGED_MS = 30_000;
 
 const CAM_LABEL: Record<CamState, string> = {
   starting: "CAM · STARTING",
@@ -58,6 +60,8 @@ export function Hud() {
   // Gemma's last decision (where to go, how to react, what to say); it overrides the mock script once it exists.
   const [directed, setDirected] = useState<Direction | null>(null);
   const said = useRef<string[]>([]);
+  const turns = useRef<string[]>([]); // the conversation, oldest first: "Astronaut: ..." and "PULSAR: ..."
+  const spokeAt = useRef(-Infinity); // when PULSAR last said something
   const spot = useRef<Spot>("home");
   const mock = MOCK_SCRIPT[step];
   const line = directed ? { text: directed.say, mood: directed.reaction === "alert" ? "alert" : "idle" as Mood, at: SPOTS[directed.spot || "home"] } : mock;
@@ -70,16 +74,24 @@ export function Hud() {
 
   // One call to Gemma, from either trigger. A stale answer never overwrites a newer one, and a silent one is dropped.
   const asked = useRef(0);
-  const ask = useCallback((seenNow: string | null, order: string, userSpoke: boolean) => {
+  const ask = useCallback((seenNow: string | null, order: string, userSpoke: boolean, viaVoice = false) => {
     const mine = ++asked.current;
     // WATCH is off, so there is no description: let Gemma look at the frame itself rather than answer blind.
     const frame = userSpoke && !seenNow ? frameBase64(videoRef.current).catch(() => undefined) : undefined;
+    // For a while after PULSAR speaks, whatever the open microphone hears counts as a reply to it.
+    const engaged = performance.now() - spokeAt.current < ENGAGED_MS;
     Promise.resolve(frame)
-      .then((image) => direct({ image, seen: seenNow ?? "", instruction: order, userSpoke, said: said.current, spot: spot.current }))
+      .then((image) =>
+        direct({ image, seen: seenNow ?? "", instruction: order, userSpoke, viaVoice, engaged, history: turns.current, said: said.current, spot: spot.current }),
+      )
       .then((d) => {
         if (mine !== asked.current || !d.speak || !d.spot) return;
         spot.current = d.spot;
         said.current = [...said.current, d.say].slice(-5);
+        // The backend compacts this further; here it only has to stay bounded.
+        turns.current = [...turns.current, ...(userSpoke ? [`Astronaut: ${order}`] : []), `PULSAR: ${d.say}`].slice(-12);
+        spokeAt.current = performance.now();
+        if (userSpoke) setInstruction(order); // only words PULSAR took as meant for it become the standing instruction
         setDirected(d);
       })
       .catch(() => mine === asked.current && setDirected(null)); // backend or model down: back to the plain line
@@ -92,11 +104,8 @@ export function Hud() {
     lastSeen.current = seen;
   }, [seen]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // The astronaut spoke or typed: always answered, using the latest description.
-  const instruct = useCallback((text: string) => {
-    setInstruction(text);
-    ask(lastSeen.current, text, true);
-  }, [ask]);
+  // The astronaut typed (always answered) or spoke (answered when it was meant for PULSAR), using the latest description.
+  const instruct = useCallback((text: string, spoken = false) => ask(lastSeen.current, text, true, spoken), [ask]);
 
   useEffect(() => {
     const [fx, fy] = still ? [0, 0] : [tx, ty];

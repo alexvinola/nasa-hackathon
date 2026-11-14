@@ -3,6 +3,7 @@
 import io
 import json
 import urllib.error
+import wave
 
 import pytest
 from fastapi.testclient import TestClient
@@ -63,6 +64,12 @@ def test_what_piper_says_whisper_understands():
     assert heard.status_code == 200, heard.text
     assert "fox" in heard.json()["text"].lower()
 
+    silence = io.BytesIO()
+    with wave.open(silence, "wb") as wav:
+        wav.setparams((1, 2, 16000, 0, "NONE", "NONE"))
+        wav.writeframes(bytes(2 * 16000 * 3))
+    assert client.post("/stt", content=silence.getvalue()).json() == {"text": ""}  # silence is not turned into words
+
 
 def test_director_only_accepts_closed_choices_and_safe_lines():
     import director
@@ -102,6 +109,36 @@ def test_director_asks_gemma_for_one_short_line(monkeypatch):
     assert sent["body"]["think"] is False and sent["body"]["keep_alive"]
     assert client.post("/pulsar/act", json={}).status_code == 400
     assert client.post("/pulsar/act", json={"instruction": "hi", "image": "not a jpeg"}).status_code == 422
+
+
+def test_director_decides_when_to_speak_without_asking_the_model(monkeypatch):
+    import director
+
+    def no_model(request, timeout):
+        raise AssertionError("the model must not be called")
+
+    monkeypatch.setattr(senses.urllib.request, "urlopen", no_model)
+    heard = {"user_spoke": True, "via_voice": True}
+    for not_for_pulsar in ("Yeah, I'll call you back after lunch, bye mum.", "Uh. Hmm."):
+        assert client.post("/pulsar/act", json={**heard, "instruction": not_for_pulsar}).json() == director.SILENT
+    for meant_for_it in ("Pulsar, come here", "What is that?", "¿Qué ves?", "Please move left"):
+        assert director.addressed(meant_for_it)
+    # health is never the model's call, typed or spoken
+    assert client.post("/pulsar/act", json={"user_spoke": True, "instruction": "Do I look tired?"}).json()["say"] == director.NOT_MINE
+    assert not director.FORBIDDEN.search("I will still paint it.")  # "ill" and "pain" only count as whole words
+
+
+def test_director_takes_a_reply_and_remembers_compactly(monkeypatch):
+    sent = {}
+    answering(monkeypatch, "none|home|calm|It is white.", sent)
+    history = [f"Astronaut: line number {n} is a rather long sentence with many more words than nine" for n in range(10)]
+    scene = {"user_spoke": True, "via_voice": True, "engaged": True, "instruction": "the white one", "history": history}
+
+    assert client.post("/pulsar/act", json=scene).json()["say"] == "It is white."  # no name, no question: a reply
+    prompt = sent["body"]["messages"][1]["content"]
+    assert "number 9 is a rather long sentence with many more words than nine" in prompt  # the latest turns, whole
+    assert "number 5 is a rather long sentence..." in prompt  # older ones, cut short
+    assert "number 3" not in prompt  # the oldest, forgotten
 
 
 def test_director_survives_a_line_in_the_wrong_shape(monkeypatch):
