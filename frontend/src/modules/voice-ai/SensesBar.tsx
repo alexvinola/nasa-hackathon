@@ -5,6 +5,8 @@ import { describeFrame, frameSignature, sceneChange, speak, stopSpeaking, transc
 
 // shortcut: guessed threshold (0-255) that has never seen a real camera, tune it on the demo laptop's webcam and lighting.
 const SCENE_CHANGE = 12;
+// Rest after each description, so constant movement cannot chain model calls or cut the spoken line short.
+const COOLDOWN_MS = 4000;
 
 function Toggle({ on, children, ...rest }: { on: boolean; children: ReactNode } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
@@ -40,6 +42,7 @@ export function SensesBar({
   const [heard, setHeard] = useState("");
   const [error, setError] = useState("");
   const recorder = useRef<MediaRecorder | null>(null);
+  const starting = useRef(false);
   const fail = (e: unknown) => setError(e instanceof Error ? e.message : String(e));
 
   useEffect(() => {
@@ -61,14 +64,16 @@ export function SensesBar({
       try {
         const video = videoRef.current!;
         const now = frameSignature(video);
+        let wait = 500;
         if (now && (!described || sceneChange(now, described) > SCENE_CHANGE)) {
           described = now;
           const seen = await describeFrame(video);
           if (!on) return;
           onSeen(seen);
           setError("");
+          wait = COOLDOWN_MS;
         }
-        timer = window.setTimeout(look, 500);
+        timer = window.setTimeout(look, wait);
       } catch (e) {
         if (!on) return;
         fail(e);
@@ -88,6 +93,8 @@ export function SensesBar({
 
   const toggleTalk = async () => {
     if (talk === "recording") return recorder.current?.stop();
+    if (starting.current) return; // a second click while the permission prompt is open must not open a second stream
+    starting.current = true;
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const rec = new MediaRecorder(stream);
@@ -109,6 +116,8 @@ export function SensesBar({
       setTalk("recording");
     } catch (e) {
       fail(e); // microphone denied or missing
+    } finally {
+      starting.current = false;
     }
   };
 

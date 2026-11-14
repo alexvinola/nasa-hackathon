@@ -9,17 +9,30 @@ import base64
 import io
 import json
 import os
+import re
+import threading
 import urllib.error
 import urllib.request
 import wave
 from functools import cache
 from pathlib import Path
 
-from fastapi import APIRouter, HTTPException, Request, Response
+from fastapi import APIRouter, Depends, HTTPException, Request, Response
 from fastapi.concurrency import run_in_threadpool
 from pydantic import BaseModel, Field
 
-router = APIRouter()
+LOCAL = re.compile(r"(https?://)?(localhost|127\.0\.0\.1)(:\d+)?")
+
+
+def local_only(request: Request) -> None:
+    """CORS only hides answers. A browser names the calling page in Origin and, under DNS rebinding, a foreign Host."""
+    for header in ("origin", "host"):
+        value = request.headers.get(header)
+        if value and not LOCAL.fullmatch(value):
+            raise HTTPException(403, "PULSAR only answers pages served from this machine")
+
+
+router = APIRouter(dependencies=[Depends(local_only)])
 
 VOICE = Path(os.environ.get("PULSAR_VOICE", Path(__file__).parent / "assets/voices/en_US-lessac-medium.onnx"))
 WHISPER_MODEL = os.environ.get("PULSAR_WHISPER_MODEL", "base.en")
@@ -36,12 +49,14 @@ VISION_PROMPT = (
 
 
 async def read_body(request: Request, limit: int, kind: str) -> bytes:
-    body = await request.body()
+    body = bytearray()
+    async for chunk in request.stream():  # stop reading at the limit instead of buffering whatever is sent
+        body += chunk
+        if len(body) > limit:
+            raise HTTPException(413, f"{kind} larger than {limit // 1024 // 1024} MB")
     if not body:
         raise HTTPException(400, f"empty {kind}")
-    if len(body) > limit:
-        raise HTTPException(413, f"{kind} larger than {limit // 1024 // 1024} MB")
-    return body
+    return bytes(body)
 
 
 @cache
@@ -67,11 +82,14 @@ def transcribe(audio: bytes) -> str:
         raise HTTPException(422, f"could not decode the audio: {error}") from error
 
 
+speaking = threading.Lock()
+
+
 def synthesize(text: str) -> bytes:
     if not VOICE.exists():
         raise HTTPException(503, f"Piper voice missing at {VOICE}: run make prefetch")
     buffer = io.BytesIO()
-    with wave.open(buffer, "wb") as wav:
+    with speaking, wave.open(buffer, "wb") as wav:  # one utterance at a time: Piper's phonemizer is not thread-safe
         voice().synthesize_wav(text, wav)
     return buffer.getvalue()
 
@@ -80,6 +98,7 @@ def describe(image: bytes) -> str:
     payload = {
         "model": VISION_MODEL,
         "stream": False,
+        "think": False,  # on by default in Gemma 4 and it would eat the short answer budget (research/llm/README.md)
         "options": {"temperature": 0.2, "num_predict": 80},
         "messages": [
             {"role": "system", "content": VISION_PROMPT},
