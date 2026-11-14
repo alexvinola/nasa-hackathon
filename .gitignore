@@ -33,3 +33,5 @@ research/nasa-data/raw/
 
 # G1 fixtures: the raw .y4m Chromium plays is ~120 MB; rebuild it from the .mp4 with data/fixtures/record.sh convert
 data/fixtures/*.y4m
+# The .mp4 sources are faces and the repository goes public: kept out unless the team decides to publish them
+data/fixtures/*.mp4
