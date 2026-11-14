@@ -48,7 +48,7 @@ Nobody writes in someone else's folder: until integration, work against `shared/
 ## Stack and commands
 
 - Frontend: Next.js, Tailwind, Framer Motion, ECharts, Zustand, `@mediapipe/tasks-vision` in a Web Worker; pnpm, Vitest, Playwright.
-- Backend: Python 3.12 with uv, FastAPI, Pydantic; faster-whisper (int8), Ollama `gemma2:2b`, Piper TTS.
+- Backend: Python 3.12 with uv, FastAPI, Pydantic; faster-whisper (int8), Ollama `gemma4:e2b-it-qat` (Gemma 4 E2B, 4.3 GB; `gemma4:e4b-it-qat` if G5 latency allows), Piper TTS.
 - Data: uv, Jupyter, pandas, scikit-learn, MediaPipe for Python, DuckDB.
 
 ```bash

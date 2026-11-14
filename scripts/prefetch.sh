@@ -24,7 +24,7 @@ done
 
 if command -v ollama >/dev/null; then
   pgrep -x ollama >/dev/null || (ollama serve >/dev/null 2>&1 &) && sleep 2
-  ollama pull gemma2:2b
+  ollama pull "${PULSAR_LLM_MODEL:-gemma4:e2b-it-qat}" || echo "WARNING: Gemma 4 needs a recent Ollama: brew upgrade ollama, then re-run"
 else
   echo "WARNING: install Ollama (brew install ollama) and re-run"
 fi

@@ -6,7 +6,7 @@ In order of urgency. Tick each box in the PR or in the team chat.
 
 - [ ] **RLDD download (FS1).** 111.3 GB: download only 1 fold (or 2) and start now; it is G2's critical path.
       Ask the DROZY authors if the site does not answer; YawDD needs a free IEEE account.
-- [ ] **`make prefetch` on all three laptops** (MediaPipe, Piper voices, `gemma2:2b`, whisper base.en/small.en).
+- [ ] **`make prefetch` on all three laptops** (MediaPipe, Piper voices, `gemma4:e2b-it-qat` (4.3 GB), whisper base.en/small.en; Gemma 4 needs a recent Ollama).
       Then check that it works with Wi-Fi off.
 - [ ] **GitHub repo**: create `synapse-nasa-2026`, give all three access, protect `main` (PR required).
       `gh auth login` on each laptop.
