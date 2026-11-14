@@ -30,3 +30,6 @@ backend/assets/voices/
 # NASA raw downloads (research/nasa-data/fetch.sh) and OS clutter
 research/nasa-data/raw/
 .DS_Store
+
+# G1 fixtures: the raw .y4m Chromium plays is ~120 MB; rebuild it from the .mp4 with data/fixtures/record.sh convert
+data/fixtures/*.y4m

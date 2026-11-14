@@ -106,8 +106,10 @@ function score(now: number): Biometrics {
   const yawnsPerMin = yawns.length; // the window is one minute
   const spread = Math.sqrt(mean(noseY.map((y) => (y - mean(noseY)) ** 2)));
   const postureStability = clamp01(1 - spread * 12);
-  // 0.6 PERCLOS + 0.25 yawns (4 a minute saturates) + 0.15 head instability
-  const fatigueScore = clamp01(0.6 * perclos + 0.25 * Math.min(1, yawnsPerMin / 4) + 0.15 * (1 - postureStability));
+  // 0.8 PERCLOS + 0.1 yawns (4 a minute saturates) + 0.1 head instability. Team assumption until G2 trains the
+  // weights: PERCLOS is the eye measure validated against PVT lapses (dinges-1998-ocular), and eyes held closed must
+  // be able to cross 0.7 on their own (goals/G1-camera-fatigue.md); with 0.6 the ceiling was 0.6.
+  const fatigueScore = clamp01(0.8 * perclos + 0.1 * Math.min(1, yawnsPerMin / 4) + 0.1 * (1 - postureStability));
   return {
     heartRateBpm: null, // rPPG is a stretch goal (SCOPE-fatigue.md)
     heartRateConfidence: 0,
