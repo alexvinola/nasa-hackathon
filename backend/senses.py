@@ -41,10 +41,15 @@ VISION_MODEL = os.environ.get("PULSAR_LLM_MODEL", "gemma4:e4b-it-qat")
 MAX_AUDIO = 10 * 1024 * 1024
 MAX_IMAGE = 2 * 1024 * 1024
 
+# Ollama unloads an idle model after 5 minutes by default, and reloading it is the slowest thing it does.
+KEEP_ALIVE = "30m"
+
 VISION_PROMPT = (
-    "You are the eyes of PULSAR, a companion for astronauts. Describe what is visible in the camera frame in at "
-    "most two short sentences: who is there, their posture, what they are doing and the surroundings. "
-    "Only describe. Do not diagnose, do not judge health, fatigue or mood, do not give advice and do not use numbers."
+    "You are the eyes of PULSAR, a companion robot for astronauts. Look at the camera frame and report only what is "
+    "clearly visible, in one or two short sentences: how many people, where they are in the picture (left, right or "
+    "centre), their posture and what they are doing, any object they hold or use, and any readable text. "
+    "Be specific and name things; if something is unclear, leave it out rather than guess. "
+    "Only describe. Do not diagnose, do not judge health, fatigue or mood, do not give advice and do not use digits."
 )
 
 
@@ -94,20 +99,15 @@ def synthesize(text: str) -> bytes:
     return buffer.getvalue()
 
 
-def describe(image: bytes) -> str:
+def chat(messages: list[dict], **extra) -> str:
+    """One answer from the local model. `extra` adds Ollama fields such as `options` or `format`."""
     payload = {
         "model": VISION_MODEL,
         "stream": False,
         "think": False,  # on by default in Gemma 4 and it would eat the short answer budget (research/llm/README.md)
-        "options": {"temperature": 0.2, "num_predict": 200},
-        "messages": [
-            {"role": "system", "content": VISION_PROMPT},
-            {
-                "role": "user",
-                "content": "What is happening in this camera frame?",
-                "images": [base64.b64encode(image).decode()],
-            },
-        ],
+        "keep_alive": KEEP_ALIVE,
+        "messages": messages,
+        **extra,
     }
     request = urllib.request.Request(
         f"{OLLAMA_URL}/api/chat", data=json.dumps(payload).encode(), headers={"Content-Type": "application/json"}
@@ -119,6 +119,28 @@ def describe(image: bytes) -> str:
         raise HTTPException(502, f"Ollama refused the request: {error.read().decode(errors='replace')}") from error
     except (urllib.error.URLError, TimeoutError) as error:
         raise HTTPException(503, f"Ollama is not answering at {OLLAMA_URL}: start it and pull {VISION_MODEL}") from error
+
+
+def warm_up() -> None:
+    """Loads the model into memory ahead of the first question; an Ollama that is not running is not an error here."""
+    try:
+        chat([])
+    except Exception:
+        pass
+
+
+def describe(image: bytes) -> str:
+    return chat(
+        [
+            {"role": "system", "content": VISION_PROMPT},
+            {
+                "role": "user",
+                "content": "What is happening in this camera frame?",
+                "images": [base64.b64encode(image).decode()],
+            },
+        ],
+        options={"temperature": 0.2, "num_predict": 200},
+    )
 
 
 class Say(BaseModel):

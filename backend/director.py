@@ -6,30 +6,26 @@ decides a health status or an escalation (the rules engine does). Everything it 
 unknown spot or reaction, or a line with numbers or clinical words, is replaced by `FALLBACK`.
 """
 
-import json
 import re
-import urllib.error
-import urllib.request
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.concurrency import run_in_threadpool
 from pydantic import BaseModel, Field
 
-from senses import OLLAMA_URL, VISION_MODEL
+from senses import MAX_IMAGE, chat, local_only
 
-router = APIRouter()
+router = APIRouter(dependencies=[Depends(local_only)])
 
 # Screen zones the mascot can fly to; the frontend maps each one to coordinates.
 SPOTS = ["home", "top_right", "mid_left", "mid_right", "bottom_left", "bottom_center", "bottom_right"]
 # "calm" is its usual look, "alert" is the attention pose; the sprite turns "calm" into talking while it types.
 REACTIONS = ["calm", "alert"]
 
-# Which side of the screen each zone is on. The view is mirrored, so a person on the left of the camera frame
-# stands on the right of the screen.
+# Which side of the screen each zone is on. The frontend sends frames already mirrored like the HUD, so the left of
+# the frame is the left of the screen.
 SCREEN_SIDE = {"home": "left", "mid_left": "left", "bottom_left": "left",
                "top_right": "right", "mid_right": "right", "bottom_right": "right", "bottom_center": "centre"}
 CLEAR_OF = {"left": "mid_right", "right": "mid_left"}  # where to go to leave a person on that screen side alone
-FRAME_TO_SCREEN = {"left": "right", "right": "left"}
 
 FALLBACK = {"say": "I'm here if you need me.", "spot": "home", "reaction": "calm", "speak": True}
 SILENT = {"say": "", "spot": "", "reaction": "calm", "speak": False}  # nothing worth saying: the mascot stays as is
@@ -41,32 +37,32 @@ FORBIDDEN = re.compile(
     re.I,
 )
 
-SYSTEM = (
-    "You are the stage director of PULSAR, a small friendly robot mascot that floats over a camera view for an "
-    "astronaut. You decide where PULSAR floats to, how it reacts and the one short sentence it says (at most 14 "
-    "words, warm, plain English). The astronaut gives PULSAR instructions by voice or text: the latest one is the "
-    "'standing instruction' and you must follow it (for example watch for something, describe what is visible, "
-    "answer a question about the picture, or stay quiet). "
-    "When the astronaut has just spoken to PULSAR, always answer (speak=true), using what the camera sees. "
-    "When only the camera changed, speak=true only if the change matters for the standing instruction or something "
-    "clearly new and notable appeared; otherwise speak=false. Never repeat or rephrase anything in 'already said'. "
-    "Say in 'person_side' which side of the camera frame the person is on (left, right, centre, or none), then "
-    "choose 'spot' away from them. Use 'alert' only when something new or unusual just appeared, otherwise 'calm'. "
-    "Only describe or acknowledge what was seen or heard. Never diagnose, never judge health, fatigue or mood, "
-    "never give medical advice or orders, never use numbers."
-)
+# Kept short and answered in one line on purpose. Measured on a CPU-only laptop with gemma4:e2b-it-qat: Ollama
+# re-reads the whole prompt on every call (about 100 tokens a second) and writes about 8 tokens a second, so the
+# earlier 400-token prompt with a 52-token JSON answer took about 11 s. `parse` turns the line back into the
+# fields `validate` checks.
+SYSTEM = f"""\
+You are PULSAR, the astronaut's personal companion: a small, warm, calm robot floating over their camera view.
+Reply with one line only: side|spot|reaction|sentence
+side: where the person is in the picture (left, right, centre, none).
+spot: where you float, away from the person ({", ".join(SPOTS)}).
+reaction: calm, or alert if something new just appeared.
+sentence: at most 14 words, first person, naming the concrete things in view; - to stay silent.
+Example: centre|top_right|calm|I can see you holding a white mug.
+Always answer when the astronaut just spoke. If only the camera changed, write - unless it matters for their \
+instruction or is clearly new; never repeat a line already said.
+Only describe what is visible: never comment on health, tiredness or mood, never advise or give orders, never \
+write digits. If asked, say that is not yours to judge.
+"""
 
-SCHEMA = {
-    "type": "object",
-    "properties": {
-        "spot": {"type": "string", "enum": SPOTS},
-        "reaction": {"type": "string", "enum": REACTIONS},
-        "say": {"type": "string"},
-        "person_side": {"type": "string", "enum": ["left", "right", "centre", "none"]},
-        "speak": {"type": "boolean"},
-    },
-    "required": ["speak", "person_side", "spot", "reaction", "say"],
-}
+LINE = re.compile(r"(left|right|centre|center|none)\s*\|\s*(\w+)\s*\|\s*(\w+)\s*\|\s*(.+)", re.I)
+
+
+def parse(content: str) -> dict:
+    """`side|spot|reaction|sentence` as the dict `validate` expects; an answer in any other shape raises."""
+    side, spot, reaction, say = (part.strip() for part in LINE.fullmatch(content.strip()).groups())
+    quiet = say == "-"
+    return {"person_side": side.lower(), "spot": spot, "reaction": reaction, "say": "" if quiet else say, "speak": not quiet}
 
 
 class Scene(BaseModel):
@@ -75,6 +71,8 @@ class Scene(BaseModel):
     user_spoke: bool = False  # True when `instruction` is new in this request, False for a camera-only update
     said: list[str] = Field(default_factory=list, max_length=6)  # PULSAR's last lines, so it does not repeat itself
     spot: str = Field("home", max_length=20)  # where PULSAR is now, so it can decide to move
+    # The current frame as a base64 JPEG, sent when the astronaut speaks so the answer comes from the picture itself.
+    image: str = Field("", max_length=4 * MAX_IMAGE // 3 + 4, pattern=r"^(/9j/[A-Za-z0-9+/]*={0,2})?$")
 
 
 FILLER = {"the", "and", "you", "your", "are", "was", "has", "have", "with", "for", "that", "this"}
@@ -103,8 +101,8 @@ def validate(raw: dict, said: list[str] = (), user_spoke: bool = True) -> dict:
     if not say or len(say.split()) > 20 or FORBIDDEN.search(say):
         return FALLBACK
     spot = raw["spot"]
-    person = FRAME_TO_SCREEN.get(raw.get("person_side"))
-    if person and SCREEN_SIDE[spot] == person:  # Gemma put the mascot over the person: move it to the free side
+    person = raw.get("person_side")
+    if person in CLEAR_OF and SCREEN_SIDE[spot] == person:  # Gemma put the mascot over the person: move it to the free side
         spot = CLEAR_OF[person]
     return {"say": say, "spot": spot, "reaction": raw["reaction"], "speak": True}
 
@@ -120,26 +118,18 @@ def direct(scene: Scene) -> dict:
         facts.append("Already said by PULSAR: " + " | ".join(scene.said))
     facts.append("Trigger: " + ("the astronaut spoke" if scene.user_spoke else "the camera changed"))
     facts.append(f"PULSAR is currently at: {scene.spot}")
-    payload = {
-        "model": VISION_MODEL,
-        "stream": False,
-        "think": False,
-        "format": SCHEMA,
-        "options": {"temperature": 0.6, "num_predict": 120},
-        "messages": [{"role": "system", "content": SYSTEM}, {"role": "user", "content": "\n".join(facts)}],
-    }
-    request = urllib.request.Request(
-        f"{OLLAMA_URL}/api/chat", data=json.dumps(payload).encode(), headers={"Content-Type": "application/json"}
+    user = {"role": "user", "content": "\n".join(facts)}
+    if scene.image:
+        user["content"] += "\nThe current camera frame is attached: look at it and answer from it."
+        user["images"] = [scene.image]
+    # The system prompt goes first and never changes, so Ollama reuses its cached evaluation on every call.
+    content = chat(
+        [{"role": "system", "content": SYSTEM}, user],
+        options={"temperature": 0.3, "num_predict": 48, "stop": ["\n"]},  # one line of about 20 tokens
     )
     try:
-        with urllib.request.urlopen(request, timeout=120) as response:
-            content = json.load(response)["message"]["content"]
-        return validate(json.loads(content), scene.said, scene.user_spoke)
-    except urllib.error.HTTPError as error:
-        raise HTTPException(502, f"Ollama refused the request: {error.read().decode(errors='replace')}") from error
-    except (urllib.error.URLError, TimeoutError) as error:
-        raise HTTPException(503, f"Ollama is not answering at {OLLAMA_URL}: start it and pull {VISION_MODEL}") from error
-    except (json.JSONDecodeError, KeyError, TypeError):
+        return validate(parse(content), scene.said, scene.user_spoke)
+    except AttributeError:
         return FALLBACK  # the model broke the format: the mascot just stays calm
 
 
