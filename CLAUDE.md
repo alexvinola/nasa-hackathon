@@ -56,6 +56,7 @@ make goals          # scoreboard: which goals pass
 make check-G4       # check one goal
 make contract       # validate the contract, its examples and their provenance
 make sources        # regenerate docs/sources.md
+research/nasa-data/fetch.sh   # NASA datasets (Inspiration4 labs, ASRS); see research/nasa-data/README.md
 make prefetch       # download models and voices to work offline
 make start          # ./start_synapse: Next.js + FastAPI + Ollama
 ```
