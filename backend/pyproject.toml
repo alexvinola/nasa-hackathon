@@ -11,6 +11,7 @@ dependencies = [
     "faster-whisper",
     "piper-tts",
     "av<19",  # faster-whisper 1.2 passes metadata_errors= to av.open, which av 19 removed
+    "mcp>=2.3.0",
 ]
 
 [dependency-groups]

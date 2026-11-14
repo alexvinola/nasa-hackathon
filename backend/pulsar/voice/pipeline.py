@@ -39,6 +39,11 @@ MAX_FACTORS = 3  # two spoken sentences cannot carry more
 NUMBER = re.compile(r"\d+(?:\.\d+)?")
 
 
+def decimal_point(text: str) -> str:
+    """Spanish writes 6,5 where the verdict says 6.5: compare both as the same figure."""
+    return re.sub(r"(?<=\d),(?=\d)", ".", text)
+
+
 @dataclass
 class Phrasing:
     text: str
@@ -77,7 +82,7 @@ def violations(text: str, decision: Mapping[str, Any], prompt: str) -> list[str]
         found.append("empty")
     if len([s for s in re.split(r"(?<=[.!?])\s+", text.strip()) if s]) > 2:
         found.append("more than 2 sentences")
-    extra = {float(n) for n in NUMBER.findall(text)} - {float(n) for n in NUMBER.findall(prompt)}
+    extra = {float(n) for n in NUMBER.findall(decimal_point(text))} - {float(n) for n in NUMBER.findall(prompt)}
     if extra:
         found.append(f"figures not in the verdict: {sorted(extra)}")
     if re.search(r"\bCM-", text):

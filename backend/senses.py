@@ -101,8 +101,9 @@ def synthesize(text: str) -> bytes:
     return buffer.getvalue()
 
 
-def chat(messages: list[dict], **extra) -> str:
-    """One answer from the local model. `extra` adds Ollama fields such as `options` or `format`."""
+def chat_message(messages: list[dict], **extra) -> dict:
+    """One reply message from the local model (with its `tool_calls`, if any). `extra` adds Ollama fields such as
+    `options`, `format` or `tools`."""
     payload = {
         "model": VISION_MODEL,
         "stream": False,
@@ -119,11 +120,16 @@ def chat(messages: list[dict], **extra) -> str:
     )
     try:
         with urllib.request.urlopen(request, timeout=120) as response:
-            return json.load(response)["message"]["content"].strip()
+            return json.load(response)["message"]
     except urllib.error.HTTPError as error:  # e.g. the model has not been pulled
         raise HTTPException(502, f"Ollama refused the request: {error.read().decode(errors='replace')}") from error
     except (urllib.error.URLError, TimeoutError) as error:
         raise HTTPException(503, f"Ollama is not answering at {OLLAMA_URL}: start it and pull {VISION_MODEL}") from error
+
+
+def chat(messages: list[dict], **extra) -> str:
+    """One answer from the local model, as text."""
+    return chat_message(messages, **extra)["content"].strip()
 
 
 def warm_up() -> None:

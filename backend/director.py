@@ -15,6 +15,7 @@ from pydantic import BaseModel, Field
 
 from pulsar.contract import telemetry_errors
 from pulsar.rules.engine import RulesEngine
+from pulsar.readings import ASKS_READINGS, answer as read_sensors
 from pulsar.voice.pipeline import first_step, phrase, verdict_text
 
 from senses import MAX_IMAGE, chat, local_only
@@ -176,6 +177,11 @@ def direct(scene: Scene, engine: RulesEngine | None = None) -> dict:
         say = phrase(decision, scene.instruction, step).text if decision else NOT_MINE
         reaction = "alert" if decision and decision["status"] != "GREEN" else "calm"
         return {"say": say, "spot": scene.spot if scene.spot in SPOTS else "home", "reaction": reaction, "speak": True}
+    if scene.user_spoke and ASKS_READINGS.search(scene.instruction):
+        # Heart rate and cabin CO2 come from the sensor MCP server: Gemma calls its tools and phrases the readings.
+        say, out_of_limits = read_sensors(scene.instruction)
+        return {"say": say, "spot": scene.spot if scene.spot in SPOTS else "home",
+                "reaction": "alert" if out_of_limits else "calm", "speak": True}
     facts = []
     if decision and decision["status"] != "GREEN":
         facts.append("Health check (final):\n" + verdict_text(decision, step))
