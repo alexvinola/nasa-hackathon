@@ -88,6 +88,32 @@
         "Inter-stimulus interval 1-4 s per the paper (secondary sources differ: check the original)"
       ]
     },
+    "fmcsa-1998-perclos": {
+      "type": "official",
+      "title": "FMCSA Technology Division (1998), PERCLOS: A Valid Psychophysiological Measure of Alertness As Assessed by Psychomotor Vigilance, tech brief FHWA-MCRT-98-006",
+      "url": "https://rosap.ntl.bts.gov/view/dot/113",
+      "findings": [
+        "PERCLOS: proportion of time in a minute that the eyes are at least 80 percent closed (Wierwille et al., 1994)",
+        "Reflects slow eyelid closures, not blinks"
+      ]
+    },
+    "dinges-1998-ocular": {
+      "type": "official",
+      "title": "Dinges, Mallis, Maislin & Powell (1998), Evaluation of techniques for ocular measurement as an index of fatigue and as the basis for alertness management, NHTSA DOT HS 808 762",
+      "url": "https://rosap.ntl.bts.gov/view/dot/2518",
+      "findings": [
+        "PERCLOS validated against PVT lapses under sleep deprivation"
+      ]
+    },
+    "soukupova-2016-ear": {
+      "type": "paper",
+      "title": "Soukupová & Čech (2016), Real-Time Eye Blink Detection using Facial Landmarks, 21st Computer Vision Winter Workshop",
+      "url": "https://vision.fe.uni-lj.si/cvww2016/proceedings/papers/05.pdf",
+      "findings": [
+        "EAR = (|p2-p6| + |p3-p5|) / (2|p1-p4|) from six eye landmarks",
+        "A fixed 0.2 threshold is only a baseline; an SVM over a temporal window detects blinks, since blink patterns differ per person"
+      ]
+    },
     "nasa-pvt-iss": {
       "type": "dataset",
       "title": "Psychomotor Vigilance Test (PVT) on ISS (data.nasa.gov)",
