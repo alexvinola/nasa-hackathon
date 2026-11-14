@@ -18,15 +18,17 @@ export function useWebcam() {
     }
     navigator.mediaDevices
       .getUserMedia({ video: { width: { ideal: 1920 }, height: { ideal: 1080 }, facingMode: "user" }, audio: false })
-      .then((s) => {
+      .then(async (s) => {
         if (cancelled) return s.getTracks().forEach((t) => t.stop());
         stream = s;
+        // Unplugged or revoked mid-session: stop claiming the camera is live.
+        s.getVideoTracks()[0]?.addEventListener("ended", () => setState("unavailable"));
         const v = videoRef.current;
         if (v) {
           v.srcObject = s;
-          void v.play();
+          await v.play(); // a rejection falls through to the catch below
         }
-        setState("live");
+        if (!cancelled) setState("live");
       })
       .catch((e: DOMException) => setState(e.name === "NotAllowedError" ? "denied" : "unavailable"));
     return () => {
