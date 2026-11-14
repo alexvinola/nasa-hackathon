@@ -2,6 +2,7 @@
 
 A goal is done when its check passes. Status is never written by hand: `make goals` computes it.
 Details for each goal live in `goals/`. The figures (0.7, 5 s, 15 fps) are proposals: tune them to the demo laptop.
+How far the fatigue work goes, and what we neither build nor claim: [fatigue scope](goals/SCOPE-fatigue.md).
 
 | Goal | Done when | Check | Owner |
 |---|---|---|---|
