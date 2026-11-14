@@ -21,6 +21,11 @@ let playing: HTMLAudioElement | null = null;
 let turn = 0;
 let request: AbortController | null = null;
 
+/** True while PULSAR's voice is coming out of the speakers. */
+export function isSpeaking() {
+  return !!playing && !playing.paused && !playing.ended;
+}
+
 export function stopSpeaking() {
   turn++;
   request?.abort(); // do not leave Piper synthesising a line nobody will hear
@@ -114,13 +119,20 @@ export async function direct(scene: {
   seen?: string;
   instruction?: string;
   userSpoke: boolean;
+  /** The instruction came through the open microphone, so the backend may decide it was not meant for PULSAR. */
+  viaVoice?: boolean;
+  /** PULSAR spoke moments ago: what the microphone hears now is a reply to it. */
+  engaged?: boolean;
+  /** Earlier turns, oldest first ("Astronaut: ..." / "PULSAR: ..."); the backend compacts them. */
+  history?: string[];
   said: string[];
   spot: Spot;
 }): Promise<Direction> {
+  const { userSpoke, viaVoice, ...rest } = scene;
   return (
     await call("/pulsar/act", {
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...scene, user_spoke: scene.userSpoke, userSpoke: undefined }),
+      body: JSON.stringify({ ...rest, user_spoke: userSpoke, via_voice: viaVoice, history: scene.history?.map((t) => t.slice(0, 300)) }),
     })
   ).json();
 }
