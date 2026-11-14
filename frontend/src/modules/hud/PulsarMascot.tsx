@@ -9,12 +9,13 @@ export function PulsarMascot({
   message,
   mood = "idle",
   heading = 0,
-  mock = false,
+  tag,
 }: {
   message: string;
   mood?: Mood;
   heading?: number;
-  mock?: boolean;
+  /** Where the line comes from, shown on the bubble (e.g. "MOCK"). */
+  tag?: string;
 }) {
   const [typed, setTyped] = useState(0);
 
@@ -37,7 +38,7 @@ export function PulsarMascot({
         animate={{ opacity: 1, x: 0 }}
         className={`relative mt-10 w-[260px] border-2 bg-space/75 px-3 py-2 text-xs leading-relaxed text-shell ${tone}`}
       >
-        {mock && <span className="absolute -top-2 right-2 bg-space px-1 text-[9px] tracking-[0.25em] text-orbit">MOCK</span>}
+        {tag && <span className="absolute -top-2 right-2 bg-space px-1 text-[9px] tracking-[0.25em] text-orbit">{tag}</span>}
         <p className="sr-only" aria-live="polite">{message}</p>
         <span aria-hidden>
           {message.slice(0, typed)}

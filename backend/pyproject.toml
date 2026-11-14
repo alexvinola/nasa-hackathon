@@ -1,0 +1,18 @@
+[project]
+name = "pulsar-backend"
+version = "0.1.0"
+description = "PULSAR local backend: speech, vision description and (later) the rules engine."
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "faster-whisper",
+    "piper-tts",
+    "av<19",  # faster-whisper 1.2 passes metadata_errors= to av.open, which av 19 removed
+]
+
+[dependency-groups]
+dev = ["pytest", "httpx", "jsonschema"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]

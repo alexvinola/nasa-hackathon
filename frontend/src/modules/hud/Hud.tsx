@@ -5,6 +5,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { PulsarMascot } from "./PulsarMascot";
 import type { Mood } from "./PulsarSprite3D";
 import { useWebcam, type CamState } from "./useWebcam";
+import { SensesBar } from "@/modules/voice-ai/SensesBar";
 
 // shortcut: canned lines so the mascot can be reviewed, replace with the rules-engine verdict once it is wired in.
 // `at` is where PULSAR flies to, as a fraction of the free screen; [0, 0] is its home corner.
@@ -40,6 +41,8 @@ export function Hud() {
   // Last x, and the yaw that currently means "facing the camera" (grows by 2π on every spin).
   const face = useRef({ x: 0, front: 0 });
   const line = MOCK_SCRIPT[step];
+  // What the local vision model says it sees while WATCH is on; it replaces the mock line.
+  const [seen, setSeen] = useState<string | null>(null);
 
   useEffect(() => {
     const id = setInterval(() => setStep((s) => (s + 1) % MOCK_SCRIPT.length), 7000);
@@ -82,8 +85,15 @@ export function Hud() {
           setHeading(face.current.front);
         }}
       >
-        <PulsarMascot message={line.text} mood={line.mood} heading={heading} mock />
+        <PulsarMascot
+          message={seen ?? line.text}
+          mood={seen ? "idle" : line.mood}
+          heading={heading}
+          tag={seen ? "CAMERA · AI DESCRIPTION" : "MOCK"}
+        />
       </motion.div>
+
+      <SensesBar videoRef={videoRef} camLive={state === "live"} line={seen ?? line.text} onSeen={setSeen} />
 
       <div className="absolute right-8 top-8 text-right text-[11px] tracking-[0.2em] text-pulse">
         <div className={state === "live" ? "" : "text-orbit"}>● {CAM_LABEL[state]}</div>
