@@ -9,7 +9,7 @@
  *
  * The score is a fixed-weight proposal (goals/SCOPE-fatigue.md, Tier 0): PERCLOS dominates, yawns and head
  * instability add to it. It is what the contract carries and what the rules engine sees. Eyes held closed for
- * seconds raise it at once (./sleep): PERCLOS over a minute alone would need 18 s of closed eyes to be noticed.
+ * seconds raise it at once (./sleep): PERCLOS over a minute alone needs about 7 s of closed eyes for a warning and cannot reach the danger level.
  *
  * The model trained on RLDD (G2, ./fatigueModel) runs next to it over the last 60 s as a second reading for the
  * overlay. It does not replace the score: it was not shown to beat the fixed formula, and its scale is different.

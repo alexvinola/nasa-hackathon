@@ -37,7 +37,7 @@
       "id": "perclos-high",
       "signal": "biometrics.perclos",
       "operator": ">=",
-      "threshold": 0.3,
+      "threshold": 0.11,
       "unit": "",
       "display": "percent",
       "status": "AMBER",
@@ -45,8 +45,8 @@
       "hrpRisk": "SLEEP_AND_SCHEDULES",
       "bodySystems": ["NERVOUS"],
       "countermeasureId": "CM-DROWSY-01",
-      "source": null,
-      "assumption": "Team placeholder until G2 calibrates fatigue on RLDD/DROZY (uta-rldd, drozy): 0.30 is not a validated PERCLOS cut-off.",
+      "source": "uta-rldd",
+      "assumption": "Calibrated on RLDD (data/out/fatigue_report.md, 'Where a threshold would sit'): 0.111 is the cut that lets 5 % of alert 60 s windows fire; out of fold it fires on 24 % of the windows of videos their subject called drowsy. The 5 % rate is the team's choice. Self-reported labels, other people's webcams: not validated on the demo camera, and not a clinical PERCLOS cut-off.",
       "message": "Eyes closed {value} of the time, above {threshold}."
     },
     {

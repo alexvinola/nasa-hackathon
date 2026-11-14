@@ -274,7 +274,7 @@ The rules engine decides with thresholds on PERCLOS and on `fatigueScore`; both 
 
 | rule | compared with | fires when | windows firing | share firing (alert / low / drowsy) | people whose drowsy video fires at all |
 |---|---|---|---|---|---|
-| `perclos-high` (AMBER) | PERCLOS | >= 0.30 | 94 | 0.0 % / 1.0 % / 6.0 % | 4 of 24 |
+| `perclos-high` (AMBER) | PERCLOS | >= 0.11 | 575 | 5.2 % / 14.1 % / 24.9 % | 13 of 24 |
 | `fatigue-score-high` (RED) | browser formula | >= 0.70 | 0 | 0.0 % / 0.0 % / 0.0 % | 0 of 24 |
 | `fatigue-score-high` (RED) | model fatigueScore | >= 0.70 | 283 | 1.0 % / 5.5 % / 14.9 % | 9 of 24 |
 

@@ -1,8 +1,8 @@
 /**
  * Eyes held closed, as a score from 0 to 1 that the worker folds into `fatigueScore`.
  *
- * PERCLOS is a share of the last minute, so someone who falls asleep after a while awake would need 18 s of closed
- * eyes to reach the engine's 0.30. This reads the current closure instead: nothing for a blink, 0.7 (the engine's
+ * PERCLOS is a share of the last minute, so someone who falls asleep after a while awake needs about 7 s of closed
+ * eyes to reach the engine's 0.11, and that rule is only a warning. This reads the current closure instead: nothing for a blink, 0.7 (the engine's
  * `fatigue-score-high` threshold) after about 3 s, 1 after 4 s.
  *
  * All four constants are team assumptions with no registered source and no calibration: they say "the eyes have

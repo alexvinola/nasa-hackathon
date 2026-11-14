@@ -3806,32 +3806,32 @@
       "perclos-high on perclos": {
         "rule": {
           "id": "perclos-high",
-          "threshold": 0.3,
+          "threshold": 0.11,
           "operator": ">=",
           "status": "AMBER"
         },
         "signal": "perclos",
-        "threshold": 0.3,
+        "threshold": 0.11,
         "operator": ">=",
         "windows": {
-          "alert": 0.0,
-          "low_vigilance": 0.010471,
-          "drowsy": 0.059701
+          "alert": 0.051576,
+          "low_vigilance": 0.140613,
+          "drowsy": 0.248507
         },
-        "windows_firing": 94,
+        "windows_firing": 575,
         "alert_per_subject": {
           "subjects": 24,
           "median": 0.0,
           "min": 0.0,
-          "max": 0.0,
-          "subjects_with_any": 0
+          "max": 0.736842,
+          "subjects_with_any": 3
         },
         "drowsy_per_subject": {
           "subjects": 24,
-          "median": 0.0,
+          "median": 0.071429,
           "min": 0.0,
-          "max": 0.712121,
-          "subjects_with_any": 4
+          "max": 0.958333,
+          "subjects_with_any": 13
         }
       },
       "fatigue-score-high on browser_formula": {

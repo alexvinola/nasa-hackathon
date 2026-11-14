@@ -48,7 +48,7 @@ for tool in uv pnpm ollama curl; do
   command -v "$tool" >/dev/null || fail "$tool is not installed"
 done
 for file in frontend/public/mediapipe/face_landmarker.task frontend/public/mediapipe/wasm/vision_wasm_internal.wasm \
-            backend/assets/voices/en_US-lessac-medium.onnx; do
+            "${PULSAR_VOICE:-backend/assets/voices/es_ES-davefx-medium.onnx}"; do
   [[ -s "$file" ]] || fail "$file is missing: run 'make prefetch' while there is a network"
 done
 [[ -d frontend/node_modules ]] || fail "frontend/node_modules is missing: run '(cd frontend && pnpm install)' while there is a network"
