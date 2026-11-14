@@ -16,6 +16,14 @@ How far the fatigue work goes, and what we neither build nor claim: [fatigue sco
 | [G7 Forensic intro](goals/G7-forensic-intro.md) | The sequence plays and "Rewind" opens the HUD | `make check-G7` | FS3 |
 | [G8 Demo](goals/G8-demo.md) | The 2-minute script runs locally with Wi-Fi off | `make check-G8` + rehearsal | Everyone |
 
+**Optional goals.** They answer the challenge video and start only after the Saturday-night gate; `make goals` lists them
+but they do not count towards "goals green".
+
+| Goal | Done when | Check | Owner |
+|---|---|---|---|
+| [G9 Indicator guides](goals/G9-indicator-guides.md) | Six indicators each have how / why / what to do, sourced, no invented ranges; one click opens them | `make check-G9` | FS3 |
+| [G10 Crewmate emergency](goals/G10-crew-emergency.md) | Yes/no checklist from a registered guideline; every path ends in FLIGHT_SURGEON; no LLM | `make check-G10` | FS2 |
+
 ## Schedule and gate
 
 | | Sat. midday | Sat. afternoon | Sat. night | Sunday |
