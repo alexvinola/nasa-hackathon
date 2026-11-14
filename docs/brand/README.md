@@ -5,7 +5,7 @@ Tagline: *Meet P.U.L.S.A.R., your personal health companion in space.*
 
 | File | Use |
 |---|---|
-| `pulsar-intro.html` | Presentation intro (~9 s). Open it in a browser; `R` or Space replays, `F` goes fullscreen. Single file, mascot embedded, works offline (without network the fonts fall back to the system ones). |
+| `pulsar-intro.html` | Presentation film (41 s, dramatization): calm habitat → master alarm and pressure drop → the flight recorder rewinds 48 h to the fatigue nobody noticed → PULSAR. Open it in a browser and press Play (sound is synthesised in the page, no audio files). Space pauses, ← → seek 5 s, `M` mutes, `F` fullscreen, `R` restarts. Single file, mascot embedded, works offline (without network the fonts fall back to the system ones). To get a video, record the screen while it plays. |
 | `pulsar-mascot.png` | Mascot, original render (1536×1024, navy backdrop). |
 | `pulsar-mascot.webp` | Same render, compressed (68 KB) for the web. |
 
