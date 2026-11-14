@@ -21,7 +21,14 @@ export function PulsarMascot({
 
   useEffect(() => {
     setTyped(0);
-    const id = setInterval(() => setTyped((n) => Math.min(n + 1, message.length)), 28);
+    const id = setInterval(
+      () =>
+        setTyped((n) => {
+          if (n + 1 >= message.length) clearInterval(id); // done typing: stop ticking
+          return Math.min(n + 1, message.length);
+        }),
+      28,
+    );
     return () => clearInterval(id);
   }, [message]);
 
@@ -32,6 +39,8 @@ export function PulsarMascot({
   return (
     <div className="flex items-start gap-3">
       <PulsarSprite3D heading={heading} mood={acting} />
+      {/* Outside the keyed bubble: a live region must persist and change to be announced. */}
+      <p className="sr-only" aria-live="polite">{message}</p>
       <motion.div
         key={message}
         initial={{ opacity: 0, x: -8 }}
@@ -39,7 +48,6 @@ export function PulsarMascot({
         className={`relative mt-10 w-[260px] border-2 bg-space/75 px-3 py-2 text-xs leading-relaxed text-shell ${tone}`}
       >
         {tag && <span className="absolute -top-2 right-2 bg-space px-1 text-[9px] tracking-[0.25em] text-orbit">{tag}</span>}
-        <p className="sr-only" aria-live="polite">{message}</p>
         <span aria-hidden>
           {message.slice(0, typed)}
           <span className="hud-blink ml-1 text-pulse">▌</span>

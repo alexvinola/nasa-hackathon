@@ -10,8 +10,14 @@ from fastapi.testclient import TestClient
 import senses
 from main import app
 
-client = TestClient(app)
+client = TestClient(app, base_url="http://localhost:8000")
 JPEG = b"\xff\xd8\xff\xe0fake-frame"
+
+
+def test_refuses_pages_from_elsewhere():
+    assert client.post("/stt", content=b"x", headers={"Origin": "https://evil.example"}).status_code == 403
+    assert client.post("/stt", content=b"x", headers={"Host": "rebound.example:8000"}).status_code == 403
+    assert client.post("/stt", content=b"", headers={"Origin": "http://localhost:3000"}).status_code == 400
 
 
 def test_rejects_bad_input():
@@ -36,6 +42,7 @@ def test_describe_sends_the_frame_to_the_local_model(monkeypatch):
     assert sent["url"].startswith("http://127.0.0.1")
     system, user = sent["body"]["messages"]
     assert "Do not diagnose" in system["content"]
+    assert sent["body"]["think"] is False
     assert len(user["images"]) == 1
 
 
