@@ -27,7 +27,7 @@ the `guard_paths.py` hook denies writes to another vertical. Hooks run through `
 
 | Vertical | Writes to | Goals |
 |---|---|---|
-| FS1 · Biometric vision | `frontend/src/modules/vision-hud/`, `frontend/public/mediapipe/`, `data/` | G1, G2, G3 |
+| FS1 · Biometric vision | `frontend/src/modules/vision-hud/`, `frontend/public/mediapipe/`, `data/` | G1, G2, G3, G11 (optional) |
 | FS2 · Decision and voice | `frontend/src/modules/voice-ai/`, `backend/` | G4, G5, G10 (optional) |
 | FS3 · Twin, intro and state | `frontend/` (the rest), `frontend/src/modules/sim-core/`, `start_synapse` | G6, G7, G9 (optional) |
 | Shared | `docs/`, `scripts/`, `frontend/package.json` (dependencies are reconciled on merge) | G0, G8 |
