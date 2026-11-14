@@ -1,4 +1,4 @@
-# S.Y.N.A.P.S.E. — every goal in GOALS.md has its check-Gn. A goal is done when its
+# PULSAR — every goal in GOALS.md has its check-Gn. A goal is done when its
 # check passes; there is no other status. `make goals` prints the scoreboard.
 
 SHELL := /bin/bash
