@@ -5,6 +5,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { AlertIndicator } from "./AlertIndicator";
 import { LEFT_COLUMN_ID } from "./HudPanel";
 import { PulsarMascot } from "./PulsarMascot";
+import { ReactionTest } from "./ReactionTest";
 import { useAlarmSound, type AlarmLevel } from "./useAlarmSound";
 import { useWebcam, type CamState } from "./useWebcam";
 import { SensesBar } from "@/modules/voice-ai/SensesBar";
@@ -105,13 +106,18 @@ export function Hud() {
   // The astronaut stops an alarm by acknowledging it: the sound and the pulsing frame end, the indicator stays
   // until the readings clear. It rings again only for a later alarm, or if this one worsens from rest to danger.
   const [ackedLevel, setAckedLevel] = useState<AlarmLevel>(null);
+  // Acknowledging means taking the reaction test: passing it stops the alarm, failing it says what to do instead.
+  const [testing, setTesting] = useState(false);
   useEffect(() => {
     if (!level) setAckedLevel(null);
   }, [level]);
+  // A forced alarm switched off and on again is a new alarm, even when the engine never saw the gap between them.
+  useEffect(() => setAckedLevel(null), [simMode]);
   const acknowledged = !!level && (ackedLevel === level || ackedLevel === "danger");
   const ringing: AlarmLevel = acknowledged ? null : level;
   // One sound per alarm level: forcing an alarm that is already on changes nothing here, so it cannot start another.
-  useAlarmSound(sound ? ringing : null);
+  // Quiet during the test, so the siren does not slow the reactions it is measuring.
+  useAlarmSound(sound && !testing ? ringing : null);
   // An alarm outranks a guide: the open guide closes so it never covers the alert and its steps.
   useEffect(() => {
     if (ringing) setGuideSignal(null);
@@ -292,7 +298,8 @@ export function Hud() {
         detail={level === "danger" && flagged(EXHAUSTED_SIGNAL) ? "NOT SAFE TO STAY AWAKE" : undefined}
         steps={steps}
         acknowledged={acknowledged}
-        onAcknowledge={() => setAckedLevel(level)}
+        testing={testing}
+        onTest={() => setTesting(true)}
       />
 
       <VerdictPanel
@@ -327,6 +334,11 @@ export function Hud() {
         <span className="bg-space/90 px-2 py-1 text-shell">PULSAR HUD · v0.1</span>
         <span className="bg-space/90 px-2 py-1 font-bold text-amber-300">NOT A MEDICAL DEVICE</span>
       </div>
+
+      {/* Stays open even if the readings flicker back to clear mid-test. */}
+      {testing && (
+        <ReactionTest steps={steps} onAcknowledge={() => setAckedLevel(level)} onClose={() => setTesting(false)} />
+      )}
     </main>
   );
 }

@@ -36,24 +36,28 @@ function Icon({ level }: { level: AlarmLevel }) {
 /**
  * The alert indicator at the top of the HUD: an icon and a label for the current alarm level and, during an alarm,
  * the steps of the countermeasure the rules engine chose. The astronaut stops the sound and the pulsing frame by
- * acknowledging it; the indicator itself only clears when the readings do.
+ * taking the reaction test; the indicator itself only clears when the readings do.
  */
 export function AlertIndicator({
   level,
   detail,
   steps,
   acknowledged,
-  onAcknowledge,
+  testing,
+  onTest,
 }: {
   level: AlarmLevel;
   /** Appended to the label, e.g. "NOT SAFE TO STAY AWAKE". */
   detail?: string;
   steps: string[];
   acknowledged: boolean;
-  onAcknowledge: () => void;
+  /** The reaction test is open: it owns the screen until it ends. */
+  testing: boolean;
+  /** Opens the reaction test, the way to stop the alarm. */
+  onTest: () => void;
 }) {
   const look = LOOK[level ?? "clear"];
-  useHotkey("escape", () => level && !acknowledged && onAcknowledge());
+  useHotkey("escape", () => level && !acknowledged && !testing && onTest());
   return (
     <section
       data-hud-panel
@@ -76,11 +80,11 @@ export function AlertIndicator({
       {level && (
         <button
           type="button"
-          disabled={acknowledged}
-          onClick={onAcknowledge}
+          disabled={acknowledged || testing}
+          onClick={onTest}
           className={`mt-3 w-full border-2 px-3 py-2 text-sm text-white disabled:opacity-60 ${level === "danger" ? "border-red-400 bg-red-600 font-bold" : "border-amber-300 bg-amber-400 font-bold !text-space"}`}
         >
-          {acknowledged ? "UNDERSTOOD · ALARM STOPPED" : "I UNDERSTAND · STOP THE ALARM (ESC)"}
+          {acknowledged ? "UNDERSTOOD · ALARM STOPPED" : "TAKE THE REACTION TEST TO STOP THE ALARM (ESC)"}
         </button>
       )}
     </section>

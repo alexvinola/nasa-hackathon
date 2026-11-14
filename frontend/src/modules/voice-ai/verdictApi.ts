@@ -40,11 +40,12 @@ export async function listRules(): Promise<Rule[]> {
   return response.json();
 }
 
-async function post<T>(path: string, body: unknown): Promise<T> {
+async function post<T>(path: string, body: unknown, timeoutMs?: number): Promise<T> {
   const response = await fetch(API + path, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
+    signal: timeoutMs ? AbortSignal.timeout(timeoutMs) : undefined,
   }).catch(() => {
     throw new Error(`PULSAR backend is not answering at ${API}`);
   });
@@ -60,7 +61,8 @@ export async function countermeasureSteps(id: string): Promise<string[]> {
 }
 
 /** The engine's decision alone: deterministic and instant, cheap enough to ask every couple of seconds. */
-export const evaluate = (telemetry: Telemetry) => post<Decision>("/rules/evaluate", telemetry);
+// With a time limit: a request that never answers would otherwise freeze the verdict (and every alarm) for good.
+export const evaluate = (telemetry: Telemetry) => post<Decision>("/rules/evaluate", telemetry, 5000);
 
 /** The decision plus the sentence PULSAR speaks (Gemma phrases it): about a second, ask only when it changes. */
 export const advise = (telemetry: Telemetry, question = "") => post<Advice>("/voice/advise", { telemetry, question });
