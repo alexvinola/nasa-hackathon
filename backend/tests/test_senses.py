@@ -55,3 +55,55 @@ def test_what_piper_says_whisper_understands():
     heard = client.post("/stt", content=spoken.content)
     assert heard.status_code == 200, heard.text
     assert "fox" in heard.json()["text"].lower()
+
+
+def test_director_only_accepts_closed_choices_and_safe_lines():
+    import director
+
+    ok = {"say": "Hello there, I see you.", "spot": "mid_left", "reaction": "alert"}
+    assert director.validate(ok) == {**ok, "speak": True}
+    assert director.validate({**ok, "spot": "the moon"}) == director.FALLBACK
+    assert director.validate({**ok, "reaction": "panic"}) == director.FALLBACK
+    assert director.validate({**ok, "say": "You look tired."}) == director.FALLBACK
+    assert director.validate({**ok, "say": "Your heart rate is 90."}) == director.FALLBACK
+    assert director.validate({**ok, "say": ""}) == director.FALLBACK
+    # mirrored view: a person on the frame's left is on the screen's right, so the mascot must not go there
+    assert director.validate({**ok, "spot": "mid_right", "person_side": "left"})["spot"] == "mid_left"
+    assert director.validate({**ok, "spot": "mid_left", "person_side": "left"})["spot"] == "mid_left"
+    assert director.validate({**ok, "spot": "home", "person_side": "right"})["spot"] == "mid_right"
+
+
+def test_director_asks_gemma_for_a_schema_constrained_answer(monkeypatch):
+    sent = {}
+
+    def fake_urlopen(request, timeout):
+        sent.update(body=json.loads(request.data))
+        answer = {"spot": "bottom_right", "reaction": "calm", "say": "Good to see you.", "person_side": "none"}
+        return io.BytesIO(json.dumps({"message": {"content": json.dumps(answer)}}).encode())
+
+    monkeypatch.setattr(senses.urllib.request, "urlopen", fake_urlopen)
+    response = client.post("/pulsar/act", json={"seen": "A person waves.", "instruction": "hello", "user_spoke": True})
+
+    assert response.json() == {"spot": "bottom_right", "reaction": "calm", "say": "Good to see you.", "speak": True}
+    assert sent["body"]["format"]["properties"]["spot"]["enum"] == director_spots()
+    assert sent["body"]["think"] is False
+    assert client.post("/pulsar/act", json={}).status_code == 400
+
+
+def director_spots():
+    import director
+
+    return director.SPOTS
+
+
+def test_director_stays_quiet_instead_of_repeating_itself():
+    import director
+
+    said = ["A person sits at a desk and types."]
+    same = {"say": "A person is sitting at a desk, typing.", "spot": "home", "reaction": "calm", "speak": True}
+    assert director.validate(same, said, user_spoke=False) == director.SILENT  # camera-only update, nothing new
+    assert director.validate(same, said, user_spoke=True)["speak"] is True  # but it always answers the astronaut
+    quiet = {**same, "say": "", "speak": False}
+    assert director.validate(quiet, [], user_spoke=False) == director.SILENT
+    new = {**same, "say": "Someone just walked in behind you."}
+    assert director.validate(new, said, user_spoke=False)["say"] == new["say"]

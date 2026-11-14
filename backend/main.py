@@ -3,6 +3,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from director import router as director
 from senses import router as senses
 
 app = FastAPI(title="PULSAR")
@@ -14,3 +15,4 @@ app.add_middleware(
     allow_headers=["*"],
 )
 app.include_router(senses)
+app.include_router(director)

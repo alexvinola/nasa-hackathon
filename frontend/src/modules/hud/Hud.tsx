@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { PulsarMascot } from "./PulsarMascot";
 import type { Mood } from "./PulsarSprite3D";
 import { useWebcam, type CamState } from "./useWebcam";
 import { SensesBar } from "@/modules/voice-ai/SensesBar";
+import { direct, type Direction, type Spot } from "@/modules/voice-ai/pulsarApi";
 
 // shortcut: canned lines so the mascot can be reviewed, replace with the rules-engine verdict once it is wired in.
 // `at` is where PULSAR flies to, as a fraction of the free screen; [0, 0] is its home corner.
@@ -16,6 +17,16 @@ const MOCK_SCRIPT: { text: string; mood: Mood; at: [number, number] }[] = [
   { text: "You look tired. How about a short break?", mood: "alert", at: [0.1, 0.6] },
   { text: "Back to my corner. Call me if you need me.", mood: "idle", at: [0, 0] },
 ];
+// Zones Gemma can pick, as a fraction of the free screen.
+const SPOTS: Record<Spot, [number, number]> = {
+  home: [0, 0],
+  top_right: [1, 0.05],
+  mid_left: [0, 0.5],
+  mid_right: [1, 0.5],
+  bottom_left: [0, 1],
+  bottom_center: [0.5, 1],
+  bottom_right: [1, 1],
+};
 // Mascot plus speech bubble plus both screen margins, so it never flies off screen.
 const MASCOT_W = 192 + 12 + 260 + 64;
 const MASCOT_H = 192 + 64;
@@ -40,22 +51,57 @@ export function Hud() {
   const [heading, setHeading] = useState(0);
   // Last x, and the yaw that currently means "facing the camera" (grows by 2π on every spin).
   const face = useRef({ x: 0, front: 0 });
-  const line = MOCK_SCRIPT[step];
-  // What the local vision model says it sees while WATCH is on; it replaces the mock line.
+  // What the local vision model says it sees while WATCH is on, and the last thing the astronaut said.
   const [seen, setSeen] = useState<string | null>(null);
+  // The astronaut's latest order (voice or typed): it stays in force while the camera keeps changing.
+  const [instruction, setInstruction] = useState("");
+  // Gemma's last decision (where to go, how to react, what to say); it overrides the mock script once it exists.
+  const [directed, setDirected] = useState<Direction | null>(null);
+  const said = useRef<string[]>([]);
+  const spot = useRef<Spot>("home");
+  const mock = MOCK_SCRIPT[step];
+  const line = directed ? { text: directed.say, mood: directed.reaction === "alert" ? "alert" : "idle" as Mood, at: SPOTS[directed.spot || "home"] } : mock;
+  const [tx, ty] = line.at;
 
   useEffect(() => {
     const id = setInterval(() => setStep((s) => (s + 1) % MOCK_SCRIPT.length), 7000);
     return () => clearInterval(id);
   }, []);
 
+  // One call to Gemma, from either trigger. A stale answer never overwrites a newer one, and a silent one is dropped.
+  const asked = useRef(0);
+  const ask = useCallback((seenNow: string | null, order: string, userSpoke: boolean) => {
+    const mine = ++asked.current;
+    direct({ seen: seenNow ?? "", instruction: order, userSpoke, said: said.current, spot: spot.current })
+      .then((d) => {
+        if (mine !== asked.current || !d.speak || !d.spot) return;
+        spot.current = d.spot;
+        said.current = [...said.current, d.say].slice(-5);
+        setDirected(d);
+      })
+      .catch(() => mine === asked.current && setDirected(null)); // backend or model down: back to the plain line
+  }, []);
+
+  // The camera changed: Gemma speaks only if it matters for the standing instruction.
+  const lastSeen = useRef<string | null>(null);
   useEffect(() => {
-    const [fx, fy] = still ? [0, 0] : MOCK_SCRIPT[step].at;
+    if (seen && seen !== lastSeen.current) ask(seen, instruction, false);
+    lastSeen.current = seen;
+  }, [seen]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // The astronaut spoke or typed: always answered, using the latest description.
+  const instruct = useCallback((text: string) => {
+    setInstruction(text);
+    ask(lastSeen.current, text, true);
+  }, [ask]);
+
+  useEffect(() => {
+    const [fx, fy] = still ? [0, 0] : [tx, ty];
     const next = { x: fx * Math.max(0, innerWidth - MASCOT_W), y: fy * Math.max(0, innerHeight - MASCOT_H) };
     setHeading(face.current.front + Math.sign(next.x - face.current.x) * 0.9); // look where it flies
     face.current.x = next.x;
     setPos(next);
-  }, [step, still]);
+  }, [tx, ty, still]);
 
   return (
     <main className="relative h-screen w-screen overflow-hidden bg-space">
@@ -86,14 +132,14 @@ export function Hud() {
         }}
       >
         <PulsarMascot
-          message={seen ?? line.text}
-          mood={seen ? "idle" : line.mood}
+          message={directed ? line.text : (seen ?? line.text)}
+          mood={line.mood}
           heading={heading}
-          tag={seen ? "CAMERA · AI DESCRIPTION" : "MOCK"}
+          tag={directed ? "GEMMA 4" : seen ? "CAMERA · AI DESCRIPTION" : "MOCK"}
         />
       </motion.div>
 
-      <SensesBar videoRef={videoRef} camLive={state === "live"} line={seen ?? line.text} onSeen={setSeen} />
+      <SensesBar videoRef={videoRef} camLive={state === "live"} line={directed ? line.text : (seen ?? line.text)} onSeen={setSeen} onInstruction={instruct} />
 
       <div className="absolute right-8 top-8 text-right text-[11px] tracking-[0.2em] text-pulse">
         <div className={state === "live" ? "" : "text-orbit"}>● {CAM_LABEL[state]}</div>

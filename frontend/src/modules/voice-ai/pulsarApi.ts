@@ -72,3 +72,26 @@ export async function describeFrame(video: HTMLVideoElement): Promise<string> {
   if (!frame) throw new Error("Could not read the camera frame");
   return (await (await call("/vision/describe", { body: frame })).json()).description;
 }
+
+export type Spot = "home" | "top_right" | "mid_left" | "mid_right" | "bottom_left" | "bottom_center" | "bottom_right";
+export type Direction = { say: string; spot: Spot | ""; reaction: "calm" | "alert"; speak: boolean };
+
+/**
+ * Asks Gemma (via the backend) where PULSAR goes, how it reacts and what it says. `instruction` is the astronaut's
+ * latest order (voice or typed), `userSpoke` is true when it is new, and `said` is what PULSAR already said so it
+ * does not repeat itself. `speak: false` in the answer means there is nothing worth saying.
+ */
+export async function direct(scene: {
+  seen?: string;
+  instruction?: string;
+  userSpoke: boolean;
+  said: string[];
+  spot: Spot;
+}): Promise<Direction> {
+  return (
+    await call("/pulsar/act", {
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...scene, user_spoke: scene.userSpoke, userSpoke: undefined }),
+    })
+  ).json();
+}

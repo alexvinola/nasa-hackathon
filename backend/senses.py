@@ -80,7 +80,8 @@ def describe(image: bytes) -> str:
     payload = {
         "model": VISION_MODEL,
         "stream": False,
-        "options": {"temperature": 0.2, "num_predict": 80},
+        "options": {"temperature": 0.2, "num_predict": 200},
+        "think": False,  # e4b is a thinking model; its thinking block would swallow the whole budget
         "messages": [
             {"role": "system", "content": VISION_PROMPT},
             {
