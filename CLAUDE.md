@@ -1,8 +1,12 @@
-# S.Y.N.A.P.S.E. — NASA Space Apps 2026
+# PULSAR — NASA Space Apps 2026
 
 A health platform for astronauts that runs entirely on a laptop, with no network. Full plan:
 [technical and functional document](https://docs.google.com/document/d/1VzA7EZoMSXTpHM6scSSvi0cd2ngCrVhFplvnuf4OImk/edit).
 Three people, three verticals, one contract and one weekend. Everything in the repository is written in English.
+
+**PULSAR**: Personal Unit for Learning, Support, Assistance & Reminders. *Your personal health companion in space.*
+Formerly S.Y.N.A.P.S.E.; internal identifiers (`SYNAPSE_VERTICAL`, `.synapse/`, `start_synapse`, `window.__synapse`)
+keep the old codename so running sessions and scripts do not break. Mascot and presentation intro: `docs/brand/`.
 
 ## Goal-driven development
 
