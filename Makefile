@@ -11,7 +11,7 @@ SHELL := $(GIT_BASH)
 endif
 endif
 .SHELLFLAGS := -eu -o pipefail -c
-.PHONY: goals contract sources model start prefetch $(addprefix check-G,0 1 2 3 4 5 6 7 8 9 10)
+.PHONY: goals contract sources model start prefetch $(addprefix check-G,0 1 2 3 4 5 6 7 8 9 10 11)
 
 BACKEND_TEST := cd backend && uv run --quiet pytest -q -p no:cacheprovider
 FRONT_UNIT   := cd frontend && pnpm -s vitest run
@@ -74,6 +74,10 @@ check-G9:
 check-G10:
 	@$(call need,backend/assets/emergency.json backend/tests/acceptance/test_emergency.py)
 	@$(BACKEND_TEST) tests/acceptance/test_emergency.py
+
+check-G11: check-G1
+	@$(call need,frontend/e2e/acceptance/g11-camera-source.spec.ts)
+	@$(FRONT_E2E) e2e/acceptance/g11-camera-source.spec.ts
 
 model:
 	@$(call need,data/pyproject.toml data/pipeline.py)
