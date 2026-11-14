@@ -24,6 +24,7 @@ lists them but they do not count towards "goals green".
 | [G9 Indicator guides](goals/G9-indicator-guides.md) | Six indicators each have how / why / what to do, sourced, no invented ranges; one click opens them | `make check-G9` | FS3 |
 | [G10 Crewmate emergency](goals/G10-crew-emergency.md) | Yes/no checklist from a registered guideline; every path ends in FLIGHT_SURGEON; no LLM | `make check-G10` | FS2 |
 | [G11 Video source](goals/G11-camera-source.md) | Any OS camera or a shared window (e.g. Enabot via OBS or iPhone mirroring) can feed G1; webcam stays default; falls back in 2 s | `make check-G11` | FS1 |
+| [G12 Extended pitch](goals/G12-extended-pitch.md) | The pitch HTML opens as today's timed landing; `?edition=extended` adds a read-at-home page: how we built it, limits, measured numbers and every NASA source linked; bilingual, offline | `make check-G12` | Everyone |
 
 ## Schedule and gate
 
