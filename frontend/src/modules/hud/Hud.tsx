@@ -19,6 +19,7 @@ import { useFaceMetrics } from "@/modules/vision-hud/useFaceMetrics";
 import { FaceOverlay } from "@/modules/vision-hud/FaceOverlay";
 import type { Biometrics, FaceFrame } from "@/modules/vision-hud/faceWorker";
 import { DebugPanel } from "@/modules/sim-core/DebugPanel";
+import { LogPanel } from "@/modules/sim-core/LogPanel";
 import { useSimVitals, type SimMode } from "@/modules/sim-core/useSimVitals";
 import { direct, frameBase64, type Direction, type Spot } from "@/modules/voice-ai/pulsarApi";
 
@@ -257,6 +258,7 @@ export function Hud() {
       <div id={LEFT_COLUMN_ID} className="absolute left-8 top-60 z-[1] flex max-h-[calc(100vh-28.5rem)] w-64 flex-col gap-2 overflow-y-auto [scrollbar-color:var(--color-pulse)_transparent] [scrollbar-width:thin] xl:max-h-[calc(100vh-18rem)]">
         <MiniTwin statuses={guideStatuses} open={guideSignal} onOpen={setGuideSignal} />
         <DebugPanel mode={simMode} onMode={setSimMode} sound={sound} onSound={setSound} />
+        <LogPanel />
       </div>
       {state === "live" && <FaceOverlay frameRef={faceFrame} videoRef={videoRef} problem={faceProblem} />}
       {state !== "live" && (

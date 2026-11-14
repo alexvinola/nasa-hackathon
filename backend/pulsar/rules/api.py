@@ -12,6 +12,7 @@ from typing import Any
 from fastapi import APIRouter, Body, HTTPException, Request
 from fastapi.exceptions import RequestValidationError
 
+from pulsar import debug
 from pulsar.contract import telemetry_errors
 from pulsar.rules.engine import RulesEngine
 from pulsar.shared import registry
@@ -28,7 +29,10 @@ def evaluate(request: Request, telemetry: dict[str, Any] = Body(...)) -> dict[st
     errors = telemetry_errors(telemetry)
     if errors:
         raise RequestValidationError(errors)
-    return _engine(request).evaluate(telemetry)
+    decision = _engine(request).evaluate(telemetry)
+    signals = ", ".join(factor.get("signal", "?") for factor in decision.get("factors", [])) or "nothing triggered"
+    debug.record("engine", f"{decision.get('status')}: {signals}", status=decision.get("status"))
+    return decision
 
 
 @router.get("/rules", summary="Every rule the engine applies and where its threshold comes from")
