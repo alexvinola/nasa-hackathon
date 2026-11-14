@@ -1,0 +1,4284 @@
+{
+  "schema": "pulsar.yawn_metrics/1",
+  "generated_at": "2026-11-14T17:47:32Z",
+  "command": "cd data && uv run python -m pulsar_vision.yawdd",
+  "limit": null,
+  "dataset": {
+    "name": "YawDD",
+    "source": "yawdd",
+    "citation": "S. Abtahi, M. Omidyeganeh, S. Shirmohammadi, and B. Hariri, \"YawDD: A Yawning Detection Dataset\", Proc. ACM Multimedia Systems, Singapore, March 19-21 2014.",
+    "license": "YawDD videos are for non-commercial and research purposes only. Screenshots are allowed only for the videos whose row in the dataset tables says so; this pipeline writes no frames, crops or images.",
+    "labels": "One label per video, from the file name. No per-frame labels.",
+    "videos_found": 349,
+    "videos_used": 349,
+    "videos_failed": [],
+    "videos_per_condition": {
+      "dash": {
+        "mixed": 29
+      },
+      "mirror": {
+        "normal": 105,
+        "talking": 100,
+        "talking_yawning": 13,
+        "yawning": 102
+      }
+    },
+    "subjects": {
+      "dash": 29,
+      "mirror": 90
+    },
+    "minutes": {
+      "dash": 35.884641,
+      "mirror": 124.335882
+    },
+    "other_files": [
+      "Readme_YawDD.pdf",
+      "Table1.pdf",
+      "Table2.pdf"
+    ],
+    "irregular_names": {
+      "Dash/Female/8-FemaleGlasses.avi.avi": [
+        "doubled .avi extension"
+      ],
+      "Dash/Female/11-FemaleGlasses.avi.avi": [
+        "doubled .avi extension"
+      ],
+      "Dash/Female/12-FemaleGlasses.avi.avi": [
+        "doubled .avi extension"
+      ],
+      "Dash/Female/13-FemaleGlasses.avi.avi": [
+        "doubled .avi extension"
+      ],
+      "Dash/Male/13-MaleNoGlasses .avi": [
+        "whitespace in the file name"
+      ],
+      "Mirror/Male_mirror Avi Videos/20-MaleGlasses-Talking&yawning.avi": [
+        "condition not capitalised as in the rest of the dataset"
+      ]
+    },
+    "videos_shorter_than_reported": []
+  },
+  "extraction": {
+    "model_file": "frontend/public/mediapipe/face_landmarker.task",
+    "model_file_name": "face_landmarker.task",
+    "model_sha256": "64184e229b263107bc2b804c6625db1341ff2bb731874b0bcc2fe6544e0bc9ff",
+    "mediapipe_version": [
+      "1.2.3"
+    ],
+    "task": "FaceLandmarker",
+    "running_mode": "VIDEO",
+    "num_faces": 1,
+    "min_face_detection_confidence": 0.5,
+    "min_face_presence_confidence": 0.5,
+    "min_tracking_confidence": 0.5,
+    "target_fps": 15.0,
+    "frame_step": [
+      2
+    ],
+    "source_fps": [
+      29.97,
+      30.0
+    ],
+    "processed_fps": [
+      14.985,
+      15.0
+    ],
+    "processed_frames": 144167,
+    "frame_size": [
+      "640x480"
+    ]
+  },
+  "feature": {
+    "name": "inner_lip_gap_over_outer_eye_corner_distance_2d_px",
+    "formula": "dist(upper_inner_lip, lower_inner_lip) / dist(right_eye_outer, left_eye_outer), 2D Euclidean distance in pixels (x * image_width, y * image_height)",
+    "landmarks": {
+      "upper_inner_lip": 13,
+      "lower_inner_lip": 14,
+      "right_eye_outer": 33,
+      "left_eye_outer": 263
+    }
+  },
+  "detector": {
+    "rule": "mouth_open_ratio >= on threshold, kept while >= off threshold, for at least min_duration_s",
+    "grid": {
+      "thresholds": [
+        0.1,
+        0.12,
+        0.14,
+        0.16,
+        0.18,
+        0.2,
+        0.22,
+        0.24,
+        0.26,
+        0.28,
+        0.3,
+        0.32,
+        0.34,
+        0.36,
+        0.38,
+        0.4,
+        0.42,
+        0.44,
+        0.46,
+        0.48,
+        0.5,
+        0.52,
+        0.54,
+        0.56,
+        0.58,
+        0.6,
+        0.62,
+        0.64,
+        0.66,
+        0.68,
+        0.7
+      ],
+      "min_durations_s": [
+        0.4,
+        0.6,
+        0.8,
+        1.0,
+        1.2,
+        1.4,
+        1.6,
+        1.8,
+        2.0,
+        2.2,
+        2.4,
+        2.6,
+        2.8,
+        3.0,
+        3.2,
+        3.4,
+        3.6,
+        3.8,
+        4.0
+      ],
+      "release_factors": [
+        1.0,
+        0.8
+      ],
+      "baseline_windows_s": [
+        1.0,
+        2.0,
+        3.0
+      ],
+      "max_gap_s": 0.25
+    },
+    "max_gap_s_is_searched": false,
+    "selection_score": "recall_yawning - 0.5 * (false_alarm_talking + false_alarm_normal), on videos",
+    "tie_break": "candidate closest to the centre of the tied region of the grid"
+  },
+  "validation": {
+    "scheme": "5 folds grouped by subject (camera + sex + participant number), stratified by sex",
+    "seed": 2026,
+    "subjects_in_train_and_test": 0,
+    "folds": [
+      {
+        "fold": 0,
+        "test_subjects": [
+          "mirror-F11",
+          "mirror-F14",
+          "mirror-F17",
+          "mirror-F20",
+          "mirror-F26",
+          "mirror-F27",
+          "mirror-F33",
+          "mirror-F34",
+          "mirror-F42",
+          "mirror-M02",
+          "mirror-M06",
+          "mirror-M07",
+          "mirror-M09",
+          "mirror-M11",
+          "mirror-M18",
+          "mirror-M39",
+          "mirror-M41",
+          "mirror-M43"
+        ],
+        "train_subjects": [
+          "mirror-F01",
+          "mirror-F02",
+          "mirror-F03",
+          "mirror-F04",
+          "mirror-F05",
+          "mirror-F06",
+          "mirror-F07",
+          "mirror-F08",
+          "mirror-F09",
+          "mirror-F10",
+          "mirror-F12",
+          "mirror-F13",
+          "mirror-F15",
+          "mirror-F16",
+          "mirror-F18",
+          "mirror-F19",
+          "mirror-F21",
+          "mirror-F22",
+          "mirror-F23",
+          "mirror-F24",
+          "mirror-F25",
+          "mirror-F28",
+          "mirror-F29",
+          "mirror-F30",
+          "mirror-F31",
+          "mirror-F32",
+          "mirror-F35",
+          "mirror-F36",
+          "mirror-F37",
+          "mirror-F38",
+          "mirror-F39",
+          "mirror-F40",
+          "mirror-F41",
+          "mirror-F43",
+          "mirror-M01",
+          "mirror-M03",
+          "mirror-M04",
+          "mirror-M05",
+          "mirror-M08",
+          "mirror-M10",
+          "mirror-M12",
+          "mirror-M13",
+          "mirror-M14",
+          "mirror-M15",
+          "mirror-M16",
+          "mirror-M17",
+          "mirror-M19",
+          "mirror-M20",
+          "mirror-M21",
+          "mirror-M22",
+          "mirror-M23",
+          "mirror-M24",
+          "mirror-M25",
+          "mirror-M26",
+          "mirror-M27",
+          "mirror-M28",
+          "mirror-M29",
+          "mirror-M30",
+          "mirror-M31",
+          "mirror-M32",
+          "mirror-M33",
+          "mirror-M34",
+          "mirror-M35",
+          "mirror-M36",
+          "mirror-M37",
+          "mirror-M38",
+          "mirror-M40",
+          "mirror-M42",
+          "mirror-M44",
+          "mirror-M45",
+          "mirror-M46",
+          "mirror-M47"
+        ]
+      },
+      {
+        "fold": 1,
+        "test_subjects": [
+          "mirror-F01",
+          "mirror-F05",
+          "mirror-F12",
+          "mirror-F18",
+          "mirror-F21",
+          "mirror-F24",
+          "mirror-F36",
+          "mirror-F37",
+          "mirror-F40",
+          "mirror-M05",
+          "mirror-M08",
+          "mirror-M10",
+          "mirror-M17",
+          "mirror-M20",
+          "mirror-M21",
+          "mirror-M25",
+          "mirror-M28",
+          "mirror-M29"
+        ],
+        "train_subjects": [
+          "mirror-F02",
+          "mirror-F03",
+          "mirror-F04",
+          "mirror-F06",
+          "mirror-F07",
+          "mirror-F08",
+          "mirror-F09",
+          "mirror-F10",
+          "mirror-F11",
+          "mirror-F13",
+          "mirror-F14",
+          "mirror-F15",
+          "mirror-F16",
+          "mirror-F17",
+          "mirror-F19",
+          "mirror-F20",
+          "mirror-F22",
+          "mirror-F23",
+          "mirror-F25",
+          "mirror-F26",
+          "mirror-F27",
+          "mirror-F28",
+          "mirror-F29",
+          "mirror-F30",
+          "mirror-F31",
+          "mirror-F32",
+          "mirror-F33",
+          "mirror-F34",
+          "mirror-F35",
+          "mirror-F38",
+          "mirror-F39",
+          "mirror-F41",
+          "mirror-F42",
+          "mirror-F43",
+          "mirror-M01",
+          "mirror-M02",
+          "mirror-M03",
+          "mirror-M04",
+          "mirror-M06",
+          "mirror-M07",
+          "mirror-M09",
+          "mirror-M11",
+          "mirror-M12",
+          "mirror-M13",
+          "mirror-M14",
+          "mirror-M15",
+          "mirror-M16",
+          "mirror-M18",
+          "mirror-M19",
+          "mirror-M22",
+          "mirror-M23",
+          "mirror-M24",
+          "mirror-M26",
+          "mirror-M27",
+          "mirror-M30",
+          "mirror-M31",
+          "mirror-M32",
+          "mirror-M33",
+          "mirror-M34",
+          "mirror-M35",
+          "mirror-M36",
+          "mirror-M37",
+          "mirror-M38",
+          "mirror-M39",
+          "mirror-M40",
+          "mirror-M41",
+          "mirror-M42",
+          "mirror-M43",
+          "mirror-M44",
+          "mirror-M45",
+          "mirror-M46",
+          "mirror-M47"
+        ]
+      },
+      {
+        "fold": 2,
+        "test_subjects": [
+          "mirror-F08",
+          "mirror-F09",
+          "mirror-F10",
+          "mirror-F15",
+          "mirror-F16",
+          "mirror-F22",
+          "mirror-F23",
+          "mirror-F28",
+          "mirror-F43",
+          "mirror-M12",
+          "mirror-M15",
+          "mirror-M16",
+          "mirror-M30",
+          "mirror-M32",
+          "mirror-M33",
+          "mirror-M34",
+          "mirror-M37",
+          "mirror-M40"
+        ],
+        "train_subjects": [
+          "mirror-F01",
+          "mirror-F02",
+          "mirror-F03",
+          "mirror-F04",
+          "mirror-F05",
+          "mirror-F06",
+          "mirror-F07",
+          "mirror-F11",
+          "mirror-F12",
+          "mirror-F13",
+          "mirror-F14",
+          "mirror-F17",
+          "mirror-F18",
+          "mirror-F19",
+          "mirror-F20",
+          "mirror-F21",
+          "mirror-F24",
+          "mirror-F25",
+          "mirror-F26",
+          "mirror-F27",
+          "mirror-F29",
+          "mirror-F30",
+          "mirror-F31",
+          "mirror-F32",
+          "mirror-F33",
+          "mirror-F34",
+          "mirror-F35",
+          "mirror-F36",
+          "mirror-F37",
+          "mirror-F38",
+          "mirror-F39",
+          "mirror-F40",
+          "mirror-F41",
+          "mirror-F42",
+          "mirror-M01",
+          "mirror-M02",
+          "mirror-M03",
+          "mirror-M04",
+          "mirror-M05",
+          "mirror-M06",
+          "mirror-M07",
+          "mirror-M08",
+          "mirror-M09",
+          "mirror-M10",
+          "mirror-M11",
+          "mirror-M13",
+          "mirror-M14",
+          "mirror-M17",
+          "mirror-M18",
+          "mirror-M19",
+          "mirror-M20",
+          "mirror-M21",
+          "mirror-M22",
+          "mirror-M23",
+          "mirror-M24",
+          "mirror-M25",
+          "mirror-M26",
+          "mirror-M27",
+          "mirror-M28",
+          "mirror-M29",
+          "mirror-M31",
+          "mirror-M35",
+          "mirror-M36",
+          "mirror-M38",
+          "mirror-M39",
+          "mirror-M41",
+          "mirror-M42",
+          "mirror-M43",
+          "mirror-M44",
+          "mirror-M45",
+          "mirror-M46",
+          "mirror-M47"
+        ]
+      },
+      {
+        "fold": 3,
+        "test_subjects": [
+          "mirror-F04",
+          "mirror-F06",
+          "mirror-F07",
+          "mirror-F13",
+          "mirror-F25",
+          "mirror-F29",
+          "mirror-F31",
+          "mirror-F35",
+          "mirror-M03",
+          "mirror-M04",
+          "mirror-M13",
+          "mirror-M19",
+          "mirror-M22",
+          "mirror-M31",
+          "mirror-M36",
+          "mirror-M45",
+          "mirror-M46",
+          "mirror-M47"
+        ],
+        "train_subjects": [
+          "mirror-F01",
+          "mirror-F02",
+          "mirror-F03",
+          "mirror-F05",
+          "mirror-F08",
+          "mirror-F09",
+          "mirror-F10",
+          "mirror-F11",
+          "mirror-F12",
+          "mirror-F14",
+          "mirror-F15",
+          "mirror-F16",
+          "mirror-F17",
+          "mirror-F18",
+          "mirror-F19",
+          "mirror-F20",
+          "mirror-F21",
+          "mirror-F22",
+          "mirror-F23",
+          "mirror-F24",
+          "mirror-F26",
+          "mirror-F27",
+          "mirror-F28",
+          "mirror-F30",
+          "mirror-F32",
+          "mirror-F33",
+          "mirror-F34",
+          "mirror-F36",
+          "mirror-F37",
+          "mirror-F38",
+          "mirror-F39",
+          "mirror-F40",
+          "mirror-F41",
+          "mirror-F42",
+          "mirror-F43",
+          "mirror-M01",
+          "mirror-M02",
+          "mirror-M05",
+          "mirror-M06",
+          "mirror-M07",
+          "mirror-M08",
+          "mirror-M09",
+          "mirror-M10",
+          "mirror-M11",
+          "mirror-M12",
+          "mirror-M14",
+          "mirror-M15",
+          "mirror-M16",
+          "mirror-M17",
+          "mirror-M18",
+          "mirror-M20",
+          "mirror-M21",
+          "mirror-M23",
+          "mirror-M24",
+          "mirror-M25",
+          "mirror-M26",
+          "mirror-M27",
+          "mirror-M28",
+          "mirror-M29",
+          "mirror-M30",
+          "mirror-M32",
+          "mirror-M33",
+          "mirror-M34",
+          "mirror-M35",
+          "mirror-M37",
+          "mirror-M38",
+          "mirror-M39",
+          "mirror-M40",
+          "mirror-M41",
+          "mirror-M42",
+          "mirror-M43",
+          "mirror-M44"
+        ]
+      },
+      {
+        "fold": 4,
+        "test_subjects": [
+          "mirror-F02",
+          "mirror-F03",
+          "mirror-F19",
+          "mirror-F30",
+          "mirror-F32",
+          "mirror-F38",
+          "mirror-F39",
+          "mirror-F41",
+          "mirror-M01",
+          "mirror-M14",
+          "mirror-M23",
+          "mirror-M24",
+          "mirror-M26",
+          "mirror-M27",
+          "mirror-M35",
+          "mirror-M38",
+          "mirror-M42",
+          "mirror-M44"
+        ],
+        "train_subjects": [
+          "mirror-F01",
+          "mirror-F04",
+          "mirror-F05",
+          "mirror-F06",
+          "mirror-F07",
+          "mirror-F08",
+          "mirror-F09",
+          "mirror-F10",
+          "mirror-F11",
+          "mirror-F12",
+          "mirror-F13",
+          "mirror-F14",
+          "mirror-F15",
+          "mirror-F16",
+          "mirror-F17",
+          "mirror-F18",
+          "mirror-F20",
+          "mirror-F21",
+          "mirror-F22",
+          "mirror-F23",
+          "mirror-F24",
+          "mirror-F25",
+          "mirror-F26",
+          "mirror-F27",
+          "mirror-F28",
+          "mirror-F29",
+          "mirror-F31",
+          "mirror-F33",
+          "mirror-F34",
+          "mirror-F35",
+          "mirror-F36",
+          "mirror-F37",
+          "mirror-F40",
+          "mirror-F42",
+          "mirror-F43",
+          "mirror-M02",
+          "mirror-M03",
+          "mirror-M04",
+          "mirror-M05",
+          "mirror-M06",
+          "mirror-M07",
+          "mirror-M08",
+          "mirror-M09",
+          "mirror-M10",
+          "mirror-M11",
+          "mirror-M12",
+          "mirror-M13",
+          "mirror-M15",
+          "mirror-M16",
+          "mirror-M17",
+          "mirror-M18",
+          "mirror-M19",
+          "mirror-M20",
+          "mirror-M21",
+          "mirror-M22",
+          "mirror-M25",
+          "mirror-M28",
+          "mirror-M29",
+          "mirror-M30",
+          "mirror-M31",
+          "mirror-M32",
+          "mirror-M33",
+          "mirror-M34",
+          "mirror-M36",
+          "mirror-M37",
+          "mirror-M39",
+          "mirror-M40",
+          "mirror-M41",
+          "mirror-M43",
+          "mirror-M45",
+          "mirror-M46",
+          "mirror-M47"
+        ]
+      }
+    ]
+  },
+  "results": {
+    "absolute": {
+      "overall": {
+        "videos": {
+          "yawning": 102,
+          "talking": 100,
+          "normal": 105
+        },
+        "yawns_per_minute": {
+          "yawning": 3.485007,
+          "talking": 0.059387,
+          "normal": 0.0
+        },
+        "detected_yawns": {
+          "yawning": 113,
+          "talking": 3,
+          "normal": 0
+        },
+        "yawning_recall": {
+          "count": 88,
+          "of": 102,
+          "rate": 0.862745,
+          "ci95_wilson": [
+            0.782713,
+            0.916446
+          ]
+        },
+        "talking_false_alarm": {
+          "count": 3,
+          "of": 100,
+          "rate": 0.03,
+          "ci95_wilson": [
+            0.010255,
+            0.084519
+          ]
+        },
+        "normal_false_alarm": {
+          "count": 0,
+          "of": 105,
+          "rate": 0.0,
+          "ci95_wilson": [
+            0.0,
+            0.035294
+          ]
+        },
+        "score": 0.847745,
+        "yawns_per_yawning_video": {
+          "mean": 1.107843,
+          "median": 1.0,
+          "max": 4
+        }
+      },
+      "by_eyewear": {
+        "glasses": {
+          "videos": {
+            "yawning": 31,
+            "talking": 33,
+            "normal": 33
+          },
+          "yawns_per_minute": {
+            "yawning": 3.717065,
+            "talking": 0.0,
+            "normal": 0.0
+          },
+          "detected_yawns": {
+            "yawning": 39,
+            "talking": 0,
+            "normal": 0
+          },
+          "yawning_recall": {
+            "count": 28,
+            "of": 31,
+            "rate": 0.903226,
+            "ci95_wilson": [
+              0.751001,
+              0.966535
+            ]
+          },
+          "talking_false_alarm": {
+            "count": 0,
+            "of": 33,
+            "rate": 0.0,
+            "ci95_wilson": [
+              0.0,
+              0.10427
+            ]
+          },
+          "normal_false_alarm": {
+            "count": 0,
+            "of": 33,
+            "rate": 0.0,
+            "ci95_wilson": [
+              0.0,
+              0.10427
+            ]
+          },
+          "score": 0.903226,
+          "yawns_per_yawning_video": {
+            "mean": 1.258065,
+            "median": 1.0,
+            "max": 4
+          }
+        },
+        "none": {
+          "videos": {
+            "yawning": 58,
+            "talking": 57,
+            "normal": 59
+          },
+          "yawns_per_minute": {
+            "yawning": 3.364837,
+            "talking": 0.10307,
+            "normal": 0.0
+          },
+          "detected_yawns": {
+            "yawning": 61,
+            "talking": 3,
+            "normal": 0
+          },
+          "yawning_recall": {
+            "count": 49,
+            "of": 58,
+            "rate": 0.844828,
+            "ci95_wilson": [
+              0.73066,
+              0.916155
+            ]
+          },
+          "talking_false_alarm": {
+            "count": 3,
+            "of": 57,
+            "rate": 0.052632,
+            "ci95_wilson": [
+              0.01806,
+              0.143696
+            ]
+          },
+          "normal_false_alarm": {
+            "count": 0,
+            "of": 59,
+            "rate": 0.0,
+            "ci95_wilson": [
+              0.0,
+              0.061129
+            ]
+          },
+          "score": 0.818512,
+          "yawns_per_yawning_video": {
+            "mean": 1.051724,
+            "median": 1.0,
+            "max": 2
+          }
+        },
+        "sunglasses": {
+          "videos": {
+            "yawning": 13,
+            "talking": 10,
+            "normal": 13
+          },
+          "yawns_per_minute": {
+            "yawning": 3.417635,
+            "talking": 0.0,
+            "normal": 0.0
+          },
+          "detected_yawns": {
+            "yawning": 13,
+            "talking": 0,
+            "normal": 0
+          },
+          "yawning_recall": {
+            "count": 11,
+            "of": 13,
+            "rate": 0.846154,
+            "ci95_wilson": [
+              0.577654,
+              0.956742
+            ]
+          },
+          "talking_false_alarm": {
+            "count": 0,
+            "of": 10,
+            "rate": 0.0,
+            "ci95_wilson": [
+              0.0,
+              0.277533
+            ]
+          },
+          "normal_false_alarm": {
+            "count": 0,
+            "of": 13,
+            "rate": 0.0,
+            "ci95_wilson": [
+              0.0,
+              0.228095
+            ]
+          },
+          "score": 0.846154,
+          "yawns_per_yawning_video": {
+            "mean": 1.0,
+            "median": 1.0,
+            "max": 2
+          }
+        }
+      },
+      "by_facial_hair": {
+        "beard": {
+          "videos": {
+            "yawning": 2,
+            "talking": 2,
+            "normal": 2
+          },
+          "yawns_per_minute": {
+            "yawning": 7.542793,
+            "talking": 0.0,
+            "normal": 0.0
+          },
+          "detected_yawns": {
+            "yawning": 5,
+            "talking": 0,
+            "normal": 0
+          },
+          "yawning_recall": {
+            "count": 2,
+            "of": 2,
+            "rate": 1.0,
+            "ci95_wilson": [
+              0.34238,
+              1.0
+            ]
+          },
+          "talking_false_alarm": {
+            "count": 0,
+            "of": 2,
+            "rate": 0.0,
+            "ci95_wilson": [
+              0.0,
+              0.65762
+            ]
+          },
+          "normal_false_alarm": {
+            "count": 0,
+            "of": 2,
+            "rate": 0.0,
+            "ci95_wilson": [
+              0.0,
+              0.65762
+            ]
+          },
+          "score": 1.0,
+          "yawns_per_yawning_video": {
+            "mean": 2.5,
+            "median": 2.5,
+            "max": 3
+          }
+        },
+        "moustache": {
+          "videos": {
+            "yawning": 2,
+            "talking": 2,
+            "normal": 2
+          },
+          "yawns_per_minute": {
+            "yawning": 6.183637,
+            "talking": 0.0,
+            "normal": 0.0
+          },
+          "detected_yawns": {
+            "yawning": 5,
+            "talking": 0,
+            "normal": 0
+          },
+          "yawning_recall": {
+            "count": 2,
+            "of": 2,
+            "rate": 1.0,
+            "ci95_wilson": [
+              0.34238,
+              1.0
+            ]
+          },
+          "talking_false_alarm": {
+            "count": 0,
+            "of": 2,
+            "rate": 0.0,
+            "ci95_wilson": [
+              0.0,
+              0.65762
+            ]
+          },
+          "normal_false_alarm": {
+            "count": 0,
+            "of": 2,
+            "rate": 0.0,
+            "ci95_wilson": [
+              0.0,
+              0.65762
+            ]
+          },
+          "score": 1.0,
+          "yawns_per_yawning_video": {
+            "mean": 2.5,
+            "median": 2.5,
+            "max": 4
+          }
+        },
+        "none": {
+          "videos": {
+            "yawning": 98,
+            "talking": 96,
+            "normal": 101
+          },
+          "yawns_per_minute": {
+            "yawning": 3.32761,
+            "talking": 0.061798,
+            "normal": 0.0
+          },
+          "detected_yawns": {
+            "yawning": 103,
+            "talking": 3,
+            "normal": 0
+          },
+          "yawning_recall": {
+            "count": 84,
+            "of": 98,
+            "rate": 0.857143,
+            "ci95_wilson": [
+              0.774388,
+              0.912955
+            ]
+          },
+          "talking_false_alarm": {
+            "count": 3,
+            "of": 96,
+            "rate": 0.03125,
+            "ci95_wilson": [
+              0.010684,
+              0.087887
+            ]
+          },
+          "normal_false_alarm": {
+            "count": 0,
+            "of": 101,
+            "rate": 0.0,
+            "ci95_wilson": [
+              0.0,
+              0.036641
+            ]
+          },
+          "score": 0.841518,
+          "yawns_per_yawning_video": {
+            "mean": 1.05102,
+            "median": 1.0,
+            "max": 2
+          }
+        }
+      },
+      "by_sex": {
+        "F": {
+          "videos": {
+            "yawning": 50,
+            "talking": 47,
+            "normal": 51
+          },
+          "yawns_per_minute": {
+            "yawning": 3.167744,
+            "talking": 0.122224,
+            "normal": 0.0
+          },
+          "detected_yawns": {
+            "yawning": 50,
+            "talking": 3,
+            "normal": 0
+          },
+          "yawning_recall": {
+            "count": 39,
+            "of": 50,
+            "rate": 0.78,
+            "ci95_wilson": [
+              0.647585,
+              0.872461
+            ]
+          },
+          "talking_false_alarm": {
+            "count": 3,
+            "of": 47,
+            "rate": 0.06383,
+            "ci95_wilson": [
+              0.021945,
+              0.171626
+            ]
+          },
+          "normal_false_alarm": {
+            "count": 0,
+            "of": 51,
+            "rate": 0.0,
+            "ci95_wilson": [
+              0.0,
+              0.070047
+            ]
+          },
+          "score": 0.748085,
+          "yawns_per_yawning_video": {
+            "mean": 1.0,
+            "median": 1.0,
+            "max": 2
+          }
+        },
+        "M": {
+          "videos": {
+            "yawning": 52,
+            "talking": 53,
+            "normal": 54
+          },
+          "yawns_per_minute": {
+            "yawning": 3.785941,
+            "talking": 0.0,
+            "normal": 0.0
+          },
+          "detected_yawns": {
+            "yawning": 63,
+            "talking": 0,
+            "normal": 0
+          },
+          "yawning_recall": {
+            "count": 49,
+            "of": 52,
+            "rate": 0.942308,
+            "ci95_wilson": [
+              0.843575,
+              0.980186
+            ]
+          },
+          "talking_false_alarm": {
+            "count": 0,
+            "of": 53,
+            "rate": 0.0,
+            "ci95_wilson": [
+              0.0,
+              0.067582
+            ]
+          },
+          "normal_false_alarm": {
+            "count": 0,
+            "of": 54,
+            "rate": 0.0,
+            "ci95_wilson": [
+              0.0,
+              0.066414
+            ]
+          },
+          "score": 0.942308,
+          "yawns_per_yawning_video": {
+            "mean": 1.211538,
+            "median": 1.0,
+            "max": 4
+          }
+        }
+      },
+      "talking_and_yawning_videos": {
+        "note": "Reported apart; never used to choose parameters. Each should contain at least one yawn.",
+        "with_detected_yawn": {
+          "count": 11,
+          "of": 13,
+          "rate": 0.846154,
+          "ci95_wilson": [
+            0.577654,
+            0.956742
+          ]
+        },
+        "detected_yawns": 12,
+        "yawns_per_minute": 2.419648
+      },
+      "per_fold": [
+        {
+          "fold": 0,
+          "params": {
+            "variant": "absolute",
+            "threshold": 0.26,
+            "min_duration_s": 1.0,
+            "release_factor": 0.8,
+            "max_gap_s": 0.25,
+            "baseline_window_s": null
+          },
+          "train_score": 0.896266,
+          "candidates_tied_on_train": 1,
+          "test": {
+            "videos": {
+              "yawning": 20,
+              "talking": 19,
+              "normal": 21
+            },
+            "yawns_per_minute": {
+              "yawning": 3.570016,
+              "talking": 0.195947,
+              "normal": 0.0
+            },
+            "detected_yawns": {
+              "yawning": 23,
+              "talking": 2,
+              "normal": 0
+            },
+            "yawning_recall": {
+              "count": 16,
+              "of": 20,
+              "rate": 0.8,
+              "ci95_wilson": [
+                0.583983,
+                0.919342
+              ]
+            },
+            "talking_false_alarm": {
+              "count": 2,
+              "of": 19,
+              "rate": 0.105263,
+              "ci95_wilson": [
+                0.029359,
+                0.313941
+              ]
+            },
+            "normal_false_alarm": {
+              "count": 0,
+              "of": 21,
+              "rate": 0.0,
+              "ci95_wilson": [
+                0.0,
+                0.154639
+              ]
+            },
+            "score": 0.747368,
+            "yawns_per_yawning_video": {
+              "mean": 1.15,
+              "median": 1.0,
+              "max": 2
+            }
+          }
+        },
+        {
+          "fold": 1,
+          "params": {
+            "variant": "absolute",
+            "threshold": 0.26,
+            "min_duration_s": 1.2,
+            "release_factor": 0.8,
+            "max_gap_s": 0.25,
+            "baseline_window_s": null
+          },
+          "train_score": 0.853195,
+          "candidates_tied_on_train": 1,
+          "test": {
+            "videos": {
+              "yawning": 20,
+              "talking": 21,
+              "normal": 21
+            },
+            "yawns_per_minute": {
+              "yawning": 3.317424,
+              "talking": 0.0,
+              "normal": 0.0
+            },
+            "detected_yawns": {
+              "yawning": 21,
+              "talking": 0,
+              "normal": 0
+            },
+            "yawning_recall": {
+              "count": 18,
+              "of": 20,
+              "rate": 0.9,
+              "ci95_wilson": [
+                0.698966,
+                0.972134
+              ]
+            },
+            "talking_false_alarm": {
+              "count": 0,
+              "of": 21,
+              "rate": 0.0,
+              "ci95_wilson": [
+                0.0,
+                0.154639
+              ]
+            },
+            "normal_false_alarm": {
+              "count": 0,
+              "of": 21,
+              "rate": 0.0,
+              "ci95_wilson": [
+                0.0,
+                0.154639
+              ]
+            },
+            "score": 0.9,
+            "yawns_per_yawning_video": {
+              "mean": 1.05,
+              "median": 1.0,
+              "max": 2
+            }
+          }
+        },
+        {
+          "fold": 2,
+          "params": {
+            "variant": "absolute",
+            "threshold": 0.26,
+            "min_duration_s": 1.0,
+            "release_factor": 0.8,
+            "max_gap_s": 0.25,
+            "baseline_window_s": null
+          },
+          "train_score": 0.873048,
+          "candidates_tied_on_train": 1,
+          "test": {
+            "videos": {
+              "yawning": 19,
+              "talking": 19,
+              "normal": 20
+            },
+            "yawns_per_minute": {
+              "yawning": 3.223739,
+              "talking": 0.0,
+              "normal": 0.0
+            },
+            "detected_yawns": {
+              "yawning": 20,
+              "talking": 0,
+              "normal": 0
+            },
+            "yawning_recall": {
+              "count": 16,
+              "of": 19,
+              "rate": 0.842105,
+              "ci95_wilson": [
+                0.624345,
+                0.944795
+              ]
+            },
+            "talking_false_alarm": {
+              "count": 0,
+              "of": 19,
+              "rate": 0.0,
+              "ci95_wilson": [
+                0.0,
+                0.168179
+              ]
+            },
+            "normal_false_alarm": {
+              "count": 0,
+              "of": 20,
+              "rate": 0.0,
+              "ci95_wilson": [
+                0.0,
+                0.161125
+              ]
+            },
+            "score": 0.842105,
+            "yawns_per_yawning_video": {
+              "mean": 1.052632,
+              "median": 1.0,
+              "max": 2
+            }
+          }
+        },
+        {
+          "fold": 3,
+          "params": {
+            "variant": "absolute",
+            "threshold": 0.22,
+            "min_duration_s": 1.0,
+            "release_factor": 1.0,
+            "max_gap_s": 0.25,
+            "baseline_window_s": null
+          },
+          "train_score": 0.850226,
+          "candidates_tied_on_train": 1,
+          "test": {
+            "videos": {
+              "yawning": 22,
+              "talking": 20,
+              "normal": 22
+            },
+            "yawns_per_minute": {
+              "yawning": 3.920608,
+              "talking": 0.096527,
+              "normal": 0.0
+            },
+            "detected_yawns": {
+              "yawning": 26,
+              "talking": 1,
+              "normal": 0
+            },
+            "yawning_recall": {
+              "count": 20,
+              "of": 22,
+              "rate": 0.909091,
+              "ci95_wilson": [
+                0.721851,
+                0.974705
+              ]
+            },
+            "talking_false_alarm": {
+              "count": 1,
+              "of": 20,
+              "rate": 0.05,
+              "ci95_wilson": [
+                0.008881,
+                0.236131
+              ]
+            },
+            "normal_false_alarm": {
+              "count": 0,
+              "of": 22,
+              "rate": 0.0,
+              "ci95_wilson": [
+                0.0,
+                0.148655
+              ]
+            },
+            "score": 0.884091,
+            "yawns_per_yawning_video": {
+              "mean": 1.181818,
+              "median": 1.0,
+              "max": 4
+            }
+          }
+        },
+        {
+          "fold": 4,
+          "params": {
+            "variant": "absolute",
+            "threshold": 0.26,
+            "min_duration_s": 1.0,
+            "release_factor": 0.8,
+            "max_gap_s": 0.25,
+            "baseline_window_s": null
+          },
+          "train_score": 0.869902,
+          "candidates_tied_on_train": 1,
+          "test": {
+            "videos": {
+              "yawning": 21,
+              "talking": 21,
+              "normal": 21
+            },
+            "yawns_per_minute": {
+              "yawning": 3.374287,
+              "talking": 0.0,
+              "normal": 0.0
+            },
+            "detected_yawns": {
+              "yawning": 23,
+              "talking": 0,
+              "normal": 0
+            },
+            "yawning_recall": {
+              "count": 18,
+              "of": 21,
+              "rate": 0.857143,
+              "ci95_wilson": [
+                0.653639,
+                0.95019
+              ]
+            },
+            "talking_false_alarm": {
+              "count": 0,
+              "of": 21,
+              "rate": 0.0,
+              "ci95_wilson": [
+                0.0,
+                0.154639
+              ]
+            },
+            "normal_false_alarm": {
+              "count": 0,
+              "of": 21,
+              "rate": 0.0,
+              "ci95_wilson": [
+                0.0,
+                0.154639
+              ]
+            },
+            "score": 0.857143,
+            "yawns_per_yawning_video": {
+              "mean": 1.095238,
+              "median": 1.0,
+              "max": 3
+            }
+          }
+        }
+      ],
+      "errors": {
+        "missed_yawning_videos": [
+          {
+            "video": "Mirror/Female_mirror/7-FemaleGlasses-Yawning.avi",
+            "fold": 3,
+            "detected_yawns": 0,
+            "max_ratio": 0.216277,
+            "no_face_rate": 0.0,
+            "fold_threshold": 0.22,
+            "reaches_fold_threshold": false
+          },
+          {
+            "video": "Mirror/Female_mirror/8-FemaleGlasses-Yawning.avi",
+            "fold": 2,
+            "detected_yawns": 0,
+            "max_ratio": 0.195235,
+            "no_face_rate": 0.0,
+            "fold_threshold": 0.26,
+            "reaches_fold_threshold": false
+          },
+          {
+            "video": "Mirror/Female_mirror/14-FemaleNoGlasses-Yawning.avi",
+            "fold": 0,
+            "detected_yawns": 0,
+            "max_ratio": 0.248118,
+            "no_face_rate": 0.0,
+            "fold_threshold": 0.26,
+            "reaches_fold_threshold": false
+          },
+          {
+            "video": "Mirror/Female_mirror/15-FemaleGlasses-Yawning.avi",
+            "fold": 2,
+            "detected_yawns": 0,
+            "max_ratio": 0.185235,
+            "no_face_rate": 0.0,
+            "fold_threshold": 0.26,
+            "reaches_fold_threshold": false
+          },
+          {
+            "video": "Mirror/Female_mirror/25-FemaleSunGlasses-Yawning.avi",
+            "fold": 3,
+            "detected_yawns": 0,
+            "max_ratio": 0.54575,
+            "no_face_rate": 0.111111,
+            "fold_threshold": 0.22,
+            "reaches_fold_threshold": true
+          },
+          {
+            "video": "Mirror/Female_mirror/32-FemaleSunGlasses-Yawning.avi",
+            "fold": 4,
+            "detected_yawns": 0,
+            "max_ratio": 0.245323,
+            "no_face_rate": 0.035874,
+            "fold_threshold": 0.26,
+            "reaches_fold_threshold": false
+          },
+          {
+            "video": "Mirror/Female_mirror/33-FemaleNoGlasses-Yawning.avi",
+            "fold": 0,
+            "detected_yawns": 0,
+            "max_ratio": 0.252479,
+            "no_face_rate": 0.0,
+            "fold_threshold": 0.26,
+            "reaches_fold_threshold": false
+          },
+          {
+            "video": "Mirror/Female_mirror/36-FemaleNoGlasses-Yawning.avi",
+            "fold": 1,
+            "detected_yawns": 0,
+            "max_ratio": 0.390534,
+            "no_face_rate": 0.0,
+            "fold_threshold": 0.26,
+            "reaches_fold_threshold": true
+          },
+          {
+            "video": "Mirror/Female_mirror/37-FemaleNoGlasses-Yawning.avi",
+            "fold": 1,
+            "detected_yawns": 0,
+            "max_ratio": 0.278948,
+            "no_face_rate": 0.0,
+            "fold_threshold": 0.26,
+            "reaches_fold_threshold": true
+          },
+          {
+            "video": "Mirror/Female_mirror/38-FemaleNoGlasses-Yawning.avi",
+            "fold": 4,
+            "detected_yawns": 0,
+            "max_ratio": 0.110972,
+            "no_face_rate": 0.0,
+            "fold_threshold": 0.26,
+            "reaches_fold_threshold": false
+          },
+          {
+            "video": "Mirror/Female_mirror/43-FemaleNoGlasses-Yawning.avi",
+            "fold": 2,
+            "detected_yawns": 0,
+            "max_ratio": 0.404449,
+            "no_face_rate": 0.0,
+            "fold_threshold": 0.26,
+            "reaches_fold_threshold": true
+          },
+          {
+            "video": "Mirror/Male_mirror Avi Videos/9-MaleNoGlasses-Yawning.avi",
+            "fold": 0,
+            "detected_yawns": 0,
+            "max_ratio": 0.23308,
+            "no_face_rate": 0.0,
+            "fold_threshold": 0.26,
+            "reaches_fold_threshold": false
+          },
+          {
+            "video": "Mirror/Male_mirror Avi Videos/35-MaleNoGlasses-Yawning.avi",
+            "fold": 4,
+            "detected_yawns": 0,
+            "max_ratio": 0.373954,
+            "no_face_rate": 0.0,
+            "fold_threshold": 0.26,
+            "reaches_fold_threshold": true
+          },
+          {
+            "video": "Mirror/Male_mirror Avi Videos/43-MaleNoGlasses-Yawning.avi",
+            "fold": 0,
+            "detected_yawns": 0,
+            "max_ratio": 0.338854,
+            "no_face_rate": 0.0,
+            "fold_threshold": 0.26,
+            "reaches_fold_threshold": true
+          }
+        ],
+        "false_alarm_videos": [
+          {
+            "video": "Mirror/Female_mirror/17-FemaleNoGlasses-Talking.avi",
+            "fold": 0,
+            "detected_yawns": 1,
+            "max_ratio": 0.397001,
+            "no_face_rate": 0.0,
+            "fold_threshold": 0.26,
+            "reaches_fold_threshold": true
+          },
+          {
+            "video": "Mirror/Female_mirror/31-FemaleNoGlasses-Talking.avi",
+            "fold": 3,
+            "detected_yawns": 1,
+            "max_ratio": 0.395123,
+            "no_face_rate": 0.0,
+            "fold_threshold": 0.22,
+            "reaches_fold_threshold": true
+          },
+          {
+            "video": "Mirror/Female_mirror/34-FemaleNoGlasses-Talking.avi",
+            "fold": 0,
+            "detected_yawns": 1,
+            "max_ratio": 0.38231,
+            "no_face_rate": 0.0,
+            "fold_threshold": 0.26,
+            "reaches_fold_threshold": true
+          }
+        ],
+        "missed_never_reaching_fold_threshold": 8
+      }
+    },
+    "relative": {
+      "overall": {
+        "videos": {
+          "yawning": 102,
+          "talking": 100,
+          "normal": 105
+        },
+        "yawns_per_minute": {
+          "yawning": 4.0093,
+          "talking": 0.455301,
+          "normal": 0.054891
+        },
+        "detected_yawns": {
+          "yawning": 130,
+          "talking": 23,
+          "normal": 2
+        },
+        "yawning_recall": {
+          "count": 93,
+          "of": 102,
+          "rate": 0.911765,
+          "ci95_wilson": [
+            0.840755,
+            0.952884
+          ]
+        },
+        "talking_false_alarm": {
+          "count": 15,
+          "of": 100,
+          "rate": 0.15,
+          "ci95_wilson": [
+            0.09306,
+            0.232836
+          ]
+        },
+        "normal_false_alarm": {
+          "count": 2,
+          "of": 105,
+          "rate": 0.019048,
+          "ci95_wilson": [
+            0.005239,
+            0.066806
+          ]
+        },
+        "score": 0.827241,
+        "yawns_per_yawning_video": {
+          "mean": 1.27451,
+          "median": 1.0,
+          "max": 4
+        }
+      },
+      "by_eyewear": {
+        "glasses": {
+          "videos": {
+            "yawning": 31,
+            "talking": 33,
+            "normal": 33
+          },
+          "yawns_per_minute": {
+            "yawning": 4.288921,
+            "talking": 0.179934,
+            "normal": 0.084629
+          },
+          "detected_yawns": {
+            "yawning": 45,
+            "talking": 3,
+            "normal": 1
+          },
+          "yawning_recall": {
+            "count": 29,
+            "of": 31,
+            "rate": 0.935484,
+            "ci95_wilson": [
+              0.792814,
+              0.982125
+            ]
+          },
+          "talking_false_alarm": {
+            "count": 3,
+            "of": 33,
+            "rate": 0.090909,
+            "ci95_wilson": [
+              0.031404,
+              0.235726
+            ]
+          },
+          "normal_false_alarm": {
+            "count": 1,
+            "of": 33,
+            "rate": 0.030303,
+            "ci95_wilson": [
+              0.005369,
+              0.153187
+            ]
+          },
+          "score": 0.874878,
+          "yawns_per_yawning_video": {
+            "mean": 1.451613,
+            "median": 1.0,
+            "max": 4
+          }
+        },
+        "none": {
+          "videos": {
+            "yawning": 58,
+            "talking": 57,
+            "normal": 59
+          },
+          "yawns_per_minute": {
+            "yawning": 3.695804,
+            "talking": 0.515352,
+            "normal": 0.049067
+          },
+          "detected_yawns": {
+            "yawning": 67,
+            "talking": 15,
+            "normal": 1
+          },
+          "yawning_recall": {
+            "count": 52,
+            "of": 58,
+            "rate": 0.896552,
+            "ci95_wilson": [
+              0.792119,
+              0.951719
+            ]
+          },
+          "talking_false_alarm": {
+            "count": 10,
+            "of": 57,
+            "rate": 0.175439,
+            "ci95_wilson": [
+              0.098189,
+              0.293674
+            ]
+          },
+          "normal_false_alarm": {
+            "count": 1,
+            "of": 59,
+            "rate": 0.016949,
+            "ci95_wilson": [
+              0.002998,
+              0.089957
+            ]
+          },
+          "score": 0.800358,
+          "yawns_per_yawning_video": {
+            "mean": 1.155172,
+            "median": 1.0,
+            "max": 2
+          }
+        },
+        "sunglasses": {
+          "videos": {
+            "yawning": 13,
+            "talking": 10,
+            "normal": 13
+          },
+          "yawns_per_minute": {
+            "yawning": 4.73211,
+            "talking": 1.05553,
+            "normal": 0.0
+          },
+          "detected_yawns": {
+            "yawning": 18,
+            "talking": 5,
+            "normal": 0
+          },
+          "yawning_recall": {
+            "count": 12,
+            "of": 13,
+            "rate": 0.923077,
+            "ci95_wilson": [
+              0.66686,
+              0.98629
+            ]
+          },
+          "talking_false_alarm": {
+            "count": 2,
+            "of": 10,
+            "rate": 0.2,
+            "ci95_wilson": [
+              0.056682,
+              0.509838
+            ]
+          },
+          "normal_false_alarm": {
+            "count": 0,
+            "of": 13,
+            "rate": 0.0,
+            "ci95_wilson": [
+              0.0,
+              0.228095
+            ]
+          },
+          "score": 0.823077,
+          "yawns_per_yawning_video": {
+            "mean": 1.384615,
+            "median": 1.0,
+            "max": 3
+          }
+        }
+      },
+      "by_facial_hair": {
+        "beard": {
+          "videos": {
+            "yawning": 2,
+            "talking": 2,
+            "normal": 2
+          },
+          "yawns_per_minute": {
+            "yawning": 7.542793,
+            "talking": 0.0,
+            "normal": 0.0
+          },
+          "detected_yawns": {
+            "yawning": 5,
+            "talking": 0,
+            "normal": 0
+          },
+          "yawning_recall": {
+            "count": 2,
+            "of": 2,
+            "rate": 1.0,
+            "ci95_wilson": [
+              0.34238,
+              1.0
+            ]
+          },
+          "talking_false_alarm": {
+            "count": 0,
+            "of": 2,
+            "rate": 0.0,
+            "ci95_wilson": [
+              0.0,
+              0.65762
+            ]
+          },
+          "normal_false_alarm": {
+            "count": 0,
+            "of": 2,
+            "rate": 0.0,
+            "ci95_wilson": [
+              0.0,
+              0.65762
+            ]
+          },
+          "score": 1.0,
+          "yawns_per_yawning_video": {
+            "mean": 2.5,
+            "median": 2.5,
+            "max": 3
+          }
+        },
+        "moustache": {
+          "videos": {
+            "yawning": 2,
+            "talking": 2,
+            "normal": 2
+          },
+          "yawns_per_minute": {
+            "yawning": 4.94691,
+            "talking": 0.0,
+            "normal": 0.0
+          },
+          "detected_yawns": {
+            "yawning": 4,
+            "talking": 0,
+            "normal": 0
+          },
+          "yawning_recall": {
+            "count": 2,
+            "of": 2,
+            "rate": 1.0,
+            "ci95_wilson": [
+              0.34238,
+              1.0
+            ]
+          },
+          "talking_false_alarm": {
+            "count": 0,
+            "of": 2,
+            "rate": 0.0,
+            "ci95_wilson": [
+              0.0,
+              0.65762
+            ]
+          },
+          "normal_false_alarm": {
+            "count": 0,
+            "of": 2,
+            "rate": 0.0,
+            "ci95_wilson": [
+              0.0,
+              0.65762
+            ]
+          },
+          "score": 1.0,
+          "yawns_per_yawning_video": {
+            "mean": 2.0,
+            "median": 2.0,
+            "max": 3
+          }
+        },
+        "none": {
+          "videos": {
+            "yawning": 98,
+            "talking": 96,
+            "normal": 101
+          },
+          "yawns_per_minute": {
+            "yawning": 3.909134,
+            "talking": 0.473786,
+            "normal": 0.057153
+          },
+          "detected_yawns": {
+            "yawning": 121,
+            "talking": 23,
+            "normal": 2
+          },
+          "yawning_recall": {
+            "count": 89,
+            "of": 98,
+            "rate": 0.908163,
+            "ci95_wilson": [
+              0.834604,
+              0.950931
+            ]
+          },
+          "talking_false_alarm": {
+            "count": 15,
+            "of": 96,
+            "rate": 0.15625,
+            "ci95_wilson": [
+              0.097037,
+              0.241915
+            ]
+          },
+          "normal_false_alarm": {
+            "count": 2,
+            "of": 101,
+            "rate": 0.019802,
+            "ci95_wilson": [
+              0.005447,
+              0.069346
+            ]
+          },
+          "score": 0.820137,
+          "yawns_per_yawning_video": {
+            "mean": 1.234694,
+            "median": 1.0,
+            "max": 4
+          }
+        }
+      },
+      "by_sex": {
+        "F": {
+          "videos": {
+            "yawning": 50,
+            "talking": 47,
+            "normal": 51
+          },
+          "yawns_per_minute": {
+            "yawning": 3.737938,
+            "talking": 0.733345,
+            "normal": 0.056183
+          },
+          "detected_yawns": {
+            "yawning": 59,
+            "talking": 18,
+            "normal": 1
+          },
+          "yawning_recall": {
+            "count": 42,
+            "of": 50,
+            "rate": 0.84,
+            "ci95_wilson": [
+              0.714858,
+              0.916626
+            ]
+          },
+          "talking_false_alarm": {
+            "count": 10,
+            "of": 47,
+            "rate": 0.212766,
+            "ci95_wilson": [
+              0.119897,
+              0.34904
+            ]
+          },
+          "normal_false_alarm": {
+            "count": 1,
+            "of": 51,
+            "rate": 0.019608,
+            "ci95_wilson": [
+              0.00347,
+              0.103046
+            ]
+          },
+          "score": 0.723813,
+          "yawns_per_yawning_video": {
+            "mean": 1.18,
+            "median": 1.0,
+            "max": 3
+          }
+        },
+        "M": {
+          "videos": {
+            "yawning": 52,
+            "talking": 53,
+            "normal": 54
+          },
+          "yawns_per_minute": {
+            "yawning": 4.266695,
+            "talking": 0.192523,
+            "normal": 0.053657
+          },
+          "detected_yawns": {
+            "yawning": 71,
+            "talking": 5,
+            "normal": 1
+          },
+          "yawning_recall": {
+            "count": 51,
+            "of": 52,
+            "rate": 0.980769,
+            "ci95_wilson": [
+              0.898795,
+              0.996597
+            ]
+          },
+          "talking_false_alarm": {
+            "count": 5,
+            "of": 53,
+            "rate": 0.09434,
+            "ci95_wilson": [
+              0.040973,
+              0.202537
+            ]
+          },
+          "normal_false_alarm": {
+            "count": 1,
+            "of": 54,
+            "rate": 0.018519,
+            "ci95_wilson": [
+              0.003276,
+              0.097714
+            ]
+          },
+          "score": 0.92434,
+          "yawns_per_yawning_video": {
+            "mean": 1.365385,
+            "median": 1.0,
+            "max": 4
+          }
+        }
+      },
+      "talking_and_yawning_videos": {
+        "note": "Reported apart; never used to choose parameters. Each should contain at least one yawn.",
+        "with_detected_yawn": {
+          "count": 12,
+          "of": 13,
+          "rate": 0.923077,
+          "ci95_wilson": [
+            0.66686,
+            0.98629
+          ]
+        },
+        "detected_yawns": 13,
+        "yawns_per_minute": 2.621285
+      },
+      "per_fold": [
+        {
+          "fold": 0,
+          "params": {
+            "variant": "relative",
+            "threshold": 0.2,
+            "min_duration_s": 0.6,
+            "release_factor": 0.8,
+            "max_gap_s": 0.25,
+            "baseline_window_s": 2.0
+          },
+          "train_score": 0.896186,
+          "candidates_tied_on_train": 1,
+          "test": {
+            "videos": {
+              "yawning": 20,
+              "talking": 19,
+              "normal": 21
+            },
+            "yawns_per_minute": {
+              "yawning": 4.035671,
+              "talking": 0.489866,
+              "normal": 0.130182
+            },
+            "detected_yawns": {
+              "yawning": 26,
+              "talking": 5,
+              "normal": 1
+            },
+            "yawning_recall": {
+              "count": 19,
+              "of": 20,
+              "rate": 0.95,
+              "ci95_wilson": [
+                0.763869,
+                0.991119
+              ]
+            },
+            "talking_false_alarm": {
+              "count": 2,
+              "of": 19,
+              "rate": 0.105263,
+              "ci95_wilson": [
+                0.029359,
+                0.313941
+              ]
+            },
+            "normal_false_alarm": {
+              "count": 1,
+              "of": 21,
+              "rate": 0.047619,
+              "ci95_wilson": [
+                0.008456,
+                0.226694
+              ]
+            },
+            "score": 0.873559,
+            "yawns_per_yawning_video": {
+              "mean": 1.3,
+              "median": 1.0,
+              "max": 2
+            }
+          }
+        },
+        {
+          "fold": 1,
+          "params": {
+            "variant": "relative",
+            "threshold": 0.16,
+            "min_duration_s": 0.8,
+            "release_factor": 1.0,
+            "max_gap_s": 0.25,
+            "baseline_window_s": 1.0
+          },
+          "train_score": 0.888219,
+          "candidates_tied_on_train": 1,
+          "test": {
+            "videos": {
+              "yawning": 20,
+              "talking": 21,
+              "normal": 21
+            },
+            "yawns_per_minute": {
+              "yawning": 4.423232,
+              "talking": 0.391872,
+              "normal": 0.0
+            },
+            "detected_yawns": {
+              "yawning": 28,
+              "talking": 4,
+              "normal": 0
+            },
+            "yawning_recall": {
+              "count": 19,
+              "of": 20,
+              "rate": 0.95,
+              "ci95_wilson": [
+                0.763869,
+                0.991119
+              ]
+            },
+            "talking_false_alarm": {
+              "count": 4,
+              "of": 21,
+              "rate": 0.190476,
+              "ci95_wilson": [
+                0.076676,
+                0.400006
+              ]
+            },
+            "normal_false_alarm": {
+              "count": 0,
+              "of": 21,
+              "rate": 0.0,
+              "ci95_wilson": [
+                0.0,
+                0.154639
+              ]
+            },
+            "score": 0.854762,
+            "yawns_per_yawning_video": {
+              "mean": 1.4,
+              "median": 1.0,
+              "max": 3
+            }
+          }
+        },
+        {
+          "fold": 2,
+          "params": {
+            "variant": "relative",
+            "threshold": 0.2,
+            "min_duration_s": 0.6,
+            "release_factor": 0.8,
+            "max_gap_s": 0.25,
+            "baseline_window_s": 2.0
+          },
+          "train_score": 0.921227,
+          "candidates_tied_on_train": 1,
+          "test": {
+            "videos": {
+              "yawning": 19,
+              "talking": 19,
+              "normal": 20
+            },
+            "yawns_per_minute": {
+              "yawning": 3.384926,
+              "talking": 0.10597,
+              "normal": 0.0
+            },
+            "detected_yawns": {
+              "yawning": 21,
+              "talking": 1,
+              "normal": 0
+            },
+            "yawning_recall": {
+              "count": 15,
+              "of": 19,
+              "rate": 0.789474,
+              "ci95_wilson": [
+                0.566657,
+                0.914923
+              ]
+            },
+            "talking_false_alarm": {
+              "count": 1,
+              "of": 19,
+              "rate": 0.052632,
+              "ci95_wilson": [
+                0.009352,
+                0.246387
+              ]
+            },
+            "normal_false_alarm": {
+              "count": 0,
+              "of": 20,
+              "rate": 0.0,
+              "ci95_wilson": [
+                0.0,
+                0.161125
+              ]
+            },
+            "score": 0.763158,
+            "yawns_per_yawning_video": {
+              "mean": 1.105263,
+              "median": 1.0,
+              "max": 4
+            }
+          }
+        },
+        {
+          "fold": 3,
+          "params": {
+            "variant": "relative",
+            "threshold": 0.18,
+            "min_duration_s": 0.8,
+            "release_factor": 0.8,
+            "max_gap_s": 0.25,
+            "baseline_window_s": 2.0
+          },
+          "train_score": 0.887726,
+          "candidates_tied_on_train": 2,
+          "test": {
+            "videos": {
+              "yawning": 22,
+              "talking": 20,
+              "normal": 22
+            },
+            "yawns_per_minute": {
+              "yawning": 4.222193,
+              "talking": 0.579162,
+              "normal": 0.129246
+            },
+            "detected_yawns": {
+              "yawning": 28,
+              "talking": 6,
+              "normal": 1
+            },
+            "yawning_recall": {
+              "count": 21,
+              "of": 22,
+              "rate": 0.954545,
+              "ci95_wilson": [
+                0.78202,
+                0.991931
+              ]
+            },
+            "talking_false_alarm": {
+              "count": 3,
+              "of": 20,
+              "rate": 0.15,
+              "ci95_wilson": [
+                0.052369,
+                0.360419
+              ]
+            },
+            "normal_false_alarm": {
+              "count": 1,
+              "of": 22,
+              "rate": 0.045455,
+              "ci95_wilson": [
+                0.008069,
+                0.21798
+              ]
+            },
+            "score": 0.856818,
+            "yawns_per_yawning_video": {
+              "mean": 1.272727,
+              "median": 1.0,
+              "max": 3
+            }
+          }
+        },
+        {
+          "fold": 4,
+          "params": {
+            "variant": "relative",
+            "threshold": 0.16,
+            "min_duration_s": 1.0,
+            "release_factor": 0.8,
+            "max_gap_s": 0.25,
+            "baseline_window_s": 2.0
+          },
+          "train_score": 0.894032,
+          "candidates_tied_on_train": 1,
+          "test": {
+            "videos": {
+              "yawning": 21,
+              "talking": 21,
+              "normal": 21
+            },
+            "yawns_per_minute": {
+              "yawning": 3.96112,
+              "talking": 0.679262,
+              "normal": 0.0
+            },
+            "detected_yawns": {
+              "yawning": 27,
+              "talking": 7,
+              "normal": 0
+            },
+            "yawning_recall": {
+              "count": 19,
+              "of": 21,
+              "rate": 0.904762,
+              "ci95_wilson": [
+                0.710859,
+                0.973481
+              ]
+            },
+            "talking_false_alarm": {
+              "count": 5,
+              "of": 21,
+              "rate": 0.238095,
+              "ci95_wilson": [
+                0.10628,
+                0.450912
+              ]
+            },
+            "normal_false_alarm": {
+              "count": 0,
+              "of": 21,
+              "rate": 0.0,
+              "ci95_wilson": [
+                0.0,
+                0.154639
+              ]
+            },
+            "score": 0.785714,
+            "yawns_per_yawning_video": {
+              "mean": 1.285714,
+              "median": 1.0,
+              "max": 3
+            }
+          }
+        }
+      ],
+      "errors": {
+        "missed_yawning_videos": [
+          {
+            "video": "Mirror/Female_mirror/8-FemaleGlasses-Yawning.avi",
+            "fold": 2,
+            "detected_yawns": 0,
+            "max_ratio": 0.195235,
+            "no_face_rate": 0.0
+          },
+          {
+            "video": "Mirror/Female_mirror/9-FemaleNoGlasses-Yawning.avi",
+            "fold": 2,
+            "detected_yawns": 0,
+            "max_ratio": 0.62208,
+            "no_face_rate": 0.0
+          },
+          {
+            "video": "Mirror/Female_mirror/10-FemaleNoGlasses-Yawning.avi",
+            "fold": 2,
+            "detected_yawns": 0,
+            "max_ratio": 0.327688,
+            "no_face_rate": 0.0
+          },
+          {
+            "video": "Mirror/Female_mirror/15-FemaleGlasses-Yawning.avi",
+            "fold": 2,
+            "detected_yawns": 0,
+            "max_ratio": 0.185235,
+            "no_face_rate": 0.0
+          },
+          {
+            "video": "Mirror/Female_mirror/26-FemaleSunGlasses-Yawning.avi",
+            "fold": 0,
+            "detected_yawns": 0,
+            "max_ratio": 0.530426,
+            "no_face_rate": 0.108871
+          },
+          {
+            "video": "Mirror/Female_mirror/29-FemaleNoGlasses-Yawning.avi",
+            "fold": 3,
+            "detected_yawns": 0,
+            "max_ratio": 0.44013,
+            "no_face_rate": 0.0
+          },
+          {
+            "video": "Mirror/Female_mirror/37-FemaleNoGlasses-Yawning.avi",
+            "fold": 1,
+            "detected_yawns": 0,
+            "max_ratio": 0.278948,
+            "no_face_rate": 0.0
+          },
+          {
+            "video": "Mirror/Female_mirror/38-FemaleNoGlasses-Yawning.avi",
+            "fold": 4,
+            "detected_yawns": 0,
+            "max_ratio": 0.110972,
+            "no_face_rate": 0.0
+          },
+          {
+            "video": "Mirror/Male_mirror Avi Videos/35-MaleNoGlasses-Yawning.avi",
+            "fold": 4,
+            "detected_yawns": 0,
+            "max_ratio": 0.373954,
+            "no_face_rate": 0.0
+          }
+        ],
+        "false_alarm_videos": [
+          {
+            "video": "Mirror/Female_mirror/1-FemaleNoGlasses-Talking.avi",
+            "fold": 1,
+            "detected_yawns": 1,
+            "max_ratio": 0.388045,
+            "no_face_rate": 0.0
+          },
+          {
+            "video": "Mirror/Female_mirror/2-FemaleNoGlasses-Talking.avi",
+            "fold": 4,
+            "detected_yawns": 2,
+            "max_ratio": 0.291134,
+            "no_face_rate": 0.0
+          },
+          {
+            "video": "Mirror/Female_mirror/13-FemaleNoGlasses-Talking.avi",
+            "fold": 3,
+            "detected_yawns": 1,
+            "max_ratio": 0.218932,
+            "no_face_rate": 0.028953
+          },
+          {
+            "video": "Mirror/Female_mirror/17-FemaleNoGlasses-Talking.avi",
+            "fold": 0,
+            "detected_yawns": 1,
+            "max_ratio": 0.397001,
+            "no_face_rate": 0.0
+          },
+          {
+            "video": "Mirror/Female_mirror/17-FemaleSunGlasses-Talking.avi",
+            "fold": 0,
+            "detected_yawns": 4,
+            "max_ratio": 0.496422,
+            "no_face_rate": 0.0
+          },
+          {
+            "video": "Mirror/Female_mirror/18-FemaleNoGlasses-Talking.avi",
+            "fold": 1,
+            "detected_yawns": 1,
+            "max_ratio": 0.258396,
+            "no_face_rate": 0.0
+          },
+          {
+            "video": "Mirror/Female_mirror/19-FemaleNoGlasses-Talking.avi",
+            "fold": 4,
+            "detected_yawns": 2,
+            "max_ratio": 0.273163,
+            "no_face_rate": 0.0
+          },
+          {
+            "video": "Mirror/Female_mirror/22-FemaleSunGlasses-Talking.avi",
+            "fold": 2,
+            "detected_yawns": 1,
+            "max_ratio": 0.367704,
+            "no_face_rate": 0.0
+          },
+          {
+            "video": "Mirror/Female_mirror/27-FemaleNoGlasses-Normal.avi",
+            "fold": 0,
+            "detected_yawns": 1,
+            "max_ratio": 0.390745,
+            "no_face_rate": 0.130531
+          },
+          {
+            "video": "Mirror/Female_mirror/29-FemaleNoGlasses-Talking.avi",
+            "fold": 3,
+            "detected_yawns": 4,
+            "max_ratio": 0.36656,
+            "no_face_rate": 0.0
+          },
+          {
+            "video": "Mirror/Female_mirror/37-FemaleNoGlasses-Talking.avi",
+            "fold": 1,
+            "detected_yawns": 1,
+            "max_ratio": 0.212508,
+            "no_face_rate": 0.0
+          },
+          {
+            "video": "Mirror/Male_mirror Avi Videos/3-MaleGlasses-Talking.avi",
+            "fold": 3,
+            "detected_yawns": 1,
+            "max_ratio": 0.206612,
+            "no_face_rate": 0.0
+          },
+          {
+            "video": "Mirror/Male_mirror Avi Videos/24-MaleGlasses-Talking.avi",
+            "fold": 4,
+            "detected_yawns": 1,
+            "max_ratio": 0.32487,
+            "no_face_rate": 0.0
+          },
+          {
+            "video": "Mirror/Male_mirror Avi Videos/27-MaleGlasses-Talking.avi",
+            "fold": 4,
+            "detected_yawns": 1,
+            "max_ratio": 0.264546,
+            "no_face_rate": 0.0
+          },
+          {
+            "video": "Mirror/Male_mirror Avi Videos/29-MaleNoGlasses-Talking.avi",
+            "fold": 1,
+            "detected_yawns": 1,
+            "max_ratio": 0.283498,
+            "no_face_rate": 0.024444
+          },
+          {
+            "video": "Mirror/Male_mirror Avi Videos/31-MaleGlasses-Normal.avi",
+            "fold": 3,
+            "detected_yawns": 1,
+            "max_ratio": 0.261846,
+            "no_face_rate": 0.106918
+          },
+          {
+            "video": "Mirror/Male_mirror Avi Videos/42-MaleNoGlasses-Talking.avi",
+            "fold": 4,
+            "detected_yawns": 1,
+            "max_ratio": 0.183447,
+            "no_face_rate": 0.02924
+          }
+        ]
+      }
+    },
+    "variant_chosen_on_train_folds": {
+      "note": "Per fold, the variant with the higher train score (absolute on a tie) is applied to the test fold.",
+      "variant_per_fold": [
+        "absolute",
+        "relative",
+        "relative",
+        "relative",
+        "relative"
+      ],
+      "overall": {
+        "videos": {
+          "yawning": 102,
+          "talking": 100,
+          "normal": 105
+        },
+        "yawns_per_minute": {
+          "yawning": 3.916777,
+          "talking": 0.395914,
+          "normal": 0.027446
+        },
+        "detected_yawns": {
+          "yawning": 127,
+          "talking": 20,
+          "normal": 1
+        },
+        "yawning_recall": {
+          "count": 90,
+          "of": 102,
+          "rate": 0.882353,
+          "ci95_wilson": [
+            0.805546,
+            0.931406
+          ]
+        },
+        "talking_false_alarm": {
+          "count": 15,
+          "of": 100,
+          "rate": 0.15,
+          "ci95_wilson": [
+            0.09306,
+            0.232836
+          ]
+        },
+        "normal_false_alarm": {
+          "count": 1,
+          "of": 105,
+          "rate": 0.009524,
+          "ci95_wilson": [
+            0.001683,
+            0.051986
+          ]
+        },
+        "score": 0.802591,
+        "yawns_per_yawning_video": {
+          "mean": 1.245098,
+          "median": 1.0,
+          "max": 4
+        }
+      },
+      "by_eyewear": {
+        "glasses": {
+          "videos": {
+            "yawning": 31,
+            "talking": 33,
+            "normal": 33
+          },
+          "yawns_per_minute": {
+            "yawning": 4.288921,
+            "talking": 0.179934,
+            "normal": 0.084629
+          },
+          "detected_yawns": {
+            "yawning": 45,
+            "talking": 3,
+            "normal": 1
+          },
+          "yawning_recall": {
+            "count": 29,
+            "of": 31,
+            "rate": 0.935484,
+            "ci95_wilson": [
+              0.792814,
+              0.982125
+            ]
+          },
+          "talking_false_alarm": {
+            "count": 3,
+            "of": 33,
+            "rate": 0.090909,
+            "ci95_wilson": [
+              0.031404,
+              0.235726
+            ]
+          },
+          "normal_false_alarm": {
+            "count": 1,
+            "of": 33,
+            "rate": 0.030303,
+            "ci95_wilson": [
+              0.005369,
+              0.153187
+            ]
+          },
+          "score": 0.874878,
+          "yawns_per_yawning_video": {
+            "mean": 1.451613,
+            "median": 1.0,
+            "max": 4
+          }
+        },
+        "none": {
+          "videos": {
+            "yawning": 58,
+            "talking": 57,
+            "normal": 59
+          },
+          "yawns_per_minute": {
+            "yawning": 3.419998,
+            "talking": 0.549709,
+            "normal": 0.0
+          },
+          "detected_yawns": {
+            "yawning": 62,
+            "talking": 16,
+            "normal": 0
+          },
+          "yawning_recall": {
+            "count": 48,
+            "of": 58,
+            "rate": 0.827586,
+            "ci95_wilson": [
+              0.710917,
+              0.903557
+            ]
+          },
+          "talking_false_alarm": {
+            "count": 11,
+            "of": 57,
+            "rate": 0.192982,
+            "ci95_wilson": [
+              0.111327,
+              0.313407
+            ]
+          },
+          "normal_false_alarm": {
+            "count": 0,
+            "of": 59,
+            "rate": 0.0,
+            "ci95_wilson": [
+              0.0,
+              0.061129
+            ]
+          },
+          "score": 0.731095,
+          "yawns_per_yawning_video": {
+            "mean": 1.068966,
+            "median": 1.0,
+            "max": 2
+          }
+        },
+        "sunglasses": {
+          "videos": {
+            "yawning": 13,
+            "talking": 10,
+            "normal": 13
+          },
+          "yawns_per_minute": {
+            "yawning": 5.2579,
+            "talking": 0.211106,
+            "normal": 0.0
+          },
+          "detected_yawns": {
+            "yawning": 20,
+            "talking": 1,
+            "normal": 0
+          },
+          "yawning_recall": {
+            "count": 13,
+            "of": 13,
+            "rate": 1.0,
+            "ci95_wilson": [
+              0.771905,
+              1.0
+            ]
+          },
+          "talking_false_alarm": {
+            "count": 1,
+            "of": 10,
+            "rate": 0.1,
+            "ci95_wilson": [
+              0.017876,
+              0.40415
+            ]
+          },
+          "normal_false_alarm": {
+            "count": 0,
+            "of": 13,
+            "rate": 0.0,
+            "ci95_wilson": [
+              0.0,
+              0.228095
+            ]
+          },
+          "score": 0.95,
+          "yawns_per_yawning_video": {
+            "mean": 1.538462,
+            "median": 1.0,
+            "max": 3
+          }
+        }
+      },
+      "by_facial_hair": {
+        "beard": {
+          "videos": {
+            "yawning": 2,
+            "talking": 2,
+            "normal": 2
+          },
+          "yawns_per_minute": {
+            "yawning": 7.542793,
+            "talking": 0.0,
+            "normal": 0.0
+          },
+          "detected_yawns": {
+            "yawning": 5,
+            "talking": 0,
+            "normal": 0
+          },
+          "yawning_recall": {
+            "count": 2,
+            "of": 2,
+            "rate": 1.0,
+            "ci95_wilson": [
+              0.34238,
+              1.0
+            ]
+          },
+          "talking_false_alarm": {
+            "count": 0,
+            "of": 2,
+            "rate": 0.0,
+            "ci95_wilson": [
+              0.0,
+              0.65762
+            ]
+          },
+          "normal_false_alarm": {
+            "count": 0,
+            "of": 2,
+            "rate": 0.0,
+            "ci95_wilson": [
+              0.0,
+              0.65762
+            ]
+          },
+          "score": 1.0,
+          "yawns_per_yawning_video": {
+            "mean": 2.5,
+            "median": 2.5,
+            "max": 3
+          }
+        },
+        "moustache": {
+          "videos": {
+            "yawning": 2,
+            "talking": 2,
+            "normal": 2
+          },
+          "yawns_per_minute": {
+            "yawning": 4.94691,
+            "talking": 0.0,
+            "normal": 0.0
+          },
+          "detected_yawns": {
+            "yawning": 4,
+            "talking": 0,
+            "normal": 0
+          },
+          "yawning_recall": {
+            "count": 2,
+            "of": 2,
+            "rate": 1.0,
+            "ci95_wilson": [
+              0.34238,
+              1.0
+            ]
+          },
+          "talking_false_alarm": {
+            "count": 0,
+            "of": 2,
+            "rate": 0.0,
+            "ci95_wilson": [
+              0.0,
+              0.65762
+            ]
+          },
+          "normal_false_alarm": {
+            "count": 0,
+            "of": 2,
+            "rate": 0.0,
+            "ci95_wilson": [
+              0.0,
+              0.65762
+            ]
+          },
+          "score": 1.0,
+          "yawns_per_yawning_video": {
+            "mean": 2.0,
+            "median": 2.0,
+            "max": 3
+          }
+        },
+        "none": {
+          "videos": {
+            "yawning": 98,
+            "talking": 96,
+            "normal": 101
+          },
+          "yawns_per_minute": {
+            "yawning": 3.812214,
+            "talking": 0.411987,
+            "normal": 0.028576
+          },
+          "detected_yawns": {
+            "yawning": 118,
+            "talking": 20,
+            "normal": 1
+          },
+          "yawning_recall": {
+            "count": 86,
+            "of": 98,
+            "rate": 0.877551,
+            "ci95_wilson": [
+              0.798072,
+              0.928548
+            ]
+          },
+          "talking_false_alarm": {
+            "count": 15,
+            "of": 96,
+            "rate": 0.15625,
+            "ci95_wilson": [
+              0.097037,
+              0.241915
+            ]
+          },
+          "normal_false_alarm": {
+            "count": 1,
+            "of": 101,
+            "rate": 0.009901,
+            "ci95_wilson": [
+              0.00175,
+              0.053967
+            ]
+          },
+          "score": 0.794476,
+          "yawns_per_yawning_video": {
+            "mean": 1.204082,
+            "median": 1.0,
+            "max": 4
+          }
+        }
+      },
+      "by_sex": {
+        "F": {
+          "videos": {
+            "yawning": 50,
+            "talking": 47,
+            "normal": 51
+          },
+          "yawns_per_minute": {
+            "yawning": 3.674583,
+            "talking": 0.611121,
+            "normal": 0.0
+          },
+          "detected_yawns": {
+            "yawning": 58,
+            "talking": 15,
+            "normal": 0
+          },
+          "yawning_recall": {
+            "count": 41,
+            "of": 50,
+            "rate": 0.82,
+            "ci95_wilson": [
+              0.692039,
+              0.902298
+            ]
+          },
+          "talking_false_alarm": {
+            "count": 10,
+            "of": 47,
+            "rate": 0.212766,
+            "ci95_wilson": [
+              0.119897,
+              0.34904
+            ]
+          },
+          "normal_false_alarm": {
+            "count": 0,
+            "of": 51,
+            "rate": 0.0,
+            "ci95_wilson": [
+              0.0,
+              0.070047
+            ]
+          },
+          "score": 0.713617,
+          "yawns_per_yawning_video": {
+            "mean": 1.16,
+            "median": 1.0,
+            "max": 3
+          }
+        },
+        "M": {
+          "videos": {
+            "yawning": 52,
+            "talking": 53,
+            "normal": 54
+          },
+          "yawns_per_minute": {
+            "yawning": 4.146507,
+            "talking": 0.192523,
+            "normal": 0.053657
+          },
+          "detected_yawns": {
+            "yawning": 69,
+            "talking": 5,
+            "normal": 1
+          },
+          "yawning_recall": {
+            "count": 49,
+            "of": 52,
+            "rate": 0.942308,
+            "ci95_wilson": [
+              0.843575,
+              0.980186
+            ]
+          },
+          "talking_false_alarm": {
+            "count": 5,
+            "of": 53,
+            "rate": 0.09434,
+            "ci95_wilson": [
+              0.040973,
+              0.202537
+            ]
+          },
+          "normal_false_alarm": {
+            "count": 1,
+            "of": 54,
+            "rate": 0.018519,
+            "ci95_wilson": [
+              0.003276,
+              0.097714
+            ]
+          },
+          "score": 0.885879,
+          "yawns_per_yawning_video": {
+            "mean": 1.326923,
+            "median": 1.0,
+            "max": 4
+          }
+        }
+      },
+      "talking_and_yawning_videos": {
+        "note": "Reported apart; never used to choose parameters. Each should contain at least one yawn.",
+        "with_detected_yawn": {
+          "count": 12,
+          "of": 13,
+          "rate": 0.923077,
+          "ci95_wilson": [
+            0.66686,
+            0.98629
+          ]
+        },
+        "detected_yawns": 13,
+        "yawns_per_minute": 2.621285
+      }
+    },
+    "chosen_variant": "absolute",
+    "chosen_by": "Higher out-of-fold selection score (recall on Yawning minus the mean false-alarm rate on Talking and Normal); absolute on a tie because it needs no baseline. Choosing between two variants on the out-of-fold score is slightly optimistic; see variant_chosen_on_train_folds for the estimate without it.",
+    "out_of_fold_score": {
+      "absolute": 0.847745,
+      "relative": 0.827241
+    }
+  },
+  "final_params": {
+    "absolute": {
+      "params": {
+        "variant": "absolute",
+        "threshold": 0.26,
+        "min_duration_s": 1.0,
+        "release_factor": 0.8,
+        "max_gap_s": 0.25,
+        "baseline_window_s": null
+      },
+      "candidates_tied": 1,
+      "in_sample_metrics": {
+        "note": "Same videos used to choose the parameters: optimistic, not a validation result.",
+        "videos": {
+          "yawning": 102,
+          "talking": 100,
+          "normal": 105
+        },
+        "yawns_per_minute": {
+          "yawning": 3.60837,
+          "talking": 0.059387,
+          "normal": 0.0
+        },
+        "detected_yawns": {
+          "yawning": 117,
+          "talking": 3,
+          "normal": 0
+        },
+        "yawning_recall": {
+          "count": 90,
+          "of": 102,
+          "rate": 0.882353,
+          "ci95_wilson": [
+            0.805546,
+            0.931406
+          ]
+        },
+        "talking_false_alarm": {
+          "count": 3,
+          "of": 100,
+          "rate": 0.03,
+          "ci95_wilson": [
+            0.010255,
+            0.084519
+          ]
+        },
+        "normal_false_alarm": {
+          "count": 0,
+          "of": 105,
+          "rate": 0.0,
+          "ci95_wilson": [
+            0.0,
+            0.035294
+          ]
+        },
+        "score": 0.867353,
+        "yawns_per_yawning_video": {
+          "mean": 1.147059,
+          "median": 1.0,
+          "max": 4
+        }
+      }
+    },
+    "relative": {
+      "params": {
+        "variant": "relative",
+        "threshold": 0.2,
+        "min_duration_s": 0.6,
+        "release_factor": 0.8,
+        "max_gap_s": 0.25,
+        "baseline_window_s": 2.0
+      },
+      "candidates_tied": 1,
+      "in_sample_metrics": {
+        "note": "Same videos used to choose the parameters: optimistic, not a validation result.",
+        "videos": {
+          "yawning": 102,
+          "talking": 100,
+          "normal": 105
+        },
+        "yawns_per_minute": {
+          "yawning": 4.070981,
+          "talking": 0.257344,
+          "normal": 0.054891
+        },
+        "detected_yawns": {
+          "yawning": 132,
+          "talking": 13,
+          "normal": 2
+        },
+        "yawning_recall": {
+          "count": 95,
+          "of": 102,
+          "rate": 0.931373,
+          "ci95_wilson": [
+            0.86507,
+            0.966362
+          ]
+        },
+        "talking_false_alarm": {
+          "count": 6,
+          "of": 100,
+          "rate": 0.06,
+          "ci95_wilson": [
+            0.027786,
+            0.124768
+          ]
+        },
+        "normal_false_alarm": {
+          "count": 2,
+          "of": 105,
+          "rate": 0.019048,
+          "ci95_wilson": [
+            0.005239,
+            0.066806
+          ]
+        },
+        "score": 0.891849,
+        "yawns_per_yawning_video": {
+          "mean": 1.294118,
+          "median": 1.0,
+          "max": 4
+        }
+      }
+    }
+  },
+  "longest_open_episode_s_at_final_threshold": {
+    "note": "Longest stretch above the final absolute threshold, per Mirror video, by condition.",
+    "normal": {
+      "min": 0.0,
+      "p10": 0.0,
+      "p25": 0.0,
+      "p50": 0.0,
+      "p75": 0.0,
+      "p90": 0.0,
+      "max": 0.867533
+    },
+    "talking": {
+      "min": 0.0,
+      "p10": 0.0,
+      "p25": 0.0,
+      "p50": 0.0,
+      "p75": 0.066733,
+      "p90": 0.613947,
+      "max": 2.4024
+    },
+    "yawning": {
+      "min": 0.0,
+      "p10": 0.734067,
+      "p25": 1.735067,
+      "p50": 2.369033,
+      "p75": 3.069733,
+      "p90": 4.270933,
+      "max": 8.875534
+    },
+    "talking_yawning": {
+      "min": 0.133467,
+      "p10": 0.827493,
+      "p25": 1.334667,
+      "p50": 1.668333,
+      "p75": 2.535867,
+      "p90": 3.350013,
+      "max": 5.4054
+    }
+  },
+  "baseline_check": {
+    "note": "The relative variant takes the median ratio of the first seconds as the person's resting mouth. YawDD does not guarantee a calm start: the numbers below measure it.",
+    "baseline_by_window_and_condition": {
+      "1s": {
+        "normal": {
+          "min": 0.000861,
+          "p10": 0.001995,
+          "p25": 0.003466,
+          "p50": 0.00494,
+          "p75": 0.009771,
+          "p90": 0.078244,
+          "max": 0.165504
+        },
+        "talking": {
+          "min": 0.000563,
+          "p10": 0.00213,
+          "p25": 0.004476,
+          "p50": 0.030434,
+          "p75": 0.092218,
+          "p90": 0.122971,
+          "max": 0.207765
+        },
+        "yawning": {
+          "min": 0.000587,
+          "p10": 0.001909,
+          "p25": 0.003137,
+          "p50": 0.006138,
+          "p75": 0.043913,
+          "p90": 0.092523,
+          "max": 0.246213
+        }
+      },
+      "2s": {
+        "normal": {
+          "min": 0.000854,
+          "p10": 0.001925,
+          "p25": 0.003042,
+          "p50": 0.005064,
+          "p75": 0.008647,
+          "p90": 0.051186,
+          "max": 0.161619
+        },
+        "talking": {
+          "min": 0.000799,
+          "p10": 0.00323,
+          "p25": 0.007327,
+          "p50": 0.050277,
+          "p75": 0.086588,
+          "p90": 0.128178,
+          "max": 0.195093
+        },
+        "yawning": {
+          "min": 0.000701,
+          "p10": 0.002471,
+          "p25": 0.003602,
+          "p50": 0.006882,
+          "p75": 0.048425,
+          "p90": 0.11444,
+          "max": 0.550718
+        }
+      },
+      "3s": {
+        "normal": {
+          "min": 0.000928,
+          "p10": 0.002369,
+          "p25": 0.003205,
+          "p50": 0.005473,
+          "p75": 0.008124,
+          "p90": 0.038684,
+          "max": 0.127652
+        },
+        "talking": {
+          "min": 0.001103,
+          "p10": 0.004224,
+          "p25": 0.011159,
+          "p50": 0.053433,
+          "p75": 0.091693,
+          "p90": 0.12363,
+          "max": 0.18997
+        },
+        "yawning": {
+          "min": 0.000805,
+          "p10": 0.002532,
+          "p25": 0.003854,
+          "p50": 0.008326,
+          "p75": 0.05692,
+          "p90": 0.131453,
+          "max": 0.453202
+        }
+      }
+    },
+    "yawning_videos_first_yawn_inside_window": {
+      "1s": {
+        "count": 4,
+        "of": 90,
+        "rate": 0.044444,
+        "ci95_wilson": [
+          0.017417,
+          0.108769
+        ]
+      },
+      "2s": {
+        "count": 13,
+        "of": 90,
+        "rate": 0.144444,
+        "ci95_wilson": [
+          0.0864,
+          0.231599
+        ]
+      },
+      "3s": {
+        "count": 24,
+        "of": 90,
+        "rate": 0.266667,
+        "ci95_wilson": [
+          0.186238,
+          0.366198
+        ]
+      }
+    },
+    "first_yawn_measured_with": "final absolute parameters; Yawning videos with a detected yawn only"
+  },
+  "no_face": {
+    "by_camera_and_condition": {
+      "dash/mixed": {
+        "videos": 29,
+        "frames": 32303,
+        "no_face_frames": 74,
+        "rate": 0.002291,
+        "videos_with_any_no_face_frame": 5
+      },
+      "mirror/normal": {
+        "videos": 105,
+        "frames": 32779,
+        "no_face_frames": 309,
+        "rate": 0.009427,
+        "videos_with_any_no_face_frame": 18
+      },
+      "mirror/talking": {
+        "videos": 100,
+        "frames": 45444,
+        "no_face_frames": 204,
+        "rate": 0.004489,
+        "videos_with_any_no_face_frame": 18
+      },
+      "mirror/talking_yawning": {
+        "videos": 13,
+        "frames": 4462,
+        "no_face_frames": 0,
+        "rate": 0.0,
+        "videos_with_any_no_face_frame": 0
+      },
+      "mirror/yawning": {
+        "videos": 102,
+        "frames": 29179,
+        "no_face_frames": 295,
+        "rate": 0.01011,
+        "videos_with_any_no_face_frame": 31
+      }
+    },
+    "by_camera_and_eyewear": {
+      "dash/glasses": {
+        "videos": 15,
+        "frames": 17138,
+        "no_face_frames": 61,
+        "rate": 0.003559,
+        "videos_with_any_no_face_frame": 2
+      },
+      "dash/none": {
+        "videos": 14,
+        "frames": 15165,
+        "no_face_frames": 13,
+        "rate": 0.000857,
+        "videos_with_any_no_face_frame": 3
+      },
+      "mirror/glasses": {
+        "videos": 102,
+        "frames": 36836,
+        "no_face_frames": 253,
+        "rate": 0.006868,
+        "videos_with_any_no_face_frame": 23
+      },
+      "mirror/none": {
+        "videos": 182,
+        "frames": 63530,
+        "no_face_frames": 434,
+        "rate": 0.006831,
+        "videos_with_any_no_face_frame": 34
+      },
+      "mirror/sunglasses": {
+        "videos": 36,
+        "frames": 11498,
+        "no_face_frames": 121,
+        "rate": 0.010524,
+        "videos_with_any_no_face_frame": 10
+      }
+    },
+    "videos_over_5_percent": [
+      {
+        "video": "Mirror/Female_mirror/11-FemaleNoGlasses-Normal.avi",
+        "rate": 0.152174,
+        "frames": 276
+      },
+      {
+        "video": "Mirror/Female_mirror/27-FemaleNoGlasses-Normal.avi",
+        "rate": 0.130531,
+        "frames": 452
+      },
+      {
+        "video": "Mirror/Female_mirror/25-FemaleSunGlasses-Yawning.avi",
+        "rate": 0.111111,
+        "frames": 306
+      },
+      {
+        "video": "Mirror/Female_mirror/26-FemaleSunGlasses-Yawning.avi",
+        "rate": 0.108871,
+        "frames": 248
+      },
+      {
+        "video": "Mirror/Female_mirror/22-FemaleSunGlasses-Yawning.avi",
+        "rate": 0.107981,
+        "frames": 213
+      },
+      {
+        "video": "Mirror/Male_mirror Avi Videos/31-MaleGlasses-Normal.avi",
+        "rate": 0.106918,
+        "frames": 318
+      },
+      {
+        "video": "Mirror/Male_mirror Avi Videos/3-MaleGlasses-Yawning.avi",
+        "rate": 0.10687,
+        "frames": 262
+      },
+      {
+        "video": "Mirror/Male_mirror Avi Videos/47-MaleNoGlasses-Normal.avi",
+        "rate": 0.101124,
+        "frames": 356
+      },
+      {
+        "video": "Mirror/Male_mirror Avi Videos/12-MaleGlasses-Normal.avi",
+        "rate": 0.096273,
+        "frames": 322
+      },
+      {
+        "video": "Mirror/Female_mirror/5-FemaleGlasses-Yawning.avi",
+        "rate": 0.094851,
+        "frames": 369
+      },
+      {
+        "video": "Mirror/Female_mirror/25-FemaleNoGlasses-Yawning.avi",
+        "rate": 0.08209,
+        "frames": 134
+      },
+      {
+        "video": "Mirror/Male_mirror Avi Videos/46-MaleGlasses-Talking.avi",
+        "rate": 0.080972,
+        "frames": 247
+      },
+      {
+        "video": "Mirror/Female_mirror/40-FemaleNoGlasses-Yawning.avi",
+        "rate": 0.070381,
+        "frames": 341
+      },
+      {
+        "video": "Mirror/Female_mirror/28-FemaleNoGlasses-Normal.avi",
+        "rate": 0.068,
+        "frames": 250
+      },
+      {
+        "video": "Mirror/Male_mirror Avi Videos/45-MaleNoGlasses-Talking.avi",
+        "rate": 0.063953,
+        "frames": 516
+      },
+      {
+        "video": "Mirror/Male_mirror Avi Videos/46-MaleGlasses-Normal.avi",
+        "rate": 0.058632,
+        "frames": 307
+      },
+      {
+        "video": "Mirror/Male_mirror Avi Videos/1-MaleNoGlasses-Talking.avi",
+        "rate": 0.055096,
+        "frames": 363
+      },
+      {
+        "video": "Mirror/Male_mirror Avi Videos/45-MaleNoGlasses-Normal.avi",
+        "rate": 0.054381,
+        "frames": 331
+      },
+      {
+        "video": "Mirror/Male_mirror Avi Videos/46-MaleGlasses-Yawning.avi",
+        "rate": 0.051546,
+        "frames": 291
+      }
+    ],
+    "runs_of_frames_without_a_face": {
+      "note": "Mirror videos. A run next to an open mouth means the face was lost while the mouth was open.",
+      "open_threshold": 0.26,
+      "by_condition": {
+        "normal": {
+          "runs": 54,
+          "runs_beside_open_mouth": 2,
+          "longest_run_frames": 32
+        },
+        "talking": {
+          "runs": 42,
+          "runs_beside_open_mouth": 6,
+          "longest_run_frames": 22
+        },
+        "talking_yawning": {
+          "runs": 0,
+          "runs_beside_open_mouth": 0,
+          "longest_run_frames": 0
+        },
+        "yawning": {
+          "runs": 116,
+          "runs_beside_open_mouth": 102,
+          "longest_run_frames": 26
+        }
+      },
+      "run_length_frames": {
+        "min": 1.0,
+        "p10": 1.0,
+        "p25": 1.0,
+        "p50": 1.0,
+        "p75": 4.0,
+        "p90": 11.0,
+        "max": 32.0
+      }
+    }
+  },
+  "max_gap_sensitivity": {
+    "note": "Out-of-fold result of the absolute variant if max_gap_s had another value (same folds, same search). max_gap_s must exceed the time between two processed frames, or no stretch can ever last.",
+    "values": {
+      "0.25": {
+        "yawning_recall": {
+          "count": 88,
+          "of": 102,
+          "rate": 0.862745,
+          "ci95_wilson": [
+            0.782713,
+            0.916446
+          ]
+        },
+        "talking_false_alarm": {
+          "count": 3,
+          "of": 100,
+          "rate": 0.03,
+          "ci95_wilson": [
+            0.010255,
+            0.084519
+          ]
+        },
+        "normal_false_alarm": {
+          "count": 0,
+          "of": 105,
+          "rate": 0.0,
+          "ci95_wilson": [
+            0.0,
+            0.035294
+          ]
+        },
+        "score": 0.847745
+      },
+      "0.5": {
+        "yawning_recall": {
+          "count": 89,
+          "of": 102,
+          "rate": 0.872549,
+          "ci95_wilson": [
+            0.794073,
+            0.923982
+          ]
+        },
+        "talking_false_alarm": {
+          "count": 3,
+          "of": 100,
+          "rate": 0.03,
+          "ci95_wilson": [
+            0.010255,
+            0.084519
+          ]
+        },
+        "normal_false_alarm": {
+          "count": 1,
+          "of": 105,
+          "rate": 0.009524,
+          "ci95_wilson": [
+            0.001683,
+            0.051986
+          ]
+        },
+        "score": 0.852787
+      },
+      "1": {
+        "yawning_recall": {
+          "count": 89,
+          "of": 102,
+          "rate": 0.872549,
+          "ci95_wilson": [
+            0.794073,
+            0.923982
+          ]
+        },
+        "talking_false_alarm": {
+          "count": 3,
+          "of": 100,
+          "rate": 0.03,
+          "ci95_wilson": [
+            0.010255,
+            0.084519
+          ]
+        },
+        "normal_false_alarm": {
+          "count": 1,
+          "of": 105,
+          "rate": 0.009524,
+          "ci95_wilson": [
+            0.001683,
+            0.051986
+          ]
+        },
+        "score": 0.852787
+      }
+    }
+  },
+  "dash_descriptive": {
+    "note": "Dash videos mix normal, talking and yawning with no time annotations. These are counts of what the detector fires on, with the final parameters; they are not an accuracy measurement.",
+    "videos": 29,
+    "absolute": {
+      "total_yawns": 73,
+      "total_minutes": 35.884641,
+      "yawns_per_minute_pooled": 2.034297,
+      "yawns_per_minute_per_video": {
+        "min": 0.0,
+        "p10": 1.289927,
+        "p25": 1.44696,
+        "p50": 2.233273,
+        "p75": 2.588712,
+        "p90": 3.367397,
+        "max": 3.679137
+      },
+      "videos_with_detected_yawn": 28,
+      "per_video": [
+        {
+          "video": "Dash/Female/1-FemaleNoGlasses.avi",
+          "minutes": 1.523,
+          "yawns": 2,
+          "yawns_per_minute": 1.313
+        },
+        {
+          "video": "Dash/Female/2-FemaleNoGlasses.avi",
+          "minutes": 1.211,
+          "yawns": 2,
+          "yawns_per_minute": 1.651
+        },
+        {
+          "video": "Dash/Female/3-FemaleGlasses.avi",
+          "minutes": 1.698,
+          "yawns": 4,
+          "yawns_per_minute": 2.355
+        },
+        {
+          "video": "Dash/Female/4-FemaleNoGlasses.avi",
+          "minutes": 0.831,
+          "yawns": 3,
+          "yawns_per_minute": 3.61
+        },
+        {
+          "video": "Dash/Female/5-FemaleNoGlasses.avi",
+          "minutes": 1.194,
+          "yawns": 0,
+          "yawns_per_minute": 0.0
+        },
+        {
+          "video": "Dash/Female/6-FemaleNoGlasses.avi",
+          "minutes": 0.828,
+          "yawns": 3,
+          "yawns_per_minute": 3.622
+        },
+        {
+          "video": "Dash/Female/7-FemaleNoGlasses.avi",
+          "minutes": 2.01,
+          "yawns": 3,
+          "yawns_per_minute": 1.493
+        },
+        {
+          "video": "Dash/Female/8-FemaleGlasses.avi.avi",
+          "minutes": 1.276,
+          "yawns": 3,
+          "yawns_per_minute": 2.351
+        },
+        {
+          "video": "Dash/Female/9-FemaleNoGlasses.avi",
+          "minutes": 0.851,
+          "yawns": 1,
+          "yawns_per_minute": 1.175
+        },
+        {
+          "video": "Dash/Female/10-FemaleNoGlasses.avi",
+          "minutes": 0.676,
+          "yawns": 2,
+          "yawns_per_minute": 2.958
+        },
+        {
+          "video": "Dash/Female/11-FemaleGlasses.avi.avi",
+          "minutes": 0.935,
+          "yawns": 3,
+          "yawns_per_minute": 3.209
+        },
+        {
+          "video": "Dash/Female/12-FemaleGlasses.avi.avi",
+          "minutes": 1.399,
+          "yawns": 2,
+          "yawns_per_minute": 1.43
+        },
+        {
+          "video": "Dash/Female/13-FemaleGlasses.avi.avi",
+          "minutes": 1.382,
+          "yawns": 2,
+          "yawns_per_minute": 1.447
+        },
+        {
+          "video": "Dash/Male/1-MaleGlasses.avi",
+          "minutes": 1.431,
+          "yawns": 3,
+          "yawns_per_minute": 2.096
+        },
+        {
+          "video": "Dash/Male/2-MaleGlasses.avi",
+          "minutes": 1.313,
+          "yawns": 3,
+          "yawns_per_minute": 2.284
+        },
+        {
+          "video": "Dash/Male/3-MaleGlasses.avi",
+          "minutes": 1.159,
+          "yawns": 3,
+          "yawns_per_minute": 2.589
+        },
+        {
+          "video": "Dash/Male/4-MaleNoGlasses.avi",
+          "minutes": 1.11,
+          "yawns": 2,
+          "yawns_per_minute": 1.802
+        },
+        {
+          "video": "Dash/Male/5-MaleGlasses.avi",
+          "minutes": 1.331,
+          "yawns": 2,
+          "yawns_per_minute": 1.503
+        },
+        {
+          "video": "Dash/Male/6-MaleGlasses.avi",
+          "minutes": 0.907,
+          "yawns": 3,
+          "yawns_per_minute": 3.307
+        },
+        {
+          "video": "Dash/Male/7-MaleGlasses.avi",
+          "minutes": 1.332,
+          "yawns": 3,
+          "yawns_per_minute": 2.252
+        },
+        {
+          "video": "Dash/Male/8-MaleNoGlasses.avi",
+          "minutes": 1.211,
+          "yawns": 3,
+          "yawns_per_minute": 2.478
+        },
+        {
+          "video": "Dash/Male/9-MaleNoGlasses.avi",
+          "minutes": 1.122,
+          "yawns": 3,
+          "yawns_per_minute": 2.673
+        },
+        {
+          "video": "Dash/Male/10-MaleGlasses.avi",
+          "minutes": 1.343,
+          "yawns": 3,
+          "yawns_per_minute": 2.233
+        },
+        {
+          "video": "Dash/Male/11-MaleGlasses.avi",
+          "minutes": 0.978,
+          "yawns": 2,
+          "yawns_per_minute": 2.045
+        },
+        {
+          "video": "Dash/Male/12-MaleGlasses.avi",
+          "minutes": 1.087,
+          "yawns": 4,
+          "yawns_per_minute": 3.679
+        },
+        {
+          "video": "Dash/Male/13-MaleNoGlasses .avi",
+          "minutes": 1.217,
+          "yawns": 3,
+          "yawns_per_minute": 2.466
+        },
+        {
+          "video": "Dash/Male/14-MaleNoGlasses.avi",
+          "minutes": 1.672,
+          "yawns": 2,
+          "yawns_per_minute": 1.196
+        },
+        {
+          "video": "Dash/Male/15-MaleGlasses.avi",
+          "minutes": 1.466,
+          "yawns": 2,
+          "yawns_per_minute": 1.364
+        },
+        {
+          "video": "Dash/Male/16-MaleNoGlasses.avi",
+          "minutes": 1.391,
+          "yawns": 2,
+          "yawns_per_minute": 1.438
+        }
+      ]
+    },
+    "relative": {
+      "total_yawns": 84,
+      "total_minutes": 35.884641,
+      "yawns_per_minute_pooled": 2.340834,
+      "yawns_per_minute_per_video": {
+        "min": 0.0,
+        "p10": 1.330538,
+        "p25": 2.096294,
+        "p50": 2.349893,
+        "p75": 3.208588,
+        "p90": 3.618273,
+        "max": 4.437185
+      },
+      "videos_with_detected_yawn": 28,
+      "per_video": [
+        {
+          "video": "Dash/Female/1-FemaleNoGlasses.avi",
+          "minutes": 1.523,
+          "yawns": 0,
+          "yawns_per_minute": 0.0
+        },
+        {
+          "video": "Dash/Female/2-FemaleNoGlasses.avi",
+          "minutes": 1.211,
+          "yawns": 2,
+          "yawns_per_minute": 1.651
+        },
+        {
+          "video": "Dash/Female/3-FemaleGlasses.avi",
+          "minutes": 1.698,
+          "yawns": 4,
+          "yawns_per_minute": 2.355
+        },
+        {
+          "video": "Dash/Female/4-FemaleNoGlasses.avi",
+          "minutes": 0.831,
+          "yawns": 3,
+          "yawns_per_minute": 3.61
+        },
+        {
+          "video": "Dash/Female/5-FemaleNoGlasses.avi",
+          "minutes": 1.194,
+          "yawns": 1,
+          "yawns_per_minute": 0.838
+        },
+        {
+          "video": "Dash/Female/6-FemaleNoGlasses.avi",
+          "minutes": 0.828,
+          "yawns": 3,
+          "yawns_per_minute": 3.622
+        },
+        {
+          "video": "Dash/Female/7-FemaleNoGlasses.avi",
+          "minutes": 2.01,
+          "yawns": 4,
+          "yawns_per_minute": 1.99
+        },
+        {
+          "video": "Dash/Female/8-FemaleGlasses.avi.avi",
+          "minutes": 1.276,
+          "yawns": 4,
+          "yawns_per_minute": 3.135
+        },
+        {
+          "video": "Dash/Female/9-FemaleNoGlasses.avi",
+          "minutes": 0.851,
+          "yawns": 2,
+          "yawns_per_minute": 2.35
+        },
+        {
+          "video": "Dash/Female/10-FemaleNoGlasses.avi",
+          "minutes": 0.676,
+          "yawns": 3,
+          "yawns_per_minute": 4.437
+        },
+        {
+          "video": "Dash/Female/11-FemaleGlasses.avi.avi",
+          "minutes": 0.935,
+          "yawns": 3,
+          "yawns_per_minute": 3.209
+        },
+        {
+          "video": "Dash/Female/12-FemaleGlasses.avi.avi",
+          "minutes": 1.399,
+          "yawns": 3,
+          "yawns_per_minute": 2.145
+        },
+        {
+          "video": "Dash/Female/13-FemaleGlasses.avi.avi",
+          "minutes": 1.382,
+          "yawns": 5,
+          "yawns_per_minute": 3.617
+        },
+        {
+          "video": "Dash/Male/1-MaleGlasses.avi",
+          "minutes": 1.431,
+          "yawns": 3,
+          "yawns_per_minute": 2.096
+        },
+        {
+          "video": "Dash/Male/2-MaleGlasses.avi",
+          "minutes": 1.313,
+          "yawns": 3,
+          "yawns_per_minute": 2.284
+        },
+        {
+          "video": "Dash/Male/3-MaleGlasses.avi",
+          "minutes": 1.159,
+          "yawns": 3,
+          "yawns_per_minute": 2.589
+        },
+        {
+          "video": "Dash/Male/4-MaleNoGlasses.avi",
+          "minutes": 1.11,
+          "yawns": 3,
+          "yawns_per_minute": 2.703
+        },
+        {
+          "video": "Dash/Male/5-MaleGlasses.avi",
+          "minutes": 1.331,
+          "yawns": 3,
+          "yawns_per_minute": 2.255
+        },
+        {
+          "video": "Dash/Male/6-MaleGlasses.avi",
+          "minutes": 0.907,
+          "yawns": 3,
+          "yawns_per_minute": 3.307
+        },
+        {
+          "video": "Dash/Male/7-MaleGlasses.avi",
+          "minutes": 1.332,
+          "yawns": 3,
+          "yawns_per_minute": 2.252
+        },
+        {
+          "video": "Dash/Male/8-MaleNoGlasses.avi",
+          "minutes": 1.211,
+          "yawns": 4,
+          "yawns_per_minute": 3.304
+        },
+        {
+          "video": "Dash/Male/9-MaleNoGlasses.avi",
+          "minutes": 1.122,
+          "yawns": 3,
+          "yawns_per_minute": 2.673
+        },
+        {
+          "video": "Dash/Male/10-MaleGlasses.avi",
+          "minutes": 1.343,
+          "yawns": 3,
+          "yawns_per_minute": 2.233
+        },
+        {
+          "video": "Dash/Male/11-MaleGlasses.avi",
+          "minutes": 0.978,
+          "yawns": 2,
+          "yawns_per_minute": 2.045
+        },
+        {
+          "video": "Dash/Male/12-MaleGlasses.avi",
+          "minutes": 1.087,
+          "yawns": 4,
+          "yawns_per_minute": 3.679
+        },
+        {
+          "video": "Dash/Male/13-MaleNoGlasses .avi",
+          "minutes": 1.217,
+          "yawns": 3,
+          "yawns_per_minute": 2.466
+        },
+        {
+          "video": "Dash/Male/14-MaleNoGlasses.avi",
+          "minutes": 1.672,
+          "yawns": 2,
+          "yawns_per_minute": 1.196
+        },
+        {
+          "video": "Dash/Male/15-MaleGlasses.avi",
+          "minutes": 1.466,
+          "yawns": 2,
+          "yawns_per_minute": 1.364
+        },
+        {
+          "video": "Dash/Male/16-MaleNoGlasses.avi",
+          "minutes": 1.391,
+          "yawns": 3,
+          "yawns_per_minute": 2.157
+        }
+      ]
+    }
+  },
+  "alternative_features": {
+    "note": "Same folds, same search, absolute thresholds. For information only: the detector parameters use the product formula. Each row is the out-of-fold result if that measure replaced it.",
+    "product_formula_absolute": {
+      "yawning_recall": {
+        "count": 88,
+        "of": 102,
+        "rate": 0.862745,
+        "ci95_wilson": [
+          0.782713,
+          0.916446
+        ]
+      },
+      "talking_false_alarm": {
+        "count": 3,
+        "of": 100,
+        "rate": 0.03,
+        "ci95_wilson": [
+          0.010255,
+          0.084519
+        ]
+      },
+      "normal_false_alarm": {
+        "count": 0,
+        "of": 105,
+        "rate": 0.0,
+        "ci95_wilson": [
+          0.0,
+          0.035294
+        ]
+      },
+      "score": 0.847745
+    },
+    "inner_lip_gap_over_inner_mouth_width_2d_px": {
+      "yawning_recall": {
+        "count": 96,
+        "of": 102,
+        "rate": 0.941176,
+        "ci95_wilson": [
+          0.877564,
+          0.972764
+        ]
+      },
+      "talking_false_alarm": {
+        "count": 11,
+        "of": 100,
+        "rate": 0.11,
+        "ci95_wilson": [
+          0.062542,
+          0.186313
+        ]
+      },
+      "normal_false_alarm": {
+        "count": 3,
+        "of": 105,
+        "rate": 0.028571,
+        "ci95_wilson": [
+          0.009764,
+          0.080656
+        ]
+      },
+      "score": 0.871891,
+      "params_per_fold": [
+        {
+          "threshold": 0.4,
+          "min_duration_s": 0.8,
+          "release_factor": 1.0
+        },
+        {
+          "threshold": 0.4,
+          "min_duration_s": 0.8,
+          "release_factor": 1.0
+        },
+        {
+          "threshold": 0.4,
+          "min_duration_s": 0.8,
+          "release_factor": 1.0
+        },
+        {
+          "threshold": 0.45,
+          "min_duration_s": 0.4,
+          "release_factor": 0.8
+        },
+        {
+          "threshold": 0.35,
+          "min_duration_s": 0.8,
+          "release_factor": 1.0
+        }
+      ]
+    },
+    "inner_lip_gap_over_outer_eye_corner_distance_3d": {
+      "yawning_recall": {
+        "count": 91,
+        "of": 102,
+        "rate": 0.892157,
+        "ci95_wilson": [
+          0.817141,
+          0.938707
+        ]
+      },
+      "talking_false_alarm": {
+        "count": 4,
+        "of": 100,
+        "rate": 0.04,
+        "ci95_wilson": [
+          0.015663,
+          0.098371
+        ]
+      },
+      "normal_false_alarm": {
+        "count": 0,
+        "of": 105,
+        "rate": 0.0,
+        "ci95_wilson": [
+          0.0,
+          0.035294
+        ]
+      },
+      "score": 0.872157,
+      "params_per_fold": [
+        {
+          "threshold": 0.24,
+          "min_duration_s": 0.6,
+          "release_factor": 1.0
+        },
+        {
+          "threshold": 0.24,
+          "min_duration_s": 0.4,
+          "release_factor": 1.0
+        },
+        {
+          "threshold": 0.24,
+          "min_duration_s": 0.4,
+          "release_factor": 1.0
+        },
+        {
+          "threshold": 0.26,
+          "min_duration_s": 0.4,
+          "release_factor": 1.0
+        },
+        {
+          "threshold": 0.22,
+          "min_duration_s": 0.8,
+          "release_factor": 1.0
+        }
+      ]
+    },
+    "jaw_open_blendshape": {
+      "yawning_recall": {
+        "count": 93,
+        "of": 102,
+        "rate": 0.911765,
+        "ci95_wilson": [
+          0.840755,
+          0.952884
+        ]
+      },
+      "talking_false_alarm": {
+        "count": 9,
+        "of": 100,
+        "rate": 0.09,
+        "ci95_wilson": [
+          0.048073,
+          0.162262
+        ]
+      },
+      "normal_false_alarm": {
+        "count": 0,
+        "of": 105,
+        "rate": 0.0,
+        "ci95_wilson": [
+          0.0,
+          0.035294
+        ]
+      },
+      "score": 0.866765,
+      "params_per_fold": [
+        {
+          "threshold": 0.45,
+          "min_duration_s": 0.4,
+          "release_factor": 1.0
+        },
+        {
+          "threshold": 0.375,
+          "min_duration_s": 0.6,
+          "release_factor": 0.8
+        },
+        {
+          "threshold": 0.375,
+          "min_duration_s": 0.6,
+          "release_factor": 0.8
+        },
+        {
+          "threshold": 0.325,
+          "min_duration_s": 0.6,
+          "release_factor": 1.0
+        },
+        {
+          "threshold": 0.375,
+          "min_duration_s": 0.6,
+          "release_factor": 0.8
+        }
+      ]
+    }
+  },
+  "timing": {
+    "videos_from_cache_this_run": 349,
+    "videos_extracted_this_run": 0,
+    "extraction_wall_seconds_this_run": 0.0,
+    "extraction_runs": [
+      {
+        "at": "2026-11-14T17:02:43Z",
+        "videos": 349,
+        "frames": 144167,
+        "wall_seconds": 337.5,
+        "workers": 8
+      }
+    ],
+    "workers": 8,
+    "processed_frames": 144167,
+    "mediapipe_seconds_sum": 2130.850032,
+    "decode_plus_mediapipe_seconds_sum": 2679.184705,
+    "mediapipe_ms_per_frame_mean": 14.780428,
+    "note": "Per-frame time is FaceLandmarker.detect_for_video in Python on this machine's CPU, measured while several worker processes ran at once. It is not a browser measurement.",
+    "calibration_seconds": 5.182214,
+    "run_seconds": 6.342309,
+    "cpu_count": 22,
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.13"
+  }
+}

@@ -17,7 +17,8 @@ export function useWebcam() {
       return;
     }
     navigator.mediaDevices
-      .getUserMedia({ video: { width: { ideal: 1920 }, height: { ideal: 1080 }, facingMode: "user" }, audio: false })
+      // 720p: the face model works at 640 px wide, so a full-HD stream only costs decoding and shrinking every frame.
+      .getUserMedia({ video: { width: { ideal: 1280 }, height: { ideal: 720 }, frameRate: { ideal: 30 }, facingMode: "user" }, audio: false })
       .then(async (s) => {
         if (cancelled) return s.getTracks().forEach((t) => t.stop());
         stream = s;

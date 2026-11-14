@@ -42,6 +42,8 @@ function buildPulsar() {
   };
   const wave = hand([1.38, 0.3, 0.3]);
 
+  const beat = part(new THREE.BoxGeometry(0.3, 0.035, 0.02), pulse, [0.2, -0.45, 0.9]); // heartbeat line on the badge
+
   const body = new THREE.Group();
   body.add(
     part(ball, shell, [0, 0, 0], [1, 1.08, 0.95]),
@@ -52,7 +54,7 @@ function buildPulsar() {
     part(earRing, pulse, [-1.07, 0.1, 0.05], [1, 1, 1], [0, Math.PI / 2, 0]),
     part(earRing, pulse, [1.07, 0.1, 0.05], [1, 1, 1], [0, Math.PI / 2, 0]),
     part(ball, badge, [0.2, -0.45, 0.8], [0.26, 0.13, 0.08]),
-    part(new THREE.BoxGeometry(0.3, 0.035, 0.02), pulse, [0.2, -0.45, 0.9]), // heartbeat line
+    beat,
     ...eyes,
     mouth,
     wave,
@@ -67,17 +69,26 @@ function buildPulsar() {
 
   const rig = new THREE.Group();
   rig.add(body, ring);
-  return { rig, body, ring, eyes, mouth, wave };
+  return { rig, body, ring, eyes, mouth, wave, beat };
 }
 
 /**
  * PULSAR as a real-time 3D model drawn like a sprite: tiny canvas, no antialiasing, ~12 fps.
  * `heading` is the yaw in radians (0 faces the camera); the model eases towards it, so adding 2π makes it spin once.
  */
-export function PulsarSprite3D({ heading = 0, mood = "idle" }: { heading?: number; mood?: Mood }) {
+export function PulsarSprite3D({
+  heading = 0,
+  mood = "idle",
+  bpm,
+}: {
+  heading?: number;
+  mood?: Mood;
+  /** Heart rate the chest badge beats to; without one the line stays flat. */
+  bpm?: number | null;
+}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const live = useRef({ heading, mood });
-  live.current = { heading, mood };
+  const live = useRef({ heading, mood, bpm });
+  live.current = { heading, mood, bpm };
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
@@ -97,7 +108,7 @@ export function PulsarSprite3D({ heading = 0, mood = "idle" }: { heading?: numbe
     scene.add(new THREE.AmbientLight(0xb4a8ff, 1.3), key);
     const camera = new THREE.OrthographicCamera(-1.75, 1.75, 1.75, -1.75, 0.1, 20);
     camera.position.z = 6;
-    const { rig, body, ring, eyes, mouth, wave } = buildPulsar();
+    const { rig, body, ring, eyes, mouth, wave, beat } = buildPulsar();
     scene.add(rig);
 
     const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -108,7 +119,9 @@ export function PulsarSprite3D({ heading = 0, mood = "idle" }: { heading?: numbe
       if (ms - last < 80) return; // ~12 fps on purpose: it reads as sprite animation
       last = ms;
       const t = still ? 0 : ms / 1000;
-      const { heading, mood } = live.current;
+      const { heading, mood, bpm } = live.current;
+      // A short spike once per heartbeat: the badge line jumps to several times its height, then rests.
+      beat.scale.y = bpm ? 1 + 5 * Math.max(0, Math.sin((t * bpm * Math.PI) / 30)) ** 12 : 1;
 
       body.rotation.y = still ? heading : body.rotation.y + (heading - body.rotation.y) * 0.25;
       rig.position.y = Math.sin(t * 2.2) * 0.07;

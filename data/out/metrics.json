@@ -1,0 +1,6397 @@
+{
+  "schema": "pulsar.fatigue_metrics/1",
+  "limit": null,
+  "macro_f1": 0.426635,
+  "auc": 0.622055,
+  "labels": [
+    "alert",
+    "low_vigilance",
+    "drowsy"
+  ],
+  "confusion_matrix": [
+    [
+      249,
+      691,
+      107
+    ],
+    [
+      193,
+      736,
+      408
+    ],
+    [
+      60,
+      622,
+      658
+    ]
+  ],
+  "confusion_matrix_note": "rows: true state, columns: predicted state, in the order of `labels`; counts of 60 s windows",
+  "pvt_correlation": null,
+  "pvt_correlation_note": "DROZY (video with PVT reaction times) is not downloaded, so the score has not been compared with any reaction time.",
+  "folds": [
+    {
+      "fold": 0,
+      "train_subjects": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "06",
+        "07",
+        "08",
+        "09",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24"
+      ],
+      "test_subjects": [
+        "05"
+      ],
+      "C": 0.001,
+      "test_windows": 154
+    },
+    {
+      "fold": 1,
+      "train_subjects": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "07",
+        "08",
+        "09",
+        "10",
+        "11",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24"
+      ],
+      "test_subjects": [
+        "12"
+      ],
+      "C": 0.001,
+      "test_windows": 141
+    },
+    {
+      "fold": 2,
+      "train_subjects": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "08",
+        "09",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24"
+      ],
+      "test_subjects": [
+        "07"
+      ],
+      "C": 0.001,
+      "test_windows": 153
+    },
+    {
+      "fold": 3,
+      "train_subjects": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "07",
+        "08",
+        "09",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24"
+      ],
+      "test_subjects": [
+        "06"
+      ],
+      "C": 0.001,
+      "test_windows": 119
+    },
+    {
+      "fold": 4,
+      "train_subjects": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "07",
+        "08",
+        "09",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "24"
+      ],
+      "test_subjects": [
+        "23"
+      ],
+      "C": 0.001,
+      "test_windows": 148
+    },
+    {
+      "fold": 5,
+      "train_subjects": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "07",
+        "08",
+        "09",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "22",
+        "23",
+        "24"
+      ],
+      "test_subjects": [
+        "21"
+      ],
+      "C": 0.001,
+      "test_windows": 153
+    },
+    {
+      "fold": 6,
+      "train_subjects": [
+        "01",
+        "02",
+        "04",
+        "05",
+        "06",
+        "07",
+        "08",
+        "09",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24"
+      ],
+      "test_subjects": [
+        "03"
+      ],
+      "C": 0.001,
+      "test_windows": 164
+    },
+    {
+      "fold": 7,
+      "train_subjects": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "07",
+        "08",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24"
+      ],
+      "test_subjects": [
+        "09"
+      ],
+      "C": 0.001,
+      "test_windows": 161
+    },
+    {
+      "fold": 8,
+      "train_subjects": [
+        "01",
+        "03",
+        "04",
+        "05",
+        "06",
+        "07",
+        "08",
+        "09",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24"
+      ],
+      "test_subjects": [
+        "02"
+      ],
+      "C": 0.001,
+      "test_windows": 153
+    },
+    {
+      "fold": 9,
+      "train_subjects": [
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "07",
+        "08",
+        "09",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24"
+      ],
+      "test_subjects": [
+        "01"
+      ],
+      "C": 0.001,
+      "test_windows": 152
+    },
+    {
+      "fold": 10,
+      "train_subjects": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "07",
+        "08",
+        "09",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "21",
+        "22",
+        "23",
+        "24"
+      ],
+      "test_subjects": [
+        "20"
+      ],
+      "C": 0.001,
+      "test_windows": 169
+    },
+    {
+      "fold": 11,
+      "train_subjects": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "07",
+        "08",
+        "09",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24"
+      ],
+      "test_subjects": [
+        "19"
+      ],
+      "C": 0.001,
+      "test_windows": 153
+    },
+    {
+      "fold": 12,
+      "train_subjects": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "07",
+        "08",
+        "09",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24"
+      ],
+      "test_subjects": [
+        "10"
+      ],
+      "C": 0.001,
+      "test_windows": 151
+    },
+    {
+      "fold": 13,
+      "train_subjects": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "07",
+        "08",
+        "09",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24"
+      ],
+      "test_subjects": [
+        "15"
+      ],
+      "C": 0.001,
+      "test_windows": 159
+    },
+    {
+      "fold": 14,
+      "train_subjects": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "07",
+        "08",
+        "09",
+        "10",
+        "11",
+        "12",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24"
+      ],
+      "test_subjects": [
+        "13"
+      ],
+      "C": 0.001,
+      "test_windows": 164
+    },
+    {
+      "fold": 15,
+      "train_subjects": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "07",
+        "08",
+        "09",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24"
+      ],
+      "test_subjects": [
+        "16"
+      ],
+      "C": 0.001,
+      "test_windows": 140
+    },
+    {
+      "fold": 16,
+      "train_subjects": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "07",
+        "08",
+        "09",
+        "10",
+        "11",
+        "12",
+        "13",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24"
+      ],
+      "test_subjects": [
+        "14"
+      ],
+      "C": 0.001,
+      "test_windows": 162
+    },
+    {
+      "fold": 17,
+      "train_subjects": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "07",
+        "08",
+        "09",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24"
+      ],
+      "test_subjects": [
+        "18"
+      ],
+      "C": 0.001,
+      "test_windows": 156
+    },
+    {
+      "fold": 18,
+      "train_subjects": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "07",
+        "09",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24"
+      ],
+      "test_subjects": [
+        "08"
+      ],
+      "C": 0.001,
+      "test_windows": 152
+    },
+    {
+      "fold": 19,
+      "train_subjects": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "07",
+        "08",
+        "09",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23"
+      ],
+      "test_subjects": [
+        "24"
+      ],
+      "C": 0.001,
+      "test_windows": 196
+    },
+    {
+      "fold": 20,
+      "train_subjects": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "07",
+        "08",
+        "09",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "23",
+        "24"
+      ],
+      "test_subjects": [
+        "22"
+      ],
+      "C": 0.001,
+      "test_windows": 154
+    },
+    {
+      "fold": 21,
+      "train_subjects": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "07",
+        "08",
+        "09",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24"
+      ],
+      "test_subjects": [
+        "17"
+      ],
+      "C": 0.001,
+      "test_windows": 153
+    },
+    {
+      "fold": 22,
+      "train_subjects": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "07",
+        "08",
+        "09",
+        "10",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24"
+      ],
+      "test_subjects": [
+        "11"
+      ],
+      "C": 0.001,
+      "test_windows": 162
+    },
+    {
+      "fold": 23,
+      "train_subjects": [
+        "01",
+        "02",
+        "03",
+        "05",
+        "06",
+        "07",
+        "08",
+        "09",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24"
+      ],
+      "test_subjects": [
+        "04"
+      ],
+      "C": 0.001,
+      "test_windows": 155
+    }
+  ],
+  "auc_definition": "macro average of the three one-vs-rest AUCs, on pooled out-of-fold windows",
+  "validation": {
+    "scheme": "leave-one-subject-out",
+    "folds": 24,
+    "inner": "C from [0.001, 0.01, 0.1, 1.0, 10.0, 100.0] by lowest pooled log loss over 5 subject-grouped folds of the training subjects",
+    "seed": 2026,
+    "correlated_windows": "Windows of a video overlap by 50 s and share one label: the window counts overstate the evidence. Intervals resample the subjects, not the windows."
+  },
+  "chosen": {
+    "configuration": "blendshape/absolute",
+    "eye_method": "blendshape",
+    "normalisation": "absolute",
+    "how": "Product decision of the team, taken after seeing the four-way comparison, the fold-internal selection and the calibration sensitivity reported here: ship eye closure `blendshape` with `absolute` features, which is what faceWorker.ts already computes and needs no calibration. Reasons: it does not depend on how a session starts, and it is the only variant whose evaluation does not depend on a calibration recording. It is a fixed setting of the pipeline, not a selection on test folds.",
+    "selected_on_test_folds": false,
+    "rank_among_the_four_by_auc": 4,
+    "windows": 3724,
+    "accuracy": 0.441192,
+    "log_loss": 1.041799,
+    "recall": {
+      "alert": 0.237822,
+      "low_vigilance": 0.550486,
+      "drowsy": 0.491045
+    },
+    "score": {
+      "auc_alert_vs_drowsy": 0.747275,
+      "auc_alert_vs_rest": 0.676343,
+      "auc_drowsy_vs_rest": 0.692117,
+      "spearman_with_label": 0.34843,
+      "mean_score": {
+        "alert": 0.497365,
+        "low_vigilance": 0.531858,
+        "drowsy": 0.588002
+      },
+      "percentiles": {
+        "alert": {
+          "p5": 0.407722,
+          "p25": 0.456043,
+          "p50": 0.490034,
+          "p75": 0.525562,
+          "p95": 0.605975
+        },
+        "low_vigilance": {
+          "p5": 0.419291,
+          "p25": 0.472431,
+          "p50": 0.505252,
+          "p75": 0.581627,
+          "p95": 0.708187
+        },
+        "drowsy": {
+          "p5": 0.446704,
+          "p25": 0.497873,
+          "p50": 0.55441,
+          "p75": 0.647283,
+          "p95": 0.847628
+        }
+      },
+      "min": 0.394499,
+      "max": 0.991523
+    },
+    "ci95_subject_bootstrap": {
+      "auc": [
+        0.574062,
+        0.675107
+      ],
+      "macro_f1": [
+        0.368055,
+        0.477253
+      ],
+      "accuracy": [
+        0.384173,
+        0.494657
+      ],
+      "score_auc_alert_vs_drowsy": [
+        0.671782,
+        0.82598
+      ],
+      "baseline_auc_alert_vs_drowsy": [
+        0.645589,
+        0.817287
+      ],
+      "score_minus_baseline_auc_alert_vs_drowsy": [
+        -0.032558,
+        0.073808
+      ],
+      "baseline_as_model_auc": [
+        0.538525,
+        0.665949
+      ],
+      "auc_minus_baseline_as_model_auc": [
+        -0.014576,
+        0.064424
+      ]
+    },
+    "bootstrap_resamples": 2000,
+    "auc_minus_other_configurations": {
+      "blendshape/calibrated": {
+        "auc_difference": -0.043889,
+        "ci95_subject_bootstrap": [
+          -0.070114,
+          -0.013354
+        ]
+      },
+      "ear_p80/absolute": {
+        "auc_difference": -0.053664,
+        "ci95_subject_bootstrap": [
+          -0.091335,
+          -0.013608
+        ]
+      },
+      "ear_p80/calibrated": {
+        "auc_difference": -0.04548,
+        "ci95_subject_bootstrap": [
+          -0.088308,
+          0.001091
+        ]
+      }
+    }
+  },
+  "feature_evidence": {
+    "perclos": {
+      "auc_alert_vs_drowsy": 0.762744,
+      "ci95_subject_bootstrap": [
+        0.676351,
+        0.850978
+      ],
+      "subjects_higher_in_drowsy_video": {
+        "subjects": 21,
+        "of": 24
+      }
+    },
+    "blink_rate_per_min": {
+      "auc_alert_vs_drowsy": 0.660637,
+      "ci95_subject_bootstrap": [
+        0.547689,
+        0.774967
+      ],
+      "subjects_higher_in_drowsy_video": {
+        "subjects": 17,
+        "of": 24
+      }
+    },
+    "mean_blink_duration_s": {
+      "auc_alert_vs_drowsy": 0.733207,
+      "ci95_subject_bootstrap": [
+        0.651242,
+        0.820276
+      ],
+      "subjects_higher_in_drowsy_video": {
+        "subjects": 18,
+        "of": 24
+      }
+    },
+    "long_closure_rate_per_min": {
+      "auc_alert_vs_drowsy": 0.714799,
+      "ci95_subject_bootstrap": [
+        0.657054,
+        0.779102
+      ],
+      "subjects_higher_in_drowsy_video": {
+        "subjects": 21,
+        "of": 24
+      }
+    },
+    "yawns_per_min": {
+      "auc_alert_vs_drowsy": 0.518401,
+      "ci95_subject_bootstrap": [
+        0.498245,
+        0.54308
+      ],
+      "subjects_higher_in_drowsy_video": {
+        "subjects": 5,
+        "of": 24
+      }
+    },
+    "head_pitch_std_deg": {
+      "auc_alert_vs_drowsy": 0.517379,
+      "ci95_subject_bootstrap": [
+        0.45768,
+        0.578698
+      ],
+      "subjects_higher_in_drowsy_video": {
+        "subjects": 12,
+        "of": 24
+      }
+    },
+    "nods_per_min": {
+      "auc_alert_vs_drowsy": 0.510297,
+      "ci95_subject_bootstrap": [
+        0.464679,
+        0.555
+      ],
+      "subjects_higher_in_drowsy_video": {
+        "subjects": 10,
+        "of": 24
+      }
+    }
+  },
+  "secondary_analyses": "`configurations` (the shipped one and three alternatives on the same windows), `nested_selection` and `calibration_sensitivity` are secondary. The decision in `chosen.how` was taken after seeing them.",
+  "configurations": {
+    "blendshape/absolute": {
+      "windows": 3724,
+      "macro_f1": 0.426635,
+      "auc": 0.622055,
+      "accuracy": 0.441192,
+      "log_loss": 1.041799,
+      "confusion_matrix": [
+        [
+          249,
+          691,
+          107
+        ],
+        [
+          193,
+          736,
+          408
+        ],
+        [
+          60,
+          622,
+          658
+        ]
+      ],
+      "recall": {
+        "alert": 0.237822,
+        "low_vigilance": 0.550486,
+        "drowsy": 0.491045
+      },
+      "score": {
+        "auc_alert_vs_drowsy": 0.747275,
+        "auc_alert_vs_rest": 0.676343,
+        "auc_drowsy_vs_rest": 0.692117,
+        "spearman_with_label": 0.34843,
+        "mean_score": {
+          "alert": 0.497365,
+          "low_vigilance": 0.531858,
+          "drowsy": 0.588002
+        },
+        "percentiles": {
+          "alert": {
+            "p5": 0.407722,
+            "p25": 0.456043,
+            "p50": 0.490034,
+            "p75": 0.525562,
+            "p95": 0.605975
+          },
+          "low_vigilance": {
+            "p5": 0.419291,
+            "p25": 0.472431,
+            "p50": 0.505252,
+            "p75": 0.581627,
+            "p95": 0.708187
+          },
+          "drowsy": {
+            "p5": 0.446704,
+            "p25": 0.497873,
+            "p50": 0.55441,
+            "p75": 0.647283,
+            "p95": 0.847628
+          }
+        },
+        "min": 0.394499,
+        "max": 0.991523
+      },
+      "eye_method": "blendshape",
+      "normalisation": "absolute",
+      "C_by_fold": [
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001
+      ],
+      "folds_at_smallest_C": 24
+    },
+    "blendshape/calibrated": {
+      "windows": 3724,
+      "macro_f1": 0.461153,
+      "auc": 0.665944,
+      "accuracy": 0.473147,
+      "log_loss": 1.013787,
+      "confusion_matrix": [
+        [
+          300,
+          675,
+          72
+        ],
+        [
+          201,
+          700,
+          436
+        ],
+        [
+          145,
+          433,
+          762
+        ]
+      ],
+      "recall": {
+        "alert": 0.286533,
+        "low_vigilance": 0.52356,
+        "drowsy": 0.568657
+      },
+      "score": {
+        "auc_alert_vs_drowsy": 0.812292,
+        "auc_alert_vs_rest": 0.74532,
+        "auc_drowsy_vs_rest": 0.734103,
+        "spearman_with_label": 0.449696,
+        "mean_score": {
+          "alert": 0.472788,
+          "low_vigilance": 0.529164,
+          "drowsy": 0.598783
+        },
+        "percentiles": {
+          "alert": {
+            "p5": 0.36789,
+            "p25": 0.436918,
+            "p50": 0.471237,
+            "p75": 0.507097,
+            "p95": 0.571232
+          },
+          "low_vigilance": {
+            "p5": 0.388723,
+            "p25": 0.462564,
+            "p50": 0.512877,
+            "p75": 0.582794,
+            "p95": 0.716659
+          },
+          "drowsy": {
+            "p5": 0.408449,
+            "p25": 0.506836,
+            "p50": 0.592388,
+            "p75": 0.682137,
+            "p95": 0.85667
+          }
+        },
+        "min": 0.139161,
+        "max": 0.983185
+      },
+      "eye_method": "blendshape",
+      "normalisation": "calibrated",
+      "C_by_fold": [
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001
+      ],
+      "folds_at_smallest_C": 24
+    },
+    "ear_p80/absolute": {
+      "windows": 3724,
+      "macro_f1": 0.504814,
+      "auc": 0.675719,
+      "accuracy": 0.502954,
+      "log_loss": 1.008489,
+      "confusion_matrix": [
+        [
+          569,
+          443,
+          35
+        ],
+        [
+          322,
+          761,
+          254
+        ],
+        [
+          232,
+          565,
+          543
+        ]
+      ],
+      "recall": {
+        "alert": 0.543457,
+        "low_vigilance": 0.569185,
+        "drowsy": 0.405224
+      },
+      "score": {
+        "auc_alert_vs_drowsy": 0.79485,
+        "auc_alert_vs_rest": 0.763648,
+        "auc_drowsy_vs_rest": 0.693885,
+        "spearman_with_label": 0.422344,
+        "mean_score": {
+          "alert": 0.455845,
+          "low_vigilance": 0.544047,
+          "drowsy": 0.60348
+        },
+        "percentiles": {
+          "alert": {
+            "p5": 0.338814,
+            "p25": 0.403256,
+            "p50": 0.443661,
+            "p75": 0.49024,
+            "p95": 0.644937
+          },
+          "low_vigilance": {
+            "p5": 0.385894,
+            "p25": 0.456571,
+            "p50": 0.529944,
+            "p75": 0.59854,
+            "p95": 0.797639
+          },
+          "drowsy": {
+            "p5": 0.354758,
+            "p25": 0.49425,
+            "p50": 0.57637,
+            "p75": 0.714668,
+            "p95": 0.90954
+          }
+        },
+        "min": 0.192018,
+        "max": 0.993083
+      },
+      "eye_method": "ear_p80",
+      "normalisation": "absolute",
+      "C_by_fold": [
+        0.01,
+        0.01,
+        0.01,
+        0.01,
+        0.001,
+        0.001,
+        0.01,
+        0.01,
+        0.01,
+        0.01,
+        0.001,
+        0.001,
+        0.01,
+        0.01,
+        0.01,
+        0.001,
+        0.01,
+        0.001,
+        0.01,
+        0.001,
+        0.001,
+        0.001,
+        0.01,
+        0.01
+      ],
+      "folds_at_smallest_C": 9
+    },
+    "ear_p80/calibrated": {
+      "windows": 3724,
+      "macro_f1": 0.443772,
+      "auc": 0.667535,
+      "accuracy": 0.444146,
+      "log_loss": 1.030637,
+      "confusion_matrix": [
+        [
+          367,
+          654,
+          26
+        ],
+        [
+          302,
+          671,
+          364
+        ],
+        [
+          174,
+          550,
+          616
+        ]
+      ],
+      "recall": {
+        "alert": 0.350525,
+        "low_vigilance": 0.50187,
+        "drowsy": 0.459701
+      },
+      "score": {
+        "auc_alert_vs_drowsy": 0.800391,
+        "auc_alert_vs_rest": 0.748874,
+        "auc_drowsy_vs_rest": 0.708736,
+        "spearman_with_label": 0.425838,
+        "mean_score": {
+          "alert": 0.470679,
+          "low_vigilance": 0.526905,
+          "drowsy": 0.580534
+        },
+        "percentiles": {
+          "alert": {
+            "p5": 0.343633,
+            "p25": 0.449868,
+            "p50": 0.478732,
+            "p75": 0.500517,
+            "p95": 0.548095
+          },
+          "low_vigilance": {
+            "p5": 0.39346,
+            "p25": 0.463949,
+            "p50": 0.523286,
+            "p75": 0.574076,
+            "p95": 0.706044
+          },
+          "drowsy": {
+            "p5": 0.417478,
+            "p25": 0.49658,
+            "p50": 0.563041,
+            "p75": 0.670997,
+            "p95": 0.83355
+          }
+        },
+        "min": 0.078354,
+        "max": 0.961212
+      },
+      "eye_method": "ear_p80",
+      "normalisation": "calibrated",
+      "C_by_fold": [
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.01,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001,
+        0.001
+      ],
+      "folds_at_smallest_C": 23
+    }
+  },
+  "nested_selection": {
+    "windows": 3724,
+    "macro_f1": 0.465337,
+    "auc": 0.655683,
+    "accuracy": 0.467777,
+    "log_loss": 1.016716,
+    "confusion_matrix": [
+      [
+        398,
+        607,
+        42
+      ],
+      [
+        231,
+        737,
+        369
+      ],
+      [
+        222,
+        511,
+        607
+      ]
+    ],
+    "recall": {
+      "alert": 0.380134,
+      "low_vigilance": 0.551234,
+      "drowsy": 0.452985
+    },
+    "score": {
+      "auc_alert_vs_drowsy": 0.780778,
+      "auc_alert_vs_rest": 0.753441,
+      "auc_drowsy_vs_rest": 0.681761,
+      "spearman_with_label": 0.401116,
+      "mean_score": {
+        "alert": 0.461649,
+        "low_vigilance": 0.546399,
+        "drowsy": 0.600901
+      },
+      "percentiles": {
+        "alert": {
+          "p5": 0.34624,
+          "p25": 0.41569,
+          "p50": 0.465866,
+          "p75": 0.502099,
+          "p95": 0.563196
+        },
+        "low_vigilance": {
+          "p5": 0.4006,
+          "p25": 0.465034,
+          "p50": 0.523967,
+          "p75": 0.588328,
+          "p95": 0.847036
+        },
+        "drowsy": {
+          "p5": 0.370647,
+          "p25": 0.48354,
+          "p50": 0.570146,
+          "p75": 0.708482,
+          "p95": 0.927542
+        }
+      },
+      "min": 0.192018,
+      "max": 0.993083
+    },
+    "picked": {
+      "blendshape/absolute": 0,
+      "blendshape/calibrated": 11,
+      "ear_p80/absolute": 11,
+      "ear_p80/calibrated": 2
+    },
+    "note": "Secondary analysis, not the shipped model. If the configuration were chosen by a score, the honest way is inside every fold from the training subjects alone (inner AUC); this is what that procedure scores."
+  },
+  "calibration_sensitivity": {
+    "question": "ear_p80 takes its eye threshold from the first 120 s of the person's ALERT video. What if it comes from the first 120 s of the video being scored, whatever state the person is in?",
+    "how": "The out-of-fold `ear_p80/absolute` models, unchanged (trained with the alert-video threshold); only the test subject's windows are recomputed with a threshold from each video's own first 120 s. Both versions are scored on the same windows: those that touch the first 120 s of no video.",
+    "windows": {
+      "alert": 1047,
+      "low_vigilance": 1049,
+      "drowsy": 1052
+    },
+    "windows_without_own_calibration": 0,
+    "calibrated_features": {
+      "what": "The same question for the `calibrated` features: the out-of-fold `blendshape/calibrated` models, unchanged, with the test subject's reference taken from the first 120 s of each video instead of the alert video.",
+      "reference_from_alert_video": {
+        "auc": 0.666528,
+        "macro_f1": 0.458034,
+        "accuracy": 0.461563,
+        "score_auc_alert_vs_drowsy": 0.81112,
+        "mean_score": {
+          "alert": 0.472788,
+          "low_vigilance": 0.532845,
+          "drowsy": 0.603389
+        }
+      },
+      "reference_from_scored_video": {
+        "auc": 0.527637,
+        "macro_f1": 0.348141,
+        "accuracy": 0.350064,
+        "score_auc_alert_vs_drowsy": 0.553181,
+        "mean_score": {
+          "alert": 0.472788,
+          "low_vigilance": 0.491948,
+          "drowsy": 0.497272
+        }
+      }
+    },
+    "threshold_from_alert_video": {
+      "auc": 0.684168,
+      "macro_f1": 0.514561,
+      "accuracy": 0.511436,
+      "score_auc_alert_vs_drowsy": 0.804306,
+      "mean_score": {
+        "alert": 0.455845,
+        "low_vigilance": 0.54892,
+        "drowsy": 0.609704
+      },
+      "perclos": {
+        "alert": 0.029918,
+        "low_vigilance": 0.061939,
+        "drowsy": 0.119649
+      }
+    },
+    "threshold_from_scored_video": {
+      "auc": 0.583156,
+      "macro_f1": 0.405256,
+      "accuracy": 0.409466,
+      "score_auc_alert_vs_drowsy": 0.665834,
+      "mean_score": {
+        "alert": 0.455845,
+        "low_vigilance": 0.473697,
+        "drowsy": 0.526669
+      },
+      "perclos": {
+        "alert": 0.029918,
+        "low_vigilance": 0.040682,
+        "drowsy": 0.074437
+      }
+    },
+    "blendshape_absolute_same_windows": {
+      "auc": 0.623467,
+      "macro_f1": 0.425913,
+      "accuracy": 0.431703,
+      "score_auc_alert_vs_drowsy": 0.75039,
+      "mean_score": {
+        "alert": 0.497365,
+        "low_vigilance": 0.534011,
+        "drowsy": 0.592461
+      },
+      "perclos": {
+        "alert": 0.029922,
+        "low_vigilance": 0.055234,
+        "drowsy": 0.102199
+      }
+    },
+    "browser_formula_same_windows": {
+      "score_auc_alert_vs_drowsy": 0.737929
+    },
+    "ci95_subject_bootstrap": {
+      "score_auc_alert_vs_drowsy_alert_video_minus_own_video": [
+        0.03707,
+        0.225671
+      ],
+      "auc_alert_video_minus_own_video": [
+        0.039604,
+        0.156972
+      ],
+      "calibrated_features_score_auc_alert_vs_drowsy_alert_video_minus_own_video": [
+        0.126318,
+        0.39401
+      ],
+      "calibrated_features_auc_alert_video_minus_own_video": [
+        0.056859,
+        0.222862
+      ]
+    },
+    "reading": "RLDD has no recording that starts rested and then turns drowsy, so neither version is the product's case. The alert-video threshold assumes the calibration was taken rested; the scored-video threshold is what happens when the session starts with the person already in the state being measured."
+  },
+  "baseline": {
+    "formula": "clamp01(0.6 * perclos + 0.25 * min(1, yawnsPerMin / 4) + 0.15 * clamp01(12 * std(noseY)))",
+    "what": "faceWorker.ts today: blendshape PERCLOS of the last minute, streaming yawn count, spread of the nose height over the last 90 frames",
+    "score": {
+      "auc_alert_vs_drowsy": 0.728173,
+      "auc_alert_vs_rest": 0.679737,
+      "auc_drowsy_vs_rest": 0.666357,
+      "spearman_with_label": 0.324025,
+      "mean_score": {
+        "alert": 0.028198,
+        "low_vigilance": 0.042455,
+        "drowsy": 0.067319
+      },
+      "percentiles": {
+        "alert": {
+          "p5": 0.001502,
+          "p25": 0.006021,
+          "p50": 0.016866,
+          "p75": 0.040257,
+          "p95": 0.088137
+        },
+        "low_vigilance": {
+          "p5": 0.00548,
+          "p25": 0.013808,
+          "p50": 0.028028,
+          "p75": 0.054614,
+          "p95": 0.128375
+        },
+        "drowsy": {
+          "p5": 0.008619,
+          "p25": 0.021709,
+          "p50": 0.04349,
+          "p75": 0.080492,
+          "p95": 0.214225
+        }
+      },
+      "min": 0.000267,
+      "max": 0.569655
+    },
+    "as_three_class_model": {
+      "windows": 3724,
+      "macro_f1": 0.450125,
+      "auc": 0.599195,
+      "accuracy": 0.463749,
+      "log_loss": 1.059173,
+      "confusion_matrix": [
+        [
+          296,
+          555,
+          196
+        ],
+        [
+          135,
+          849,
+          353
+        ],
+        [
+          54,
+          704,
+          582
+        ]
+      ],
+      "recall": {
+        "alert": 0.282713,
+        "low_vigilance": 0.635004,
+        "drowsy": 0.434328
+      },
+      "how": "the formula's number as the only feature of the same logistic regression, in the same folds: the best three-way split that number allows"
+    },
+    "share_of_windows_at_zero": 0.0
+  },
+  "video_level": {
+    "model": {
+      "videos": 72,
+      "correct": 32,
+      "accuracy": 0.444444,
+      "confusion_matrix": [
+        [
+          6,
+          17,
+          1
+        ],
+        [
+          3,
+          14,
+          7
+        ],
+        [
+          0,
+          12,
+          12
+        ]
+      ],
+      "rule": "a video gets the class most of its windows got; ties go to the class with the higher mean probability"
+    },
+    "baseline_as_three_class_model": {
+      "videos": 72,
+      "correct": 37,
+      "accuracy": 0.513889,
+      "confusion_matrix": [
+        [
+          9,
+          12,
+          3
+        ],
+        [
+          1,
+          18,
+          5
+        ],
+        [
+          0,
+          14,
+          10
+        ]
+      ],
+      "rule": "a video gets the class most of its windows got; ties go to the class with the higher mean probability"
+    },
+    "videos": [
+      {
+        "video_id": "01_0",
+        "true": "alert",
+        "predicted": "alert",
+        "windows": 43,
+        "votes": [
+          25,
+          16,
+          2
+        ],
+        "mean_fatigue_score": 0.449811
+      },
+      {
+        "video_id": "01_10",
+        "true": "drowsy",
+        "predicted": "low_vigilance",
+        "windows": 55,
+        "votes": [
+          5,
+          44,
+          6
+        ],
+        "mean_fatigue_score": 0.500218
+      },
+      {
+        "video_id": "01_5",
+        "true": "low_vigilance",
+        "predicted": "alert",
+        "windows": 54,
+        "votes": [
+          32,
+          22,
+          0
+        ],
+        "mean_fatigue_score": 0.442948
+      },
+      {
+        "video_id": "02_0",
+        "true": "alert",
+        "predicted": "low_vigilance",
+        "windows": 43,
+        "votes": [
+          17,
+          23,
+          3
+        ],
+        "mean_fatigue_score": 0.455765
+      },
+      {
+        "video_id": "02_10",
+        "true": "drowsy",
+        "predicted": "low_vigilance",
+        "windows": 55,
+        "votes": [
+          7,
+          45,
+          3
+        ],
+        "mean_fatigue_score": 0.485547
+      },
+      {
+        "video_id": "02_5",
+        "true": "low_vigilance",
+        "predicted": "low_vigilance",
+        "windows": 55,
+        "votes": [
+          9,
+          44,
+          2
+        ],
+        "mean_fatigue_score": 0.485334
+      },
+      {
+        "video_id": "03_0",
+        "true": "alert",
+        "predicted": "low_vigilance",
+        "windows": 52,
+        "votes": [
+          21,
+          31,
+          0
+        ],
+        "mean_fatigue_score": 0.457921
+      },
+      {
+        "video_id": "03_10",
+        "true": "drowsy",
+        "predicted": "drowsy",
+        "windows": 56,
+        "votes": [
+          0,
+          8,
+          48
+        ],
+        "mean_fatigue_score": 0.577387
+      },
+      {
+        "video_id": "03_5",
+        "true": "low_vigilance",
+        "predicted": "low_vigilance",
+        "windows": 56,
+        "votes": [
+          4,
+          33,
+          19
+        ],
+        "mean_fatigue_score": 0.513228
+      },
+      {
+        "video_id": "04_0",
+        "true": "alert",
+        "predicted": "alert",
+        "windows": 44,
+        "votes": [
+          25,
+          19,
+          0
+        ],
+        "mean_fatigue_score": 0.446096
+      },
+      {
+        "video_id": "04_10",
+        "true": "drowsy",
+        "predicted": "low_vigilance",
+        "windows": 56,
+        "votes": [
+          1,
+          46,
+          9
+        ],
+        "mean_fatigue_score": 0.514755
+      },
+      {
+        "video_id": "04_5",
+        "true": "low_vigilance",
+        "predicted": "low_vigilance",
+        "windows": 55,
+        "votes": [
+          15,
+          40,
+          0
+        ],
+        "mean_fatigue_score": 0.464187
+      },
+      {
+        "video_id": "05_0",
+        "true": "alert",
+        "predicted": "alert",
+        "windows": 44,
+        "votes": [
+          28,
+          16,
+          0
+        ],
+        "mean_fatigue_score": 0.443642
+      },
+      {
+        "video_id": "05_10",
+        "true": "drowsy",
+        "predicted": "low_vigilance",
+        "windows": 55,
+        "votes": [
+          3,
+          33,
+          19
+        ],
+        "mean_fatigue_score": 0.535316
+      },
+      {
+        "video_id": "05_5",
+        "true": "low_vigilance",
+        "predicted": "low_vigilance",
+        "windows": 55,
+        "votes": [
+          21,
+          27,
+          7
+        ],
+        "mean_fatigue_score": 0.470118
+      },
+      {
+        "video_id": "06_0",
+        "true": "alert",
+        "predicted": "low_vigilance",
+        "windows": 44,
+        "votes": [
+          7,
+          37,
+          0
+        ],
+        "mean_fatigue_score": 0.475108
+      },
+      {
+        "video_id": "06_10",
+        "true": "drowsy",
+        "predicted": "low_vigilance",
+        "windows": 37,
+        "votes": [
+          0,
+          20,
+          17
+        ],
+        "mean_fatigue_score": 0.532337
+      },
+      {
+        "video_id": "06_5",
+        "true": "low_vigilance",
+        "predicted": "low_vigilance",
+        "windows": 38,
+        "votes": [
+          6,
+          23,
+          9
+        ],
+        "mean_fatigue_score": 0.532896
+      },
+      {
+        "video_id": "07_0",
+        "true": "alert",
+        "predicted": "low_vigilance",
+        "windows": 43,
+        "votes": [
+          0,
+          36,
+          7
+        ],
+        "mean_fatigue_score": 0.580575
+      },
+      {
+        "video_id": "07_10",
+        "true": "drowsy",
+        "predicted": "drowsy",
+        "windows": 55,
+        "votes": [
+          0,
+          16,
+          39
+        ],
+        "mean_fatigue_score": 0.633154
+      },
+      {
+        "video_id": "07_5",
+        "true": "low_vigilance",
+        "predicted": "drowsy",
+        "windows": 55,
+        "votes": [
+          0,
+          14,
+          41
+        ],
+        "mean_fatigue_score": 0.616662
+      },
+      {
+        "video_id": "08_0",
+        "true": "alert",
+        "predicted": "low_vigilance",
+        "windows": 43,
+        "votes": [
+          1,
+          36,
+          6
+        ],
+        "mean_fatigue_score": 0.501156
+      },
+      {
+        "video_id": "08_10",
+        "true": "drowsy",
+        "predicted": "drowsy",
+        "windows": 54,
+        "votes": [
+          0,
+          21,
+          33
+        ],
+        "mean_fatigue_score": 0.581323
+      },
+      {
+        "video_id": "08_5",
+        "true": "low_vigilance",
+        "predicted": "low_vigilance",
+        "windows": 55,
+        "votes": [
+          1,
+          51,
+          3
+        ],
+        "mean_fatigue_score": 0.498083
+      },
+      {
+        "video_id": "09_0",
+        "true": "alert",
+        "predicted": "low_vigilance",
+        "windows": 44,
+        "votes": [
+          2,
+          42,
+          0
+        ],
+        "mean_fatigue_score": 0.490946
+      },
+      {
+        "video_id": "09_10",
+        "true": "drowsy",
+        "predicted": "low_vigilance",
+        "windows": 61,
+        "votes": [
+          2,
+          55,
+          4
+        ],
+        "mean_fatigue_score": 0.495974
+      },
+      {
+        "video_id": "09_5",
+        "true": "low_vigilance",
+        "predicted": "drowsy",
+        "windows": 56,
+        "votes": [
+          0,
+          23,
+          33
+        ],
+        "mean_fatigue_score": 0.559406
+      },
+      {
+        "video_id": "10_0",
+        "true": "alert",
+        "predicted": "drowsy",
+        "windows": 37,
+        "votes": [
+          1,
+          4,
+          32
+        ],
+        "mean_fatigue_score": 0.574255
+      },
+      {
+        "video_id": "10_10",
+        "true": "drowsy",
+        "predicted": "drowsy",
+        "windows": 57,
+        "votes": [
+          1,
+          14,
+          42
+        ],
+        "mean_fatigue_score": 0.563844
+      },
+      {
+        "video_id": "10_5",
+        "true": "low_vigilance",
+        "predicted": "low_vigilance",
+        "windows": 57,
+        "votes": [
+          1,
+          43,
+          13
+        ],
+        "mean_fatigue_score": 0.514028
+      },
+      {
+        "video_id": "11_0",
+        "true": "alert",
+        "predicted": "alert",
+        "windows": 45,
+        "votes": [
+          41,
+          4,
+          0
+        ],
+        "mean_fatigue_score": 0.414824
+      },
+      {
+        "video_id": "11_10",
+        "true": "drowsy",
+        "predicted": "low_vigilance",
+        "windows": 57,
+        "votes": [
+          15,
+          42,
+          0
+        ],
+        "mean_fatigue_score": 0.472874
+      },
+      {
+        "video_id": "11_5",
+        "true": "low_vigilance",
+        "predicted": "alert",
+        "windows": 60,
+        "votes": [
+          28,
+          27,
+          5
+        ],
+        "mean_fatigue_score": 0.458664
+      },
+      {
+        "video_id": "12_0",
+        "true": "alert",
+        "predicted": "low_vigilance",
+        "windows": 39,
+        "votes": [
+          0,
+          39,
+          0
+        ],
+        "mean_fatigue_score": 0.489007
+      },
+      {
+        "video_id": "12_10",
+        "true": "drowsy",
+        "predicted": "drowsy",
+        "windows": 45,
+        "votes": [
+          0,
+          0,
+          45
+        ],
+        "mean_fatigue_score": 0.690757
+      },
+      {
+        "video_id": "12_5",
+        "true": "low_vigilance",
+        "predicted": "low_vigilance",
+        "windows": 57,
+        "votes": [
+          0,
+          51,
+          6
+        ],
+        "mean_fatigue_score": 0.522578
+      },
+      {
+        "video_id": "13_0",
+        "true": "alert",
+        "predicted": "low_vigilance",
+        "windows": 44,
+        "votes": [
+          6,
+          38,
+          0
+        ],
+        "mean_fatigue_score": 0.482562
+      },
+      {
+        "video_id": "13_10",
+        "true": "drowsy",
+        "predicted": "drowsy",
+        "windows": 57,
+        "votes": [
+          0,
+          6,
+          51
+        ],
+        "mean_fatigue_score": 0.640219
+      },
+      {
+        "video_id": "13_5",
+        "true": "low_vigilance",
+        "predicted": "low_vigilance",
+        "windows": 63,
+        "votes": [
+          13,
+          46,
+          4
+        ],
+        "mean_fatigue_score": 0.496019
+      },
+      {
+        "video_id": "14_0",
+        "true": "alert",
+        "predicted": "low_vigilance",
+        "windows": 44,
+        "votes": [
+          6,
+          38,
+          0
+        ],
+        "mean_fatigue_score": 0.468814
+      },
+      {
+        "video_id": "14_10",
+        "true": "drowsy",
+        "predicted": "drowsy",
+        "windows": 57,
+        "votes": [
+          3,
+          27,
+          27
+        ],
+        "mean_fatigue_score": 0.536647
+      },
+      {
+        "video_id": "14_5",
+        "true": "low_vigilance",
+        "predicted": "drowsy",
+        "windows": 61,
+        "votes": [
+          0,
+          4,
+          57
+        ],
+        "mean_fatigue_score": 0.627308
+      },
+      {
+        "video_id": "15_0",
+        "true": "alert",
+        "predicted": "low_vigilance",
+        "windows": 47,
+        "votes": [
+          0,
+          32,
+          15
+        ],
+        "mean_fatigue_score": 0.562115
+      },
+      {
+        "video_id": "15_10",
+        "true": "drowsy",
+        "predicted": "low_vigilance",
+        "windows": 56,
+        "votes": [
+          7,
+          39,
+          10
+        ],
+        "mean_fatigue_score": 0.532384
+      },
+      {
+        "video_id": "15_5",
+        "true": "low_vigilance",
+        "predicted": "drowsy",
+        "windows": 56,
+        "votes": [
+          0,
+          18,
+          38
+        ],
+        "mean_fatigue_score": 0.59029
+      },
+      {
+        "video_id": "16_0",
+        "true": "alert",
+        "predicted": "alert",
+        "windows": 30,
+        "votes": [
+          30,
+          0,
+          0
+        ],
+        "mean_fatigue_score": 0.463438
+      },
+      {
+        "video_id": "16_10",
+        "true": "drowsy",
+        "predicted": "low_vigilance",
+        "windows": 55,
+        "votes": [
+          14,
+          40,
+          1
+        ],
+        "mean_fatigue_score": 0.487583
+      },
+      {
+        "video_id": "16_5",
+        "true": "low_vigilance",
+        "predicted": "alert",
+        "windows": 55,
+        "votes": [
+          33,
+          22,
+          0
+        ],
+        "mean_fatigue_score": 0.452235
+      },
+      {
+        "video_id": "17_0",
+        "true": "alert",
+        "predicted": "alert",
+        "windows": 43,
+        "votes": [
+          27,
+          16,
+          0
+        ],
+        "mean_fatigue_score": 0.453471
+      },
+      {
+        "video_id": "17_10",
+        "true": "drowsy",
+        "predicted": "drowsy",
+        "windows": 55,
+        "votes": [
+          2,
+          19,
+          34
+        ],
+        "mean_fatigue_score": 0.554419
+      },
+      {
+        "video_id": "17_5",
+        "true": "low_vigilance",
+        "predicted": "low_vigilance",
+        "windows": 55,
+        "votes": [
+          18,
+          31,
+          6
+        ],
+        "mean_fatigue_score": 0.477612
+      },
+      {
+        "video_id": "18_0",
+        "true": "alert",
+        "predicted": "low_vigilance",
+        "windows": 43,
+        "votes": [
+          0,
+          24,
+          19
+        ],
+        "mean_fatigue_score": 0.562905
+      },
+      {
+        "video_id": "18_10",
+        "true": "drowsy",
+        "predicted": "drowsy",
+        "windows": 58,
+        "votes": [
+          0,
+          0,
+          58
+        ],
+        "mean_fatigue_score": 0.931228
+      },
+      {
+        "video_id": "18_5",
+        "true": "low_vigilance",
+        "predicted": "drowsy",
+        "windows": 55,
+        "votes": [
+          0,
+          0,
+          55
+        ],
+        "mean_fatigue_score": 0.812804
+      },
+      {
+        "video_id": "19_0",
+        "true": "alert",
+        "predicted": "low_vigilance",
+        "windows": 43,
+        "votes": [
+          0,
+          43,
+          0
+        ],
+        "mean_fatigue_score": 0.510933
+      },
+      {
+        "video_id": "19_10",
+        "true": "drowsy",
+        "predicted": "low_vigilance",
+        "windows": 55,
+        "votes": [
+          0,
+          55,
+          0
+        ],
+        "mean_fatigue_score": 0.492397
+      },
+      {
+        "video_id": "19_5",
+        "true": "low_vigilance",
+        "predicted": "low_vigilance",
+        "windows": 55,
+        "votes": [
+          0,
+          55,
+          0
+        ],
+        "mean_fatigue_score": 0.502971
+      },
+      {
+        "video_id": "20_0",
+        "true": "alert",
+        "predicted": "low_vigilance",
+        "windows": 48,
+        "votes": [
+          3,
+          45,
+          0
+        ],
+        "mean_fatigue_score": 0.514988
+      },
+      {
+        "video_id": "20_10",
+        "true": "drowsy",
+        "predicted": "drowsy",
+        "windows": 66,
+        "votes": [
+          0,
+          0,
+          66
+        ],
+        "mean_fatigue_score": 0.794092
+      },
+      {
+        "video_id": "20_5",
+        "true": "low_vigilance",
+        "predicted": "low_vigilance",
+        "windows": 55,
+        "votes": [
+          11,
+          31,
+          13
+        ],
+        "mean_fatigue_score": 0.496443
+      },
+      {
+        "video_id": "21_0",
+        "true": "alert",
+        "predicted": "low_vigilance",
+        "windows": 43,
+        "votes": [
+          0,
+          33,
+          10
+        ],
+        "mean_fatigue_score": 0.526102
+      },
+      {
+        "video_id": "21_10",
+        "true": "drowsy",
+        "predicted": "low_vigilance",
+        "windows": 55,
+        "votes": [
+          0,
+          35,
+          20
+        ],
+        "mean_fatigue_score": 0.580459
+      },
+      {
+        "video_id": "21_5",
+        "true": "low_vigilance",
+        "predicted": "low_vigilance",
+        "windows": 55,
+        "votes": [
+          1,
+          54,
+          0
+        ],
+        "mean_fatigue_score": 0.484824
+      },
+      {
+        "video_id": "22_0",
+        "true": "alert",
+        "predicted": "low_vigilance",
+        "windows": 43,
+        "votes": [
+          9,
+          33,
+          1
+        ],
+        "mean_fatigue_score": 0.4837
+      },
+      {
+        "video_id": "22_10",
+        "true": "drowsy",
+        "predicted": "drowsy",
+        "windows": 56,
+        "votes": [
+          0,
+          0,
+          56
+        ],
+        "mean_fatigue_score": 0.716492
+      },
+      {
+        "video_id": "22_5",
+        "true": "low_vigilance",
+        "predicted": "drowsy",
+        "windows": 55,
+        "votes": [
+          0,
+          3,
+          52
+        ],
+        "mean_fatigue_score": 0.611019
+      },
+      {
+        "video_id": "23_0",
+        "true": "alert",
+        "predicted": "low_vigilance",
+        "windows": 41,
+        "votes": [
+          0,
+          41,
+          0
+        ],
+        "mean_fatigue_score": 0.450153
+      },
+      {
+        "video_id": "23_10",
+        "true": "drowsy",
+        "predicted": "low_vigilance",
+        "windows": 55,
+        "votes": [
+          0,
+          40,
+          15
+        ],
+        "mean_fatigue_score": 0.542118
+      },
+      {
+        "video_id": "23_5",
+        "true": "low_vigilance",
+        "predicted": "low_vigilance",
+        "windows": 52,
+        "votes": [
+          0,
+          51,
+          1
+        ],
+        "mean_fatigue_score": 0.485632
+      },
+      {
+        "video_id": "24_0",
+        "true": "alert",
+        "predicted": "low_vigilance",
+        "windows": 57,
+        "votes": [
+          0,
+          45,
+          12
+        ],
+        "mean_fatigue_score": 0.638245
+      },
+      {
+        "video_id": "24_10",
+        "true": "drowsy",
+        "predicted": "drowsy",
+        "windows": 72,
+        "votes": [
+          0,
+          17,
+          55
+        ],
+        "mean_fatigue_score": 0.655376
+      },
+      {
+        "video_id": "24_5",
+        "true": "low_vigilance",
+        "predicted": "drowsy",
+        "windows": 67,
+        "votes": [
+          0,
+          23,
+          44
+        ],
+        "mean_fatigue_score": 0.626142
+      }
+    ]
+  },
+  "per_subject": [
+    {
+      "subject": "01",
+      "windows": {
+        "alert": 43,
+        "low_vigilance": 54,
+        "drowsy": 55
+      },
+      "accuracy": 0.348684,
+      "macro_f1": 0.330065,
+      "auc": 0.6194,
+      "score_auc_alert_vs_drowsy": 0.724313,
+      "baseline_auc_alert_vs_drowsy": 0.761099,
+      "mean_fatigue_score": {
+        "alert": 0.449811,
+        "low_vigilance": 0.442948,
+        "drowsy": 0.500218
+      },
+      "mean_baseline_score": {
+        "alert": 0.012495,
+        "low_vigilance": 0.014757,
+        "drowsy": 0.032586
+      },
+      "videos_correct": 1,
+      "video_predictions": {
+        "alert": "alert",
+        "drowsy": "low_vigilance",
+        "low_vigilance": "alert"
+      }
+    },
+    {
+      "subject": "02",
+      "windows": {
+        "alert": 43,
+        "low_vigilance": 55,
+        "drowsy": 55
+      },
+      "accuracy": 0.418301,
+      "macro_f1": 0.356518,
+      "auc": 0.506919,
+      "score_auc_alert_vs_drowsy": 0.791121,
+      "baseline_auc_alert_vs_drowsy": 0.748837,
+      "mean_fatigue_score": {
+        "alert": 0.455765,
+        "low_vigilance": 0.485334,
+        "drowsy": 0.485547
+      },
+      "mean_baseline_score": {
+        "alert": 0.010179,
+        "low_vigilance": 0.016008,
+        "drowsy": 0.017263
+      },
+      "videos_correct": 1,
+      "video_predictions": {
+        "alert": "low_vigilance",
+        "drowsy": "low_vigilance",
+        "low_vigilance": "low_vigilance"
+      }
+    },
+    {
+      "subject": "03",
+      "windows": {
+        "alert": 52,
+        "low_vigilance": 56,
+        "drowsy": 56
+      },
+      "accuracy": 0.621951,
+      "macro_f1": 0.613856,
+      "auc": 0.794842,
+      "score_auc_alert_vs_drowsy": 0.981456,
+      "baseline_auc_alert_vs_drowsy": 0.984547,
+      "mean_fatigue_score": {
+        "alert": 0.457921,
+        "low_vigilance": 0.513228,
+        "drowsy": 0.577387
+      },
+      "mean_baseline_score": {
+        "alert": 0.003845,
+        "low_vigilance": 0.0208,
+        "drowsy": 0.037751
+      },
+      "videos_correct": 2,
+      "video_predictions": {
+        "alert": "low_vigilance",
+        "drowsy": "drowsy",
+        "low_vigilance": "low_vigilance"
+      }
+    },
+    {
+      "subject": "04",
+      "windows": {
+        "alert": 44,
+        "low_vigilance": 55,
+        "drowsy": 56
+      },
+      "accuracy": 0.477419,
+      "macro_f1": 0.455053,
+      "auc": 0.869899,
+      "score_auc_alert_vs_drowsy": 0.934659,
+      "baseline_auc_alert_vs_drowsy": 0.349432,
+      "mean_fatigue_score": {
+        "alert": 0.446096,
+        "low_vigilance": 0.464187,
+        "drowsy": 0.514755
+      },
+      "mean_baseline_score": {
+        "alert": 0.027632,
+        "low_vigilance": 0.029995,
+        "drowsy": 0.024377
+      },
+      "videos_correct": 2,
+      "video_predictions": {
+        "alert": "alert",
+        "drowsy": "low_vigilance",
+        "low_vigilance": "low_vigilance"
+      }
+    },
+    {
+      "subject": "05",
+      "windows": {
+        "alert": 44,
+        "low_vigilance": 55,
+        "drowsy": 55
+      },
+      "accuracy": 0.480519,
+      "macro_f1": 0.488228,
+      "auc": 0.627028,
+      "score_auc_alert_vs_drowsy": 0.790083,
+      "baseline_auc_alert_vs_drowsy": 0.907025,
+      "mean_fatigue_score": {
+        "alert": 0.443642,
+        "low_vigilance": 0.470118,
+        "drowsy": 0.535316
+      },
+      "mean_baseline_score": {
+        "alert": 0.00503,
+        "low_vigilance": 0.015226,
+        "drowsy": 0.07523
+      },
+      "videos_correct": 2,
+      "video_predictions": {
+        "alert": "alert",
+        "drowsy": "low_vigilance",
+        "low_vigilance": "low_vigilance"
+      }
+    },
+    {
+      "subject": "06",
+      "windows": {
+        "alert": 44,
+        "low_vigilance": 38,
+        "drowsy": 37
+      },
+      "accuracy": 0.394958,
+      "macro_f1": 0.391709,
+      "auc": 0.672194,
+      "score_auc_alert_vs_drowsy": 0.867936,
+      "baseline_auc_alert_vs_drowsy": 0.668305,
+      "mean_fatigue_score": {
+        "alert": 0.475108,
+        "low_vigilance": 0.532896,
+        "drowsy": 0.532337
+      },
+      "mean_baseline_score": {
+        "alert": 0.033674,
+        "low_vigilance": 0.076985,
+        "drowsy": 0.059425
+      },
+      "videos_correct": 1,
+      "video_predictions": {
+        "alert": "low_vigilance",
+        "drowsy": "low_vigilance",
+        "low_vigilance": "low_vigilance"
+      }
+    },
+    {
+      "subject": "07",
+      "windows": {
+        "alert": 43,
+        "low_vigilance": 55,
+        "drowsy": 55
+      },
+      "accuracy": 0.346405,
+      "macro_f1": 0.260234,
+      "auc": 0.637963,
+      "score_auc_alert_vs_drowsy": 0.887949,
+      "baseline_auc_alert_vs_drowsy": 0.6537,
+      "mean_fatigue_score": {
+        "alert": 0.580575,
+        "low_vigilance": 0.616662,
+        "drowsy": 0.633154
+      },
+      "mean_baseline_score": {
+        "alert": 0.05343,
+        "low_vigilance": 0.080153,
+        "drowsy": 0.064037
+      },
+      "videos_correct": 1,
+      "video_predictions": {
+        "alert": "low_vigilance",
+        "drowsy": "drowsy",
+        "low_vigilance": "drowsy"
+      }
+    },
+    {
+      "subject": "08",
+      "windows": {
+        "alert": 43,
+        "low_vigilance": 55,
+        "drowsy": 54
+      },
+      "accuracy": 0.559211,
+      "macro_f1": 0.45257,
+      "auc": 0.759443,
+      "score_auc_alert_vs_drowsy": 0.923342,
+      "baseline_auc_alert_vs_drowsy": 0.995693,
+      "mean_fatigue_score": {
+        "alert": 0.501156,
+        "low_vigilance": 0.498083,
+        "drowsy": 0.581323
+      },
+      "mean_baseline_score": {
+        "alert": 0.014124,
+        "low_vigilance": 0.02523,
+        "drowsy": 0.100248
+      },
+      "videos_correct": 2,
+      "video_predictions": {
+        "alert": "low_vigilance",
+        "drowsy": "drowsy",
+        "low_vigilance": "low_vigilance"
+      }
+    },
+    {
+      "subject": "09",
+      "windows": {
+        "alert": 44,
+        "low_vigilance": 56,
+        "drowsy": 61
+      },
+      "accuracy": 0.180124,
+      "macro_f1": 0.14211,
+      "auc": 0.450883,
+      "score_auc_alert_vs_drowsy": 0.538748,
+      "baseline_auc_alert_vs_drowsy": 0.350969,
+      "mean_fatigue_score": {
+        "alert": 0.490946,
+        "low_vigilance": 0.559406,
+        "drowsy": 0.495974
+      },
+      "mean_baseline_score": {
+        "alert": 0.034062,
+        "low_vigilance": 0.042085,
+        "drowsy": 0.026369
+      },
+      "videos_correct": 0,
+      "video_predictions": {
+        "alert": "low_vigilance",
+        "drowsy": "low_vigilance",
+        "low_vigilance": "drowsy"
+      }
+    },
+    {
+      "subject": "10",
+      "windows": {
+        "alert": 37,
+        "low_vigilance": 57,
+        "drowsy": 57
+      },
+      "accuracy": 0.569536,
+      "macro_f1": 0.454049,
+      "auc": 0.596844,
+      "score_auc_alert_vs_drowsy": 0.424372,
+      "baseline_auc_alert_vs_drowsy": 0.853011,
+      "mean_fatigue_score": {
+        "alert": 0.574255,
+        "low_vigilance": 0.514028,
+        "drowsy": 0.563844
+      },
+      "mean_baseline_score": {
+        "alert": 0.00982,
+        "low_vigilance": 0.012943,
+        "drowsy": 0.023286
+      },
+      "videos_correct": 2,
+      "video_predictions": {
+        "alert": "drowsy",
+        "drowsy": "drowsy",
+        "low_vigilance": "low_vigilance"
+      }
+    },
+    {
+      "subject": "11",
+      "windows": {
+        "alert": 45,
+        "low_vigilance": 60,
+        "drowsy": 57
+      },
+      "accuracy": 0.419753,
+      "macro_f1": 0.347225,
+      "auc": 0.677925,
+      "score_auc_alert_vs_drowsy": 0.933333,
+      "baseline_auc_alert_vs_drowsy": 0.892788,
+      "mean_fatigue_score": {
+        "alert": 0.414824,
+        "low_vigilance": 0.458664,
+        "drowsy": 0.472874
+      },
+      "mean_baseline_score": {
+        "alert": 0.007774,
+        "low_vigilance": 0.019071,
+        "drowsy": 0.022496
+      },
+      "videos_correct": 1,
+      "video_predictions": {
+        "alert": "alert",
+        "drowsy": "low_vigilance",
+        "low_vigilance": "alert"
+      }
+    },
+    {
+      "subject": "12",
+      "windows": {
+        "alert": 39,
+        "low_vigilance": 57,
+        "drowsy": 45
+      },
+      "accuracy": 0.680851,
+      "macro_f1": 0.543793,
+      "auc": 0.817546,
+      "score_auc_alert_vs_drowsy": 1.0,
+      "baseline_auc_alert_vs_drowsy": 0.997151,
+      "mean_fatigue_score": {
+        "alert": 0.489007,
+        "low_vigilance": 0.522578,
+        "drowsy": 0.690757
+      },
+      "mean_baseline_score": {
+        "alert": 0.035708,
+        "low_vigilance": 0.035338,
+        "drowsy": 0.106215
+      },
+      "videos_correct": 2,
+      "video_predictions": {
+        "alert": "low_vigilance",
+        "drowsy": "drowsy",
+        "low_vigilance": "low_vigilance"
+      }
+    },
+    {
+      "subject": "13",
+      "windows": {
+        "alert": 44,
+        "low_vigilance": 63,
+        "drowsy": 57
+      },
+      "accuracy": 0.628049,
+      "macro_f1": 0.567499,
+      "auc": 0.905951,
+      "score_auc_alert_vs_drowsy": 0.988038,
+      "baseline_auc_alert_vs_drowsy": 0.998804,
+      "mean_fatigue_score": {
+        "alert": 0.482562,
+        "low_vigilance": 0.496019,
+        "drowsy": 0.640219
+      },
+      "mean_baseline_score": {
+        "alert": 0.005219,
+        "low_vigilance": 0.026184,
+        "drowsy": 0.07899
+      },
+      "videos_correct": 2,
+      "video_predictions": {
+        "alert": "low_vigilance",
+        "drowsy": "drowsy",
+        "low_vigilance": "low_vigilance"
+      }
+    },
+    {
+      "subject": "14",
+      "windows": {
+        "alert": 44,
+        "low_vigilance": 61,
+        "drowsy": 57
+      },
+      "accuracy": 0.228395,
+      "macro_f1": 0.223644,
+      "auc": 0.532337,
+      "score_auc_alert_vs_drowsy": 0.851276,
+      "baseline_auc_alert_vs_drowsy": 0.750797,
+      "mean_fatigue_score": {
+        "alert": 0.468814,
+        "low_vigilance": 0.627308,
+        "drowsy": 0.536647
+      },
+      "mean_baseline_score": {
+        "alert": 0.011881,
+        "low_vigilance": 0.106831,
+        "drowsy": 0.025629
+      },
+      "videos_correct": 1,
+      "video_predictions": {
+        "alert": "low_vigilance",
+        "drowsy": "drowsy",
+        "low_vigilance": "drowsy"
+      }
+    },
+    {
+      "subject": "15",
+      "windows": {
+        "alert": 47,
+        "low_vigilance": 56,
+        "drowsy": 56
+      },
+      "accuracy": 0.176101,
+      "macro_f1": 0.138781,
+      "auc": 0.364256,
+      "score_auc_alert_vs_drowsy": 0.302052,
+      "baseline_auc_alert_vs_drowsy": 0.240122,
+      "mean_fatigue_score": {
+        "alert": 0.562115,
+        "low_vigilance": 0.59029,
+        "drowsy": 0.532384
+      },
+      "mean_baseline_score": {
+        "alert": 0.079896,
+        "low_vigilance": 0.084785,
+        "drowsy": 0.054645
+      },
+      "videos_correct": 0,
+      "video_predictions": {
+        "alert": "low_vigilance",
+        "drowsy": "low_vigilance",
+        "low_vigilance": "drowsy"
+      }
+    },
+    {
+      "subject": "16",
+      "windows": {
+        "alert": 30,
+        "low_vigilance": 55,
+        "drowsy": 55
+      },
+      "accuracy": 0.378571,
+      "macro_f1": 0.324177,
+      "auc": 0.57262,
+      "score_auc_alert_vs_drowsy": 0.643636,
+      "baseline_auc_alert_vs_drowsy": 0.910303,
+      "mean_fatigue_score": {
+        "alert": 0.463438,
+        "low_vigilance": 0.452235,
+        "drowsy": 0.487583
+      },
+      "mean_baseline_score": {
+        "alert": 0.004375,
+        "low_vigilance": 0.008212,
+        "drowsy": 0.022646
+      },
+      "videos_correct": 1,
+      "video_predictions": {
+        "alert": "alert",
+        "drowsy": "low_vigilance",
+        "low_vigilance": "alert"
+      }
+    },
+    {
+      "subject": "17",
+      "windows": {
+        "alert": 43,
+        "low_vigilance": 55,
+        "drowsy": 55
+      },
+      "accuracy": 0.601307,
+      "macro_f1": 0.609395,
+      "auc": 0.807963,
+      "score_auc_alert_vs_drowsy": 0.959831,
+      "baseline_auc_alert_vs_drowsy": 0.999154,
+      "mean_fatigue_score": {
+        "alert": 0.453471,
+        "low_vigilance": 0.477612,
+        "drowsy": 0.554419
+      },
+      "mean_baseline_score": {
+        "alert": 0.003312,
+        "low_vigilance": 0.019513,
+        "drowsy": 0.043882
+      },
+      "videos_correct": 3,
+      "video_predictions": {
+        "alert": "alert",
+        "drowsy": "drowsy",
+        "low_vigilance": "low_vigilance"
+      }
+    },
+    {
+      "subject": "18",
+      "windows": {
+        "alert": 43,
+        "low_vigilance": 55,
+        "drowsy": 58
+      },
+      "accuracy": 0.371795,
+      "macro_f1": 0.203509,
+      "auc": 0.795554,
+      "score_auc_alert_vs_drowsy": 1.0,
+      "baseline_auc_alert_vs_drowsy": 0.942662,
+      "mean_fatigue_score": {
+        "alert": 0.562905,
+        "low_vigilance": 0.812804,
+        "drowsy": 0.931228
+      },
+      "mean_baseline_score": {
+        "alert": 0.057067,
+        "low_vigilance": 0.130075,
+        "drowsy": 0.178514
+      },
+      "videos_correct": 1,
+      "video_predictions": {
+        "alert": "low_vigilance",
+        "drowsy": "drowsy",
+        "low_vigilance": "drowsy"
+      }
+    },
+    {
+      "subject": "19",
+      "windows": {
+        "alert": 43,
+        "low_vigilance": 55,
+        "drowsy": 55
+      },
+      "accuracy": 0.359477,
+      "macro_f1": 0.176282,
+      "auc": 0.344918,
+      "score_auc_alert_vs_drowsy": 0.04186,
+      "baseline_auc_alert_vs_drowsy": 0.017336,
+      "mean_fatigue_score": {
+        "alert": 0.510933,
+        "low_vigilance": 0.502971,
+        "drowsy": 0.492397
+      },
+      "mean_baseline_score": {
+        "alert": 0.040797,
+        "low_vigilance": 0.036339,
+        "drowsy": 0.028037
+      },
+      "videos_correct": 1,
+      "video_predictions": {
+        "alert": "low_vigilance",
+        "drowsy": "low_vigilance",
+        "low_vigilance": "low_vigilance"
+      }
+    },
+    {
+      "subject": "20",
+      "windows": {
+        "alert": 48,
+        "low_vigilance": 55,
+        "drowsy": 66
+      },
+      "accuracy": 0.591716,
+      "macro_f1": 0.493467,
+      "auc": 0.716588,
+      "score_auc_alert_vs_drowsy": 1.0,
+      "baseline_auc_alert_vs_drowsy": 0.973485,
+      "mean_fatigue_score": {
+        "alert": 0.514988,
+        "low_vigilance": 0.496443,
+        "drowsy": 0.794092
+      },
+      "mean_baseline_score": {
+        "alert": 0.041084,
+        "low_vigilance": 0.02228,
+        "drowsy": 0.284736
+      },
+      "videos_correct": 2,
+      "video_predictions": {
+        "alert": "low_vigilance",
+        "drowsy": "drowsy",
+        "low_vigilance": "low_vigilance"
+      }
+    },
+    {
+      "subject": "21",
+      "windows": {
+        "alert": 43,
+        "low_vigilance": 55,
+        "drowsy": 55
+      },
+      "accuracy": 0.48366,
+      "macro_f1": 0.360253,
+      "auc": 0.746343,
+      "score_auc_alert_vs_drowsy": 0.757717,
+      "baseline_auc_alert_vs_drowsy": 0.997463,
+      "mean_fatigue_score": {
+        "alert": 0.526102,
+        "low_vigilance": 0.484824,
+        "drowsy": 0.580459
+      },
+      "mean_baseline_score": {
+        "alert": 0.021268,
+        "low_vigilance": 0.034271,
+        "drowsy": 0.079124
+      },
+      "videos_correct": 1,
+      "video_predictions": {
+        "alert": "low_vigilance",
+        "drowsy": "low_vigilance",
+        "low_vigilance": "low_vigilance"
+      }
+    },
+    {
+      "subject": "22",
+      "windows": {
+        "alert": 43,
+        "low_vigilance": 55,
+        "drowsy": 56
+      },
+      "accuracy": 0.441558,
+      "macro_f1": 0.363625,
+      "auc": 0.826015,
+      "score_auc_alert_vs_drowsy": 1.0,
+      "baseline_auc_alert_vs_drowsy": 0.999169,
+      "mean_fatigue_score": {
+        "alert": 0.4837,
+        "low_vigilance": 0.611019,
+        "drowsy": 0.716492
+      },
+      "mean_baseline_score": {
+        "alert": 0.008846,
+        "low_vigilance": 0.027207,
+        "drowsy": 0.053441
+      },
+      "videos_correct": 1,
+      "video_predictions": {
+        "alert": "low_vigilance",
+        "drowsy": "drowsy",
+        "low_vigilance": "drowsy"
+      }
+    },
+    {
+      "subject": "23",
+      "windows": {
+        "alert": 41,
+        "low_vigilance": 52,
+        "drowsy": 55
+      },
+      "accuracy": 0.445946,
+      "macro_f1": 0.325628,
+      "auc": 0.761114,
+      "score_auc_alert_vs_drowsy": 0.960089,
+      "baseline_auc_alert_vs_drowsy": 0.723282,
+      "mean_fatigue_score": {
+        "alert": 0.450153,
+        "low_vigilance": 0.485632,
+        "drowsy": 0.542118
+      },
+      "mean_baseline_score": {
+        "alert": 0.025307,
+        "low_vigilance": 0.033573,
+        "drowsy": 0.036865
+      },
+      "videos_correct": 1,
+      "video_predictions": {
+        "alert": "low_vigilance",
+        "drowsy": "low_vigilance",
+        "low_vigilance": "low_vigilance"
+      }
+    },
+    {
+      "subject": "24",
+      "windows": {
+        "alert": 57,
+        "low_vigilance": 67,
+        "drowsy": 72
+      },
+      "accuracy": 0.397959,
+      "macro_f1": 0.301241,
+      "auc": 0.534535,
+      "score_auc_alert_vs_drowsy": 0.732212,
+      "baseline_auc_alert_vs_drowsy": 0.592836,
+      "mean_fatigue_score": {
+        "alert": 0.638245,
+        "low_vigilance": 0.626142,
+        "drowsy": 0.655376
+      },
+      "mean_baseline_score": {
+        "alert": 0.098712,
+        "low_vigilance": 0.097218,
+        "drowsy": 0.096863
+      },
+      "videos_correct": 1,
+      "video_predictions": {
+        "alert": "low_vigilance",
+        "drowsy": "drowsy",
+        "low_vigilance": "drowsy"
+      }
+    }
+  ],
+  "subject_ordering": {
+    "model_mean_fatigue_score": {
+      "drowsy_above_alert": {
+        "subjects": 21,
+        "of": 24
+      },
+      "low_vigilance_above_alert": {
+        "subjects": 16,
+        "of": 24
+      },
+      "drowsy_above_low_vigilance": {
+        "subjects": 19,
+        "of": 24
+      }
+    },
+    "baseline_mean_score": {
+      "drowsy_above_alert": {
+        "subjects": 19,
+        "of": 24
+      },
+      "low_vigilance_above_alert": {
+        "subjects": 20,
+        "of": 24
+      },
+      "drowsy_above_low_vigilance": {
+        "subjects": 16,
+        "of": 24
+      }
+    }
+  },
+  "feature_statistics": {
+    "blendshape/absolute": {
+      "perclos": {
+        "mean": {
+          "alert": 0.029922,
+          "low_vigilance": 0.052575,
+          "drowsy": 0.094813
+        },
+        "missing_share": 0.0,
+        "auc_alert_vs_drowsy": 0.762744,
+        "spearman_with_label": 0.375302
+      },
+      "blink_rate_per_min": {
+        "mean": {
+          "alert": 11.49648,
+          "low_vigilance": 14.382082,
+          "drowsy": 14.975852
+        },
+        "missing_share": 0.0,
+        "auc_alert_vs_drowsy": 0.660637,
+        "spearman_with_label": 0.215634
+      },
+      "mean_blink_duration_s": {
+        "mean": {
+          "alert": 0.137865,
+          "low_vigilance": 0.157955,
+          "drowsy": 0.187569
+        },
+        "missing_share": 0.042427,
+        "auc_alert_vs_drowsy": 0.733207,
+        "spearman_with_label": 0.325159
+      },
+      "long_closure_rate_per_min": {
+        "mean": {
+          "alert": 0.072659,
+          "low_vigilance": 0.55647,
+          "drowsy": 1.577096
+        },
+        "missing_share": 0.0,
+        "auc_alert_vs_drowsy": 0.714799,
+        "spearman_with_label": 0.383299
+      },
+      "yawns_per_min": {
+        "mean": {
+          "alert": 0.011461,
+          "low_vigilance": 0.008975,
+          "drowsy": 0.046269
+        },
+        "missing_share": 0.0,
+        "auc_alert_vs_drowsy": 0.518401,
+        "spearman_with_label": 0.106364
+      },
+      "head_pitch_std_deg": {
+        "mean": {
+          "alert": 2.253383,
+          "low_vigilance": 2.538055,
+          "drowsy": 2.45821
+        },
+        "missing_share": 0.0,
+        "auc_alert_vs_drowsy": 0.517379,
+        "spearman_with_label": 0.016664
+      },
+      "nods_per_min": {
+        "mean": {
+          "alert": 0.300256,
+          "low_vigilance": 0.378726,
+          "drowsy": 0.298561
+        },
+        "missing_share": 0.0,
+        "auc_alert_vs_drowsy": 0.510297,
+        "spearman_with_label": 0.018029
+      }
+    },
+    "blendshape/calibrated": {
+      "perclos": {
+        "mean": {
+          "alert": -0.002891,
+          "low_vigilance": 0.021037,
+          "drowsy": 0.062357
+        },
+        "missing_share": 0.0,
+        "auc_alert_vs_drowsy": 0.808675,
+        "spearman_with_label": 0.447202
+      },
+      "blink_rate_per_min": {
+        "mean": {
+          "alert": 0.3718,
+          "low_vigilance": 3.651333,
+          "drowsy": 3.951859
+        },
+        "missing_share": 0.0,
+        "auc_alert_vs_drowsy": 0.635734,
+        "spearman_with_label": 0.189795
+      },
+      "mean_blink_duration_s": {
+        "mean": {
+          "alert": 0.001002,
+          "low_vigilance": 0.02792,
+          "drowsy": 0.057494
+        },
+        "missing_share": 0.042427,
+        "auc_alert_vs_drowsy": 0.801395,
+        "spearman_with_label": 0.429336
+      },
+      "long_closure_rate_per_min": {
+        "mean": {
+          "alert": -0.055325,
+          "low_vigilance": 0.437226,
+          "drowsy": 1.452363
+        },
+        "missing_share": 0.0,
+        "auc_alert_vs_drowsy": 0.716574,
+        "spearman_with_label": 0.350365
+      },
+      "yawns_per_min": {
+        "mean": {
+          "alert": 0.011461,
+          "low_vigilance": 0.008975,
+          "drowsy": 0.046269
+        },
+        "missing_share": 0.0,
+        "auc_alert_vs_drowsy": 0.518401,
+        "spearman_with_label": 0.106364
+      },
+      "head_pitch_std_deg": {
+        "mean": {
+          "alert": -0.174137,
+          "low_vigilance": 0.175586,
+          "drowsy": 0.064968
+        },
+        "missing_share": 0.0,
+        "auc_alert_vs_drowsy": 0.514451,
+        "spearman_with_label": 0.016522
+      },
+      "nods_per_min": {
+        "mean": {
+          "alert": -0.007183,
+          "low_vigilance": 0.091109,
+          "drowsy": 0.0054
+        },
+        "missing_share": 0.0,
+        "auc_alert_vs_drowsy": 0.511323,
+        "spearman_with_label": 0.013232
+      }
+    },
+    "ear_p80/absolute": {
+      "perclos": {
+        "mean": {
+          "alert": 0.029918,
+          "low_vigilance": 0.058989,
+          "drowsy": 0.113137
+        },
+        "missing_share": 0.0,
+        "auc_alert_vs_drowsy": 0.786255,
+        "spearman_with_label": 0.410139
+      },
+      "blink_rate_per_min": {
+        "mean": {
+          "alert": 13.152288,
+          "low_vigilance": 15.041355,
+          "drowsy": 14.900443
+        },
+        "missing_share": 0.0,
+        "auc_alert_vs_drowsy": 0.599277,
+        "spearman_with_label": 0.129358
+      },
+      "mean_blink_duration_s": {
+        "mean": {
+          "alert": 0.141038,
+          "low_vigilance": 0.181233,
+          "drowsy": 0.195773
+        },
+        "missing_share": 0.003222,
+        "auc_alert_vs_drowsy": 0.782922,
+        "spearman_with_label": 0.381903
+      },
+      "long_closure_rate_per_min": {
+        "mean": {
+          "alert": 0.086037,
+          "low_vigilance": 0.653375,
+          "drowsy": 1.924169
+        },
+        "missing_share": 0.0,
+        "auc_alert_vs_drowsy": 0.73224,
+        "spearman_with_label": 0.406192
+      },
+      "yawns_per_min": {
+        "mean": {
+          "alert": 0.011461,
+          "low_vigilance": 0.008975,
+          "drowsy": 0.046269
+        },
+        "missing_share": 0.0,
+        "auc_alert_vs_drowsy": 0.518401,
+        "spearman_with_label": 0.106364
+      },
+      "head_pitch_std_deg": {
+        "mean": {
+          "alert": 2.253383,
+          "low_vigilance": 2.538055,
+          "drowsy": 2.45821
+        },
+        "missing_share": 0.0,
+        "auc_alert_vs_drowsy": 0.517379,
+        "spearman_with_label": 0.016664
+      },
+      "nods_per_min": {
+        "mean": {
+          "alert": 0.300256,
+          "low_vigilance": 0.378726,
+          "drowsy": 0.298561
+        },
+        "missing_share": 0.0,
+        "auc_alert_vs_drowsy": 0.510297,
+        "spearman_with_label": 0.018029
+      }
+    },
+    "ear_p80/calibrated": {
+      "perclos": {
+        "mean": {
+          "alert": -0.000614,
+          "low_vigilance": 0.029178,
+          "drowsy": 0.082884
+        },
+        "missing_share": 0.0,
+        "auc_alert_vs_drowsy": 0.794033,
+        "spearman_with_label": 0.421465
+      },
+      "blink_rate_per_min": {
+        "mean": {
+          "alert": 0.649667,
+          "low_vigilance": 2.8775,
+          "drowsy": 2.532338
+        },
+        "missing_share": 0.0,
+        "auc_alert_vs_drowsy": 0.591806,
+        "spearman_with_label": 0.122098
+      },
+      "mean_blink_duration_s": {
+        "mean": {
+          "alert": -0.000583,
+          "low_vigilance": 0.035543,
+          "drowsy": 0.050418
+        },
+        "missing_share": 0.003222,
+        "auc_alert_vs_drowsy": 0.737984,
+        "spearman_with_label": 0.332264
+      },
+      "long_closure_rate_per_min": {
+        "mean": {
+          "alert": -0.026529,
+          "low_vigilance": 0.535307,
+          "drowsy": 1.805299
+        },
+        "missing_share": 0.0,
+        "auc_alert_vs_drowsy": 0.718356,
+        "spearman_with_label": 0.352614
+      },
+      "yawns_per_min": {
+        "mean": {
+          "alert": 0.011461,
+          "low_vigilance": 0.008975,
+          "drowsy": 0.046269
+        },
+        "missing_share": 0.0,
+        "auc_alert_vs_drowsy": 0.518401,
+        "spearman_with_label": 0.106364
+      },
+      "head_pitch_std_deg": {
+        "mean": {
+          "alert": -0.174137,
+          "low_vigilance": 0.175586,
+          "drowsy": 0.064968
+        },
+        "missing_share": 0.0,
+        "auc_alert_vs_drowsy": 0.514451,
+        "spearman_with_label": 0.016522
+      },
+      "nods_per_min": {
+        "mean": {
+          "alert": -0.007183,
+          "low_vigilance": 0.091109,
+          "drowsy": 0.0054
+        },
+        "missing_share": 0.0,
+        "auc_alert_vs_drowsy": 0.511323,
+        "spearman_with_label": 0.013232
+      }
+    }
+  },
+  "final_model": {
+    "file": "data/fatigue_model.json",
+    "C": 0.001,
+    "log_loss_by_C": {
+      "0.001": 1.043062,
+      "0.01": 1.062226,
+      "0.1": 1.099688,
+      "1.0": 1.122463,
+      "10.0": 1.136934,
+      "100.0": 1.149502
+    },
+    "coef_standardised": {
+      "alert": {
+        "perclos": -0.113774,
+        "blink_rate_per_min": -0.052413,
+        "mean_blink_duration_s": -0.153245,
+        "long_closure_rate_per_min": -0.146144,
+        "yawns_per_min": -0.018155,
+        "head_pitch_std_deg": -0.042616,
+        "nods_per_min": -0.011983
+      },
+      "low_vigilance": {
+        "perclos": -0.014482,
+        "blink_rate_per_min": 0.045739,
+        "mean_blink_duration_s": -0.027574,
+        "long_closure_rate_per_min": -0.011087,
+        "yawns_per_min": -0.051924,
+        "head_pitch_std_deg": 0.038681,
+        "nods_per_min": 0.018819
+      },
+      "drowsy": {
+        "perclos": 0.128255,
+        "blink_rate_per_min": 0.006675,
+        "mean_blink_duration_s": 0.180819,
+        "long_closure_rate_per_min": 0.157231,
+        "yawns_per_min": 0.070079,
+        "head_pitch_std_deg": 0.003935,
+        "nods_per_min": -0.006836
+      }
+    },
+    "note": "refit on every subject; the metrics in this file are out of fold, not of this refit"
+  },
+  "features": {
+    "version": 1,
+    "names": [
+      "perclos",
+      "blink_rate_per_min",
+      "mean_blink_duration_s",
+      "long_closure_rate_per_min",
+      "yawns_per_min",
+      "head_pitch_std_deg",
+      "nods_per_min"
+    ],
+    "definitions": {
+      "perclos": "closed frames / frames with a face, in the window",
+      "blink_rate_per_min": "eye closures shorter than 0.5 s, per observed minute",
+      "mean_blink_duration_s": "mean duration of those short closures (last closed frame - first + one frame period); missing when there is none",
+      "long_closure_rate_per_min": "eye closures of 0.5 s or more, per observed minute (assumption: the 0.5 s boundary)",
+      "yawns_per_min": "yawns found in the window by the YawDD-calibrated detector (yawn_params.json), per window minute",
+      "head_pitch_std_deg": "population standard deviation of the head pitch (degrees) over the frames with a face",
+      "nods_per_min": "drops of the head at least 10 degrees below the window's median pitch (ending within 5), per observed minute (assumption: both levels)"
+    },
+    "constants": {
+      "window_s": 60.0,
+      "step_s": 10.0,
+      "min_face_fraction": 0.8,
+      "min_window_frames": 450,
+      "max_gap_s": 0.25,
+      "long_closure_s": 0.5,
+      "nod_on_deg": 10.0,
+      "nod_off_deg": 5.0,
+      "pitch_down_sign": 1.0,
+      "blendshape_closed": 0.5,
+      "p80_fraction": 0.2,
+      "ear_open_percentile": 50.0,
+      "ear_floor_percentile": 1.0,
+      "assumptions": [
+        "long_closure_s",
+        "nod_on_deg",
+        "nod_off_deg",
+        "min_face_fraction",
+        "min_window_frames",
+        "ear_open_percentile",
+        "ear_floor_percentile",
+        "min_calibration_frames"
+      ]
+    }
+  },
+  "eye_methods": {
+    "perclos_by_state": {
+      "blendshape": {
+        "alert": 0.029922,
+        "low_vigilance": 0.052575,
+        "drowsy": 0.094813
+      },
+      "ear_p80": {
+        "alert": 0.029918,
+        "low_vigilance": 0.058989,
+        "drowsy": 0.113137
+      }
+    },
+    "ear_calibration": {
+      "open_median": 0.29387,
+      "floor_median": 0.14843,
+      "threshold_range": [
+        0.057701,
+        0.270193
+      ],
+      "floor_over_open_range": [
+        0.042774,
+        0.754702
+      ],
+      "subjects_with_floor_above_half_open": 11,
+      "subjects": 24,
+      "by_subject": {
+        "01": {
+          "open": 0.30259,
+          "floor": 0.169759,
+          "threshold": 0.196325,
+          "frames": 1799
+        },
+        "02": {
+          "open": 0.280813,
+          "floor": 0.169499,
+          "threshold": 0.191762,
+          "frames": 1799
+        },
+        "03": {
+          "open": 0.309545,
+          "floor": 0.163893,
+          "threshold": 0.193023,
+          "frames": 1799
+        },
+        "04": {
+          "open": 0.281829,
+          "floor": 0.183883,
+          "threshold": 0.203472,
+          "frames": 1500
+        },
+        "05": {
+          "open": 0.332116,
+          "floor": 0.204398,
+          "threshold": 0.229942,
+          "frames": 1802
+        },
+        "06": {
+          "open": 0.27419,
+          "floor": 0.122168,
+          "threshold": 0.152572,
+          "frames": 1498
+        },
+        "07": {
+          "open": 0.270383,
+          "floor": 0.068109,
+          "threshold": 0.108564,
+          "frames": 1800
+        },
+        "08": {
+          "open": 0.291333,
+          "floor": 0.140809,
+          "threshold": 0.170914,
+          "frames": 1800
+        },
+        "09": {
+          "open": 0.308476,
+          "floor": 0.045454,
+          "threshold": 0.098058,
+          "frames": 1788
+        },
+        "10": {
+          "open": 0.265346,
+          "floor": 0.165622,
+          "threshold": 0.185567,
+          "frames": 1802
+        },
+        "11": {
+          "open": 0.335428,
+          "floor": 0.156051,
+          "threshold": 0.191926,
+          "frames": 1793
+        },
+        "12": {
+          "open": 0.328555,
+          "floor": 0.10984,
+          "threshold": 0.153583,
+          "frames": 1811
+        },
+        "13": {
+          "open": 0.346914,
+          "floor": 0.175683,
+          "threshold": 0.20993,
+          "frames": 1786
+        },
+        "14": {
+          "open": 0.300317,
+          "floor": 0.171825,
+          "threshold": 0.197523,
+          "frames": 1800
+        },
+        "15": {
+          "open": 0.254548,
+          "floor": 0.05118,
+          "threshold": 0.091854,
+          "frames": 1801
+        },
+        "16": {
+          "open": 0.336161,
+          "floor": 0.253701,
+          "threshold": 0.270193,
+          "frames": 1441
+        },
+        "17": {
+          "open": 0.344917,
+          "floor": 0.209986,
+          "threshold": 0.236972,
+          "frames": 1799
+        },
+        "18": {
+          "open": 0.246356,
+          "floor": 0.010538,
+          "threshold": 0.057701,
+          "frames": 1479
+        },
+        "19": {
+          "open": 0.296407,
+          "floor": 0.061216,
+          "threshold": 0.108254,
+          "frames": 1799
+        },
+        "20": {
+          "open": 0.255241,
+          "floor": 0.049142,
+          "threshold": 0.090362,
+          "frames": 1768
+        },
+        "21": {
+          "open": 0.276277,
+          "floor": 0.08796,
+          "threshold": 0.125624,
+          "frames": 1799
+        },
+        "22": {
+          "open": 0.268254,
+          "floor": 0.020893,
+          "threshold": 0.070365,
+          "frames": 1799
+        },
+        "23": {
+          "open": 0.357679,
+          "floor": 0.186174,
+          "threshold": 0.220475,
+          "frames": 1481
+        },
+        "24": {
+          "open": 0.260964,
+          "floor": 0.046207,
+          "threshold": 0.089158,
+          "frames": 1790
+        }
+      }
+    },
+    "caveat": "RLDD records the three states of a person as three separate videos, often on another day, device or camera angle. The EAR threshold and the calibration reference come from the alert video and are applied to the other two. The product calibrates at the start of the session it then monitors, a case RLDD does not contain; `calibration_sensitivity` measures what changes when the threshold comes from the scored recording itself."
+  },
+  "checks": {
+    "ear_landmarks": {
+      "right": {
+        "lid_points_between_corners": 0.999594,
+        "upper_and_lower_lids_on_opposite_sides": 0.970446,
+        "p2_faces_p6_and_p3_faces_p5": 0.999955,
+        "upper_lid_above_lower_lid_in_image": 0.995156
+      },
+      "left": {
+        "lid_points_between_corners": 0.999525,
+        "upper_and_lower_lids_on_opposite_sides": 0.970783,
+        "p2_faces_p6_and_p3_faces_p5": 0.99978,
+        "upper_lid_above_lower_lid_in_image": 0.993994
+      }
+    },
+    "ear_landmarks_note": "share of the frames with a face where the six points of each eye sit where the EAR formula assumes; lids can cross on a fully closed eye",
+    "transformation_matrix": {
+      "frames": 640010,
+      "last_row_is_0_0_0_1": 640010,
+      "rotation_columns_share_one_scale": 640010,
+      "note": "row-major in Python with the translation in the last column; the browser's flat array is its transpose, so M[2][1] here is m[6] there"
+    },
+    "pitch_sign": {
+      "videos": 72,
+      "videos_with_positive_correlation": 72,
+      "median_correlation": 0.92028,
+      "note": "correlation between pitch_deg and how far down the nose tip sits between forehead and chin; positive supports PITCH_DOWN_SIGN = +1"
+    }
+  },
+  "dataset": {
+    "source": "uta-rldd",
+    "parts": [
+      "Fold1_part1",
+      "Fold1_part2",
+      "Fold2_part1",
+      "Fold2_part2"
+    ],
+    "videos": 72,
+    "subjects_found": 24,
+    "subjects_used": 24,
+    "subjects_not_used": {},
+    "incomplete_subjects": [],
+    "failed_videos": [],
+    "ignored_files": [],
+    "hours_of_video": 12.232083,
+    "portrait_videos": 42,
+    "timestamp_fallback_frames": 214,
+    "processed_frames": 641068,
+    "no_face": {
+      "frames": 1058,
+      "rate_overall": 0.00165,
+      "rate_per_video": {
+        "median": 0.0,
+        "max": 0.04998
+      },
+      "videos_above_5_percent": []
+    },
+    "orientation": {
+      "videos_with_rotation_flag": 29,
+      "max_abs_median_roll_deg": 8.9,
+      "videos_sideways": []
+    },
+    "processed_fps": {
+      "min": 11.384,
+      "median": 14.984,
+      "max": 15.087,
+      "videos_under_12": [
+        "Fold1_part1/06/10.mp4",
+        "Fold2_part1/18/5.mov"
+      ],
+      "videos_under_13": [
+        "Fold1_part1/04/0.mp4",
+        "Fold1_part1/04/10.mp4",
+        "Fold1_part1/06/0.mp4",
+        "Fold1_part1/06/10.mp4",
+        "Fold2_part1/16/0.MOV",
+        "Fold2_part1/16/10.MOV",
+        "Fold2_part1/16/5.MOV",
+        "Fold2_part1/18/0.mov",
+        "Fold2_part1/18/10.mov",
+        "Fold2_part1/18/5.mov"
+      ]
+    },
+    "windows": {
+      "windows": 4012,
+      "dropped_low_face_or_few_frames": 6,
+      "calibration_period": 282,
+      "evaluated": 3724,
+      "by_state": {
+        "alert": {
+          "windows": 1335,
+          "dropped_low_face_or_few_frames": 6,
+          "calibration_period": 282,
+          "evaluated": 1047
+        },
+        "low_vigilance": {
+          "windows": 1337,
+          "dropped_low_face_or_few_frames": 0,
+          "calibration_period": 0,
+          "evaluated": 1337
+        },
+        "drowsy": {
+          "windows": 1340,
+          "dropped_low_face_or_few_frames": 0,
+          "calibration_period": 0,
+          "evaluated": 1340
+        }
+      }
+    },
+    "window_rule": "60 s windows every 10 s from the first frame; used when they hold at least 450 frames and a face in at least 80% of them. Every window of the alert video that touches its first 120 s is left out, for training and for scoring: the calibrated alternatives use those seconds, and all four configurations are measured on the same windows. The shipped configuration does not use them for anything."
+  },
+  "subjects": {
+    "01": {
+      "used": true,
+      "reason": null,
+      "calibration_windows": 7,
+      "calibration_reference": {
+        "blendshape": {
+          "perclos": 0.004448,
+          "blink_rate_per_min": 2.714286,
+          "mean_blink_duration_s": 0.092698,
+          "long_closure_rate_per_min": 0.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 2.576763,
+          "nods_per_min": 0.0
+        },
+        "ear_p80": {
+          "perclos": 0.018905,
+          "blink_rate_per_min": 10.571429,
+          "mean_blink_duration_s": 0.106233,
+          "long_closure_rate_per_min": 0.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 2.576763,
+          "nods_per_min": 0.0
+        }
+      }
+    },
+    "02": {
+      "used": true,
+      "reason": null,
+      "calibration_windows": 7,
+      "calibration_reference": {
+        "blendshape": {
+          "perclos": 0.008578,
+          "blink_rate_per_min": 4.142857,
+          "mean_blink_duration_s": 0.117857,
+          "long_closure_rate_per_min": 0.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 3.478896,
+          "nods_per_min": 0.0
+        },
+        "ear_p80": {
+          "perclos": 0.011438,
+          "blink_rate_per_min": 5.714286,
+          "mean_blink_duration_s": 0.116893,
+          "long_closure_rate_per_min": 0.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 3.478896,
+          "nods_per_min": 0.0
+        }
+      }
+    },
+    "03": {
+      "used": true,
+      "reason": null,
+      "calibration_windows": 7,
+      "calibration_reference": {
+        "blendshape": {
+          "perclos": 0.004766,
+          "blink_rate_per_min": 2.714286,
+          "mean_blink_duration_s": 0.103778,
+          "long_closure_rate_per_min": 0.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 2.789391,
+          "nods_per_min": 0.142857
+        },
+        "ear_p80": {
+          "perclos": 0.017793,
+          "blink_rate_per_min": 6.571429,
+          "mean_blink_duration_s": 0.156508,
+          "long_closure_rate_per_min": 0.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 2.789391,
+          "nods_per_min": 0.142857
+        }
+      }
+    },
+    "04": {
+      "used": true,
+      "reason": null,
+      "calibration_windows": 7,
+      "calibration_reference": {
+        "blendshape": {
+          "perclos": 0.005905,
+          "blink_rate_per_min": 3.571429,
+          "mean_blink_duration_s": 0.100762,
+          "long_closure_rate_per_min": 0.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 1.965794,
+          "nods_per_min": 0.285714
+        },
+        "ear_p80": {
+          "perclos": 0.029143,
+          "blink_rate_per_min": 5.142857,
+          "mean_blink_duration_s": 0.130612,
+          "long_closure_rate_per_min": 1.428571,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 1.965794,
+          "nods_per_min": 0.285714
+        }
+      }
+    },
+    "05": {
+      "used": true,
+      "reason": null,
+      "calibration_windows": 7,
+      "calibration_reference": {
+        "blendshape": {
+          "perclos": 0.000634,
+          "blink_rate_per_min": 0.571429,
+          "mean_blink_duration_s": 0.066667,
+          "long_closure_rate_per_min": 0.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 1.915235,
+          "nods_per_min": 0.0
+        },
+        "ear_p80": {
+          "perclos": 0.023793,
+          "blink_rate_per_min": 11.857143,
+          "mean_blink_duration_s": 0.118758,
+          "long_closure_rate_per_min": 0.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 1.915235,
+          "nods_per_min": 0.0
+        }
+      }
+    },
+    "06": {
+      "used": true,
+      "reason": null,
+      "calibration_windows": 7,
+      "calibration_reference": {
+        "blendshape": {
+          "perclos": 0.020607,
+          "blink_rate_per_min": 8.857143,
+          "mean_blink_duration_s": 0.143695,
+          "long_closure_rate_per_min": 0.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 5.375525,
+          "nods_per_min": 1.285714
+        },
+        "ear_p80": {
+          "perclos": 0.019083,
+          "blink_rate_per_min": 8.571429,
+          "mean_blink_duration_s": 0.134434,
+          "long_closure_rate_per_min": 0.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 5.375525,
+          "nods_per_min": 1.285714
+        }
+      }
+    },
+    "07": {
+      "used": true,
+      "reason": null,
+      "calibration_windows": 7,
+      "calibration_reference": {
+        "blendshape": {
+          "perclos": 0.06874,
+          "blink_rate_per_min": 19.428571,
+          "mean_blink_duration_s": 0.210979,
+          "long_closure_rate_per_min": 0.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 3.89149,
+          "nods_per_min": 0.714286
+        },
+        "ear_p80": {
+          "perclos": 0.041593,
+          "blink_rate_per_min": 18.571429,
+          "mean_blink_duration_s": 0.134054,
+          "long_closure_rate_per_min": 0.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 3.89149,
+          "nods_per_min": 0.714286
+        }
+      }
+    },
+    "08": {
+      "used": true,
+      "reason": null,
+      "calibration_windows": 7,
+      "calibration_reference": {
+        "blendshape": {
+          "perclos": 0.013492,
+          "blink_rate_per_min": 5.571429,
+          "mean_blink_duration_s": 0.142864,
+          "long_closure_rate_per_min": 0.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 1.3127,
+          "nods_per_min": 0.0
+        },
+        "ear_p80": {
+          "perclos": 0.013492,
+          "blink_rate_per_min": 5.571429,
+          "mean_blink_duration_s": 0.142864,
+          "long_closure_rate_per_min": 0.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 1.3127,
+          "nods_per_min": 0.0
+        }
+      }
+    },
+    "09": {
+      "used": true,
+      "reason": null,
+      "calibration_windows": 7,
+      "calibration_reference": {
+        "blendshape": {
+          "perclos": 0.040109,
+          "blink_rate_per_min": 15.571429,
+          "mean_blink_duration_s": 0.145129,
+          "long_closure_rate_per_min": 0.285714,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 2.386503,
+          "nods_per_min": 0.0
+        },
+        "ear_p80": {
+          "perclos": 0.026206,
+          "blink_rate_per_min": 12.0,
+          "mean_blink_duration_s": 0.131414,
+          "long_closure_rate_per_min": 0.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 2.386503,
+          "nods_per_min": 0.0
+        }
+      }
+    },
+    "10": {
+      "used": true,
+      "reason": null,
+      "calibration_windows": 7,
+      "calibration_reference": {
+        "blendshape": {
+          "perclos": 0.008089,
+          "blink_rate_per_min": 3.0,
+          "mean_blink_duration_s": 0.155556,
+          "long_closure_rate_per_min": 0.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 2.277328,
+          "nods_per_min": 0.0
+        },
+        "ear_p80": {
+          "perclos": 0.016336,
+          "blink_rate_per_min": 3.857143,
+          "mean_blink_duration_s": 0.261905,
+          "long_closure_rate_per_min": 0.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 2.277328,
+          "nods_per_min": 0.0
+        }
+      }
+    },
+    "11": {
+      "used": true,
+      "reason": null,
+      "calibration_windows": 7,
+      "calibration_reference": {
+        "blendshape": {
+          "perclos": 0.004304,
+          "blink_rate_per_min": 3.142857,
+          "mean_blink_duration_s": 0.0793,
+          "long_closure_rate_per_min": 0.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 0.829897,
+          "nods_per_min": 0.0
+        },
+        "ear_p80": {
+          "perclos": 0.018335,
+          "blink_rate_per_min": 11.0,
+          "mean_blink_duration_s": 0.096159,
+          "long_closure_rate_per_min": 0.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 0.829897,
+          "nods_per_min": 0.0
+        }
+      }
+    },
+    "12": {
+      "used": true,
+      "reason": null,
+      "calibration_windows": 7,
+      "calibration_reference": {
+        "blendshape": {
+          "perclos": 0.016883,
+          "blink_rate_per_min": 8.142857,
+          "mean_blink_duration_s": 0.125787,
+          "long_closure_rate_per_min": 0.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 1.558709,
+          "nods_per_min": 0.0
+        },
+        "ear_p80": {
+          "perclos": 0.017041,
+          "blink_rate_per_min": 8.285714,
+          "mean_blink_duration_s": 0.12531,
+          "long_closure_rate_per_min": 0.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 1.558709,
+          "nods_per_min": 0.0
+        }
+      }
+    },
+    "13": {
+      "used": true,
+      "reason": null,
+      "calibration_windows": 7,
+      "calibration_reference": {
+        "blendshape": {
+          "perclos": 0.00112,
+          "blink_rate_per_min": 0.858104,
+          "mean_blink_duration_s": 0.074593,
+          "long_closure_rate_per_min": 0.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 2.418414,
+          "nods_per_min": 0.428892
+        },
+        "ear_p80": {
+          "perclos": 0.015672,
+          "blink_rate_per_min": 7.577194,
+          "mean_blink_duration_s": 0.124228,
+          "long_closure_rate_per_min": 0.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 2.418414,
+          "nods_per_min": 0.428892
+        }
+      }
+    },
+    "14": {
+      "used": true,
+      "reason": null,
+      "calibration_windows": 7,
+      "calibration_reference": {
+        "blendshape": {
+          "perclos": 0.008571,
+          "blink_rate_per_min": 3.714286,
+          "mean_blink_duration_s": 0.137871,
+          "long_closure_rate_per_min": 0.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 1.039137,
+          "nods_per_min": 0.0
+        },
+        "ear_p80": {
+          "perclos": 0.014286,
+          "blink_rate_per_min": 4.571429,
+          "mean_blink_duration_s": 0.19127,
+          "long_closure_rate_per_min": 0.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 1.039137,
+          "nods_per_min": 0.0
+        }
+      }
+    },
+    "15": {
+      "used": true,
+      "reason": null,
+      "calibration_windows": 7,
+      "calibration_reference": {
+        "blendshape": {
+          "perclos": 0.167941,
+          "blink_rate_per_min": 38.0,
+          "mean_blink_duration_s": 0.165688,
+          "long_closure_rate_per_min": 2.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 3.590656,
+          "nods_per_min": 0.714286
+        },
+        "ear_p80": {
+          "perclos": 0.132894,
+          "blink_rate_per_min": 35.0,
+          "mean_blink_duration_s": 0.134689,
+          "long_closure_rate_per_min": 0.714286,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 3.590656,
+          "nods_per_min": 0.714286
+        }
+      }
+    },
+    "16": {
+      "used": true,
+      "reason": null,
+      "calibration_windows": 7,
+      "calibration_reference": {
+        "blendshape": {
+          "perclos": 0.001389,
+          "blink_rate_per_min": 1.0,
+          "mean_blink_duration_s": 0.083311,
+          "long_closure_rate_per_min": 0.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 2.494677,
+          "nods_per_min": 0.0
+        },
+        "ear_p80": {
+          "perclos": 0.014482,
+          "blink_rate_per_min": 1.142857,
+          "mean_blink_duration_s": 0.354072,
+          "long_closure_rate_per_min": 0.714286,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 2.494677,
+          "nods_per_min": 0.0
+        }
+      }
+    },
+    "17": {
+      "used": true,
+      "reason": null,
+      "calibration_windows": 7,
+      "calibration_reference": {
+        "blendshape": {
+          "perclos": 0.000476,
+          "blink_rate_per_min": 0.428571,
+          "mean_blink_duration_s": 0.066733,
+          "long_closure_rate_per_min": 0.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 1.397642,
+          "nods_per_min": 0.0
+        },
+        "ear_p80": {
+          "perclos": 0.014774,
+          "blink_rate_per_min": 7.142857,
+          "mean_blink_duration_s": 0.12463,
+          "long_closure_rate_per_min": 0.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 1.397642,
+          "nods_per_min": 0.0
+        }
+      }
+    },
+    "18": {
+      "used": true,
+      "reason": null,
+      "calibration_windows": 7,
+      "calibration_reference": {
+        "blendshape": {
+          "perclos": 0.096517,
+          "blink_rate_per_min": 30.142857,
+          "mean_blink_duration_s": 0.173986,
+          "long_closure_rate_per_min": 0.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 1.718878,
+          "nods_per_min": 0.0
+        },
+        "ear_p80": {
+          "perclos": 0.070611,
+          "blink_rate_per_min": 29.428571,
+          "mean_blink_duration_s": 0.126343,
+          "long_closure_rate_per_min": 0.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 1.718878,
+          "nods_per_min": 0.0
+        }
+      }
+    },
+    "19": {
+      "used": true,
+      "reason": null,
+      "calibration_windows": 7,
+      "calibration_reference": {
+        "blendshape": {
+          "perclos": 0.054973,
+          "blink_rate_per_min": 23.285714,
+          "mean_blink_duration_s": 0.141771,
+          "long_closure_rate_per_min": 0.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 1.334896,
+          "nods_per_min": 0.0
+        },
+        "ear_p80": {
+          "perclos": 0.032729,
+          "blink_rate_per_min": 22.428571,
+          "mean_blink_duration_s": 0.08754,
+          "long_closure_rate_per_min": 0.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 1.334896,
+          "nods_per_min": 0.0
+        }
+      }
+    },
+    "20": {
+      "used": true,
+      "reason": null,
+      "calibration_windows": 7,
+      "calibration_reference": {
+        "blendshape": {
+          "perclos": 0.050697,
+          "blink_rate_per_min": 16.372349,
+          "mean_blink_duration_s": 0.167437,
+          "long_closure_rate_per_min": 0.571429,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 4.469883,
+          "nods_per_min": 0.0
+        },
+        "ear_p80": {
+          "perclos": 0.028718,
+          "blink_rate_per_min": 14.489725,
+          "mean_blink_duration_s": 0.118224,
+          "long_closure_rate_per_min": 0.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 4.469883,
+          "nods_per_min": 0.0
+        }
+      }
+    },
+    "21": {
+      "used": true,
+      "reason": null,
+      "calibration_windows": 7,
+      "calibration_reference": {
+        "blendshape": {
+          "perclos": 0.017477,
+          "blink_rate_per_min": 5.714286,
+          "mean_blink_duration_s": 0.185414,
+          "long_closure_rate_per_min": 0.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 1.672867,
+          "nods_per_min": 0.0
+        },
+        "ear_p80": {
+          "perclos": 0.012393,
+          "blink_rate_per_min": 4.571429,
+          "mean_blink_duration_s": 0.163016,
+          "long_closure_rate_per_min": 0.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 1.672867,
+          "nods_per_min": 0.0
+        }
+      }
+    },
+    "22": {
+      "used": true,
+      "reason": null,
+      "calibration_windows": 7,
+      "calibration_reference": {
+        "blendshape": {
+          "perclos": 0.045282,
+          "blink_rate_per_min": 16.0,
+          "mean_blink_duration_s": 0.170146,
+          "long_closure_rate_per_min": 0.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 1.076716,
+          "nods_per_min": 0.0
+        },
+        "ear_p80": {
+          "perclos": 0.035113,
+          "blink_rate_per_min": 14.714286,
+          "mean_blink_duration_s": 0.143217,
+          "long_closure_rate_per_min": 0.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 1.076716,
+          "nods_per_min": 0.0
+        }
+      }
+    },
+    "23": {
+      "used": true,
+      "reason": null,
+      "calibration_windows": 3,
+      "calibration_reference": {
+        "blendshape": {
+          "perclos": 0.004769,
+          "blink_rate_per_min": 3.206881,
+          "mean_blink_duration_s": 0.090831,
+          "long_closure_rate_per_min": 0.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 5.238024,
+          "nods_per_min": 3.955113
+        },
+        "ear_p80": {
+          "perclos": 0.013891,
+          "blink_rate_per_min": 6.039647,
+          "mean_blink_duration_s": 0.145516,
+          "long_closure_rate_per_min": 0.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 5.238024,
+          "nods_per_min": 3.955113
+        }
+      }
+    },
+    "24": {
+      "used": true,
+      "reason": null,
+      "calibration_windows": 7,
+      "calibration_reference": {
+        "blendshape": {
+          "perclos": 0.099601,
+          "blink_rate_per_min": 37.285714,
+          "mean_blink_duration_s": 0.161293,
+          "long_closure_rate_per_min": 0.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 1.456335,
+          "nods_per_min": 0.0
+        },
+        "ear_p80": {
+          "perclos": 0.068156,
+          "blink_rate_per_min": 32.857143,
+          "mean_blink_duration_s": 0.126315,
+          "long_closure_rate_per_min": 0.0,
+          "yawns_per_min": 0.0,
+          "head_pitch_std_deg": 1.456335,
+          "nods_per_min": 0.0
+        }
+      }
+    }
+  },
+  "videos": [
+    {
+      "video": "Fold1_part1/01/0.mov",
+      "subject": "01",
+      "label": 0,
+      "width": 1080,
+      "height": 1920,
+      "source_fps": 29.969,
+      "orientation_meta_deg": 90.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 602.4,
+      "processed_frames": 9027,
+      "processed_fps": 14.984,
+      "frame_period_median_s": 0.0667,
+      "no_face_frames": 1,
+      "no_face_rate": 0.00011,
+      "longest_no_face_s": 0.07,
+      "roll_median_deg": 0.4,
+      "pitch_vs_nose_position_correlation": 0.97089,
+      "mediapipe_ms_per_frame": 37.89,
+      "extraction_seconds": 1143.4,
+      "windows": 55,
+      "windows_dropped": 0,
+      "windows_evaluated": 43
+    },
+    {
+      "video": "Fold1_part1/01/10.MOV",
+      "subject": "01",
+      "label": 10,
+      "width": 1080,
+      "height": 1920,
+      "source_fps": 29.969,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 601.0,
+      "processed_frames": 9006,
+      "processed_fps": 14.984,
+      "frame_period_median_s": 0.0667,
+      "no_face_frames": 2,
+      "no_face_rate": 0.00022,
+      "longest_no_face_s": 0.07,
+      "roll_median_deg": 6.4,
+      "pitch_vs_nose_position_correlation": 0.888275,
+      "mediapipe_ms_per_frame": 30.43,
+      "extraction_seconds": 584.6,
+      "windows": 55,
+      "windows_dropped": 0,
+      "windows_evaluated": 55
+    },
+    {
+      "video": "Fold1_part1/01/5.mov",
+      "subject": "01",
+      "label": 5,
+      "width": 1080,
+      "height": 1920,
+      "source_fps": 29.969,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 599.6,
+      "processed_frames": 8985,
+      "processed_fps": 14.984,
+      "frame_period_median_s": 0.0667,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": 0.8,
+      "pitch_vs_nose_position_correlation": 0.875142,
+      "mediapipe_ms_per_frame": 32.38,
+      "extraction_seconds": 678.6,
+      "windows": 54,
+      "windows_dropped": 0,
+      "windows_evaluated": 54
+    },
+    {
+      "video": "Fold1_part1/02/0.mov",
+      "subject": "02",
+      "label": 0,
+      "width": 1080,
+      "height": 1920,
+      "source_fps": 29.969,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 609.4,
+      "processed_frames": 9132,
+      "processed_fps": 14.984,
+      "frame_period_median_s": 0.0667,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": 1.3,
+      "pitch_vs_nose_position_correlation": 0.949101,
+      "mediapipe_ms_per_frame": 38.19,
+      "extraction_seconds": 847.2,
+      "windows": 55,
+      "windows_dropped": 0,
+      "windows_evaluated": 43
+    },
+    {
+      "video": "Fold1_part1/02/10.MOV",
+      "subject": "02",
+      "label": 10,
+      "width": 1080,
+      "height": 1920,
+      "source_fps": 29.969,
+      "orientation_meta_deg": 90.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 604.7,
+      "processed_frames": 9062,
+      "processed_fps": 14.984,
+      "frame_period_median_s": 0.0667,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": 0.6,
+      "pitch_vs_nose_position_correlation": 0.945304,
+      "mediapipe_ms_per_frame": 32.96,
+      "extraction_seconds": 996.7,
+      "windows": 55,
+      "windows_dropped": 0,
+      "windows_evaluated": 55
+    },
+    {
+      "video": "Fold1_part1/02/5.MOV",
+      "subject": "02",
+      "label": 5,
+      "width": 1080,
+      "height": 1920,
+      "source_fps": 29.969,
+      "orientation_meta_deg": 90.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 604.0,
+      "processed_frames": 9052,
+      "processed_fps": 14.984,
+      "frame_period_median_s": 0.0667,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": 1.9,
+      "pitch_vs_nose_position_correlation": 0.848831,
+      "mediapipe_ms_per_frame": 44.71,
+      "extraction_seconds": 1176.3,
+      "windows": 55,
+      "windows_dropped": 0,
+      "windows_evaluated": 55
+    },
+    {
+      "video": "Fold1_part1/03/0.MOV",
+      "subject": "03",
+      "label": 0,
+      "width": 1080,
+      "height": 1920,
+      "source_fps": 29.969,
+      "orientation_meta_deg": 90.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 692.8,
+      "processed_frames": 10382,
+      "processed_fps": 14.984,
+      "frame_period_median_s": 0.0667,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": -0.5,
+      "pitch_vs_nose_position_correlation": 0.909263,
+      "mediapipe_ms_per_frame": 39.02,
+      "extraction_seconds": 1354.3,
+      "windows": 64,
+      "windows_dropped": 0,
+      "windows_evaluated": 52
+    },
+    {
+      "video": "Fold1_part1/03/10.mov",
+      "subject": "03",
+      "label": 10,
+      "width": 1080,
+      "height": 720,
+      "source_fps": 29.995,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 616.0,
+      "processed_frames": 9241,
+      "processed_fps": 14.999,
+      "frame_period_median_s": 0.0667,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": -2.2,
+      "pitch_vs_nose_position_correlation": 0.918907,
+      "mediapipe_ms_per_frame": 30.38,
+      "extraction_seconds": 505.9,
+      "windows": 56,
+      "windows_dropped": 0,
+      "windows_evaluated": 56
+    },
+    {
+      "video": "Fold1_part1/03/5.mov",
+      "subject": "03",
+      "label": 5,
+      "width": 1080,
+      "height": 720,
+      "source_fps": 29.989,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 617.3,
+      "processed_frames": 9260,
+      "processed_fps": 14.999,
+      "frame_period_median_s": 0.0667,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": -2.3,
+      "pitch_vs_nose_position_correlation": 0.974932,
+      "mediapipe_ms_per_frame": 35.28,
+      "extraction_seconds": 579.6,
+      "windows": 56,
+      "windows_dropped": 0,
+      "windows_evaluated": 56
+    },
+    {
+      "video": "Fold1_part1/04/0.mp4",
+      "subject": "04",
+      "label": 0,
+      "width": 848,
+      "height": 480,
+      "source_fps": 25.0,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 614.5,
+      "processed_frames": 7682,
+      "processed_fps": 12.5,
+      "frame_period_median_s": 0.08,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": -3.6,
+      "pitch_vs_nose_position_correlation": 0.543928,
+      "mediapipe_ms_per_frame": 18.76,
+      "extraction_seconds": 174.7,
+      "windows": 56,
+      "windows_dropped": 0,
+      "windows_evaluated": 44
+    },
+    {
+      "video": "Fold1_part1/04/10.mp4",
+      "subject": "04",
+      "label": 10,
+      "width": 480,
+      "height": 848,
+      "source_fps": 25.0,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 615.7,
+      "processed_frames": 7697,
+      "processed_fps": 12.5,
+      "frame_period_median_s": 0.08,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": -2.4,
+      "pitch_vs_nose_position_correlation": 0.987461,
+      "mediapipe_ms_per_frame": 27.2,
+      "extraction_seconds": 265.5,
+      "windows": 56,
+      "windows_dropped": 0,
+      "windows_evaluated": 56
+    },
+    {
+      "video": "Fold1_part1/04/5.mp4",
+      "subject": "04",
+      "label": 5,
+      "width": 1280,
+      "height": 720,
+      "source_fps": 30.0,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 607.4,
+      "processed_frames": 9112,
+      "processed_fps": 15.0,
+      "frame_period_median_s": 0.0667,
+      "no_face_frames": 57,
+      "no_face_rate": 0.00626,
+      "longest_no_face_s": 0.6,
+      "roll_median_deg": 2.6,
+      "pitch_vs_nose_position_correlation": 0.703532,
+      "mediapipe_ms_per_frame": 35.17,
+      "extraction_seconds": 531.6,
+      "windows": 55,
+      "windows_dropped": 0,
+      "windows_evaluated": 55
+    },
+    {
+      "video": "Fold1_part1/05/0.MOV",
+      "subject": "05",
+      "label": 0,
+      "width": 720,
+      "height": 1280,
+      "source_fps": 30.025,
+      "orientation_meta_deg": 90.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 613.1,
+      "processed_frames": 9205,
+      "processed_fps": 15.012,
+      "frame_period_median_s": 0.0667,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": 2.0,
+      "pitch_vs_nose_position_correlation": 0.948554,
+      "mediapipe_ms_per_frame": 29.22,
+      "extraction_seconds": 569.4,
+      "windows": 56,
+      "windows_dropped": 0,
+      "windows_evaluated": 44
+    },
+    {
+      "video": "Fold1_part1/05/10.MOV",
+      "subject": "05",
+      "label": 10,
+      "width": 720,
+      "height": 1280,
+      "source_fps": 30.025,
+      "orientation_meta_deg": 90.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 601.1,
+      "processed_frames": 9025,
+      "processed_fps": 15.012,
+      "frame_period_median_s": 0.0667,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": 8.1,
+      "pitch_vs_nose_position_correlation": 0.893619,
+      "mediapipe_ms_per_frame": 30.35,
+      "extraction_seconds": 617.0,
+      "windows": 55,
+      "windows_dropped": 0,
+      "windows_evaluated": 55
+    },
+    {
+      "video": "Fold1_part1/05/5.MOV",
+      "subject": "05",
+      "label": 5,
+      "width": 720,
+      "height": 1280,
+      "source_fps": 30.025,
+      "orientation_meta_deg": 90.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 601.5,
+      "processed_frames": 9031,
+      "processed_fps": 15.012,
+      "frame_period_median_s": 0.0667,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": 4.7,
+      "pitch_vs_nose_position_correlation": 0.901029,
+      "mediapipe_ms_per_frame": 32.63,
+      "extraction_seconds": 623.5,
+      "windows": 55,
+      "windows_dropped": 0,
+      "windows_evaluated": 55
+    },
+    {
+      "video": "Fold1_part1/06/0.mp4",
+      "subject": "06",
+      "label": 0,
+      "width": 1920,
+      "height": 1080,
+      "source_fps": 24.962,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 610.0,
+      "processed_frames": 7615,
+      "processed_fps": 12.481,
+      "frame_period_median_s": 0.0802,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": -1.0,
+      "pitch_vs_nose_position_correlation": 0.928491,
+      "mediapipe_ms_per_frame": 32.03,
+      "extraction_seconds": 504.5,
+      "windows": 56,
+      "windows_dropped": 0,
+      "windows_evaluated": 44
+    },
+    {
+      "video": "Fold1_part1/06/10.mp4",
+      "subject": "06",
+      "label": 10,
+      "width": 1920,
+      "height": 1080,
+      "source_fps": 23.82,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 429.6,
+      "processed_frames": 5117,
+      "processed_fps": 11.91,
+      "frame_period_median_s": 0.0835,
+      "no_face_frames": 2,
+      "no_face_rate": 0.00039,
+      "longest_no_face_s": 0.17,
+      "roll_median_deg": 2.2,
+      "pitch_vs_nose_position_correlation": 0.911602,
+      "mediapipe_ms_per_frame": 39.52,
+      "extraction_seconds": 487.0,
+      "windows": 37,
+      "windows_dropped": 0,
+      "windows_evaluated": 37
+    },
+    {
+      "video": "Fold1_part1/06/5.mp4",
+      "subject": "06",
+      "label": 5,
+      "width": 1920,
+      "height": 1080,
+      "source_fps": 29.907,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 438.6,
+      "processed_frames": 6559,
+      "processed_fps": 14.954,
+      "frame_period_median_s": 0.0669,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": 0.7,
+      "pitch_vs_nose_position_correlation": 0.94959,
+      "mediapipe_ms_per_frame": 35.94,
+      "extraction_seconds": 523.9,
+      "windows": 38,
+      "windows_dropped": 0,
+      "windows_evaluated": 38
+    },
+    {
+      "video": "Fold1_part2/07/0.mp4",
+      "subject": "07",
+      "label": 0,
+      "width": 1080,
+      "height": 1920,
+      "source_fps": 29.991,
+      "orientation_meta_deg": 270.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 600.6,
+      "processed_frames": 9008,
+      "processed_fps": 14.996,
+      "frame_period_median_s": 0.0667,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": -2.1,
+      "pitch_vs_nose_position_correlation": 0.988192,
+      "mediapipe_ms_per_frame": 36.33,
+      "extraction_seconds": 843.1,
+      "windows": 55,
+      "windows_dropped": 0,
+      "windows_evaluated": 43
+    },
+    {
+      "video": "Fold1_part2/07/10.mp4",
+      "subject": "07",
+      "label": 10,
+      "width": 1080,
+      "height": 1920,
+      "source_fps": 29.789,
+      "orientation_meta_deg": 270.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 602.2,
+      "processed_frames": 8970,
+      "processed_fps": 14.895,
+      "frame_period_median_s": 0.0671,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": 0.1,
+      "pitch_vs_nose_position_correlation": 0.99015,
+      "mediapipe_ms_per_frame": 48.39,
+      "extraction_seconds": 983.7,
+      "windows": 55,
+      "windows_dropped": 0,
+      "windows_evaluated": 55
+    },
+    {
+      "video": "Fold1_part2/07/5.mp4",
+      "subject": "07",
+      "label": 5,
+      "width": 1920,
+      "height": 1080,
+      "source_fps": 29.776,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 600.6,
+      "processed_frames": 8944,
+      "processed_fps": 14.889,
+      "frame_period_median_s": 0.0671,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": 1.5,
+      "pitch_vs_nose_position_correlation": 0.974776,
+      "mediapipe_ms_per_frame": 38.19,
+      "extraction_seconds": 711.8,
+      "windows": 55,
+      "windows_dropped": 0,
+      "windows_evaluated": 55
+    },
+    {
+      "video": "Fold1_part2/08/0.mp4",
+      "subject": "08",
+      "label": 0,
+      "width": 480,
+      "height": 720,
+      "source_fps": 30.0,
+      "orientation_meta_deg": 270.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 605.2,
+      "processed_frames": 9079,
+      "processed_fps": 15.0,
+      "frame_period_median_s": 0.067,
+      "no_face_frames": 1,
+      "no_face_rate": 0.00011,
+      "longest_no_face_s": 0.07,
+      "roll_median_deg": 1.0,
+      "pitch_vs_nose_position_correlation": 0.892838,
+      "mediapipe_ms_per_frame": 32.75,
+      "extraction_seconds": 436.0,
+      "windows": 55,
+      "windows_dropped": 0,
+      "windows_evaluated": 43
+    },
+    {
+      "video": "Fold1_part2/08/10.mp4",
+      "subject": "08",
+      "label": 10,
+      "width": 1080,
+      "height": 1920,
+      "source_fps": 30.0,
+      "orientation_meta_deg": 270.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 599.6,
+      "processed_frames": 8995,
+      "processed_fps": 15.0,
+      "frame_period_median_s": 0.067,
+      "no_face_frames": 35,
+      "no_face_rate": 0.00389,
+      "longest_no_face_s": 1.67,
+      "roll_median_deg": -7.9,
+      "pitch_vs_nose_position_correlation": 0.893621,
+      "mediapipe_ms_per_frame": 35.37,
+      "extraction_seconds": 835.4,
+      "windows": 54,
+      "windows_dropped": 0,
+      "windows_evaluated": 54
+    },
+    {
+      "video": "Fold1_part2/08/5.mp4",
+      "subject": "08",
+      "label": 5,
+      "width": 1080,
+      "height": 1920,
+      "source_fps": 30.0,
+      "orientation_meta_deg": 270.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 601.5,
+      "processed_frames": 9024,
+      "processed_fps": 15.0,
+      "frame_period_median_s": 0.067,
+      "no_face_frames": 14,
+      "no_face_rate": 0.00155,
+      "longest_no_face_s": 0.8,
+      "roll_median_deg": 6.5,
+      "pitch_vs_nose_position_correlation": 0.911682,
+      "mediapipe_ms_per_frame": 34.65,
+      "extraction_seconds": 818.7,
+      "windows": 55,
+      "windows_dropped": 0,
+      "windows_evaluated": 55
+    },
+    {
+      "video": "Fold1_part2/09/0.mp4",
+      "subject": "09",
+      "label": 0,
+      "width": 1440,
+      "height": 2560,
+      "source_fps": 29.789,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 610.0,
+      "processed_frames": 9086,
+      "processed_fps": 14.894,
+      "frame_period_median_s": 0.0671,
+      "no_face_frames": 16,
+      "no_face_rate": 0.00176,
+      "longest_no_face_s": 1.07,
+      "roll_median_deg": -1.2,
+      "pitch_vs_nose_position_correlation": 0.932865,
+      "mediapipe_ms_per_frame": 16.74,
+      "extraction_seconds": 325.0,
+      "windows": 56,
+      "windows_dropped": 0,
+      "windows_evaluated": 44
+    },
+    {
+      "video": "Fold1_part2/09/10.mp4",
+      "subject": "09",
+      "label": 10,
+      "width": 1440,
+      "height": 2560,
+      "source_fps": 29.789,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 665.1,
+      "processed_frames": 9908,
+      "processed_fps": 14.894,
+      "frame_period_median_s": 0.0671,
+      "no_face_frames": 2,
+      "no_face_rate": 0.0002,
+      "longest_no_face_s": 0.13,
+      "roll_median_deg": 3.1,
+      "pitch_vs_nose_position_correlation": 0.971363,
+      "mediapipe_ms_per_frame": 16.72,
+      "extraction_seconds": 347.7,
+      "windows": 61,
+      "windows_dropped": 0,
+      "windows_evaluated": 61
+    },
+    {
+      "video": "Fold1_part2/09/5.mp4",
+      "subject": "09",
+      "label": 5,
+      "width": 1440,
+      "height": 2560,
+      "source_fps": 30.007,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 612.1,
+      "processed_frames": 9184,
+      "processed_fps": 15.003,
+      "frame_period_median_s": 0.0667,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": 1.6,
+      "pitch_vs_nose_position_correlation": 0.955024,
+      "mediapipe_ms_per_frame": 16.75,
+      "extraction_seconds": 328.6,
+      "windows": 56,
+      "windows_dropped": 0,
+      "windows_evaluated": 56
+    },
+    {
+      "video": "Fold1_part2/10/0.MOV",
+      "subject": "10",
+      "label": 0,
+      "width": 320,
+      "height": 568,
+      "source_fps": 30.025,
+      "orientation_meta_deg": 90.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 543.2,
+      "processed_frames": 8155,
+      "processed_fps": 15.012,
+      "frame_period_median_s": 0.0667,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": -1.9,
+      "pitch_vs_nose_position_correlation": 0.726422,
+      "mediapipe_ms_per_frame": 25.84,
+      "extraction_seconds": 248.6,
+      "windows": 49,
+      "windows_dropped": 0,
+      "windows_evaluated": 37
+    },
+    {
+      "video": "Fold1_part2/10/10.MOV",
+      "subject": "10",
+      "label": 10,
+      "width": 720,
+      "height": 1280,
+      "source_fps": 30.025,
+      "orientation_meta_deg": 90.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 628.3,
+      "processed_frames": 9433,
+      "processed_fps": 15.012,
+      "frame_period_median_s": 0.0667,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": -3.8,
+      "pitch_vs_nose_position_correlation": 0.890134,
+      "mediapipe_ms_per_frame": 36.4,
+      "extraction_seconds": 803.5,
+      "windows": 57,
+      "windows_dropped": 0,
+      "windows_evaluated": 57
+    },
+    {
+      "video": "Fold1_part2/10/5.MOV",
+      "subject": "10",
+      "label": 5,
+      "width": 720,
+      "height": 1280,
+      "source_fps": 30.025,
+      "orientation_meta_deg": 90.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 620.1,
+      "processed_frames": 9310,
+      "processed_fps": 15.012,
+      "frame_period_median_s": 0.0667,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": -0.6,
+      "pitch_vs_nose_position_correlation": 0.838417,
+      "mediapipe_ms_per_frame": 35.34,
+      "extraction_seconds": 710.3,
+      "windows": 57,
+      "windows_dropped": 0,
+      "windows_evaluated": 57
+    },
+    {
+      "video": "Fold1_part2/11/0.mp4",
+      "subject": "11",
+      "label": 0,
+      "width": 1280,
+      "height": 720,
+      "source_fps": 29.94,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 214,
+      "duration_s": 628.5,
+      "processed_frames": 9395,
+      "processed_fps": 14.948,
+      "frame_period_median_s": 0.064,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": -0.3,
+      "pitch_vs_nose_position_correlation": 0.884974,
+      "mediapipe_ms_per_frame": 32.39,
+      "extraction_seconds": 499.6,
+      "windows": 57,
+      "windows_dropped": 0,
+      "windows_evaluated": 45
+    },
+    {
+      "video": "Fold1_part2/11/10.mp4",
+      "subject": "11",
+      "label": 10,
+      "width": 1280,
+      "height": 720,
+      "source_fps": 17.161,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 620.9,
+      "processed_frames": 8609,
+      "processed_fps": 13.863,
+      "frame_period_median_s": 0.0648,
+      "no_face_frames": 8,
+      "no_face_rate": 0.00093,
+      "longest_no_face_s": 0.4,
+      "roll_median_deg": 7.1,
+      "pitch_vs_nose_position_correlation": 0.887859,
+      "mediapipe_ms_per_frame": 29.58,
+      "extraction_seconds": 399.4,
+      "windows": 57,
+      "windows_dropped": 0,
+      "windows_evaluated": 57
+    },
+    {
+      "video": "Fold1_part2/11/5.mp4",
+      "subject": "11",
+      "label": 5,
+      "width": 1280,
+      "height": 720,
+      "source_fps": 15.031,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 655.5,
+      "processed_frames": 8959,
+      "processed_fps": 13.666,
+      "frame_period_median_s": 0.0656,
+      "no_face_frames": 38,
+      "no_face_rate": 0.00424,
+      "longest_no_face_s": 1.0,
+      "roll_median_deg": 4.4,
+      "pitch_vs_nose_position_correlation": 0.945947,
+      "mediapipe_ms_per_frame": 18.74,
+      "extraction_seconds": 225.9,
+      "windows": 60,
+      "windows_dropped": 0,
+      "windows_evaluated": 60
+    },
+    {
+      "video": "Fold1_part2/12/0.mp4",
+      "subject": "12",
+      "label": 0,
+      "width": 1280,
+      "height": 720,
+      "source_fps": 30.175,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 560.7,
+      "processed_frames": 8460,
+      "processed_fps": 15.087,
+      "frame_period_median_s": 0.064,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": 4.0,
+      "pitch_vs_nose_position_correlation": 0.971783,
+      "mediapipe_ms_per_frame": 32.02,
+      "extraction_seconds": 431.8,
+      "windows": 51,
+      "windows_dropped": 0,
+      "windows_evaluated": 39
+    },
+    {
+      "video": "Fold1_part2/12/10.mp4",
+      "subject": "12",
+      "label": 10,
+      "width": 1280,
+      "height": 720,
+      "source_fps": 30.175,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 500.3,
+      "processed_frames": 7549,
+      "processed_fps": 15.087,
+      "frame_period_median_s": 0.064,
+      "no_face_frames": 18,
+      "no_face_rate": 0.00238,
+      "longest_no_face_s": 1.18,
+      "roll_median_deg": 2.4,
+      "pitch_vs_nose_position_correlation": 0.951949,
+      "mediapipe_ms_per_frame": 30.1,
+      "extraction_seconds": 372.3,
+      "windows": 45,
+      "windows_dropped": 0,
+      "windows_evaluated": 45
+    },
+    {
+      "video": "Fold1_part2/12/5.mp4",
+      "subject": "12",
+      "label": 5,
+      "width": 1280,
+      "height": 720,
+      "source_fps": 30.174,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 624.2,
+      "processed_frames": 9419,
+      "processed_fps": 15.087,
+      "frame_period_median_s": 0.064,
+      "no_face_frames": 4,
+      "no_face_rate": 0.00042,
+      "longest_no_face_s": 0.06,
+      "roll_median_deg": 2.8,
+      "pitch_vs_nose_position_correlation": 0.925296,
+      "mediapipe_ms_per_frame": 32.2,
+      "extraction_seconds": 501.1,
+      "windows": 57,
+      "windows_dropped": 0,
+      "windows_evaluated": 57
+    },
+    {
+      "video": "Fold2_part1/13/0.mp4",
+      "subject": "13",
+      "label": 0,
+      "width": 1080,
+      "height": 1920,
+      "source_fps": 29.789,
+      "orientation_meta_deg": 270.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 612.1,
+      "processed_frames": 9118,
+      "processed_fps": 14.895,
+      "frame_period_median_s": 0.0671,
+      "no_face_frames": 24,
+      "no_face_rate": 0.00263,
+      "longest_no_face_s": 1.48,
+      "roll_median_deg": 5.1,
+      "pitch_vs_nose_position_correlation": 0.929194,
+      "mediapipe_ms_per_frame": 33.11,
+      "extraction_seconds": 785.5,
+      "windows": 56,
+      "windows_dropped": 0,
+      "windows_evaluated": 44
+    },
+    {
+      "video": "Fold2_part1/13/10.mp4",
+      "subject": "13",
+      "label": 10,
+      "width": 1080,
+      "height": 1920,
+      "source_fps": 29.79,
+      "orientation_meta_deg": 270.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 620.5,
+      "processed_frames": 9243,
+      "processed_fps": 14.895,
+      "frame_period_median_s": 0.0671,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": -2.7,
+      "pitch_vs_nose_position_correlation": 0.935637,
+      "mediapipe_ms_per_frame": 35.41,
+      "extraction_seconds": 814.8,
+      "windows": 57,
+      "windows_dropped": 0,
+      "windows_evaluated": 57
+    },
+    {
+      "video": "Fold2_part1/13/5.mp4",
+      "subject": "13",
+      "label": 5,
+      "width": 1080,
+      "height": 1920,
+      "source_fps": 29.789,
+      "orientation_meta_deg": 270.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 687.4,
+      "processed_frames": 10239,
+      "processed_fps": 14.894,
+      "frame_period_median_s": 0.0671,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": 3.6,
+      "pitch_vs_nose_position_correlation": 0.96648,
+      "mediapipe_ms_per_frame": 32.79,
+      "extraction_seconds": 876.8,
+      "windows": 63,
+      "windows_dropped": 0,
+      "windows_evaluated": 63
+    },
+    {
+      "video": "Fold2_part1/14/0.mp4",
+      "subject": "14",
+      "label": 0,
+      "width": 1440,
+      "height": 2560,
+      "source_fps": 30.0,
+      "orientation_meta_deg": 270.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 612.8,
+      "processed_frames": 9193,
+      "processed_fps": 15.0,
+      "frame_period_median_s": 0.067,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": 0.2,
+      "pitch_vs_nose_position_correlation": 0.985638,
+      "mediapipe_ms_per_frame": 35.2,
+      "extraction_seconds": 1171.3,
+      "windows": 56,
+      "windows_dropped": 0,
+      "windows_evaluated": 44
+    },
+    {
+      "video": "Fold2_part1/14/10.mp4",
+      "subject": "14",
+      "label": 10,
+      "width": 2560,
+      "height": 1440,
+      "source_fps": 30.0,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 623.0,
+      "processed_frames": 9346,
+      "processed_fps": 15.0,
+      "frame_period_median_s": 0.067,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": 3.4,
+      "pitch_vs_nose_position_correlation": 0.959583,
+      "mediapipe_ms_per_frame": 34.18,
+      "extraction_seconds": 880.6,
+      "windows": 57,
+      "windows_dropped": 0,
+      "windows_evaluated": 57
+    },
+    {
+      "video": "Fold2_part1/14/5.mp4",
+      "subject": "14",
+      "label": 5,
+      "width": 1280,
+      "height": 720,
+      "source_fps": 29.85,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 661.3,
+      "processed_frames": 9871,
+      "processed_fps": 14.925,
+      "frame_period_median_s": 0.0641,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": -0.9,
+      "pitch_vs_nose_position_correlation": 0.942491,
+      "mediapipe_ms_per_frame": 33.78,
+      "extraction_seconds": 640.6,
+      "windows": 61,
+      "windows_dropped": 0,
+      "windows_evaluated": 61
+    },
+    {
+      "video": "Fold2_part1/15/0.mp4",
+      "subject": "15",
+      "label": 0,
+      "width": 1280,
+      "height": 720,
+      "source_fps": 30.001,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 643.3,
+      "processed_frames": 9651,
+      "processed_fps": 15.001,
+      "frame_period_median_s": 0.064,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": 1.0,
+      "pitch_vs_nose_position_correlation": 0.921654,
+      "mediapipe_ms_per_frame": 36.06,
+      "extraction_seconds": 583.4,
+      "windows": 59,
+      "windows_dropped": 0,
+      "windows_evaluated": 47
+    },
+    {
+      "video": "Fold2_part1/15/10.mp4",
+      "subject": "15",
+      "label": 10,
+      "width": 1280,
+      "height": 720,
+      "source_fps": 30.0,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 616.1,
+      "processed_frames": 9242,
+      "processed_fps": 15.0,
+      "frame_period_median_s": 0.064,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": -1.3,
+      "pitch_vs_nose_position_correlation": 0.958096,
+      "mediapipe_ms_per_frame": 33.8,
+      "extraction_seconds": 529.0,
+      "windows": 56,
+      "windows_dropped": 0,
+      "windows_evaluated": 56
+    },
+    {
+      "video": "Fold2_part1/15/5.mp4",
+      "subject": "15",
+      "label": 5,
+      "width": 1280,
+      "height": 720,
+      "source_fps": 30.001,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 618.0,
+      "processed_frames": 9271,
+      "processed_fps": 15.0,
+      "frame_period_median_s": 0.064,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": -0.2,
+      "pitch_vs_nose_position_correlation": 0.922603,
+      "mediapipe_ms_per_frame": 33.99,
+      "extraction_seconds": 540.4,
+      "windows": 56,
+      "windows_dropped": 0,
+      "windows_evaluated": 56
+    },
+    {
+      "video": "Fold2_part1/16/0.MOV",
+      "subject": "16",
+      "label": 0,
+      "width": 720,
+      "height": 1280,
+      "source_fps": 24.006,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 473.0,
+      "processed_frames": 5679,
+      "processed_fps": 12.003,
+      "frame_period_median_s": 0.0833,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": 1.5,
+      "pitch_vs_nose_position_correlation": 0.961823,
+      "mediapipe_ms_per_frame": 28.67,
+      "extraction_seconds": 263.7,
+      "windows": 42,
+      "windows_dropped": 0,
+      "windows_evaluated": 30
+    },
+    {
+      "video": "Fold2_part1/16/10.MOV",
+      "subject": "16",
+      "label": 10,
+      "width": 720,
+      "height": 1280,
+      "source_fps": 24.006,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 603.6,
+      "processed_frames": 7246,
+      "processed_fps": 12.003,
+      "frame_period_median_s": 0.0833,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": 5.3,
+      "pitch_vs_nose_position_correlation": 0.949962,
+      "mediapipe_ms_per_frame": 30.53,
+      "extraction_seconds": 357.2,
+      "windows": 55,
+      "windows_dropped": 0,
+      "windows_evaluated": 55
+    },
+    {
+      "video": "Fold2_part1/16/5.MOV",
+      "subject": "16",
+      "label": 5,
+      "width": 720,
+      "height": 1280,
+      "source_fps": 24.006,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 603.4,
+      "processed_frames": 7244,
+      "processed_fps": 12.003,
+      "frame_period_median_s": 0.0833,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": -6.4,
+      "pitch_vs_nose_position_correlation": 0.947499,
+      "mediapipe_ms_per_frame": 29.27,
+      "extraction_seconds": 333.2,
+      "windows": 55,
+      "windows_dropped": 0,
+      "windows_evaluated": 55
+    },
+    {
+      "video": "Fold2_part1/17/0.mp4",
+      "subject": "17",
+      "label": 0,
+      "width": 480,
+      "height": 640,
+      "source_fps": 29.97,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 604.6,
+      "processed_frames": 9061,
+      "processed_fps": 14.985,
+      "frame_period_median_s": 0.0667,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": 5.4,
+      "pitch_vs_nose_position_correlation": 0.981954,
+      "mediapipe_ms_per_frame": 25.66,
+      "extraction_seconds": 260.5,
+      "windows": 55,
+      "windows_dropped": 0,
+      "windows_evaluated": 43
+    },
+    {
+      "video": "Fold2_part1/17/10.mp4",
+      "subject": "17",
+      "label": 10,
+      "width": 240,
+      "height": 426,
+      "source_fps": 29.938,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 608.3,
+      "processed_frames": 9106,
+      "processed_fps": 14.969,
+      "frame_period_median_s": 0.0668,
+      "no_face_frames": 15,
+      "no_face_rate": 0.00165,
+      "longest_no_face_s": 0.53,
+      "roll_median_deg": 2.3,
+      "pitch_vs_nose_position_correlation": 0.674869,
+      "mediapipe_ms_per_frame": 26.43,
+      "extraction_seconds": 268.6,
+      "windows": 55,
+      "windows_dropped": 0,
+      "windows_evaluated": 55
+    },
+    {
+      "video": "Fold2_part1/17/5.mp4",
+      "subject": "17",
+      "label": 5,
+      "width": 1080,
+      "height": 1920,
+      "source_fps": 29.97,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 608.7,
+      "processed_frames": 9123,
+      "processed_fps": 14.985,
+      "frame_period_median_s": 0.0667,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": 2.8,
+      "pitch_vs_nose_position_correlation": 0.931997,
+      "mediapipe_ms_per_frame": 26.13,
+      "extraction_seconds": 433.3,
+      "windows": 55,
+      "windows_dropped": 0,
+      "windows_evaluated": 55
+    },
+    {
+      "video": "Fold2_part1/18/0.mov",
+      "subject": "18",
+      "label": 0,
+      "width": 1080,
+      "height": 720,
+      "source_fps": 19.366,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 602.6,
+      "processed_frames": 7390,
+      "processed_fps": 12.261,
+      "frame_period_median_s": 0.0667,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": 1.5,
+      "pitch_vs_nose_position_correlation": 0.839633,
+      "mediapipe_ms_per_frame": 31.68,
+      "extraction_seconds": 415.2,
+      "windows": 55,
+      "windows_dropped": 0,
+      "windows_evaluated": 43
+    },
+    {
+      "video": "Fold2_part1/18/10.mov",
+      "subject": "18",
+      "label": 10,
+      "width": 1080,
+      "height": 720,
+      "source_fps": 12.002,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 639.5,
+      "processed_frames": 7676,
+      "processed_fps": 12.002,
+      "frame_period_median_s": 0.0833,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": -1.1,
+      "pitch_vs_nose_position_correlation": 0.54511,
+      "mediapipe_ms_per_frame": 28.89,
+      "extraction_seconds": 345.1,
+      "windows": 58,
+      "windows_dropped": 0,
+      "windows_evaluated": 58
+    },
+    {
+      "video": "Fold2_part1/18/5.mov",
+      "subject": "18",
+      "label": 5,
+      "width": 1080,
+      "height": 720,
+      "source_fps": 14.858,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 604.0,
+      "processed_frames": 6877,
+      "processed_fps": 11.384,
+      "frame_period_median_s": 0.0667,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": -1.6,
+      "pitch_vs_nose_position_correlation": 0.883331,
+      "mediapipe_ms_per_frame": 30.66,
+      "extraction_seconds": 344.3,
+      "windows": 55,
+      "windows_dropped": 0,
+      "windows_evaluated": 55
+    },
+    {
+      "video": "Fold2_part2/19/0.MOV",
+      "subject": "19",
+      "label": 0,
+      "width": 1080,
+      "height": 1920,
+      "source_fps": 29.969,
+      "orientation_meta_deg": 90.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 601.6,
+      "processed_frames": 9015,
+      "processed_fps": 14.984,
+      "frame_period_median_s": 0.0667,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": 3.4,
+      "pitch_vs_nose_position_correlation": 0.932547,
+      "mediapipe_ms_per_frame": 35.92,
+      "extraction_seconds": 1045.9,
+      "windows": 55,
+      "windows_dropped": 0,
+      "windows_evaluated": 43
+    },
+    {
+      "video": "Fold2_part2/19/10.MOV",
+      "subject": "19",
+      "label": 10,
+      "width": 1080,
+      "height": 1920,
+      "source_fps": 29.969,
+      "orientation_meta_deg": 90.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 602.7,
+      "processed_frames": 9032,
+      "processed_fps": 14.984,
+      "frame_period_median_s": 0.0667,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": 1.3,
+      "pitch_vs_nose_position_correlation": 0.908513,
+      "mediapipe_ms_per_frame": 33.16,
+      "extraction_seconds": 1003.1,
+      "windows": 55,
+      "windows_dropped": 0,
+      "windows_evaluated": 55
+    },
+    {
+      "video": "Fold2_part2/19/5.MOV",
+      "subject": "19",
+      "label": 5,
+      "width": 1080,
+      "height": 1920,
+      "source_fps": 29.969,
+      "orientation_meta_deg": 90.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 601.8,
+      "processed_frames": 9018,
+      "processed_fps": 14.984,
+      "frame_period_median_s": 0.0667,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": 4.5,
+      "pitch_vs_nose_position_correlation": 0.795142,
+      "mediapipe_ms_per_frame": 33.25,
+      "extraction_seconds": 990.8,
+      "windows": 55,
+      "windows_dropped": 0,
+      "windows_evaluated": 55
+    },
+    {
+      "video": "Fold2_part2/20/0.mp4",
+      "subject": "20",
+      "label": 0,
+      "width": 1920,
+      "height": 1080,
+      "source_fps": 29.97,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 653.5,
+      "processed_frames": 9793,
+      "processed_fps": 14.985,
+      "frame_period_median_s": 0.0667,
+      "no_face_frames": 72,
+      "no_face_rate": 0.00735,
+      "longest_no_face_s": 2.0,
+      "roll_median_deg": 5.1,
+      "pitch_vs_nose_position_correlation": 0.879934,
+      "mediapipe_ms_per_frame": 31.26,
+      "extraction_seconds": 612.5,
+      "windows": 60,
+      "windows_dropped": 0,
+      "windows_evaluated": 48
+    },
+    {
+      "video": "Fold2_part2/20/10.mp4",
+      "subject": "20",
+      "label": 10,
+      "width": 352,
+      "height": 640,
+      "source_fps": 29.953,
+      "orientation_meta_deg": 270.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 718.7,
+      "processed_frames": 10764,
+      "processed_fps": 14.976,
+      "frame_period_median_s": 0.0668,
+      "no_face_frames": 63,
+      "no_face_rate": 0.00585,
+      "longest_no_face_s": 2.94,
+      "roll_median_deg": -2.5,
+      "pitch_vs_nose_position_correlation": 0.977801,
+      "mediapipe_ms_per_frame": 27.23,
+      "extraction_seconds": 346.9,
+      "windows": 66,
+      "windows_dropped": 0,
+      "windows_evaluated": 66
+    },
+    {
+      "video": "Fold2_part2/20/5.MOV",
+      "subject": "20",
+      "label": 5,
+      "width": 1920,
+      "height": 1080,
+      "source_fps": 29.985,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 607.2,
+      "processed_frames": 9104,
+      "processed_fps": 14.992,
+      "frame_period_median_s": 0.0667,
+      "no_face_frames": 56,
+      "no_face_rate": 0.00615,
+      "longest_no_face_s": 2.87,
+      "roll_median_deg": 5.8,
+      "pitch_vs_nose_position_correlation": 0.881056,
+      "mediapipe_ms_per_frame": 35.84,
+      "extraction_seconds": 753.1,
+      "windows": 55,
+      "windows_dropped": 0,
+      "windows_evaluated": 55
+    },
+    {
+      "video": "Fold2_part2/21/0.MOV",
+      "subject": "21",
+      "label": 0,
+      "width": 720,
+      "height": 1280,
+      "source_fps": 29.969,
+      "orientation_meta_deg": 90.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 605.6,
+      "processed_frames": 9076,
+      "processed_fps": 14.984,
+      "frame_period_median_s": 0.0667,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": 4.6,
+      "pitch_vs_nose_position_correlation": 0.940851,
+      "mediapipe_ms_per_frame": 30.81,
+      "extraction_seconds": 565.2,
+      "windows": 55,
+      "windows_dropped": 0,
+      "windows_evaluated": 43
+    },
+    {
+      "video": "Fold2_part2/21/10.MOV",
+      "subject": "21",
+      "label": 10,
+      "width": 720,
+      "height": 1280,
+      "source_fps": 29.969,
+      "orientation_meta_deg": 90.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 602.4,
+      "processed_frames": 9028,
+      "processed_fps": 14.984,
+      "frame_period_median_s": 0.0667,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": 1.6,
+      "pitch_vs_nose_position_correlation": 0.514693,
+      "mediapipe_ms_per_frame": 32.47,
+      "extraction_seconds": 621.5,
+      "windows": 55,
+      "windows_dropped": 0,
+      "windows_evaluated": 55
+    },
+    {
+      "video": "Fold2_part2/21/5.MOV",
+      "subject": "21",
+      "label": 5,
+      "width": 720,
+      "height": 1280,
+      "source_fps": 29.969,
+      "orientation_meta_deg": 90.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 601.6,
+      "processed_frames": 9016,
+      "processed_fps": 14.984,
+      "frame_period_median_s": 0.0667,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": 4.5,
+      "pitch_vs_nose_position_correlation": 0.862711,
+      "mediapipe_ms_per_frame": 32.83,
+      "extraction_seconds": 631.0,
+      "windows": 55,
+      "windows_dropped": 0,
+      "windows_evaluated": 55
+    },
+    {
+      "video": "Fold2_part2/22/0.MOV",
+      "subject": "22",
+      "label": 0,
+      "width": 1080,
+      "height": 1920,
+      "source_fps": 29.969,
+      "orientation_meta_deg": 90.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 608.0,
+      "processed_frames": 9111,
+      "processed_fps": 14.984,
+      "frame_period_median_s": 0.0667,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": -2.1,
+      "pitch_vs_nose_position_correlation": 0.91139,
+      "mediapipe_ms_per_frame": 33.7,
+      "extraction_seconds": 1016.3,
+      "windows": 55,
+      "windows_dropped": 0,
+      "windows_evaluated": 43
+    },
+    {
+      "video": "Fold2_part2/22/10.MOV",
+      "subject": "22",
+      "label": 10,
+      "width": 1080,
+      "height": 1920,
+      "source_fps": 29.969,
+      "orientation_meta_deg": 90.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 611.1,
+      "processed_frames": 9158,
+      "processed_fps": 14.984,
+      "frame_period_median_s": 0.0667,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": -3.6,
+      "pitch_vs_nose_position_correlation": 0.910713,
+      "mediapipe_ms_per_frame": 33.25,
+      "extraction_seconds": 1014.4,
+      "windows": 56,
+      "windows_dropped": 0,
+      "windows_evaluated": 56
+    },
+    {
+      "video": "Fold2_part2/22/5.MOV",
+      "subject": "22",
+      "label": 5,
+      "width": 1080,
+      "height": 1920,
+      "source_fps": 29.969,
+      "orientation_meta_deg": 90.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 609.4,
+      "processed_frames": 9133,
+      "processed_fps": 14.984,
+      "frame_period_median_s": 0.0667,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": -2.2,
+      "pitch_vs_nose_position_correlation": 0.915594,
+      "mediapipe_ms_per_frame": 33.02,
+      "extraction_seconds": 1014.0,
+      "windows": 55,
+      "windows_dropped": 0,
+      "windows_evaluated": 55
+    },
+    {
+      "video": "Fold2_part2/23/0.mp4",
+      "subject": "23",
+      "label": 0,
+      "width": 1280,
+      "height": 720,
+      "source_fps": 29.97,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 586.1,
+      "processed_frames": 8784,
+      "processed_fps": 14.985,
+      "frame_period_median_s": 0.0667,
+      "no_face_frames": 439,
+      "no_face_rate": 0.04998,
+      "longest_no_face_s": 14.68,
+      "roll_median_deg": 3.2,
+      "pitch_vs_nose_position_correlation": 0.950098,
+      "mediapipe_ms_per_frame": 27.63,
+      "extraction_seconds": 386.2,
+      "windows": 53,
+      "windows_dropped": 6,
+      "windows_evaluated": 41
+    },
+    {
+      "video": "Fold2_part2/23/10.mp4",
+      "subject": "23",
+      "label": 10,
+      "width": 1280,
+      "height": 720,
+      "source_fps": 29.97,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 606.8,
+      "processed_frames": 9094,
+      "processed_fps": 14.985,
+      "frame_period_median_s": 0.0667,
+      "no_face_frames": 102,
+      "no_face_rate": 0.01122,
+      "longest_no_face_s": 3.34,
+      "roll_median_deg": 8.9,
+      "pitch_vs_nose_position_correlation": 0.880381,
+      "mediapipe_ms_per_frame": 33.73,
+      "extraction_seconds": 508.7,
+      "windows": 55,
+      "windows_dropped": 0,
+      "windows_evaluated": 55
+    },
+    {
+      "video": "Fold2_part2/23/5.mp4",
+      "subject": "23",
+      "label": 5,
+      "width": 1280,
+      "height": 720,
+      "source_fps": 29.97,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 577.5,
+      "processed_frames": 8655,
+      "processed_fps": 14.985,
+      "frame_period_median_s": 0.0667,
+      "no_face_frames": 89,
+      "no_face_rate": 0.01028,
+      "longest_no_face_s": 5.14,
+      "roll_median_deg": 2.1,
+      "pitch_vs_nose_position_correlation": 0.914414,
+      "mediapipe_ms_per_frame": 28.9,
+      "extraction_seconds": 391.1,
+      "windows": 52,
+      "windows_dropped": 0,
+      "windows_evaluated": 52
+    },
+    {
+      "video": "Fold2_part2/24/0.mp4",
+      "subject": "24",
+      "label": 0,
+      "width": 1920,
+      "height": 1080,
+      "source_fps": 14.917,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 740.4,
+      "processed_frames": 11045,
+      "processed_fps": 14.917,
+      "frame_period_median_s": 0.067,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": 0.7,
+      "pitch_vs_nose_position_correlation": 0.860707,
+      "mediapipe_ms_per_frame": 23.95,
+      "extraction_seconds": 468.2,
+      "windows": 69,
+      "windows_dropped": 0,
+      "windows_evaluated": 57
+    },
+    {
+      "video": "Fold2_part2/24/10.mp4",
+      "subject": "24",
+      "label": 10,
+      "width": 1920,
+      "height": 1080,
+      "source_fps": 14.917,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 771.9,
+      "processed_frames": 11515,
+      "processed_fps": 14.917,
+      "frame_period_median_s": 0.067,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": 1.2,
+      "pitch_vs_nose_position_correlation": 0.884577,
+      "mediapipe_ms_per_frame": 26.12,
+      "extraction_seconds": 537.3,
+      "windows": 72,
+      "windows_dropped": 0,
+      "windows_evaluated": 72
+    },
+    {
+      "video": "Fold2_part2/24/5.mp4",
+      "subject": "24",
+      "label": 5,
+      "width": 1920,
+      "height": 1080,
+      "source_fps": 14.979,
+      "orientation_meta_deg": 0.0,
+      "orientation_auto": true,
+      "timestamp_fallbacks": 0,
+      "duration_s": 729.7,
+      "processed_frames": 10474,
+      "processed_fps": 14.352,
+      "frame_period_median_s": 0.0642,
+      "no_face_frames": 0,
+      "no_face_rate": 0.0,
+      "longest_no_face_s": 0.0,
+      "roll_median_deg": 5.1,
+      "pitch_vs_nose_position_correlation": 0.907951,
+      "mediapipe_ms_per_frame": 33.67,
+      "extraction_seconds": 737.7,
+      "windows": 67,
+      "windows_dropped": 0,
+      "windows_evaluated": 67
+    }
+  ],
+  "extraction": {
+    "face_landmarker": {
+      "model_file_name": "face_landmarker.task",
+      "model_sha256": "64184e229b263107bc2b804c6625db1341ff2bb731874b0bcc2fe6544e0bc9ff",
+      "running_mode": "VIDEO",
+      "num_faces": 1,
+      "min_face_detection_confidence": 0.5,
+      "min_face_presence_confidence": 0.5,
+      "min_tracking_confidence": 0.5,
+      "output_face_blendshapes": true,
+      "output_facial_transformation_matrixes": true,
+      "target_fps": 15.0
+    },
+    "mediapipe_ms_per_frame_mean": 31.694747,
+    "decode_plus_mediapipe_seconds_per_video": {
+      "min": 174.74712,
+      "median": 567.304097,
+      "max": 1354.269403
+    },
+    "decode_plus_mediapipe_seconds_sum": 44473.955748,
+    "runs": [
+      {
+        "at": "2026-11-14T18:56:16Z",
+        "videos": 5,
+        "frames": 44819,
+        "wall_seconds": 349.5,
+        "workers": 5
+      },
+      {
+        "at": "2026-11-14T20:04:12Z",
+        "videos": 67,
+        "frames": 596249,
+        "wall_seconds": 4025.5,
+        "workers": 11
+      }
+    ],
+    "note": "Per-frame time is FaceLandmarker.detect_for_video in Python on this machine's CPU, measured while several worker processes ran at once. It is not a browser measurement."
+  }
+}

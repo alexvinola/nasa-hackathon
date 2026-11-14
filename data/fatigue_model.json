@@ -1,0 +1,232 @@
+{
+  "schema": "pulsar.fatigue_model/1",
+  "limit": null,
+  "features": [
+    "perclos",
+    "blink_rate_per_min",
+    "mean_blink_duration_s",
+    "long_closure_rate_per_min",
+    "yawns_per_min",
+    "head_pitch_std_deg",
+    "nods_per_min"
+  ],
+  "mean": [
+    0.061404,
+    13.784452,
+    0.163878,
+    0.787697,
+    0.023093,
+    2.429289,
+    0.327818
+  ],
+  "std": [
+    0.092453,
+    11.825457,
+    0.060204,
+    2.019035,
+    0.157189,
+    1.735511,
+    0.847971
+  ],
+  "coef": [
+    [
+      -0.113774,
+      -0.052413,
+      -0.153245,
+      -0.146144,
+      -0.018155,
+      -0.042616,
+      -0.011983
+    ],
+    [
+      -0.014482,
+      0.045739,
+      -0.027574,
+      -0.011087,
+      -0.051924,
+      0.038681,
+      0.018819
+    ],
+    [
+      0.128255,
+      0.006675,
+      0.180819,
+      0.157231,
+      0.070079,
+      0.003935,
+      -0.006836
+    ]
+  ],
+  "intercept": [
+    -0.196448,
+    0.112094,
+    0.084354
+  ],
+  "classes": [
+    "alert",
+    "low_vigilance",
+    "drowsy"
+  ],
+  "trainedOn": "UTA-RLDD (Fold1_part1, Fold1_part2, Fold2_part1, Fold2_part2): 3724 windows of 60 s every 10 s from 72 videos of 24 subjects (1047 alert, 1337 low vigilance, 1340 drowsy; self-reported labels)",
+  "score": {
+    "name": "fatigueScore",
+    "formula": "fatigueScore = 0.5 * P(low_vigilance) + 1.0 * P(drowsy)",
+    "weights": {
+      "alert": 0.0,
+      "low_vigilance": 0.5,
+      "drowsy": 1.0
+    },
+    "range": [
+      0,
+      1
+    ],
+    "meaning": "expected RLDD label (0 alert, 5 low vigilance, 10 drowsy) divided by 10"
+  },
+  "configuration": {
+    "shipped": "blendshape/absolute",
+    "decision": "Product decision of the team, taken after seeing the four-way comparison, the fold-internal selection and the calibration sensitivity reported here: ship eye closure `blendshape` with `absolute` features, which is what faceWorker.ts already computes and needs no calibration. Reasons: it does not depend on how a session starts, and it is the only variant whose evaluation does not depend on a calibration recording. It is a fixed setting of the pipeline, not a selection on test folds.",
+    "selected_on_test_folds": false
+  },
+  "calibration": {
+    "required": false,
+    "note": "None. The score is available from the first usable 60 s window."
+  },
+  "inference": "Per processed frame: eye closed when (eyeBlinkLeft + eyeBlinkRight) / 2 > 0.5. Per usable 60 s window: the seven features (features are used as computed); z = (x - mean) / std, with z = 0 for a missing feature; p = softmax(intercept + coef . z). No calibration step.",
+  "features_version": 1,
+  "feature_definitions": {
+    "perclos": "closed frames / frames with a face, in the window",
+    "blink_rate_per_min": "eye closures shorter than 0.5 s, per observed minute",
+    "mean_blink_duration_s": "mean duration of those short closures (last closed frame - first + one frame period); missing when there is none",
+    "long_closure_rate_per_min": "eye closures of 0.5 s or more, per observed minute (assumption: the 0.5 s boundary)",
+    "yawns_per_min": "yawns found in the window by the YawDD-calibrated detector (yawn_params.json), per window minute",
+    "head_pitch_std_deg": "population standard deviation of the head pitch (degrees) over the frames with a face",
+    "nods_per_min": "drops of the head at least 10 degrees below the window's median pitch (ending within 5), per observed minute (assumption: both levels)"
+  },
+  "feature_module": "data/pulsar_vision/fatigue_features.py",
+  "eye_closure": {
+    "method": "blendshape",
+    "rule": "closed when (eyeBlinkLeft + eyeBlinkRight) / 2 > 0.5",
+    "needs_calibration": false,
+    "same_as": "faceWorker.ts (BLINK = 0.5)"
+  },
+  "normalisation": {
+    "variant": "absolute",
+    "rule": "features are used as computed",
+    "needs_calibration": false
+  },
+  "constants": {
+    "window_s": 60.0,
+    "step_s": 10.0,
+    "min_face_fraction": 0.8,
+    "min_window_frames": 450,
+    "max_gap_s": 0.25,
+    "long_closure_s": 0.5,
+    "nod_on_deg": 10.0,
+    "nod_off_deg": 5.0,
+    "pitch_down_sign": 1.0,
+    "blendshape_closed": 0.5,
+    "assumptions": [
+      "long_closure_s",
+      "nod_on_deg",
+      "nod_off_deg",
+      "min_face_fraction",
+      "min_window_frames"
+    ]
+  },
+  "evaluated_alternatives": {
+    "status": "evaluated on RLDD, NOT shipped; the browser does not port them",
+    "why_not": "RLDD has one recording per state, so it cannot show what a calibration taken at the start of a session is worth. To be tried again on a dataset where one recording goes from rested to drowsy (DROZY, for example).",
+    "eye_closure": {
+      "method": "ear_p80",
+      "rule": "closed when ear <= floor + 0.2 * (open - floor); open = P50 and floor = P1 of ear over the frames with a face in the first 120 s",
+      "ear_landmarks": {
+        "right_eye_p1_to_p6": [
+          33,
+          160,
+          158,
+          133,
+          153,
+          144
+        ],
+        "left_eye_p1_to_p6": [
+          362,
+          385,
+          387,
+          263,
+          373,
+          380
+        ]
+      },
+      "constants": {
+        "p80_fraction": 0.2,
+        "ear_open_percentile": 50.0,
+        "ear_floor_percentile": 1.0
+      }
+    },
+    "normalisation": {
+      "variant": "calibrated",
+      "rule": "feature - reference, for every feature; reference = mean of the feature over the usable windows inside the first 120 s of the session (person rested), ignoring missing values"
+    },
+    "calibration_s": 120.0,
+    "min_calibration_frames": 900,
+    "results": "data/out/metrics.json: configurations, nested_selection, calibration_sensitivity"
+  },
+  "yawn_detector": {
+    "params_file": "data/out/yawn_params.json",
+    "variant": "absolute",
+    "threshold": 0.26,
+    "min_duration_s": 1.0,
+    "release_factor": 0.8,
+    "max_gap_s": 0.25
+  },
+  "face_landmarker": {
+    "model_file_name": "face_landmarker.task",
+    "model_sha256": "64184e229b263107bc2b804c6625db1341ff2bb731874b0bcc2fe6544e0bc9ff",
+    "running_mode": "VIDEO",
+    "num_faces": 1,
+    "min_face_detection_confidence": 0.5,
+    "min_face_presence_confidence": 0.5,
+    "min_tracking_confidence": 0.5,
+    "output_face_blendshapes": true,
+    "output_facial_transformation_matrixes": true,
+    "target_fps": 15.0
+  },
+  "regularisation": {
+    "C": 0.001,
+    "chosen_by": "lowest pooled log loss over 5 subject-grouped folds of all subjects",
+    "grid": [
+      0.001,
+      0.01,
+      0.1,
+      1.0,
+      10.0,
+      100.0
+    ]
+  },
+  "validated": {
+    "scheme": "leave-one-subject-out",
+    "subjects": 24,
+    "windows": 3724,
+    "macro_f1": 0.426635,
+    "auc": 0.622055,
+    "accuracy": 0.441192,
+    "score_auc_alert_vs_drowsy": 0.747275,
+    "ci95_subject_bootstrap": {
+      "auc": [
+        0.574062,
+        0.675107
+      ],
+      "macro_f1": [
+        0.368055,
+        0.477253
+      ],
+      "score_auc_alert_vs_drowsy": [
+        0.671782,
+        0.82598
+      ]
+    },
+    "note": "out-of-fold numbers of this configuration; the weights above are a refit on every subject"
+  },
+  "not_a_medical_device": "It estimates signs consistent with drowsiness from self-reported labels. The rules engine decides.",
+  "source": "uta-rldd"
+}

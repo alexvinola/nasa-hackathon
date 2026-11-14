@@ -7,6 +7,9 @@ __pycache__/
 node_modules/
 .next/
 out/
+# measured results the pitch may quote (yawn calibration, G2 metrics) are versioned; smoke runs are not
+!data/out/
+data/out/smoke/
 frontend/test-results/
 frontend/playwright-report/
 
@@ -21,8 +24,9 @@ backend/assets/voices/
 # secrets
 .env
 
-# per-developer preview servers for the Claude desktop app
+# per-developer preview servers for the Claude desktop app, and git worktrees made for Claude subagents
 .claude/launch.json
+.claude/worktrees/
 
 # NASA raw downloads (research/nasa-data/fetch.sh) and OS clutter
 research/nasa-data/raw/

@@ -84,8 +84,50 @@
       "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3197786",
       "findings": [
         "3-minute PVT-B",
-        "Lapse threshold lowered from 500 ms to 355 ms",
-        "Inter-stimulus interval 1-4 s per the paper (secondary sources differ: check the original)"
+        "Lapse threshold lowered from 500 ms to 355 ms, chosen so that PVT-B lapse frequency matched the 10-minute PVT; measured on the handheld PVT-192 device",
+        "Inter-stimulus interval 1-4 s, including 1 s of reaction-time feedback (Section 2.2, checked against the original on 2026-11-14)",
+        "A response with no stimulus or a reaction under 100 ms is a false start; 30 s without a response counts as a lapse with a 30 s reaction time",
+        "Metrics are response speed (1/RT), lapses, fastest and slowest 10% and a performance score; a mean reaction time in ms is not one of them",
+        "A 3-minute test sampled 62.3 stimuli on average; lapse frequency was 5.3% across the study",
+        "Only Methods and part of Results were read verbatim; Discussion and Conclusions are unverified"
+      ]
+    },
+    "challenge-video": {
+      "type": "official",
+      "title": "Space Apps 2026 challenge video: Create Health Monitoring Software for Astronauts on Space Missions (Brazilian Space Agency)",
+      "url": "https://www.youtube.com/watch?v=RERG3gEmdC8",
+      "findings": [
+        "Challenge authored by the Brazilian Space Agency (AEB); video embedded on the challenge page",
+        "Scenario: halfway to Mars a crewmate has a sharp chest pain and collapses; asks for guidance in an emergency",
+        "Astronauts are not doctors: explain how to take each measurement, why it matters and what to do when a value does not look normal",
+        "Remind the crew to take measurements; adapt to a spacecraft, a space station or a lunar base",
+        "Suggests NASA's Open Science Data Repository; the same tools could serve remote communities on Earth"
+      ]
+    },
+    "fmcsa-1998-perclos": {
+      "type": "official",
+      "title": "FMCSA Technology Division (1998), PERCLOS: A Valid Psychophysiological Measure of Alertness As Assessed by Psychomotor Vigilance, tech brief FHWA-MCRT-98-006",
+      "url": "https://rosap.ntl.bts.gov/view/dot/113",
+      "findings": [
+        "PERCLOS: proportion of time in a minute that the eyes are at least 80 percent closed (Wierwille et al., 1994)",
+        "Reflects slow eyelid closures, not blinks"
+      ]
+    },
+    "dinges-1998-ocular": {
+      "type": "official",
+      "title": "Dinges, Mallis, Maislin & Powell (1998), Evaluation of techniques for ocular measurement as an index of fatigue and as the basis for alertness management, NHTSA DOT HS 808 762",
+      "url": "https://rosap.ntl.bts.gov/view/dot/2518",
+      "findings": [
+        "PERCLOS validated against PVT lapses under sleep deprivation"
+      ]
+    },
+    "soukupova-2016-ear": {
+      "type": "paper",
+      "title": "Soukupová & Čech (2016), Real-Time Eye Blink Detection using Facial Landmarks, 21st Computer Vision Winter Workshop",
+      "url": "https://vision.fe.uni-lj.si/cvww2016/proceedings/papers/05.pdf",
+      "findings": [
+        "EAR = (|p2-p6| + |p3-p5|) / (2|p1-p4|) from six eye landmarks",
+        "A fixed 0.2 threshold is only a baseline; an SVM over a temporal window detects blinks, since blink patterns differ per person"
       ]
     },
     "nasa-pvt-iss": {
@@ -131,15 +173,21 @@
       "title": "DROZY drowsiness database (University of Liege)",
       "url": "https://orbi.uliege.be/handle/2268/191620",
       "findings": [
-        "14 subjects, 28-30 h awake; face video, polysomnography, KSS and PVT synchronized"
+        "14 subjects, 28-30 h awake; face video, polysomnography, KSS and PVT synchronized",
+        "Video is Kinect v2 near-infrared intensity, 8-bit, 512x424, 30 fps (15 fps in tests 2-3 of subjects 1-8); 36 tests usable",
+        "License (2018-07-18): research and evaluation only, no commercial use, no redistribution in full or in part, no modification, no revealing subject identities, no showing images except those marked publishable",
+        "Any document, presentation or poster with results from DROZY must cite Massoz, Langohr, François & Verly (2016), The ULg Multimodality Drowsiness Database (called DROZY) and Examples of Use, WACV 2016"
       ]
     },
     "yawdd": {
       "type": "dataset",
-      "title": "YawDD yawning detection dataset",
+      "title": "Abtahi, Omidyeganeh, Shirmohammadi & Hariri (2014), YawDD: A Yawning Detection Dataset, Proc. ACM Multimedia Systems, Singapore",
       "url": "https://ieee-dataport.org/open-access/yawdd-yawning-detection-dataset",
       "findings": [
-        "Videos of drivers talking, singing and yawning; validates yawn detection"
+        "349 videos as downloaded: 320 Mirror with one label per video (105 Normal, 100 Talking, 102 Yawning, 13 Talking&Yawning; 90 participants) and 29 Dash without time labels; 640x480, 30 fps, no audio",
+        "Licence: non-commercial research only; the publication must be cited; screenshots only for videos whose table row allows it",
+        "Yawn detector calibrated on the Mirror set with leave-subject-out validation (make yawns, data/out/yawn_metrics.json): mouth opening ratio >= 0.26 held for >= 1.0 s; out of fold 88/102 Yawning videos detected, 3/100 Talking and 0/105 Normal videos with a false yawn",
+        "Acted yawns by drivers in cars with per-video labels: it measures yawn-vs-talking separation, not drowsiness, and not laptop-webcam geometry"
       ]
     },
     "mrl-eye": {
@@ -185,6 +233,69 @@
       "findings": [
         "14 astronauts on 6-month missions destroyed 54% more red blood cells than on Earth",
         "Space anemia resolved within 3-4 months back on Earth; destruction was still 30% above preflight a year later"
+      ]
+    },
+    "medlineplus-pulse": {
+      "type": "official",
+      "title": "MedlinePlus Medical Encyclopedia (NIH National Library of Medicine): Pulse",
+      "url": "https://medlineplus.gov/ency/article/003399.htm",
+      "findings": [
+        "Wrist pulse: index and middle fingers, not the thumb, on the underside of the opposite wrist below the base of the thumb; press lightly with flat fingertips",
+        "Count for one full minute, or for 30 seconds and multiply by 2",
+        "For a resting heart rate, rest for at least 10 minutes first",
+        "Used by the G9 heart-rate guide for how to take the measurement, not for any range"
+      ]
+    },
+    "cdc-blood-pressure-measure": {
+      "type": "official",
+      "title": "CDC: Measuring Your Blood Pressure",
+      "url": "https://www.cdc.gov/high-blood-pressure/measure/index.html",
+      "findings": [
+        "Before measuring: no food or drink for 30 minutes, empty the bladder, sit with the back supported for at least 5 minutes",
+        "Feet flat, legs uncrossed, arm resting with the cuff at chest height, cuff on the bare upper arm, snug but comfortable, no talking",
+        "Take at least two readings 1 to 2 minutes apart and keep a log",
+        "Used by the G9 blood-pressure guide for how to take the measurement, not for any range"
+      ]
+    },
+    "medlineplus-home-blood-sugar": {
+      "type": "official",
+      "title": "MedlinePlus Medical Encyclopedia (NIH National Library of Medicine): Home blood sugar testing",
+      "url": "https://medlineplus.gov/ency/patientinstructions/000324.htm",
+      "findings": [
+        "Have all test items within reach; wash the prick area with soap and water, not an alcohol pad, and let it dry completely",
+        "Prick the finger with a lancet in its spring-loaded device, place a drop of blood on a test strip, read the meter's display",
+        "If the value is unexpectedly high or low, test again with a new strip; log the result with the time of day",
+        "Used by the G9 glucose guide for how to take the measurement, not for any range"
+      ]
+    },
+    "medlineplus-temperature": {
+      "type": "official",
+      "title": "MedlinePlus Medical Encyclopedia (NIH National Library of Medicine): Temperature measurement",
+      "url": "https://medlineplus.gov/ency/article/003400.htm",
+      "findings": [
+        "Oral electronic thermometer: clean it, probe under the tongue, mouth closed, breathe through the nose, hold for 3 minutes or until it beeps",
+        "Wait at least 20 to 30 minutes after eating or drinking a hot or cold liquid, and at least 1 hour after heavy exercise or a hot bath",
+        "Used by the G9 body-temperature guide for how to take the measurement, not for any range"
+      ]
+    },
+    "nasa-sleep-risk": {
+      "type": "official",
+      "title": "NASA: Risk of Performance Decrements and Adverse Health Outcomes Resulting from Sleep Loss, Circadian Desynchronization, and Work Overload",
+      "url": "https://www.nasa.gov/directorates/esdmd/hhp/risk-of-performance-decrements-and-adverse-health-outcomes-resulting-from-sleep-loss-circadian-desynchronization-and-work-overload/",
+      "findings": [
+        "Top-tier performance depends on an adequate quantity of daily sleep and appropriate sleep quality",
+        "Spaceflight experience has shown that astronauts commonly experience sleep deprivation; fatigue leads to task errors",
+        "Does not describe how crew sleep is logged: the G9 sleep guide's steps are team wording"
+      ]
+    },
+    "nasa-behavioral-health-risk": {
+      "type": "official",
+      "title": "NASA: Risk of Adverse Cognitive or Behavioral Changes and Psychiatric Disorders (Behavioral Health Risk)",
+      "url": "https://www.nasa.gov/directorates/esdmd/hhp/behavioral-health-risk/",
+      "findings": [
+        "Isolation and confinement can adversely impact individual and crew health, well-being and performance",
+        "Countermeasures for exploration-class missions have not yet been developed and validated",
+        "Does not describe a mood self-report: the G9 mood guide's steps are team wording"
       ]
     }
   }
