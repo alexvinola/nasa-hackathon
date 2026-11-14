@@ -15,6 +15,8 @@ data/raw/
 data/features/
 *.part
 frontend/public/mediapipe/wasm/
+frontend/public/mediapipe/*.task
+backend/assets/voices/
 
 # secrets
 .env
