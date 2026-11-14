@@ -1,0 +1,138 @@
+Inspiration4 clinical labs (OSDR OSD-569 and OSD-575): what changes the day after landing.
+
+uv run --with pandas python research/nasa-data/labs.py > research/nasa-data/findings/labs.txt
+
+Four crew (C001-C004), seven draws: L-92, L-44, L-3 days before launch, R+1, R+45, R+82, R+194 days after
+return. A change counts as a pattern only if all four crew move the same way at R+1 against three different
+preflight baselines; anything weaker is reported as fragile. Descriptive only: n = 4, no statistics.
+
+## Complete blood count (4 crew x 7 draws)
+
+Lab reference ranges (from the dataset):
+  absolute_basophils_cells_per_microliter                    [0] - [200]
+  absolute_eosinophils_cells_per_microliter                  [15] - [500]
+  absolute_lymphocytes_cells_per_microliter                  [850] - [3900]
+  absolute_monocytes_cells_per_microliter                    [200] - [950]
+  absolute_neutrophils_cells_per_microliter                  [1500] - [7800]
+  basophils_percent                                          [0] - [2]
+  eosinophils_percent                                        [0] - [8]
+  hematocrit_percent                                         [35.0, 38.5] - [45, 50]
+  hemoglobin_percent                                         [11.7, 13.2] - [15.5, 17.1]
+  lymphocytes_percent                                        [15] - [49]
+  mch_picogram                                               [27.0] - [33.0]
+  mchc_grams_per_deciliter                                   [32.0] - [36.0]
+  mcv_femtoliter                                             [80.0] - [100.0]
+  monocytes_percent                                          [0] - [13]
+  mpv_femtoliter                                             [7.5] - [12.5]
+  neutrophils_percent                                        [38] - [80]
+  platelet_count_thousand_per_microliter                     [140] - [400]
+  rdw_percent                                                [11] - [15]
+  red_blood_cell_count_million_per_microliter                [3.8, 4.2] - [5.1, 5.8]
+  white_blood_cell_count_thousand_per_microliter             [3.8] - [10.8]
+
+Values outside the reference range (crew count low/high per draw):
+  absolute_eosinophils_cells_per_microliter                  L-92   low=0 high=1
+  absolute_lymphocytes_cells_per_microliter                  L-92   low=0 high=1
+  absolute_monocytes_cells_per_microliter                    L-92   low=0 high=1
+  absolute_monocytes_cells_per_microliter                    L-3    low=0 high=1
+  absolute_monocytes_cells_per_microliter                    R+1    low=0 high=1
+  absolute_monocytes_cells_per_microliter                    R+194  low=0 high=1
+  absolute_neutrophils_cells_per_microliter                  L-92   low=1 high=0
+  hematocrit_percent                                         R+82   low=1 high=0
+  hemoglobin_percent                                         L-3    low=1 high=0
+  hemoglobin_percent                                         R+82   low=1 high=0
+  mchc_grams_per_deciliter                                   L-92   low=1 high=0
+  monocytes_percent                                          R+45   low=0 high=1
+  mpv_femtoliter                                             L-92   low=0 high=1
+  platelet_count_thousand_per_microliter                     L-92   low=1 high=0
+  rdw_percent                                                L-92   low=0 high=1
+  red_blood_cell_count_million_per_microliter                L-3    low=1 high=0
+
+Day after landing (R+1) vs preflight, all 4 crew in the same direction:
+  fragile absolute_eosinophils_cells_per_microliter                  all preflight: - -14%  without L-44: - -20%  L-3 only: 4/4 +20%
+  fragile absolute_lymphocytes_cells_per_microliter                  all preflight: - -27%  without L-44: 4/4 -35%  L-3 only: 4/4 -36%
+  fragile absolute_neutrophils_cells_per_microliter                  all preflight: - -5%  without L-44: - +1%  L-3 only: 4/4 -23%
+  fragile eosinophils_percent                                        all preflight: - +22%  without L-44: - +28%  L-3 only: 4/4 +63%
+  fragile hematocrit_percent                                         all preflight: 4/4 -2%  without L-44: - -1%  L-3 only: - -1%
+  fragile lymphocytes_percent                                        all preflight: - -3%  without L-44: - -6%  L-3 only: 4/4 -14%
+  ROBUST  mch_picogram                                               all preflight: 4/4 -3%  without L-44: 4/4 -3%  L-3 only: 4/4 -3%
+                                                                     later vs preflight without L-44: R+1 -3%  R+45 -2%  R+82 -1%  R+194 -2%
+  ROBUST  mcv_femtoliter                                             all preflight: 4/4 -4%  without L-44: 4/4 -4%  L-3 only: 4/4 -5%
+                                                                     later vs preflight without L-44: R+1 -4%  R+45 -3%  R+82 -3%  R+194 -5%
+  ROBUST  monocytes_percent                                          all preflight: 4/4 +26%  without L-44: 4/4 +26%  L-3 only: 4/4 +28%
+                                                                     later vs preflight without L-44: R+1 +26%  R+45 +17%  R+82 +16%  R+194 +25%
+  fragile mpv_femtoliter                                             all preflight: - -23%  without L-44: - -23%  L-3 only: 4/4 -3%
+  fragile red_blood_cell_count_million_per_microliter                all preflight: 4/4 +2%  without L-44: - +3%  L-3 only: 4/4 +4%
+  ROBUST  white_blood_cell_count_thousand_per_microliter             all preflight: 4/4 -15%  without L-44: 4/4 -20%  L-3 only: 4/4 -26%
+                                                                     later vs preflight without L-44: R+1 -20%  R+45 -18%  R+82 -17%  R+194 -15%
+
+## Comprehensive metabolic panel (4 crew x 7 draws)
+
+Lab reference ranges (from the dataset):
+  albumin_gram_per_deciliter                                 [3.6] - [5.1]
+  alkaline_phosphatase_units_per_liter                       [31, 36, 37] - [125, 130, 153]
+  total_bilirubin_milligram_per_deciliter                    [0.2] - [1.2]
+  calcium_milligram_per_deciliter                            [8.6] - [10.2, 10.3, 10.4]
+  carbon_dioxide_millimol_per_liter                          [20] - [32]
+  chloride_millimol_per_liter                                [98] - [110]
+  creatinine_milligram_per_deciliter                         [0.5, 0.6] - [1.05, 1.1, 1.35]
+  egfr_african_american_milliliter_per_minute_per_1.73_meter_squared [60] - []
+  egfr_non_african_american_milliliter_per_minute_per_1.73_meter_squared [60] - []
+  globulin_gram_per_deciliter                                [1.9] - [3.7]
+  glucose_milligram_per_deciliter                            [65] - [99]
+  potassium_millimol_per_liter                               [3.5] - [5.3]
+  total_protein_gram_per_deciliter                           [6.1] - [8.1]
+  sodium_millimol_per_liter                                  [135] - [146]
+  urea_nitrogen_bun_milligram_per_deciliter                  [7] - [25]
+
+Values outside the reference range (crew count low/high per draw):
+  alkaline_phosphatase_units_per_liter                       L-92   low=1 high=0
+  alkaline_phosphatase_units_per_liter                       L-3    low=1 high=0
+  carbon_dioxide_millimol_per_liter                          R+194  low=1 high=0
+  chloride_millimol_per_liter                                R+45   low=1 high=0
+  creatinine_milligram_per_deciliter                         L-3    low=0 high=1
+  globulin_gram_per_deciliter                                L-44   low=0 high=1
+  glucose_milligram_per_deciliter                            L-92   low=0 high=1
+  glucose_milligram_per_deciliter                            L-44   low=1 high=0
+  glucose_milligram_per_deciliter                            L-3    low=1 high=0
+  glucose_milligram_per_deciliter                            R+1    low=0 high=1
+  glucose_milligram_per_deciliter                            R+45   low=3 high=0
+  potassium_millimol_per_liter                               L-3    low=1 high=0
+  potassium_millimol_per_liter                               R+1    low=1 high=0
+  potassium_millimol_per_liter                               R+45   low=0 high=1
+  total_protein_gram_per_deciliter                           L-44   low=0 high=1
+  urea_nitrogen_bun_milligram_per_deciliter                  L-3    low=0 high=1
+  urea_nitrogen_bun_milligram_per_deciliter                  R+1    low=0 high=1
+  urea_nitrogen_bun_milligram_per_deciliter                  R+194  low=0 high=3
+
+Day after landing (R+1) vs preflight, all 4 crew in the same direction:
+  fragile albumin_gram_per_deciliter                                 all preflight: 4/4 -3%  without L-44: 4/4 -2%  L-3 only: - +0%
+  fragile alkaline_phosphatase_units_per_liter                       all preflight: - +9%  without L-44: 4/4 +12%  L-3 only: 4/4 +16%
+  fragile calcium_milligram_per_deciliter                            all preflight: 4/4 -3%  without L-44: - -2%  L-3 only: - -1%
+  ROBUST  carbon_dioxide_millimol_per_liter                          all preflight: 4/4 -6%  without L-44: 4/4 -4%  L-3 only: 4/4 -8%
+                                                                     later vs preflight without L-44: R+1 -4%  R+45 +3%  R+82 +6%  R+194 -9%
+  fragile globulin_gram_per_deciliter                                all preflight: - +1%  without L-44: 4/4 +7%  L-3 only: 4/4 +9%
+  ROBUST  glucose_milligram_per_deciliter                            all preflight: 4/4 +24%  without L-44: 4/4 +23%  L-3 only: 4/4 +37%
+                                                                     later vs preflight without L-44: R+1 +23%  R+45 -32%  R+82 +8%  R+194 +8%
+  fragile total_protein_gram_per_deciliter                           all preflight: - -2%  without L-44: - +1%  L-3 only: 4/4 +3%
+  fragile sodium_millimol_per_liter                                  all preflight: - -2%  without L-44: - -2%  L-3 only: 4/4 -2%
+
+## Serum cardiovascular panel (4 crew x 7 draws)
+
+Lab reference ranges (from the dataset):
+  a2_macroglobulin_nanogram_per_milliliter                   [531433.88, 634017.94, 657943.56, 734243.34, 903742.69, 913857.15, 1002300.0, 1048700.0, 1130800.0, 1354300.0, 1403700.0, 1526000.0, 1568600.0, 1651200.0, 1780800.0, 1785900.0, 1820800.0, 1892200.0, 2025600.0, 2036900.0, 2127300.0, 2342900.0, 2895000.0, 2948400.0, 2993600.0, 3030400.0, 3051700.0] - [531433.88, 634017.94, 657943.56, 734243.34, 903742.69, 913857.15, 1002300.0, 1048700.0, 1130800.0, 1354300.0, 1403700.0, 1526000.0, 1568600.0, 1651200.0, 1780800.0, 1785900.0, 1820800.0, 1892200.0, 2025600.0, 2036900.0, 2127300.0, 2342900.0, 2895000.0, 2948400.0, 2993600.0, 3030400.0, 3051700.0]
+  agp_nanogram_per_milliliter                                [942754.34, 1034400.0, 1048700.0, 1068100.0, 1214100.0, 1285200.0, 1559000.0, 1616800.0, 1745700.0, 1850900.0, 1963300.0, 2165100.0, 2220700.0, 2455500.0, 2479200.0, 2595800.0, 2651400.0, 2912600.0, 2918800.0, 2932000.0, 2968900.0, 3046500.0, 3249500.0, 3338700.0, 3484600.0, 3606700.0, 3653700.0, 4564200.0] - [942754.34, 1034400.0, 1048700.0, 1068100.0, 1214100.0, 1285200.0, 1559000.0, 1616800.0, 1745700.0, 1850900.0, 1963300.0, 2165100.0, 2220700.0, 2455500.0, 2479200.0, 2595800.0, 2651400.0, 2912600.0, 2918800.0, 2932000.0, 2968900.0, 3046500.0, 3249500.0, 3338700.0, 3484600.0, 3606700.0, 3653700.0, 4564200.0]
+  crp_picogram_per_milliliter                                [1289600, 1568500, 2191000, 3677200, 5131700, 6713900, 7902300, 8633700, 8927100, 9311500, 9379400, 9383100, 10637600, 11967000, 12680000, 13742000, 15415000, 17701000, 18385000, 21378000, 21462000, 22407000, 25030000, 39190000, 42838000, 46006000, 75749000, 83617000] - [1289600, 1568500, 2191000, 3677200, 5131700, 6713900, 7902300, 8633700, 8927100, 9311500, 9379400, 9383100, 10637600, 11967000, 12680000, 13742000, 15415000, 17701000, 18385000, 21378000, 21462000, 22407000, 25030000, 39190000, 42838000, 46006000, 75749000, 83617000]
+  fetuin_a36_nanogram_per_milliliter                         [125785.45, 144424.41, 155302.07, 159096.21, 163848.05, 180155.97, 188579.51, 190495.51, 194978.74, 241485.24, 245913.55, 253064.34, 253558.23, 270655.44, 271898.71, 273640.25, 276877.57, 280617.78, 285112.88, 287113.08, 294376.04, 295881.1, 300149.84, 316530.95, 329448.71, 334021.3, 357755.04, 373933.42] - [125785.45, 144424.41, 155302.07, 159096.21, 163848.05, 180155.97, 188579.51, 190495.51, 194978.74, 241485.24, 245913.55, 253064.34, 253558.23, 270655.44, 271898.71, 273640.25, 276877.57, 280617.78, 285112.88, 287113.08, 294376.04, 295881.1, 300149.84, 316530.95, 329448.71, 334021.3, 357755.04, 373933.42]
+  fibrinogen_nanogram_per_milliliter                         [1999.88, 2513.02, 2604.7, 2732.11, 2780.38, 2840.5, 2852.5, 3208.77, 3226.41, 3279.23, 3553.01, 3602.38, 3657.0, 3723.84, 4027.43, 4074.55, 4153.93, 4187.89, 4334.63, 4390.9, 4447.08, 4491.95, 4531.17, 4587.13, 4609.49, 5428.66, 5707.32, 6533.18] - [1999.88, 2513.02, 2604.7, 2732.11, 2780.38, 2840.5, 2852.5, 3208.77, 3226.41, 3279.23, 3553.01, 3602.38, 3657.0, 3723.84, 4027.43, 4074.55, 4153.93, 4187.89, 4334.63, 4390.9, 4447.08, 4491.95, 4531.17, 4587.13, 4609.49, 5428.66, 5707.32, 6533.18]
+  haptoglobin_nanogram_per_milliliter                        [73870.48, 80330.74, 122441.48, 203473.61, 568223.15, 853104.4, 1049100.0, 1305900.0, 1864800.0, 2571500.0, 2919100.0, 3204700.0, 3442000.0, 3825900.0, 5442300.0, 6036000.0, 6263200.0, 11995000.0, 13593000.0, 14476000.0, 17907000.0, 55113000.0] - [73870.48, 80330.74, 122441.48, 203473.61, 568223.15, 853104.4, 1049100.0, 1305900.0, 1864800.0, 2571500.0, 2919100.0, 3204700.0, 3442000.0, 3825900.0, 5442300.0, 6036000.0, 6263200.0, 11995000.0, 13593000.0, 14476000.0, 17907000.0, 55113000.0]
+  l_selectin_picogram_per_milliliter                         [515957.2, 561452.93, 568449.05, 596429.89, 629653.79, 675114.37, 762532.23, 789635.95, 847821.61, 893494.17, 1056400.0, 1058100.0, 1075600.0, 1077400.0, 1114100.0, 1119400.0, 1128100.0, 1152700.0, 1193000.0, 1247300.0, 1250800.0, 1256100.0, 1266600.0, 1285900.0, 1317500.0, 1336800.0, 1364800.0, 1398200.0] - [515957.2, 561452.93, 568449.05, 596429.89, 629653.79, 675114.37, 762532.23, 789635.95, 847821.61, 893494.17, 1056400.0, 1058100.0, 1075600.0, 1077400.0, 1114100.0, 1119400.0, 1128100.0, 1152700.0, 1193000.0, 1247300.0, 1250800.0, 1256100.0, 1266600.0, 1285900.0, 1317500.0, 1336800.0, 1364800.0, 1398200.0]
+  pf4_nanogram_per_milliliter                                [2156.35, 2371.07, 3335.42, 3903.78, 5951.22, 6374.28, 6973.32, 8143.69, 8602.35, 11371.31, 12168.67, 13080.91, 13342.85, 13652.06, 14071.86, 14317.3, 15095.42, 15624.9, 15879.14, 18173.95, 19678.31, 21024.9, 21375.52, 21999.42, 23891.75, 25381.08, 26633.16, 28157.23] - [2156.35, 2371.07, 3335.42, 3903.78, 5951.22, 6374.28, 6973.32, 8143.69, 8602.35, 11371.31, 12168.67, 13080.91, 13342.85, 13652.06, 14071.86, 14317.3, 15095.42, 15624.9, 15879.14, 18173.95, 19678.31, 21024.9, 21375.52, 21999.42, 23891.75, 25381.08, 26633.16, 28157.23]
+  sap_picogram_per_milliliter                                [4048000, 4509000, 4760000, 5319800, 5428000, 5592700, 6057300, 6183500, 6670900, 7739400, 9482000, 10138000, 10210000, 10765000, 10983000, 11337000, 11733000, 11850000, 12038000, 12111000, 12329000, 13414000, 13595000, 13775000, 13993000, 16583000, 16745000, 18242000] - [4048000, 4509000, 4760000, 5319800, 5428000, 5592700, 6057300, 6183500, 6670900, 7739400, 9482000, 10138000, 10210000, 10765000, 10983000, 11337000, 11733000, 11850000, 12038000, 12111000, 12329000, 13414000, 13595000, 13775000, 13993000, 16583000, 16745000, 18242000]
+
+Values outside the reference range (crew count low/high per draw):
+
+Day after landing (R+1) vs preflight, all 4 crew in the same direction:
+  fragile agp_nanogram_per_milliliter                                all preflight: - -18%  without L-44: - -22%  L-3 only: 4/4 -25%
+  fragile crp_picogram_per_milliliter                                all preflight: 4/4 +48%  without L-44: - +5%  L-3 only: - +52%
+  fragile fibrinogen_nanogram_per_milliliter                         all preflight: - -20%  without L-44: - -18%  L-3 only: 4/4 -25%
