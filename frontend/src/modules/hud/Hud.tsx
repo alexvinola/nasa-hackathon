@@ -409,22 +409,20 @@ export function Hud() {
 
       <div className="absolute bottom-8 left-8 flex items-center gap-3 text-xs tracking-[0.2em] text-shell/70">
         <LangToggle className="pointer-events-auto" />
-        {/* A gear instead of the version text; right-click it for the developer panels. */}
-        <span
-          role="img"
+        {/* A gear instead of the version text; click it for the developer panels. */}
+        <button
+          type="button"
+          aria-pressed={devTools}
           aria-label={t("hud.version")}
           title={t("hud.version")}
           className={`pointer-events-auto grid h-8 w-8 place-items-center border backdrop-blur ${devTools ? "border-pulse bg-pulse/20 text-pulse" : "border-shell/40 bg-space/60 text-shell/70"} hover:text-shell`}
-          onContextMenu={(event) => {
-            event.preventDefault();
-            setDevTools((was) => !was);
-          }}
+          onClick={() => setDevTools((was) => !was)}
         >
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
             <circle cx="12" cy="12" r="3" />
             <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
           </svg>
-        </span>
+        </button>
       </div>
 
       {/* Stays open even if the readings flicker back to clear mid-test. */}
