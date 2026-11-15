@@ -57,6 +57,7 @@ export function AlertIndicator({
   testing,
   needsTest = true,
   onTest,
+  onClose,
 }: {
   level: AlarmLevel;
   /** Appended to the label, e.g. "NO ES SEGURO SEGUIR DESPIERTO". */
@@ -69,10 +70,12 @@ export function AlertIndicator({
   needsTest?: boolean;
   /** Opens the reaction test, the way to stop the alarm. */
   onTest: () => void;
+  /** The X was pressed: the alert is hidden and the alarm counts as acknowledged. */
+  onClose?: () => void;
 }) {
   const t = useT();
   const look = LOOK[level ?? "clear"];
-  // The X hides this alert; a different one (another level or cause) shows again. The alarm itself is not acknowledged.
+  // The X hides this alert (and the parent acknowledges the alarm); a different one (another level or cause) shows again.
   const [closedKey, setClosedKey] = useState("");
   const key = `${level}|${detail ?? ""}|${steps.join(",")}`;
   useEffect(() => {
@@ -89,7 +92,10 @@ export function AlertIndicator({
     >
       <button
         type="button"
-        onClick={() => setClosedKey(key)}
+        onClick={() => {
+          setClosedKey(key);
+          onClose?.();
+        }}
         aria-label={t("hud.alert.close")}
         className="hud-btn absolute right-2 top-2 grid h-7 w-7 place-items-center text-sm"
       >
