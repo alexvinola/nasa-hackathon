@@ -1,5 +1,6 @@
 /** Calls to the local PULSAR backend (backend/senses.py). Everything stays on this machine. */
 import { getLang, t } from "@/i18n";
+import type { HudAction } from "@/modules/hud/hudActions";
 
 const API = process.env.NEXT_PUBLIC_PULSAR_API ?? "http://localhost:8000";
 
@@ -118,7 +119,14 @@ export function userWaiting() {
 }
 
 export type Spot ="home" | "top_right" | "mid_left" | "mid_right" | "bottom_left" | "bottom_center" | "bottom_right";
-export type Direction = { say: string; spot: Spot | ""; reaction: "calm" | "alert"; speak: boolean };
+export type Direction = {
+  say: string;
+  spot: Spot | "";
+  reaction: "calm" | "alert";
+  speak: boolean;
+  /** Something for the HUD to do (open relaxation, log a habit...), when the astronaut asked for it. */
+  action?: HudAction;
+};
 
 /**
  * Asks Gemma (via the backend) where PULSAR goes, how it reacts and what it says. `instruction` is the astronaut's
@@ -141,6 +149,8 @@ export async function direct(scene: {
   telemetry?: unknown;
   said: string[];
   spot: Spot;
+  /** Today's habits as the HUD shows them, so PULSAR can answer "how am I doing". */
+  habits?: Record<string, number>;
 }): Promise<Direction> {
   const { userSpoke, viaVoice, ...rest } = scene;
   if (userSpoke) waiting++;

@@ -13,7 +13,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.concurrency import run_in_threadpool
 from pydantic import BaseModel, Field
 
-from pulsar import settings
+from pulsar import hud_actions, settings
 from pulsar.contract import telemetry_errors
 from pulsar.rules.api import engine_for
 from pulsar.rules.engine import RulesEngine
@@ -155,6 +155,8 @@ class Scene(BaseModel):
     # The current frame as a base64 JPEG, sent when the astronaut speaks so the answer comes from the picture itself.
     image: str = Field("", max_length=4 * MAX_IMAGE // 3 + 4, pattern=r"^(/9j/[A-Za-z0-9+/]*={0,2})?$")
     lang: str | None = None  # the language PULSAR answers in; the server default when missing
+    # Today's daily habits as the HUD shows them (score 0 to 1, exercise in minutes, water in glasses, relax in times, sleep in hours).
+    habits: dict[str, float] | None = None
 
 
 FILLER = {"the", "and", "you", "your", "are", "was", "has", "have", "with", "for", "that", "this",
@@ -213,6 +215,12 @@ def direct(scene: Scene, engine: RulesEngine | None = None) -> dict:
         return {"say": OUT_OF_SCOPE[lang], "spot": scene.spot if scene.spot in SPOTS else "home", "reaction": "calm", "speak": True}
     if injected:
         scene = scene.model_copy(update={"instruction": ""})  # RED: the required step is still said, without that text
+    if scene.user_spoke and not danger:
+        # A request for the HUD (open the relaxation menu, a measurement, log a habit): a closed list of actions,
+        # matched here without the model; the HUD executes it. See pulsar/hud_actions.py.
+        request = hud_actions.parse(scene.instruction, lang, scene.telemetry, scene.habits)
+        if request:
+            return {"spot": scene.spot if scene.spot in SPOTS else "home", "reaction": "calm", "speak": True, **request}
     if scene.user_spoke and (danger or HEALTH_QUESTION.search(scene.instruction)):
         # The engine decides and Gemma only phrases its verdict; with no readings there is nothing to phrase.
         # While the verdict is RED this is the only thing PULSAR says, whatever it is asked: it keeps telling the

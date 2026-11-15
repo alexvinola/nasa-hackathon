@@ -27,6 +27,14 @@ make check-G5                    # voice acceptance: local models/prerequisites 
 | GET | `/health` | Liveness probe. |
 | POST | `/voice/advise` | `{telemetry, question?}` in; engine `decision`, `say`, `source`, `violations` out. 422 for invalid telemetry; 503 when the phrasing model is unavailable. |
 
+## PULSAR drives the HUD
+
+Two directions between the astronaut and the HUD, neither lets the model decide anything:
+
+- **HUD to PULSAR (readings):** fatigue, eyes closed, heart rate, cabin CO2 and radiation reach Gemma through the sensor MCP server (`mock_mcp.py`, `pulsar/readings.py`), each with the rules engine's verdict.
+- **Astronaut to HUD (actions):** `pulsar/hud_actions.py` matches what the astronaut says or types against a closed list (open relaxation or one of its exercises, open the measurement form on a signal, type a measurement in, log a daily habit, show or expand the habits, tell how today is going). No model call: `POST /pulsar/act` answers with `say` plus an `action`, the frontend (`modules/hud/hudActions.ts`) runs it, and values are checked against the contract bounds on both sides.
+- Examples: "abre relajación y elige tú uno", "quiero medir la tensión", "mi temperatura es 36,8", "he dormido 7 horas", "he hecho 30 minutos de ejercicio", "muéstrame el historial de hábitos", "cómo voy con mis hábitos".
+
 ## Layout
 
 ```
