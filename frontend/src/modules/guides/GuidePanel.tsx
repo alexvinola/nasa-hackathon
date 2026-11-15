@@ -93,7 +93,7 @@ export function GuidePanel({ guide: original, value, status, onClose }: { guide:
         <p className="mt-1 text-xs text-shell/60">{t("guides.panel.countermeasure", { ids: guide.whenAbnormal.countermeasureIds.join(", ") })}</p>
       )}
 
-      <p className="mt-3 border-t border-pulse/20 pt-2 text-[11px] tracking-[0.1em] text-shell/60">
+      <p className="mt-3 border-t border-pulse/20 pt-2 text-xs tracking-[0.1em] text-shell/60">
         {t("guides.panel.sources", { sources: guide.sources.join(", ") })}{guide.assumption ? t("guides.panel.teamSteps") : ""} · <span className="text-orbit">{t("guides.panel.notDevice")}</span>
       </p>
     </section>

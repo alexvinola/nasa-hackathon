@@ -77,13 +77,13 @@ export function LogPanel() {
   }, [shown.length, wide]);
 
   const lines = (
-    <ol className="space-y-0.5 font-mono text-[11px] normal-case leading-snug tracking-normal">
+    <ol className="space-y-0.5 font-mono text-xs normal-case leading-snug tracking-normal">
       {shown.map((event) => (
         <li key={event.id} className={TONE[event.kind] ?? "text-shell/80"}>
-          <span className="text-shell/40">{clock(event.at)}</span> <span className="uppercase">{event.kind}</span> {event.text}
+          <span className="text-shell/60">{clock(event.at)}</span> <span className="uppercase">{event.kind}</span> {event.text}
         </li>
       ))}
-      {!shown.length && <li className="text-shell/50">{down ? "" : t("debug.log.nothing")}</li>}
+      {!shown.length && <li className="text-shell/60">{down ? "" : t("debug.log.nothing")}</li>}
       {down && <li className="text-red-400">{t("debug.log.unreachable", { api: API })}</li>}
       <div ref={end} />
     </ol>

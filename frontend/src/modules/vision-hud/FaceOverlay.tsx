@@ -121,7 +121,7 @@ export function FaceOverlay({
           </p>
         )}
         {error && <p className="mt-1 text-red-300">{error}</p>}
-        <p className="mt-2 text-[11px] tracking-normal text-shell/70">{t("vision.overlay.evidence")}</p>
+        <p className="mt-2 text-xs tracking-normal text-shell/70">{t("vision.overlay.evidence")}</p>
       </HudPanel>
       </div>,
       column)}

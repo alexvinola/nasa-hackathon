@@ -68,7 +68,7 @@ export function HealthPanel({ point, onClose }: { point: HealthPoint; onClose: (
       <h3 className="mt-3 text-xs tracking-[0.15em] text-orbit">{t("guides.health.tools")}</h3>
       <p className="mt-1 leading-snug">{healthText(point.tools, lang)}</p>
 
-      <p className="mt-3 border-t border-pulse/20 pt-2 text-[11px] tracking-[0.1em] text-shell/60">
+      <p className="mt-3 border-t border-pulse/20 pt-2 text-xs tracking-[0.1em] text-shell/60">
         {t("guides.health.sources")}{" "}
         {point.pages.map((page, index) => (
           <span key={page}>

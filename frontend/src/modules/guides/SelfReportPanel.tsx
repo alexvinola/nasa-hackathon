@@ -147,10 +147,10 @@ export function SelfReportPanel({
               className={`border px-2 py-1.5 text-left text-xs leading-tight ${index === at ? "border-pulse bg-pulse/15" : "border-shell/30 hover:border-shell/60"}`}
             >
               <span className="block tracking-[0.1em] text-shell">{candidate.label.toUpperCase()}</span>
-              <span className={saved ? "text-shell/90" : "text-shell/50"}>
+              <span className={saved ? "text-shell/90" : "text-shell/60"}>
                 {saved ? FIELDS[candidate.signal].map((f) => shown(f, entries[f.key])).join("/") + " " + unit(FIELDS[candidate.signal][0]) : t("selfReport.notEntered")}
               </span>
-              {saved && <span className={`ml-2 border px-1 text-[10px] ${TONE[status]}`}>{t(`selfReport.status.${status}` as Key)}</span>}
+              {saved && <span className={`ml-2 border px-1 text-xs ${TONE[status]}`}>{t(`selfReport.status.${status}` as Key)}</span>}
             </button>
           );
         })}
@@ -232,13 +232,13 @@ export function SelfReportPanel({
                   </button>
                   <span className="ml-1 text-shell/70">{unit(f)}</span>
                 </span>
-                <span className={`mt-1 block text-[11px] ${wrong ? "text-red-300" : "text-shell/50"}`}>
+                <span className={`mt-1 block text-xs ${wrong ? "text-red-300" : "text-shell/60"}`}>
                   {t(wrong ? "selfReport.wrong" : "selfReport.accepts", { min: f.min, max: f.max })}
                 </span>
               </label>
             );
           })}
-          <button type="submit" disabled={!ready} className="h-12 border-2 border-pulse bg-pulse/20 px-5 text-base font-bold tracking-[0.1em] text-pulse disabled:border-shell/30 disabled:bg-transparent disabled:text-shell/40">
+          <button type="submit" disabled={!ready} className="h-12 border-2 border-pulse bg-pulse/20 px-5 text-base font-bold tracking-[0.1em] text-pulse disabled:border-shell/30 disabled:bg-transparent disabled:text-shell/60">
             {t("selfReport.save")}
           </button>
           {entered(guide.signal, entries) && (
@@ -257,7 +257,7 @@ export function SelfReportPanel({
         onClick={() => setInfo((was) => !was)}
         className="mt-3 flex items-center gap-2 text-xs tracking-[0.12em] text-pulse hover:text-shell"
       >
-        <span aria-hidden className={`grid h-5 w-5 place-items-center rounded-full border text-[11px] font-bold italic ${info ? "border-pulse bg-pulse/20" : "border-pulse/60"}`}>i</span>
+        <span aria-hidden className={`grid h-5 w-5 place-items-center rounded-full border text-xs font-bold italic ${info ? "border-pulse bg-pulse/20" : "border-pulse/60"}`}>i</span>
         {t(info ? "selfReport.infoLess" : "selfReport.info")}
       </button>
 
@@ -268,7 +268,7 @@ export function SelfReportPanel({
         {REFERENCES[guide.signal].map((reference) => (
           <p key={reference.text} className="mt-1 text-shell">
             {t(reference.text as Key)}{" "}
-            <span className="text-[11px] text-shell/60">
+            <span className="text-xs text-shell/60">
               ({t(reference.flight ? "selfReport.ref.flight" : "selfReport.ref.earth")} · {reference.source})
             </span>
           </p>
@@ -284,13 +284,13 @@ export function SelfReportPanel({
         <p className="mt-1 text-xs text-shell/60">{t("guides.panel.countermeasure", { ids: guide.whenAbnormal.countermeasureIds.join(", ") })}</p>
       )}
 
-      <p className="mt-3 border-t border-pulse/20 pt-2 text-[11px] tracking-[0.1em] text-shell/60">
+      <p className="mt-3 border-t border-pulse/20 pt-2 text-xs tracking-[0.1em] text-shell/60">
         {t("selfReport.footer")} · {t("guides.panel.sources", { sources: guide.sources.join(", ") })}
         {guide.assumption ? t("guides.panel.teamSteps") : ""}
       </p>
       </div>
 
-      <p className="mt-3 border-t border-pulse/20 pt-2 text-[11px] tracking-[0.1em] text-orbit">NOT A MEDICAL DEVICE</p>
+      <p className="mt-3 border-t border-pulse/20 pt-2 text-xs tracking-[0.1em] text-orbit">NOT A MEDICAL DEVICE</p>
       </div>
     </section>
   );

@@ -16,7 +16,7 @@ const ESCALATION = { SELF_CARE: "voice.verdict.selfCare", CREW: "voice.verdict.c
 function Figure({ label, shown, over, tone }: { label: string; shown: string; over: boolean; tone?: string }) {
   return (
     <div>
-      <div className="text-[11px] text-shell/80">{label}</div>
+      <div className="text-xs text-shell/80">{label}</div>
       <div className={`text-3xl leading-tight tracking-normal ${over ? "text-amber-300" : (tone ?? "text-emerald-300")}`}>{shown}</div>
     </div>
   );
@@ -31,14 +31,14 @@ function Mini({ label, label2, value, unit, limit }: { label: string; label2: st
       <span className="block">{label}</span>
       <span className={`block text-base leading-tight tracking-normal ${over ? "text-amber-300" : "text-shell"}`}>
         {value.toFixed(1)}
-        <span className="ml-1 text-[11px] text-shell/70">{unit}</span>
+        <span className="ml-1 text-xs text-shell/70">{unit}</span>
       </span>
       {limit != null && (
         <>
           <div className="mt-1 h-1.5 overflow-hidden rounded bg-shell/15" role="meter" aria-label={label2} aria-valuemin={0} aria-valuemax={limit} aria-valuenow={Math.min(value, limit)}>
             <div className={`h-full ${over ? "bg-amber-400" : "bg-pulse"}`} style={{ width: `${Math.min(100, (value / limit) * 100)}%` }} />
           </div>
-          <span className="mt-0.5 block text-[11px] text-shell/70">{t("voice.verdict.limit", { value: limit.toFixed(1), unit: "" })}</span>
+          <span className="mt-0.5 block text-xs text-shell/70">{t("voice.verdict.limit", { value: limit.toFixed(1), unit: "" })}</span>
         </>
       )}
     </div>
@@ -112,9 +112,9 @@ export function VerdictPanel({
               <span className="block text-base leading-tight tracking-normal text-shell">
                 <span aria-hidden className="hud-beat mr-1 inline-block text-red-400" style={{ animationDuration: `${60 / bpm}s` }}>♥</span>
                 {bpm}
-                <span className="ml-1 text-[11px] text-shell/70">{t("voice.verdict.bpmUnit")}</span>
+                <span className="ml-1 text-xs text-shell/70">{t("voice.verdict.bpmUnit")}</span>
               </span>
-              <span className="mt-1 block text-[11px] text-red-300">{t("voice.verdict.simShort")}</span>
+              <span className="mt-1 block text-xs text-red-300">{t("voice.verdict.simShort")}</span>
             </button>
           )}
           {cabinCo2 != null && <Mini label="CO2" value={cabinCo2} unit="mmHg" limit={cabinCo2Limit} label2={t("voice.verdict.co2Label")} />}
@@ -129,7 +129,7 @@ export function VerdictPanel({
       )}
 
       {error && <p className="mt-2 text-red-400">{error}</p>}
-      <p className="mt-3 text-[11px] text-shell/80">
+      <p className="mt-3 text-xs text-shell/80">
         {simulated ? t("voice.verdict.simulated") : t("voice.verdict.measured")} · {t("voice.verdict.pending")}
       </p>
       </div>

@@ -88,7 +88,7 @@ export function MiniTwin({
     if (action.type === "open_health") setTab("health");
     else if (action.type === "open_measure" || action.type === "set_measure") setTab("measure");
   });
-  const TAB = "flex-1 border px-1 py-1 text-[11px] tracking-[0.08em]";
+  const TAB = "flex-1 border px-1 py-1 text-xs tracking-[0.08em]";
   const place = ([x, y]: V3) => ({
     left: `${((x / (FIGURE_HALF_HEIGHT * FIGURE_ASPECT) + 1) / 2) * 100}%`,
     top: `${((1 - y / FIGURE_HALF_HEIGHT) / 2) * 100}%`,

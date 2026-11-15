@@ -16,7 +16,7 @@ export function LangToggle({ className = "" }: { className?: string }) {
           lang={code}
           aria-pressed={lang === code}
           onClick={() => setLang(code)}
-          className={`grid h-8 w-8 place-items-center border backdrop-blur ${lang === code ? "border-pulse bg-pulse/20 text-pulse" : "border-shell/40 bg-space/60 text-shell/70"}`}
+          className="hud-btn grid h-8 w-8 place-items-center backdrop-blur"
         >
           {code.toUpperCase()}
         </button>

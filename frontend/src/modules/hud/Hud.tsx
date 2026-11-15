@@ -453,7 +453,7 @@ export function Hud() {
           aria-pressed={devTools}
           aria-label={t("hud.version")}
           title={t("hud.version")}
-          className={`pointer-events-auto grid h-8 w-8 place-items-center border backdrop-blur ${devTools ? "border-pulse bg-pulse/20 text-pulse" : "border-shell/40 bg-space/60 text-shell/70"} hover:text-shell`}
+          className="hud-btn pointer-events-auto grid h-8 w-8 place-items-center backdrop-blur"
           onClick={() => setDevTools((was) => !was)}
         >
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
