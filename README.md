@@ -61,6 +61,7 @@ The harness does not declare a goal complete or replace independent verification
 - [Harness guide](docs/HARNESS.md): agent/skill routing and local validation.
 - [Goals](GOALS.md): authoritative acceptance criteria and dependencies.
 - [Sources](docs/sources.md): provenance and explicit assumptions.
+- [Judging](docs/JUDGING.md): the Space Apps rubric, eligibility rules and where PULSAR stands.
 - [NASA data](research/nasa-data/README.md) and [brand assets](docs/brand/).
 
 Repository documentation is in English. No automatic downloads, publishing,
