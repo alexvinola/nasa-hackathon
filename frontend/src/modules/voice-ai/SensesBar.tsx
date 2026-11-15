@@ -58,8 +58,8 @@ export function SensesBar({
           setHeard(text);
           setError(text ? "" : t("voice.senses.heardNothing"));
           if (text) onInstruction?.(text);
-        } catch (e) {
-          fail(e);
+        } catch {
+          setError(t("voice.senses.heardNothing")); // the audio could not be transcribed: ask to say it again
         }
         setTalk("idle");
       };
