@@ -16,7 +16,7 @@
  */
 
 import { FaceLandmarker, FilesetResolver } from "@mediapipe/tasks-vision";
-import { estimateFatigue, WINDOW_S, type FatigueEstimate, type Sample } from "./fatigueModel";
+import { estimateFatigue, MODEL_BLINK, WINDOW_S, type FatigueEstimate, type Sample } from "./fatigueModel";
 import { SustainedClosure } from "./sleep";
 import { BLINK } from "./thresholds";
 import { mouthOpenRatio, YawnDetector } from "./yawn";
@@ -125,9 +125,12 @@ function score(now: number): Biometrics {
   const yawnsPerMin = yawns.length; // the window is one minute
   const spread = Math.sqrt(mean(noseY.map((y) => (y - mean(noseY)) ** 2)));
   const postureStability = clamp01(1 - spread * 12);
-  // 0.6 PERCLOS + 0.25 yawns (4 a minute saturates) + 0.15 head instability
+  // 0.6 PERCLOS + 0.25 yawns (4 a minute saturates) + 0.15 head instability. Team assumption. These weights are the
+  // "browser formula" measured on RLDD and DROZY (data/out/fatigue_report.md), so they stay as measured.
   const overMinute = clamp01(0.6 * perclos + 0.25 * Math.min(1, yawnsPerMin / 4) + 0.15 * (1 - postureStability));
-  const fatigueScore = Math.max(overMinute, closure.score(now / 1000)); // asleep now outweighs the minute's average
+  // Eyes held closed must cross 0.7 on their own within 5 s (goals/G1-camera-fatigue.md): the minute's formula
+  // cannot, so the held closure does (0.7 after about 3 s). Asleep now outweighs the minute's average.
+  const fatigueScore = Math.max(overMinute, closure.score(now / 1000));
   return {
     heartRateBpm: null, // rPPG is a stretch goal (SCOPE-fatigue.md)
     heartRateConfidence: 0,
@@ -160,12 +163,13 @@ function readFace(result: ReturnType<FaceLandmarker["detectForVideo"]>, now: num
   if (yawnDetector.push(now / 1000, mouth)) yawns.push(now);
   const shapes = result.faceBlendshapes?.[0]?.categories;
   const at = (name: string) => shapes?.find((c) => c.categoryName === name)?.score ?? 0;
-  const closed = (at("eyeBlinkLeft") + at("eyeBlinkRight")) / 2 > BLINK;
+  const blink = (at("eyeBlinkLeft") + at("eyeBlinkRight")) / 2;
+  const closed = blink > BLINK;
   const m = result.facialTransformationMatrixes?.[0]?.data;
   samples.push({
     t: now / 1000,
     face: Boolean(landmarks),
-    closed: landmarks && shapes ? Number(closed) : Number.NaN,
+    closed: landmarks && shapes ? Number(blink > MODEL_BLINK) : Number.NaN, // the model's own definition
     pitch: landmarks && m ? Math.atan2(m[6], m[10]) * DEG : Number.NaN,
     mouth,
   });
