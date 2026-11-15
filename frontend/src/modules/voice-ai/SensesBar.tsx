@@ -13,8 +13,8 @@ const ON = "border-pulse bg-pulse text-space";
 
 /**
  * PULSAR's controls. Nothing here runs on its own: SEND answers what was typed, HOLD TO TALK records while the
- * button (or the space bar) is held and sends when it is released, and SPEAK reads PULSAR's current line aloud.
- * Each label names the key that does the same.
+ * mic button (or the space bar) is held and sends when it is released. PULSAR reads each new line of its own aloud
+ * (the S key stops it or repeats it). The input, the mic and the send arrow sit on one row, like a chat.
  */
 export function SensesBar({
   line,
@@ -79,6 +79,11 @@ export function SensesBar({
     if (isSpeaking()) stopSpeaking();
     else if (line) speak(line).catch(fail);
   };
+  // PULSAR always speaks what it says. A browser that has not yet had a click may refuse to play: that is not an error.
+  useEffect(() => {
+    if (line) speak(line).catch((e) => e?.name !== "NotAllowedError" && fail(e));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [line]);
   useHotkey(" ", press, release);
   useHotkey("s", speakLine);
 
@@ -116,27 +121,24 @@ export function SensesBar({
             aria-label={t("voice.senses.inputLabel")}
             className="min-w-0 flex-1 border-2 border-shell bg-space/95 px-3 py-2 text-lg tracking-normal text-white outline-none placeholder:text-shell/70 focus:border-pulse"
           />
-          <button type="submit" disabled={!typed.trim()} className={`${BUTTON} ${ON}`}>
-            {t("voice.senses.send")}
-          </button>
-        </form>
-        <div className="flex gap-2">
-          <button type="button" disabled={!line} onClick={speakLine} className={`${BUTTON} ${OFF}`}>
-            {t("voice.senses.speak")}
-          </button>
           <button
             type="button"
             aria-pressed={talk === "recording"}
+            aria-label={talk === "recording" ? t("voice.senses.release") : talk === "transcribing" ? t("voice.senses.transcribing") : t("voice.senses.hold")}
+            title={talk === "recording" ? t("voice.senses.release") : t("voice.senses.hold")}
             disabled={talk === "transcribing"}
             onPointerDown={press}
             onPointerUp={release}
             onPointerLeave={release}
             onPointerCancel={release}
-            className={`${BUTTON} touch-none select-none ${talk === "recording" ? "border-red-500 bg-red-600 text-white" : OFF}`}
+            className={`${BUTTON} grid place-items-center px-3 touch-none select-none ${talk === "recording" ? "animate-pulse border-red-500 bg-red-600 text-white" : OFF}`}
           >
-            {talk === "recording" ? t("voice.senses.release") : talk === "transcribing" ? t("voice.senses.transcribing") : t("voice.senses.hold")}
+            <svg aria-hidden viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="2" width="6" height="12" rx="3" /><path d="M5 11a7 7 0 0 0 14 0M12 18v4" /></svg>
           </button>
-        </div>
+          <button type="submit" aria-label={t("voice.senses.send")} title={t("voice.senses.send")} disabled={!typed.trim()} className={`${BUTTON} grid place-items-center px-3 ${ON}`}>
+            <svg aria-hidden viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 19V5M5 12l7-7 7 7" /></svg>
+          </button>
+        </form>
       </div>
     </div>
   );
