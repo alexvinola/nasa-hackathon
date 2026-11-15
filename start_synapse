@@ -99,7 +99,7 @@ else
 fi
 
 answers "$OLLAMA_URL/api/tags" && answers "$BACKEND_URL/health" && answers "$FRONTEND_URL/" || fail "a service stopped answering"
-say ready "$FRONTEND_URL  (backend $BACKEND_URL, Ollama $OLLAMA_URL)"
+say ready "$FRONTEND_URL/  (app: $FRONTEND_URL/pulsar, backend $BACKEND_URL, Ollama $OLLAMA_URL)"
 
 [[ $CHECK_ONLY == 1 ]] && exit 0
 if [[ ${#started[@]} -eq 0 ]]; then

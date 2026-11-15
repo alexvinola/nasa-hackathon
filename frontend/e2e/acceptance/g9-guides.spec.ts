@@ -51,7 +51,7 @@ const NOT_JUDGED = "PULSAR does not judge this value yet: tell the crew medical 
 
 test("each marker on the twin opens its guide in one click", async ({ page }) => {
   await mockEngine(page, "01-nominal.json");
-  await page.goto("/");
+  await page.goto("/pulsar");
   expect(guides).toHaveLength(6);
   for (const guide of guides) {
     await page.locator(`[data-twin] [data-indicator="${guide.signal}"]`).click();
@@ -69,7 +69,7 @@ test("each marker on the twin opens its guide in one click", async ({ page }) =>
 
 test("the HUD heart-rate reading opens its guide with the current value", async ({ page }) => {
   await mockEngine(page, "01-nominal.json");
-  await page.goto("/");
+  await page.goto("/pulsar");
   await page.locator('[data-reading="biometrics.heartRateBpm"]').click();
   const panel = guideOf(page, "biometrics.heartRateBpm");
   await expect(panel).toBeVisible();
@@ -85,7 +85,7 @@ for (const [scenarioFile, flagged, clear] of [
 ] as const) {
   test(`the guide shows the engine's status for the indicator (${scenarioFile})`, async ({ page }) => {
     await mockEngine(page, scenarioFile);
-    await page.goto("/");
+    await page.goto("/pulsar");
     const ruleStatus = rules.find((rule) => rule.signal === flagged)!.status;
 
     await page.locator(`[data-twin] [data-indicator="${flagged}"]`).click();
@@ -98,7 +98,7 @@ for (const [scenarioFile, flagged, clear] of [
 
 test("each how-step highlights its part of the animation", async ({ page }) => {
   await mockEngine(page, "01-nominal.json");
-  await page.goto("/");
+  await page.goto("/pulsar");
   for (const guide of guides) {
     await page.locator(`[data-twin] [data-indicator="${guide.signal}"]`).click();
     const panel = guideOf(page, guide.signal);
@@ -113,7 +113,7 @@ test("each how-step highlights its part of the animation", async ({ page }) => {
 test("the guide closes and respects reduced motion", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await mockEngine(page, "01-nominal.json");
-  await page.goto("/");
+  await page.goto("/pulsar");
   await page.locator('[data-twin] [data-indicator="selfReport.bodyTempC"]').click();
   const panel = guideOf(page, "selfReport.bodyTempC");
   await expect(panel.locator("[data-guide-animation]")).toHaveAttribute("data-motion", "still");

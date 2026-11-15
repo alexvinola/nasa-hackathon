@@ -49,7 +49,7 @@ async function withCamera<T>(playwright: PlaywrightWorkerArgs["playwright"], bas
 async function watch(page: Page, seconds: number) {
   await page.route("http://localhost:8000/**", (route) => route.fulfill({ status: 503 }));
   await page.addInitScript(recordReadings);
-  await page.goto("/");
+  await page.goto("/pulsar");
   // Model download and camera start are not part of the 5 s: the clock starts at the first reading.
   await page.waitForFunction(() => (window as unknown as { __g1: Reading[] }).__g1.length > 0, null, { timeout: 60_000 });
   await page.waitForTimeout(seconds * 1000);

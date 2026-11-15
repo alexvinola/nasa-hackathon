@@ -292,7 +292,7 @@ footer .fine { font: 500 11px/1.7 var(--f-mono); letter-spacing: .06em; color: v
       <button type="button" data-lang="es" aria-pressed="true">ES</button>
       <button type="button" data-lang="en" aria-pressed="false">EN</button>
     </div>
-    <a class="pill" href="pulsar-intro.html" data-i="navFilm">Ver la película</a>
+    <a class="pill" href="pulsar-intro.html?next=/pulsar&autoplay=1" data-i="navFilm">Ver la película</a>
   </div>
 </header>
 
@@ -306,7 +306,8 @@ footer .fine { font: 500 11px/1.7 var(--f-mono); letter-spacing: .06em; color: v
       <h1 data-i="h1">Tu compañero de salud personal. <em>En el espacio.</em> Y&nbsp;en&nbsp;la&nbsp;Tierra.</h1>
       <p class="lead" data-i="heroLead">PULSAR detecta signos de fatiga con una webcam, te pregunta cómo estás, decide con reglas explícitas y te lo explica con voz. Todo en un portátil, sin internet y sin que ninguna imagen salga de la máquina.</p>
       <div class="ctas">
-        <a class="button" href="pulsar-intro.html" data-i="ctaFilm">▶ Ver la película · 41 s</a>
+        <a class="button" href="pulsar-intro.html?next=/pulsar&autoplay=1" data-i="ctaFilm">▶ Ver la película</a>
+        <a class="button ghost" href="/pulsar" data-i="ctaTry">▶ Probar PULSAR</a>
         <a class="button ghost" href="#como-decide" data-i="ctaHow">Cómo funciona ↓</a>
       </div>
       <div class="chips">
@@ -617,7 +618,8 @@ footer .fine { font: 500 11px/1.7 var(--f-mono); letter-spacing: .06em; color: v
     <h2 class="rv" data-i="cl_h2">Cuidar a la tripulación es <em>cuidar la misión.</em></h2>
     <p class="lead rv" data-i="cl_lead">Y en la Tierra, la misión es llegar a casa.</p>
     <div class="ctas rv">
-      <a class="button" href="pulsar-intro.html" data-i="ctaFilm2">▶ Ver la película</a>
+      <a class="button" href="pulsar-intro.html?next=/pulsar&autoplay=1" data-i="ctaFilm2">▶ Ver la película</a>
+      <a class="button ghost" href="/pulsar" data-i="ctaTry2">▶ Probar PULSAR</a>
       <a class="button ghost" href="#top" data-i="ctaTop">Volver arriba ↑</a>
     </div>
   </div>
@@ -637,11 +639,11 @@ footer .fine { font: 500 11px/1.7 var(--f-mono); letter-spacing: .06em; color: v
   const EN = {
     navLabel: "Sections", tabsLabel: "Contexts on Earth",
     n1: "The problem", n2: "What it does", n2b: "Ask it", n3: "How it decides", n4: "On Earth", n5: "NASA data", n6: "Roadmap", n8: "Team", n7: "FAQ",
-    navFilm: "Watch the film",
+    navFilm: "Watch the film", ctaTry: "▶ Try PULSAR", ctaTry2: "▶ Try PULSAR",
     eyebrow: "NASA Space Apps 2026 · Health monitoring software for astronauts",
     h1: "Your personal health companion. <em>In space.</em> And&nbsp;on&nbsp;Earth.",
     heroLead: "PULSAR spots signs of fatigue through a webcam, asks how you are, decides with explicit rules and explains it out loud. All on one laptop, with no internet, and no image ever leaves the machine.",
-    ctaFilm: "▶ Watch the film · 41 s", ctaHow: "How it works ↓",
+    ctaFilm: "▶ Watch the film", ctaHow: "How it works ↓",
     chip1: "100% local, no network", chip2: "Rules decide, the AI only speaks", chip3: "6 health indicators", chip4: "Spanish and English",
     k1: "01 · The problem",
     p_h2: "On a long mission, nobody looks at your face every morning.",
