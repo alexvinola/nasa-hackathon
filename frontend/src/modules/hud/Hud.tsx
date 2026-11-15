@@ -21,7 +21,9 @@ import { HealthPanel } from "@/modules/guides/HealthPanel";
 import { HEALTH_POINTS } from "@/modules/guides/healthPoints";
 import { GUIDES, currentValue, statusOf } from "@/modules/guides/guides";
 import { SelfReportPanel } from "@/modules/guides/SelfReportPanel";
-import { type Entries } from "@/modules/guides/selfReport";
+import { FIELDS, isValid, type Entries } from "@/modules/guides/selfReport";
+import { dispatchHudAction, useHudAction } from "./hudActions";
+import { todayHabits } from "@/modules/habits/habitStore";
 import { useFaceMetrics } from "@/modules/vision-hud/useFaceMetrics";
 import { FaceOverlay } from "@/modules/vision-hud/FaceOverlay";
 import type { Biometrics, FaceFrame } from "@/modules/vision-hud/faceWorker";
@@ -124,6 +126,22 @@ export function Hud() {
     setGuideSignal(signal);
     setReporting(true);
   };
+  // PULSAR was asked, by voice or chat, to open a measurement or to type one in. The values are checked again here
+  // against the contract's bounds, as if they had been typed in the form.
+  useHudAction((action) => {
+    if (action.type === "open_measure") {
+      if (action.signal) openGuide(action.signal);
+      else {
+        setHealthId(null);
+        setReporting(true);
+      }
+    } else if (action.type === "set_measure") {
+      const fields = FIELDS[action.signal];
+      if (!fields || !fields.every((f) => isValid(f, action.values[f.key]))) return;
+      setEntries((had) => ({ ...had, ...Object.fromEntries(fields.map((f) => [f.key, action.values[f.key]])) }));
+      openGuide(action.signal);
+    }
+  });
   // The SALUD point whose panel is open (id in guides/healthPoints.ts); it shares the place of the guides, so one at a time.
   const [healthId, setHealthId] = useState<string | null>(null);
   const healthPoint = HEALTH_POINTS.find((candidate) => candidate.id === healthId);
@@ -238,6 +256,7 @@ export function Hud() {
           history: turns.current,
           said: said.current,
           spot: spot.current,
+          habits: todayHabits(),
           telemetry: telemetryNow.current, // so PULSAR knows the engine's current health check
         }),
       )
@@ -246,6 +265,7 @@ export function Hud() {
         moveTo(d.spot);
         setDirected(d);
         say(d.say, order);
+        if (d.action) dispatchHudAction(d.action);
       })
       .catch(() => undefined); // backend or model down: the mascot keeps its last line
   }, [videoRef, say, moveTo]);
@@ -378,6 +398,7 @@ export function Hud() {
           statuses={guideStatuses}
           signal={guideSignal}
           onSelect={setGuideSignal}
+          valueOf={(signal) => currentValue(signal, telemetryNow.current)}
           onSave={(values) => setEntries((had) => ({ ...had, ...values }))}
           onClear={(keys) => setEntries((had) => Object.fromEntries(Object.entries(had).filter(([key]) => !keys.includes(key))))}
           onClose={() => {

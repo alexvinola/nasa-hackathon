@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useLang, useT, type Key } from "@/i18n";
 import { HudPanel } from "@/modules/hud/HudPanel";
+import { useHudAction } from "@/modules/hud/hudActions";
 import { BADGES, dayKey, dayScore, daysBack, GOOD_DAY, habitStats, HABITS, history, levelOf, pending, progress, range, streak, totalXp, XP_PER_LEVEL, type HabitId } from "./habits";
 import { logHabit, setHabit, useHabitLog } from "./habitStore";
 
@@ -202,6 +203,19 @@ export function HabitsPanel({ sleepHours }: { /** Hours slept, as typed in "Regi
   const [selected, setSelected] = useState<HabitId>("exercise");
   const [span, setSpan] = useState(7);
   const [expanded, setExpanded] = useState(false);
+  const [folded, setFolded] = useState(true);
+  // PULSAR was asked to log a habit or to show them: the panel opens so the change is seen.
+  useHudAction((action) => {
+    if (action.type === "log_habit") {
+      const habit = HABITS.find((item) => item.id === action.habit);
+      if (!habit || habit.fromReport || !(action.amount > 0)) return;
+      logHabit(habit.id, action.amount);
+      setFolded(false);
+    } else if (action.type === "open_habits") {
+      setFolded(false);
+      if (action.expand) setExpanded(true);
+    }
+  });
   useEffect(() => {
     if (sleepHours != null) setHabit("sleep", sleepHours);
   }, [sleepHours]);
@@ -220,7 +234,7 @@ export function HabitsPanel({ sleepHours }: { /** Hours slept, as typed in "Regi
   const score = percent(dayScore(log, dayKey(today)));
 
   return (
-    <HudPanel data-habits title={<span className={due.length ? "animate-pulse text-amber-300" : ""}>{t("habits.title")}{due.length ? ` · ${due.length}` : ""}</span>} defaultOpen={false}>
+    <HudPanel data-habits title={<span className={due.length ? "animate-pulse text-amber-300" : ""}>{t("habits.title")}{due.length ? ` · ${due.length}` : ""}</span>} open={!folded} onOpenChange={(open) => setFolded(!open)}>
       <p className="flex justify-between text-shell">
         <span>{t("habits.level", { level: levelOf(xp) })}</span>
         <span>{t("habits.streak", { days })}</span>

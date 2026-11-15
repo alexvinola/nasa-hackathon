@@ -49,6 +49,8 @@ Nobody writes in someone else's folder: until integration, work against `shared/
 - Every number and label traces back to `shared/sources.json` or is declared as an assumption: scenarios through
   their `provenance`, rules through `GET /rules`, factors through `source`. HRP hazards and risks use the official
   names in `shared/hrp.json`. `make contract` fails otherwise; `make sources` regenerates `docs/sources.md`.
+- PULSAR drives the HUD only through the closed action list in `backend/pulsar/hud_actions.py` (matched without the
+  model, values checked against the contract): the model never writes an action, a health status or an escalation.
 - Fatigue features are extracted with MediaPipe in Python too, exactly as in the browser.
 
 ## Stack and commands

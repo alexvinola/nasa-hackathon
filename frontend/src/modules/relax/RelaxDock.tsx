@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import { useT } from "@/i18n";
 import { logHabit } from "@/modules/habits/habitStore";
 import { LEFT_COLUMN_ID } from "@/modules/hud/HudPanel";
+import { useHudAction } from "@/modules/hud/hudActions";
 import { useHotkey } from "@/modules/hud/useHotkey";
 import { EXERCISES, position, totalSeconds, type Exercise } from "./exercises";
 import { Cue, Orb, RelaxBackdrop } from "./RelaxScene";
@@ -59,6 +60,16 @@ export function RelaxDock({ suggest = false }: { suggest?: boolean }) {
   // The RELAX button joins the stack of panels on the left, above the rest, so it moves with them.
   const [column, setColumn] = useState<HTMLElement | null>(null);
   useEffect(() => setColumn(document.getElementById(LEFT_COLUMN_ID)), []);
+  // PULSAR was asked to open the relaxation menu, or to put one exercise on.
+  useHudAction((action) => {
+    if (action.type !== "open_relax") return;
+    const picked = EXERCISES.find((item) => item.id === action.exercise);
+    if (picked) start(picked);
+    else {
+      setExercise(null);
+      setOpen(true);
+    }
+  });
   useHotkey("escape", () => {
     if (open) {
       setExercise(null);

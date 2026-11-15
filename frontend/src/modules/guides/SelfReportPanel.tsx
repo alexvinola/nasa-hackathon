@@ -28,6 +28,7 @@ export function SelfReportPanel({
   statuses,
   signal,
   onSelect,
+  valueOf,
   onSave,
   onClear,
   onClose,
@@ -37,6 +38,8 @@ export function SelfReportPanel({
   /** The measurement a body marker asked for; the form moves to it, and reports the tab it is on. */
   signal?: string | null;
   onSelect?: (signal: string) => void;
+  /** The reading the HUD has now for a measurement, as text ("72 bpm"). */
+  valueOf?: (signal: string) => string;
   onSave: (values: Entries) => void;
   onClear: (keys: string[]) => void;
   onClose: () => void;
@@ -49,7 +52,11 @@ export function SelfReportPanel({
     const asked = GUIDES.findIndex((guide) => guide.signal === signal);
     if (asked >= 0) setAt(asked);
   }, [signal]);
-  useEffect(() => onSelect?.(GUIDES[at].signal), [at]); // eslint-disable-line react-hooks/exhaustive-deps
+  const mounted = useRef(false);
+  useEffect(() => {
+    if (mounted.current) onSelect?.(GUIDES[at].signal);
+    mounted.current = true;
+  }, [at]); // eslint-disable-line react-hooks/exhaustive-deps
   const t = useT();
   const lang = useLang();
   const guide = localizedGuide(GUIDES[at], lang);
@@ -95,6 +102,7 @@ export function SelfReportPanel({
     <section
       data-hud-panel
       data-self-report
+      data-guide={signal === guide.signal ? guide.signal : undefined}
       aria-label={t("selfReport.aria")}
       onKeyDown={(event) => event.key === "Escape" && onClose()}
       className="absolute left-[19rem] top-24 z-10 max-h-[calc(100vh-17rem)] w-[46rem] max-w-[calc(100vw-22rem)] overflow-y-auto border-2 border-pulse/60 bg-space/80 p-4 text-sm text-shell backdrop-blur"
@@ -140,6 +148,12 @@ export function SelfReportPanel({
         <div className="w-64 shrink-0">
           <GuideAnimation key={guide.signal} signal={guide.signal} focus={guide.how[Math.min(step, guide.how.length - 1)].focus} label={guide.label} />
           <p className="mt-1 text-xs tracking-[0.1em] text-shell/70">{guide.instrument}</p>
+          <dl className="mt-2 text-xs tracking-[0.1em] text-shell/70">
+            <dt>{t("guides.panel.now")}</dt>
+            <dd data-guide-value className="text-xl tracking-normal text-shell">{valueOf?.(guide.signal)}</dd>
+            <dt className="mt-1">{t("guides.panel.engine")}</dt>
+            <dd data-guide-status className={`mt-1 inline-block border px-2 py-0.5 text-sm ${TONE[statuses[guide.signal] ?? "WAITING"]}`}>{statuses[guide.signal] ?? "WAITING"}</dd>
+          </dl>
         </div>
 
         <div className="min-w-0 flex-1">
@@ -149,6 +163,7 @@ export function SelfReportPanel({
               <li key={item.text}>
                 <button
                   type="button"
+                  data-guide-step
                   aria-current={index === step ? "step" : undefined}
                   onClick={() => setStep(index)}
                   className={`flex w-full gap-2 border px-2 py-0.5 text-left text-[13px] leading-snug ${index === step ? "border-pulse bg-pulse/15 text-shell" : "border-transparent text-shell/70 hover:border-shell/30"}`}
@@ -231,6 +246,15 @@ export function SelfReportPanel({
           </p>
         ))}
       </aside>
+
+      <h3 className="mt-3 text-xs tracking-[0.15em] text-orbit">{t("guides.panel.why")}</h3>
+      <p className="mt-1 leading-snug">{guide.why}</p>
+      <h3 className="mt-3 text-xs tracking-[0.15em] text-orbit">{t("guides.panel.abnormal")}</h3>
+      <p className="mt-1 leading-snug">{guide.whenAbnormal.text}</p>
+      {guide.whenAbnormal.countermeasureIds.length > 0 && (
+        // Rule ids stay out of sight: some carry their limit in the name, and a guide quotes no threshold.
+        <p className="mt-1 text-xs text-shell/60">{t("guides.panel.countermeasure", { ids: guide.whenAbnormal.countermeasureIds.join(", ") })}</p>
+      )}
 
       <p className="mt-3 border-t border-pulse/20 pt-2 text-[11px] tracking-[0.1em] text-shell/60">
         {t("selfReport.footer")} · {t("guides.panel.sources", { sources: guide.sources.join(", ") })}

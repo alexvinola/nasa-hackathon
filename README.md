@@ -13,6 +13,11 @@ The internal S.Y.N.A.P.S.E. identifiers remain for compatibility.
 - Shared telemetry schema, scenarios, sources and official HRP identifiers.
 - FastAPI deterministic rules and countermeasures, with a local voice pipeline.
 - Next.js HUD, MediaPipe worker, PVT logic and indicator guides.
+- HUD companions: a daily-habits panel (four habits, a perfect-day score, 3/7/30-day ranges and an expanded
+  month view), guided relaxation exercises, one panel that merges "how to measure" with the measurement form,
+  a gear menu for the developer panels (AI check with Gemma 4, debug, log), and ES/EN text.
+- PULSAR drives the HUD by voice or chat through a closed list of actions (open relaxation or an exercise, open a
+  measurement, type a measurement or a habit in, show the habits); see [the backend guide](backend/README.md).
 - Python vision extraction, fatigue training/model artifacts and yawn calibration.
 - Acceptance checks and goal-oriented agent workflows.
 

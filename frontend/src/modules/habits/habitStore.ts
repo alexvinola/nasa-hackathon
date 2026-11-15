@@ -1,7 +1,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { dayKey, HABITS, mockLog, type HabitId, type Log } from "./habits";
+import { dayKey, dayScore, HABITS, mockLog, type HabitId, type Log } from "./habits";
 
 const KEY = "pulsar-habits-v2"; // v2: a fresh 60-day demo history and an empty today
 const EMPTY: Log = {};
@@ -49,6 +49,13 @@ export function logHabit(id: HabitId, amount: number, now = new Date()) {
     /* the habit stays in memory for this session */
   }
   listeners.forEach((listener) => listener());
+}
+
+/** Today's habits as PULSAR needs them to answer "how am I doing": the score (0 to 1) and each habit's value. */
+export function todayHabits(now = new Date()): Record<string, number> {
+  const current = load();
+  const key = dayKey(now);
+  return { score: dayScore(current, key), ...Object.fromEntries(HABITS.map((habit) => [habit.id, current[key]?.[habit.id] ?? 0])) };
 }
 
 export function useHabitLog(): Log {

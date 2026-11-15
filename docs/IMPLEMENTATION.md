@@ -39,6 +39,18 @@ does not mean all other source is absent, and present prerequisites do not prove
 No model latency, camera FPS, classifier accuracy or disconnected-demo result is
 claimed from this audit. Do not convert fixture presence into measured performance.
 
+## HUD additions after the snapshot (2026-11-15)
+
+- Daily habits (`frontend/src/modules/habits`): four habits, perfect-day score, 3/7/30-day ranges, expanded
+  month/range view, 60 days of demo data. Unit tests in `habits.test.ts`.
+- One measurement panel (`guides/SelfReportPanel.tsx`) now carries the guide of the selected marker and the form;
+  the G9 Playwright spec passes against it (6 of 6, served with `next start` on 3100 because a dev server of this
+  folder holds the dev lock).
+- PULSAR drives the HUD (`backend/pulsar/hud_actions.py`, `frontend/src/modules/hud/hudActions.ts`): closed action
+  list, no model call, values checked against the contract on both sides. Unit tests in
+  `backend/tests/unit/test_hud_actions.py`. Not exercised end to end against a restarted backend.
+- Backend acceptance tests that call Ollama (`test_voice.py` phrasing and bench) need the local model running.
+
 ## G9 independent review limitations
 
 The verifier mapped the six guides, sources, official HRP names, rule references and
