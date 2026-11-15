@@ -33,7 +33,7 @@ export function HudPanel({
   const open = forced ?? inner;
   const setOpen = (next: (was: boolean) => boolean) => (onOpenChange ?? setInner)(next(open));
   return (
-    <section data-hud-panel {...rest} className={`border border-pulse/30 bg-space/60 p-3 text-xs tracking-[0.12em] text-shell/80 backdrop-blur ${up ? "flex flex-col-reverse" : ""} ${className}`}>
+    <section data-hud-panel {...rest} className={`hud-glass border p-3 text-xs tracking-[0.12em] text-shell/80 backdrop-blur ${up ? "flex flex-col-reverse" : ""} ${className}`}>
       <button type="button" aria-expanded={open} onClick={() => setOpen((was) => !was)} className="pointer-events-auto flex w-full items-center justify-between gap-3 text-left text-pulse">
         <span>{title}</span>
         <span aria-hidden className="border border-pulse/40 px-1.5 leading-tight">{open ? "−" : "+"}</span>

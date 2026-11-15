@@ -84,7 +84,7 @@ export function VerdictPanel({
   const [open, setOpen] = useState(true);
 
   return (
-    <section data-hud-panel className="pointer-events-auto absolute right-8 top-28 max-h-[calc(100vh-15.5rem)] w-80 overflow-y-auto [scrollbar-color:var(--color-pulse)_transparent] [scrollbar-width:thin] rounded-lg border border-pulse/30 bg-space/60 p-4 text-sm tracking-[0.1em] text-shell/80 backdrop-blur">
+    <section data-hud-panel className="hud-glass border pointer-events-auto absolute right-8 top-28 max-h-[calc(100vh-15.5rem)] w-80 overflow-y-auto [scrollbar-color:var(--color-pulse)_transparent] [scrollbar-width:thin] p-4 text-sm tracking-[0.1em] text-shell/80 backdrop-blur">
       <button type="button" aria-expanded={open} onClick={() => setOpen((was) => !was)} className="pointer-events-auto flex w-full items-center gap-3 text-left">
         <span className={`h-3 w-3 rounded-full ${decision ? LIGHT[decision.status] : "bg-orbit/40"}`} />
         <span className="text-pulse">{decision ? decision.status : t("voice.verdict.waiting")}</span>
