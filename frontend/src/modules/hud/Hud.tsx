@@ -281,9 +281,8 @@ export function Hud() {
       <video ref={videoRef} muted playsInline className="absolute inset-0 h-full w-full -scale-x-100 object-cover" />
       {/* The left column of foldable panels, below the mascot's home corner. Declared before the camera overlay,
           whose AI-check panel joins it through a portal. */}
-      {/* Below xl the centred text box (42rem wide, 12.5rem off the bottom) reaches under this column, so the column
-          stops above it and scrolls. shortcut: assumes the box's usual height, measure it if the box grows. */}
-      <div id={LEFT_COLUMN_ID} className="absolute left-8 top-60 z-[1] flex max-h-[calc(100vh-28.5rem)] w-64 flex-col gap-2 overflow-y-auto [scrollbar-color:var(--color-pulse)_transparent] [scrollbar-width:thin] xl:max-h-[calc(100vh-18rem)]">
+      {/* The column stops above the footer line and scrolls; the centred text box keeps clear of it at any width. */}
+      <div id={LEFT_COLUMN_ID} className="absolute left-8 top-60 z-[1] flex max-h-[calc(100vh-19.5rem)] w-64 flex-col gap-2 overflow-y-auto [scrollbar-color:var(--color-pulse)_transparent] [scrollbar-width:thin]">
         <button
           type="button"
           data-self-report-open

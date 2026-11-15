@@ -98,7 +98,8 @@ export function SensesBar({
 
   return (
     <div className="pointer-events-none absolute inset-x-0 bottom-16 flex justify-center px-8 text-sm tracking-[0.15em]">
-      <div data-hud-panel className="pointer-events-auto flex w-full max-w-2xl flex-col items-center gap-2">
+      {/* Never under the side columns: 16rem on the left and 20rem on the right, plus margins, stay free. */}
+      <div data-hud-panel className="pointer-events-auto flex w-full min-w-72 max-w-[min(42rem,calc(100vw-44rem))] flex-col items-center gap-2">
         {/* What PULSAR understood, on a solid plate so it can be checked against what was said or typed. */}
         <p role="status" className="min-h-8 text-center text-lg tracking-normal">
           {error ? (
