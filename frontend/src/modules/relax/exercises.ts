@@ -60,10 +60,6 @@ export const EXERCISES: Exercise[] = [
   },
 ];
 
-/** Reminder intervals in minutes; 0 is off. The 1 minute option is for trying it out. */
-export const REMINDER_OPTIONS = [0, 1, 15, 30, 60] as const;
-export type ReminderEvery = (typeof REMINDER_OPTIONS)[number];
-
 export const totalSeconds = (exercise: Exercise) => exercise.rounds * exercise.phases.reduce((sum, phase) => sum + phase.seconds, 0);
 
 /** Where `elapsed` seconds into an exercise falls: the phase, the time left in it and whether it is over. */

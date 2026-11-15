@@ -1,11 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { useT } from "@/i18n";
-import { EXERCISES, REMINDER_OPTIONS, position, totalSeconds, type Exercise } from "./exercises";
+import { logHabit } from "@/modules/habits/habitStore";
+import { LEFT_COLUMN_ID } from "@/modules/hud/HudPanel";
+import { useHotkey } from "@/modules/hud/useHotkey";
+import { EXERCISES, position, totalSeconds, type Exercise } from "./exercises";
+import { Cue, Orb, RelaxBackdrop } from "./RelaxScene";
 import { useRelaxReminder } from "./useRelaxReminder";
 
-const BTN = "border px-3 py-1.5 text-xs tracking-[0.12em] hover:border-shell";
+const BTN = "border-2 px-4 py-2 text-sm font-bold tracking-[0.12em] hover:border-shell";
 
 /** The guide circle of a running exercise: it grows and shrinks over each phase, with the instruction and the seconds left. */
 function Session({ exercise, onEnd }: { exercise: Exercise; onEnd: (finished: boolean) => void }) {
@@ -20,20 +25,19 @@ function Session({ exercise, onEnd }: { exercise: Exercise; onEnd: (finished: bo
     if (now.done) onEnd(true);
   }, [now.done, onEnd]);
   const phase = now.done ? null : now.phase;
+  const cycle = Math.floor(elapsed / exercise.phases.reduce((sum, item) => sum + item.seconds, 0)); // which round, so a repeated phase restarts its bar
   return (
-    <div data-relax-session={exercise.id} className="mt-3 flex flex-col items-center gap-3">
-      <div className="grid h-32 w-32 place-items-center">
-        <div
-          aria-hidden
-          className="h-32 w-32 rounded-full border-2 border-pulse bg-pulse/20 shadow-[0_0_24px] shadow-pulse/40"
-          style={{ transform: `scale(${phase?.scale ?? 0.4})`, transition: `transform ${phase?.seconds ?? 1}s ease-in-out` }}
-        />
+    <div data-relax-session={exercise.id} className="flex w-full max-w-3xl flex-1 flex-col items-center justify-center gap-8">
+      <div className="relative grid place-items-center">
+        <Orb mood={exercise.id} scale={phase?.scale ?? 0.4} seconds={phase?.seconds ?? 1} />
+        {phase && <Cue key={`${cycle}-${phase.key}`} phase={phase.key} />}
       </div>
-      <p role="status" className="min-h-10 text-center text-base normal-case tracking-normal text-shell">
+      <p role="status" className="min-h-16 text-center text-4xl font-light normal-case tracking-wide text-white drop-shadow-[0_0_12px_rgba(255,255,255,0.35)]">
         {phase ? t(phase.key) : ""} {!now.done && <span className="text-pulse">· {now.left}s</span>}
       </p>
-      <div className="h-1 w-full overflow-hidden rounded bg-shell/15">
-        <div className="h-full bg-pulse transition-[width] duration-1000 ease-linear" style={{ width: `${Math.min(100, (elapsed / totalSeconds(exercise)) * 100)}%` }} />
+      {/* The bar fills in exactly the seconds of the phase it belongs to. */}
+      <div className="h-1.5 w-full max-w-xl overflow-hidden rounded bg-white/15">
+        {phase && <div key={`${cycle}-${phase.key}`} className="relax-anim h-full bg-white/80" style={{ animation: `relax-fill ${phase.seconds}s linear forwards` }} />}
       </div>
       <button type="button" onClick={() => onEnd(false)} className={`${BTN} border-shell/40 text-shell/80`}>
         {t("relax.stop")}
@@ -43,14 +47,24 @@ function Session({ exercise, onEnd }: { exercise: Exercise; onEnd: (finished: bo
 }
 
 /**
- * Relaxation buttons and the reminder. A small RELAJARSE button opens the exercises; when the reminder is due a banner
- * offers to start one now or later. `suggest` is true while the rules engine finds the astronaut drowsy.
+ * Relaxation exercises on the whole screen, and the reminder that offers them every half hour. A small RELAJARSE button
+ * opens them; when the reminder is due a banner offers to start one now or later. `suggest` is true while the rules
+ * engine finds the astronaut drowsy.
  */
 export function RelaxDock({ suggest = false }: { suggest?: boolean }) {
   const t = useT();
   const [open, setOpen] = useState(false);
   const [exercise, setExercise] = useState<Exercise | null>(null);
-  const reminder = useRelaxReminder(exercise !== null);
+  const reminder = useRelaxReminder(open);
+  // The RELAX button joins the stack of panels on the left, above the rest, so it moves with them.
+  const [column, setColumn] = useState<HTMLElement | null>(null);
+  useEffect(() => setColumn(document.getElementById(LEFT_COLUMN_ID)), []);
+  useHotkey("escape", () => {
+    if (open) {
+      setExercise(null);
+      setOpen(false);
+    }
+  });
 
   const start = (picked: Exercise) => {
     setExercise(picked);
@@ -58,71 +72,79 @@ export function RelaxDock({ suggest = false }: { suggest?: boolean }) {
   };
   const end = (finished: boolean) => {
     setExercise(null);
-    if (finished) reminder.done();
+    if (finished) {
+      reminder.done();
+      logHabit("relax", 1);
+    }
   };
 
   return (
-    <div data-hud-panel data-relax className="pointer-events-none absolute bottom-16 right-8 z-10 w-80 text-sm tracking-[0.1em] text-shell/80">
-      {reminder.due && !exercise && (
-        <div role="alert" data-relax-due className="pointer-events-auto absolute bottom-0 right-[21rem] w-80 border-2 border-pulse bg-space/90 p-3 backdrop-blur">
-          <p className="text-base normal-case tracking-normal text-shell">{t("relax.due")}</p>
-          <div className="mt-2 flex gap-2">
-            <button type="button" onClick={() => start(EXERCISES[0])} className={`${BTN} border-pulse bg-pulse/20 text-pulse`}>
-              {t("relax.start")}
-            </button>
-            <button type="button" onClick={reminder.snooze} className={`${BTN} border-shell/40 text-shell/80`}>
-              {t("relax.later")}
-            </button>
+    <>
+      <div data-hud-panel data-relax className="pointer-events-none absolute bottom-24 left-[19rem] z-10 w-80 text-sm tracking-[0.1em] text-shell/80">
+        {reminder.due && !open && (
+          <div role="alert" data-relax-due className="pointer-events-auto w-80 border-2 border-pulse bg-space/90 p-3 backdrop-blur">
+            <p className="text-base normal-case tracking-normal text-shell">{t("relax.due")}</p>
+            <div className="mt-2 flex gap-2">
+              <button type="button" onClick={() => start(EXERCISES[0])} className={`${BTN} border-pulse bg-pulse/20 text-pulse`}>
+                {t("relax.start")}
+              </button>
+              <button type="button" onClick={reminder.snooze} className={`${BTN} border-shell/40 text-shell/80`}>
+                {t("relax.later")}
+              </button>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
+      {column &&
+        createPortal(
+          <button
+            type="button"
+            data-hud-panel
+            data-relax-open
+            aria-expanded={open}
+            onClick={() => setOpen(true)}
+            className={`${BTN} pointer-events-auto order-first mt-auto block w-full shrink-0 border-pulse/60 bg-space/80 text-pulse ${suggest || reminder.due ? "animate-pulse border-amber-400 text-amber-300" : ""}`}
+          >
+            {t("relax.open")}
+          </button>,
+          column,
+        )}
 
       {open && (
-        <section aria-label={t("relax.aria")} className="pointer-events-auto absolute bottom-0 right-[21rem] z-10 w-80 rounded-lg border border-pulse/40 bg-space/80 p-3 backdrop-blur">
-          <h2 className="text-xs tracking-[0.15em] text-orbit">{t("relax.heading")}</h2>
-          {suggest && !exercise && <p className="mt-1 text-sm normal-case tracking-normal text-amber-300">{t("relax.suggest")}</p>}
+        <RelaxBackdrop mood={exercise?.id ?? "menu"}>
+        <section role="dialog" aria-modal="true" aria-label={t("relax.aria")} className="flex w-full flex-1 flex-col items-center gap-6">
+          <header className="flex w-full items-start justify-between gap-8">
+            <h1 className="text-2xl font-bold tracking-[0.2em] text-pulse">{t("relax.heading")}</h1>
+            <button type="button" onClick={() => { setExercise(null); setOpen(false); }} className={`${BTN} border-shell/40 text-shell/80`}>
+              {t("relax.close")}
+            </button>
+          </header>
+          {suggest && !exercise && <p className="text-xl normal-case tracking-normal text-amber-300">{t("relax.suggest")}</p>}
           {exercise ? (
             <Session exercise={exercise} onEnd={end} />
           ) : (
-            <>
-              <ul className="mt-2 space-y-2">
+            <div className="flex w-full max-w-5xl flex-1 flex-col justify-center gap-6">
+              <ul className="grid gap-6 md:grid-cols-3">
                 {EXERCISES.map((item) => (
                   <li key={item.id}>
-                    <button type="button" data-relax-start={item.id} onClick={() => start(item)} className={`${BTN} w-full border-pulse/50 text-left text-pulse`}>
+                    <button
+                      type="button"
+                      data-relax-start={item.id}
+                      onClick={() => start(item)}
+                      className="h-full w-full rounded-3xl border border-white/20 bg-white/5 p-8 text-left text-2xl font-bold text-white backdrop-blur-md transition hover:border-white/50 hover:bg-white/10"
+                    >
                       {t(item.title)}
-                      <span className="mt-0.5 block text-[11px] normal-case tracking-normal text-shell/70">{t(item.hint)}</span>
+                      <span className="mt-3 block text-base font-normal normal-case leading-snug tracking-normal text-shell/80">{t(item.hint)}</span>
                     </button>
                   </li>
                 ))}
               </ul>
-              <label className="mt-3 flex items-center justify-between gap-2 text-xs">
-                {t("relax.remind")}
-                <select
-                  value={reminder.every}
-                  onChange={(event) => reminder.setEvery(Number(event.target.value) as (typeof REMINDER_OPTIONS)[number])}
-                  className="border border-shell/40 bg-space px-2 py-1 text-shell"
-                >
-                  {REMINDER_OPTIONS.map((minutes) => (
-                    <option key={minutes} value={minutes}>
-                      {minutes === 0 ? t("relax.off") : minutes === 1 ? t("relax.test") : t("relax.minutes", { minutes })}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <p className="mt-2 text-[11px] normal-case leading-snug tracking-normal text-shell/60">{t("relax.note")}</p>
-            </>
+              <p className="text-center text-sm normal-case leading-snug tracking-normal text-shell/60">{t("relax.note")}</p>
+            </div>
           )}
         </section>
+        </RelaxBackdrop>
       )}
-
-      <button
-        type="button"
-        aria-expanded={open}
-        onClick={() => setOpen((was) => !was)}
-        className={`${BTN} pointer-events-auto ml-auto block border-pulse/60 bg-space/80 text-pulse ${suggest || reminder.due ? "animate-pulse border-amber-400 text-amber-300" : ""}`}
-      >
-        {t("relax.open")}
-      </button>
-    </div>
+    </>
   );
 }
