@@ -1,0 +1,46 @@
+// Messages of the "habits" slice (daily habits game and its reminders). Same keys in both languages.
+const es = {
+  "habits.title": "HÁBITOS DIARIOS",
+  "habits.level": "Nivel {level}",
+  "habits.streak": "Racha: {days} d",
+  "habits.xp": "{xp} / {next} XP al siguiente nivel",
+  "habits.sleep": "Sueño",
+  "habits.exercise": "Ejercicio",
+  "habits.water": "Hidratación",
+  "habits.relax": "Relajación",
+  "habits.unit.h": "h",
+  "habits.unit.min": "min",
+  "habits.unit.glasses": "vasos",
+  "habits.unit.times": "veces",
+  "habits.add": "Sumar {habit}",
+  "habits.remind": "Te falta {left} {unit} de {habit} hoy.",
+  "habits.histogram": "{habit}: últimos 7 días (línea = objetivo)",
+  "habits.badge.perfect": "Día perfecto",
+  "habits.badge.streak3": "3 días",
+  "habits.badge.streak7": "7 días",
+  "habits.note": "Objetivos orientativos del equipo, basados en lo que se cuenta de la jornada en la ISS (unas 8,5 h de sueño y unas 2 h de ejercicio para frenar la pérdida de hueso y músculo). No son cifras de un documento de la NASA ni consejo médico.",
+} as const;
+
+const en: Record<keyof typeof es, string> = {
+  "habits.title": "DAILY HABITS",
+  "habits.level": "Level {level}",
+  "habits.streak": "Streak: {days} d",
+  "habits.xp": "{xp} / {next} XP to next level",
+  "habits.sleep": "Sleep",
+  "habits.exercise": "Exercise",
+  "habits.water": "Hydration",
+  "habits.relax": "Relaxation",
+  "habits.unit.h": "h",
+  "habits.unit.min": "min",
+  "habits.unit.glasses": "glasses",
+  "habits.unit.times": "times",
+  "habits.add": "Add {habit}",
+  "habits.remind": "You still need {left} {unit} of {habit} today.",
+  "habits.histogram": "{habit}: last 7 days (line = target)",
+  "habits.badge.perfect": "Perfect day",
+  "habits.badge.streak3": "3 days",
+  "habits.badge.streak7": "7 days",
+  "habits.note": "Team targets as a guide, based on what is reported about the ISS crew day (about 8.5 h of sleep and about 2 h of exercise to limit bone and muscle loss). They are not figures from a NASA document, and not medical advice.",
+};
+
+export default { es, en };
