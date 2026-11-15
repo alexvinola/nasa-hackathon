@@ -138,8 +138,9 @@ export function Hud() {
     } else if (action.type === "set_measure") {
       const fields = FIELDS[action.signal];
       if (!fields || !fields.every((f) => isValid(f, action.values[f.key]))) return;
-      // Saved straight away: PULSAR says what it logged, and the form stays closed unless it already is open.
+      // Saved, and the measurement's form opens on that signal with the value in it, so it can be checked or corrected.
       setEntries((had) => ({ ...had, ...Object.fromEntries(fields.map((f) => [f.key, action.values[f.key]])) }));
+      openGuide(action.signal);
     } else if (action.type === "open_health") {
       if (action.id === null) return; // only the symptoms tab: MiniTwin switches to it
       if (!HEALTH_POINTS.some((point) => point.id === action.id)) return;
