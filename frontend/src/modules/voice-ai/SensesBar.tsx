@@ -95,6 +95,7 @@ export function SensesBar({
     if (!text) return;
     setHeard(text);
     setTyped("");
+    (document.activeElement as HTMLElement | null)?.blur(); // sent: the HUD's keys (1-6, R, S) work again
     onInstruction?.(text);
   };
 
@@ -119,6 +120,7 @@ export function SensesBar({
           <input
             value={typed}
             onChange={(e) => setTyped(e.target.value)}
+            onKeyDown={(e) => e.key === "Escape" && e.currentTarget.blur()} // out of the box, the 1-6 and R keys work again
             maxLength={400}
             placeholder={t("voice.senses.placeholder")}
             aria-label={t("voice.senses.inputLabel")}

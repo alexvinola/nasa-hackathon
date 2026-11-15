@@ -107,7 +107,7 @@ export function Hud() {
   const telemetryNow = useRef(telemetryFrom(reading, sim.cabinCo2, sim.radiation, entries));
   telemetryNow.current = telemetryFrom(reading, sim.cabinCo2, sim.radiation, entries);
   // The rules engine decides on those readings and Gemma phrases its verdict.
-  const { decision, advice, error } = useVerdict(reading, sim.cabinCo2, sim.radiation, entries);
+  const { decision, advice, error } = useVerdict(reading, sim.cabinCo2, sim.radiation, entries, simMode);
   // The engine's own CO2 limit, for the cabin-air gauge: the HUD never hard-codes a threshold.
   const [rules, setRules] = useState<Rule[]>([]);
   useEffect(() => {
@@ -414,6 +414,11 @@ export function Hud() {
         testing={testing}
         needsTest={!radiationOnly}
         onTest={() => (radiationOnly ? setAckedLevel(level) : setTesting(true))}
+        // Closing the alert acknowledges it: the siren and the frame stop and the mascot goes back to normal.
+        onClose={() => {
+          setAckedLevel(level);
+          setDirected(null);
+        }}
       />
 
       <VerdictPanel
