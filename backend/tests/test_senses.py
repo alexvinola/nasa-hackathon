@@ -226,6 +226,6 @@ def test_biometrics_are_checked_against_the_contract():
 def test_sensor_questions_go_through_the_mcp_readings(monkeypatch):
     import director
 
-    monkeypatch.setattr(director, "read_sensors", lambda question, telemetry: ("El CO2 de la cabina está en 6,5 mmHg.", True))
+    monkeypatch.setattr(director, "read_sensors", lambda question, telemetry, lang=None: ("El CO2 de la cabina está en 6,5 mmHg.", True))
     told = client.post("/pulsar/act", json={"user_spoke": True, "instruction": "¿Cómo está el CO2?"}).json()
     assert told["say"] == "El CO2 de la cabina está en 6,5 mmHg." and told["reaction"] == "alert" and told["speak"]

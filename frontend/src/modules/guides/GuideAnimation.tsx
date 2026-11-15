@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
+import { useT } from "@/i18n";
 import { BLOOD, ORBIT, PULSE, SHELL, SITE, SKIN, UP, VISOR, arc, ball, disposeScene, group, lightScene, limb, mk, ring, rbox, rod, standingFigure, type V3 } from "./mannequin";
 
 /**
@@ -32,7 +33,7 @@ const clamp = (value: number) => Math.min(1, Math.max(0, value));
  * A forearm and hand lying palm up along +x, wrist at the origin, thumb towards +z. Each finger has two segments
  * with a natural curl; `pointing` keeps the index straight and folds the others into the palm.
  */
-function forearmAndHand(pointing = false, forearm = 2.3) {
+export function forearmAndHand(pointing = false, forearm = 2.3) {
   const fingers = [0.2, 0.07, -0.06, -0.19].flatMap((z, i) => {
     const length = [0.5, 0.56, 0.52, 0.4][i];
     const r = [0.06, 0.062, 0.058, 0.05][i];
@@ -52,7 +53,7 @@ function forearmAndHand(pointing = false, forearm = 2.3) {
   );
 }
 /** The mannequin's head and shoulders facing the camera, with a nose and eyes (open, or closed arcs). */
-function bust(closedEyes = false) {
+export function bust(closedEyes = false) {
   const eye = (x: number) =>
     closedEyes ? mk(arc, VISOR, [x, 0.14, 0.8], [0.1, 0.1, 0.1], [0, 0, Math.PI], true) : mk(ball, VISOR, [x, 0.17, 0.77], [0.07, 0.09, 0.04], [0, 0, 0], true);
   return group(
@@ -253,6 +254,7 @@ const SCENES: Record<string, () => Built> = {
  * about; the rest of the scene is dimmed.
  */
 export function GuideAnimation({ signal, focus, label }: { signal: string; focus: string; label: string }) {
+  const t = useT();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const boxRef = useRef<HTMLDivElement>(null);
   const focusNow = useRef(focus);
@@ -343,7 +345,7 @@ export function GuideAnimation({ signal, focus, label }: { signal: string; focus
       {failed ? (
         <p className="grid h-full place-items-center p-3 text-center text-xs text-orbit">LA ANIMACIÓN NECESITA WEBGL · SIGUE LOS PASOS</p>
       ) : (
-        <canvas ref={canvasRef} role="img" aria-label={`Cómo medir: ${label}`} className="block h-full w-full" />
+        <canvas ref={canvasRef} role="img" aria-label={t("guides.anim.aria", { label })} className="block h-full w-full" />
       )}
     </div>
   );

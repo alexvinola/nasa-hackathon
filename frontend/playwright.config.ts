@@ -8,5 +8,5 @@ export default defineConfig({
   testDir: "e2e",
   timeout: 60_000,
   use: { baseURL: `http://localhost:${PORT}`, viewport: { width: 1440, height: 900 } },
-  webServer: { command: `pnpm dev --port ${PORT}`, url: `http://localhost:${PORT}`, reuseExistingServer: true, timeout: 120_000 },
+  webServer: { env: { NEXT_PUBLIC_LANG: "en" }, command: `pnpm dev --port ${PORT}`, url: `http://localhost:${PORT}`, reuseExistingServer: true, timeout: 120_000 },
 });

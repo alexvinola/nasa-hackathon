@@ -26,7 +26,7 @@ mcp = MCPServer("pulsar-mock-sensors")
 
 @cache
 def engine():
-    return build_engine()
+    return build_engine(os.environ.get("PULSAR_MOCK_LANG"))  # the language the readings are worded in
 
 
 def report(*fields: tuple[str, str]) -> dict[str, Any]:

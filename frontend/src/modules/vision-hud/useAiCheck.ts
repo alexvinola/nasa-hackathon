@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type MutableRefObject, type RefObject } from "react";
+import { t } from "@/i18n";
 import { frameBase64, userWaiting } from "@/modules/voice-ai/pulsarApi";
 import type { FaceFrame } from "./faceWorker";
 import { BLINK, MOUTH_OPEN as MOUTH } from "./thresholds"; // the worker's own, so the claim is what the metrics counted
@@ -49,7 +50,7 @@ export function useAiCheck(videoRef: RefObject<HTMLVideoElement | null>, frameRe
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ image, claim }),
         });
-        if (!response.ok) throw new Error(`Comprobación IA: error del backend ${response.status}`);
+        if (!response.ok) throw new Error(t("vision.check.error", { status: response.status }));
         const check: AiCheck = await response.json();
         setLast(check);
         setError(null);

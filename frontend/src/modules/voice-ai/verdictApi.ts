@@ -1,6 +1,7 @@
 /** The rules engine and the voice turn on the local backend (backend/pulsar). Everything stays on this machine. */
 import nominal from "../../../../shared/examples/nominal.json";
 import type { Biometrics } from "@/modules/vision-hud/faceWorker";
+import { getLang, t } from "@/i18n";
 
 const API = process.env.NEXT_PUBLIC_PULSAR_API ?? "http://localhost:8000";
 
@@ -39,8 +40,8 @@ export type Rule = { id: string; signal: string; threshold: number; status: Stat
 
 /** Every rule the engine applies (GET /rules). */
 export async function listRules(): Promise<Rule[]> {
-  const response = await fetch(`${API}/rules`);
-  if (!response.ok) throw new Error(`Error del backend ${response.status}`);
+  const response = await fetch(`${API}/rules?lang=${getLang()}`);
+  if (!response.ok) throw new Error(t("voice.api.error", { status: response.status }));
   return response.json();
 }
 
@@ -51,22 +52,22 @@ async function post<T>(path: string, body: unknown, timeoutMs?: number): Promise
     body: JSON.stringify(body),
     signal: timeoutMs ? AbortSignal.timeout(timeoutMs) : undefined,
   }).catch(() => {
-    throw new Error(`El backend de PULSAR no responde en ${API}`);
+    throw new Error(t("voice.api.unreachable", { api: API }));
   });
-  if (!response.ok) throw new Error(`Error del backend ${response.status}`);
+  if (!response.ok) throw new Error(t("voice.api.error", { status: response.status }));
   return response.json();
 }
 
 /** The steps of one countermeasure, as the rules engine lists them (GET /countermeasures/{id}). */
 export async function countermeasureSteps(id: string): Promise<string[]> {
-  const response = await fetch(`${API}/countermeasures/${encodeURIComponent(id)}`);
-  if (!response.ok) throw new Error(`Error del backend ${response.status}`);
+  const response = await fetch(`${API}/countermeasures/${encodeURIComponent(id)}?lang=${getLang()}`);
+  if (!response.ok) throw new Error(t("voice.api.error", { status: response.status }));
   return (await response.json()).steps;
 }
 
 /** The engine's decision alone: deterministic and instant, cheap enough to ask every couple of seconds. */
 // With a time limit: a request that never answers would otherwise freeze the verdict (and every alarm) for good.
-export const evaluate = (telemetry: Telemetry) => post<Decision>("/rules/evaluate", telemetry, 5000);
+export const evaluate = (telemetry: Telemetry) => post<Decision>(`/rules/evaluate?lang=${getLang()}`, telemetry, 5000);
 
 /** The decision plus the sentence PULSAR speaks (Gemma phrases it): about a second, ask only when it changes. */
-export const advise = (telemetry: Telemetry, question = "") => post<Advice>("/voice/advise", { telemetry, question });
+export const advise = (telemetry: Telemetry, question = "") => post<Advice>("/voice/advise", { telemetry, question, lang: getLang() });

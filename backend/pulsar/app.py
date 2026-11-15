@@ -28,7 +28,10 @@ def create_app(lifespan=None, routers: Iterable[APIRouter] = ()) -> FastAPI:
         version="0.1.0",
     )
     # Built eagerly so a rules file that does not trace back to shared/ fails at startup, not mid-demo.
-    app.state.rules_engine = build_engine()
+    # One engine per language: same rules, same ids, only the wording differs (assets/i18n/). The default one is
+    # `rules_engine`; a request that names a language gets its own through `pulsar.rules.api.engine_for`.
+    app.state.engines = {lang: build_engine(lang) for lang in settings.LANGS}
+    app.state.rules_engine = app.state.engines[settings.DEFAULT_LANG]
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.CORS_ORIGINS,

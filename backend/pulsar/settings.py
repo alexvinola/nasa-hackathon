@@ -18,3 +18,13 @@ CORS_ORIGINS = [
     for origin in os.environ.get("PULSAR_CORS_ORIGINS", "http://localhost:3000,http://127.0.0.1:3000").split(",")
     if origin.strip()
 ]
+
+# The language PULSAR answers in when a request does not say ("es" or "en"). The front sends its own choice.
+LANGS = ("es", "en")
+DEFAULT_LANG = os.environ.get("PULSAR_LANG", "es") if os.environ.get("PULSAR_LANG", "es") in LANGS else "es"
+I18N_DIR = ASSETS_DIR / "i18n"
+
+
+def pick_lang(lang: str | None) -> str:
+    """The language of a request: the one asked for when we have it, else the default."""
+    return lang if lang in LANGS else DEFAULT_LANG

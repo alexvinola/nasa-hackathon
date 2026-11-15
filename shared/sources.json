@@ -316,6 +316,18 @@
         "Used by the G9 body-temperature guide for how to take the measurement, not for any range"
       ]
     },
+    "nasa-sleep-dag": {
+      "type": "official",
+      "title": "NASA HRP: Sleep Risk DAG Narrative (SA-07566)",
+      "url": "https://www.nasa.gov/wp-content/uploads/2025/09/sleep-risk-dag-narrative-sa-07566.pdf",
+      "findings": [
+        "Sleep deficiency comes from schedule shifting, workload, stress (alarms, emergencies), sleeping-quarters conditions (temperature, humidity, noise, privacy) and food and caffeine timing",
+        "Circadian misalignment depends on lighting (intensity, wavelength, timing) and schedule shifting",
+        "Sleep loss leads to fatigue (mental, physical, drowsiness), sleep inertia (slower response to alarms) and insomnia",
+        "Countermeasures named: environmental monitoring and control of the sleeping quarters, hypnotics for expected schedule shifts, medical treatment",
+        "No numeric thresholds and no relaxation technique is prescribed: PULSAR's relaxation exercises and their timings are team wording"
+      ]
+    },
     "nasa-sleep-risk": {
       "type": "official",
       "title": "NASA: Risk of Performance Decrements and Adverse Health Outcomes Resulting from Sleep Loss, Circadian Desynchronization, and Work Overload",

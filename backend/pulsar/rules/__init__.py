@@ -10,6 +10,6 @@ from pulsar.rules.loader import RulesFileError, load_rule_book
 __all__ = ["RulesEngine", "RulesFileError", "load_rule_book", "build_engine"]
 
 
-def build_engine() -> RulesEngine:
-    """Engine built from the configured rules and countermeasures, checked against shared/."""
-    return RulesEngine(*load_rule_book())
+def build_engine(lang: str | None = None) -> RulesEngine:
+    """Engine built from the configured rules and countermeasures, checked against shared/, worded in `lang`."""
+    return RulesEngine(*load_rule_book(lang=lang))

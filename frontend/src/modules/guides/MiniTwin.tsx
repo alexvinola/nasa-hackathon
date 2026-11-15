@@ -4,7 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { HudPanel } from "@/modules/hud/HudPanel";
 import { HEALTH_POINTS } from "./healthPoints";
-import { GUIDES, type GuideStatus } from "./guides";
+import { useLang, useT } from "@/i18n";
+import { GUIDES, localizedGuide, type GuideStatus } from "./guides";
+import { healthText } from "./healthPoints";
 import { FIGURE_ASPECT, FIGURE_HALF_HEIGHT, SITE, disposeScene, lightScene, standingFigure, type V3 } from "./mannequin";
 
 const HEIGHT = 288; // CSS pixels
@@ -75,6 +77,8 @@ export function MiniTwin({
   healthOpen: string | null;
   onOpenHealth: (id: string) => void;
 }) {
+  const t = useT();
+  const lang = useLang();
   // "measure": a marker where each instrument is used. "health": a marker for each body zone NASA lists risks for.
   const [tab, setTab] = useState<"measure" | "health">("measure");
   const TAB = "flex-1 border px-1 py-1 text-[11px] tracking-[0.08em]";
@@ -83,9 +87,9 @@ export function MiniTwin({
     top: `${((1 - y / FIGURE_HALF_HEIGHT) / 2) * 100}%`,
   });
   return (
-    <HudPanel title="CÓMO MEDIR" data-twin>
-      <div role="tablist" aria-label="Medir o salud" className="mb-2 flex gap-1">
-        {([["measure", "MEDIR"], ["health", "SALUD"]] as const).map(([id, label]) => (
+    <HudPanel title={t("guides.twin.title")} data-twin>
+      <div role="tablist" aria-label={t("guides.twin.tabsAria")} className="mb-2 flex gap-1">
+        {([["measure", t("guides.twin.tabMeasure")], ["health", t("guides.twin.tabHealth")]] as const).map(([id, label]) => (
           <button
             key={id}
             type="button"
@@ -98,11 +102,11 @@ export function MiniTwin({
           </button>
         ))}
       </div>
-      {tab === "health" && <p className="mb-1 text-[11px] normal-case tracking-normal text-shell/80">Toca un punto del cuerpo: riesgos, herramientas y qué hacer, a ti o a un compañero.</p>}
       <div className="relative mx-auto" style={{ width: WIDTH, height: HEIGHT }}>
         <Figure />
         {tab === "measure" &&
-          GUIDES.map((guide) => {
+          GUIDES.map((original) => {
+            const guide = localizedGuide(original, lang);
             const status = statuses[guide.signal];
             return (
               <button
@@ -110,7 +114,7 @@ export function MiniTwin({
                 type="button"
                 data-indicator={guide.signal}
                 aria-pressed={open === guide.signal}
-                aria-label={`Abrir la guía: ${guide.label} (${status.toLowerCase()})`}
+                aria-label={t("guides.twin.openGuide", { label: guide.label, status: status.toLowerCase() })}
                 title={guide.label}
                 onClick={() => onOpen(guide.signal)}
                 // The figure is drawn with a front orthographic camera, so a site maps straight to the box.
@@ -126,8 +130,8 @@ export function MiniTwin({
               type="button"
               data-health-point={point.id}
               aria-pressed={healthOpen === point.id}
-              aria-label={`Abrir salud: ${point.label}`}
-              title={point.label}
+              aria-label={t("guides.twin.openHealth", { label: healthText(point.label, lang) })}
+              title={healthText(point.label, lang)}
               onClick={() => onOpenHealth(point.id)}
               style={place(point.site)}
               className={`absolute h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-orbit bg-orbit/70 ${healthOpen === point.id ? "ring-2 ring-shell" : ""} hover:ring-2 hover:ring-shell focus-visible:ring-2 focus-visible:ring-shell`}

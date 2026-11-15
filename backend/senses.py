@@ -22,7 +22,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request, Response
 from fastapi.concurrency import run_in_threadpool
 from pydantic import BaseModel, Field
 
-from pulsar import debug
+from pulsar import debug, settings
 
 LOCAL = re.compile(r"(https?://)?(localhost|127\.0\.0\.1)(:\d+)?")
 
@@ -37,7 +37,15 @@ def local_only(request: Request) -> None:
 
 router = APIRouter(dependencies=[Depends(local_only)])
 
-VOICE = Path(os.environ.get("PULSAR_VOICE", Path(__file__).parent / "assets/voices/es_ES-davefx-medium.onnx"))
+VOICES_DIR = Path(__file__).parent / "assets/voices"
+# One Piper voice per language (make prefetch downloads both); PULSAR_VOICE overrides the default language's.
+VOICES = {
+    "es": Path(os.environ.get("PULSAR_VOICE_ES", VOICES_DIR / "es_ES-davefx-medium.onnx")),
+    "en": Path(os.environ.get("PULSAR_VOICE_EN", VOICES_DIR / "en_US-lessac-medium.onnx")),
+}
+if os.environ.get("PULSAR_VOICE"):
+    VOICES[settings.DEFAULT_LANG] = Path(os.environ["PULSAR_VOICE"])
+VOICE = VOICES[settings.DEFAULT_LANG]  # the default language's voice
 # Multilingual so the astronaut can speak Spanish; about twice as slow as base.en (set that for an English-only crew).
 WHISPER_MODEL = os.environ.get("PULSAR_WHISPER_MODEL", "base")
 OLLAMA_URL = os.environ.get("PULSAR_OLLAMA_URL", "http://127.0.0.1:11434")
@@ -76,17 +84,18 @@ def whisper():
 
 
 @cache
-def voice():
+def voice(lang: str | None = None):
     from piper import PiperVoice
 
-    return PiperVoice.load(VOICE)
+    return PiperVoice.load(VOICES[settings.pick_lang(lang)])
 
 
-def transcribe(audio: bytes) -> str:
+def transcribe(audio: bytes, lang: str | None = None) -> str:
     model = whisper()
     try:
         # The VAD drops silence, which whisper otherwise "hears" as short made-up words ("You", "Thank you.").
-        segments, _ = model.transcribe(io.BytesIO(audio), vad_filter=True, condition_on_previous_text=False)
+        segments, _ = model.transcribe(io.BytesIO(audio), language=settings.pick_lang(lang), vad_filter=True,
+                                       condition_on_previous_text=False)
         return " ".join(segment.text.strip() for segment in segments)
     except Exception as error:  # PyAV raises its own family of errors for anything it cannot decode
         raise HTTPException(422, f"could not decode the audio: {error}") from error
@@ -95,12 +104,13 @@ def transcribe(audio: bytes) -> str:
 speaking = threading.Lock()
 
 
-def synthesize(text: str) -> bytes:
-    if not VOICE.exists():
-        raise HTTPException(503, f"Piper voice missing at {VOICE}: run make prefetch")
+def synthesize(text: str, lang: str | None = None) -> bytes:
+    lang = settings.pick_lang(lang)
+    if not VOICES[lang].exists():
+        raise HTTPException(503, f"Piper voice missing at {VOICES[lang]}: run make prefetch")
     buffer = io.BytesIO()
     with speaking, wave.open(buffer, "wb") as wav:  # one utterance at a time: Piper's phonemizer is not thread-safe
-        voice().synthesize_wav(text, wav)
+        voice(lang).synthesize_wav(text, wav)
     return buffer.getvalue()
 
 
@@ -165,13 +175,14 @@ def describe(image: bytes) -> str:
 
 class Say(BaseModel):
     text: str = Field(min_length=1, max_length=600)
+    lang: str | None = None
 
 
 @router.post("/stt")
-async def speech_to_text(request: Request) -> dict[str, str]:
+async def speech_to_text(request: Request, lang: str | None = None) -> dict[str, str]:
     """Body: an audio file (wav, webm/opus, mp3...). Returns its transcript."""
     audio = await read_body(request, MAX_AUDIO, "audio")
-    text = await run_in_threadpool(transcribe, audio)
+    text = await run_in_threadpool(transcribe, audio, lang)
     debug.record("voice", f"heard: {text or '(nothing)'}")
     return {"text": text}
 
@@ -179,7 +190,7 @@ async def speech_to_text(request: Request) -> dict[str, str]:
 @router.post("/tts")
 async def text_to_speech(say: Say) -> Response:
     """Returns the text spoken by Piper as a WAV file."""
-    return Response(await run_in_threadpool(synthesize, say.text), media_type="audio/wav")
+    return Response(await run_in_threadpool(synthesize, say.text, say.lang), media_type="audio/wav")
 
 
 @router.post("/vision/describe")

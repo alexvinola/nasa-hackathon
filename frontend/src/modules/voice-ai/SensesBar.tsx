@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useT } from "@/i18n";
 import { useHotkey } from "@/modules/hud/useHotkey";
 import { isSpeaking, speak, stopSpeaking, transcribe } from "./pulsarApi";
 
@@ -23,6 +24,7 @@ export function SensesBar({
   /** The astronaut's order, typed or spoken. */
   onInstruction?: (text: string) => void;
 }) {
+  const t = useT();
   const [talk, setTalk] = useState<"idle" | "recording" | "transcribing">("idle");
   const [heard, setHeard] = useState("");
   const [typed, setTyped] = useState("");
@@ -54,7 +56,7 @@ export function SensesBar({
         try {
           const text = await transcribe(new Blob(chunks, { type: rec.mimeType }));
           setHeard(text);
-          setError(text ? "" : "No he oído nada. Mantén pulsado el botón mientras hablas.");
+          setError(text ? "" : t("voice.senses.heardNothing"));
           if (text) onInstruction?.(text);
         } catch (e) {
           fail(e);
@@ -99,7 +101,7 @@ export function SensesBar({
           ) : (
             heard && (
               <span className="inline-block border-2 border-pulse bg-space/95 px-3 py-1 text-white">
-                <span className="mr-2 text-sm font-bold tracking-[0.15em] text-pulse">HAS DICHO</span>
+                <span className="mr-2 text-sm font-bold tracking-[0.15em] text-pulse">{t("voice.senses.youSaid")}</span>
                 {heard}
               </span>
             )
@@ -110,17 +112,17 @@ export function SensesBar({
             value={typed}
             onChange={(e) => setTyped(e.target.value)}
             maxLength={400}
-            placeholder="Dile a PULSAR qué hacer..."
-            aria-label="Escribe una instrucción para PULSAR"
+            placeholder={t("voice.senses.placeholder")}
+            aria-label={t("voice.senses.inputLabel")}
             className="min-w-0 flex-1 border-2 border-shell bg-space/95 px-3 py-2 text-lg tracking-normal text-white outline-none placeholder:text-shell/70 focus:border-pulse"
           />
           <button type="submit" disabled={!typed.trim()} className={`${BUTTON} ${ON}`}>
-            ENVIAR (ENTER)
+            {t("voice.senses.send")}
           </button>
         </form>
         <div className="flex gap-2">
           <button type="button" disabled={!line} onClick={speakLine} className={`${BUTTON} ${OFF}`}>
-            ▶ HABLAR (S)
+            {t("voice.senses.speak")}
           </button>
           <button
             type="button"
@@ -132,7 +134,7 @@ export function SensesBar({
             onPointerCancel={release}
             className={`${BUTTON} touch-none select-none ${talk === "recording" ? "border-red-500 bg-red-600 text-white" : OFF}`}
           >
-            {talk === "recording" ? "● SUELTA PARA ENVIAR" : talk === "transcribing" ? "TRANSCRIBIENDO…" : "MANTÉN PARA HABLAR (ESPACIO)"}
+            {talk === "recording" ? t("voice.senses.release") : talk === "transcribing" ? t("voice.senses.transcribing") : t("voice.senses.hold")}
           </button>
         </div>
       </div>

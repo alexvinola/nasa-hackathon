@@ -1,5 +1,7 @@
 /** The G9 indicator guides (shared/indicators.json) and what the HUD shows next to them. */
 import data from "../../../../shared/indicators.json";
+import { INDICATORS_ES } from "./indicators.es";
+import { t, type Lang } from "@/i18n";
 import type { Decision, Rule, Status, Telemetry } from "@/modules/voice-ai/verdictApi";
 
 export type Guide = {
@@ -15,6 +17,20 @@ export type Guide = {
 };
 export const GUIDES: Guide[] = data.indicators;
 
+/** The guide in `lang`: the JSON is the English original; Spanish text comes from indicators.es.ts (rule ids, focus and sources stay). */
+export function localizedGuide(guide: Guide, lang: Lang): Guide {
+  const es = lang === "es" ? INDICATORS_ES[guide.signal] : undefined;
+  if (!es) return guide;
+  return {
+    ...guide,
+    label: es.label,
+    instrument: es.instrument,
+    how: guide.how.map((step, index) => ({ ...step, text: es.how[index] ?? step.text })),
+    why: es.why,
+    whenAbnormal: { ...guide.whenAbnormal, text: es.whenAbnormal },
+  };
+}
+
 /** What the guide shows as the engine's status: one of the engine's own, or why there is none. */
 export type GuideStatus = Status | "NOT JUDGED" | "WAITING";
 
@@ -29,7 +45,7 @@ const UNIT: Record<string, string> = {
 /** The indicator's current value as text, read from the telemetry the HUD sends to the engine. */
 export function currentValue(signal: string, telemetry: Telemetry): string {
   const value = signal.split(".").reduce<unknown>((node, key) => (node as Record<string, unknown> | null)?.[key], telemetry);
-  if (value == null) return "Sin lectura todavía";
+  if (value == null) return t("guides.value.none");
   if (typeof value === "object") {
     const { systolic, diastolic } = value as { systolic: number; diastolic: number };
     return `${systolic}/${diastolic} mmHg`;

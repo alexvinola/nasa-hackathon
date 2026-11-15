@@ -13,7 +13,9 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.concurrency import run_in_threadpool
 from pydantic import BaseModel, Field
 
+from pulsar import settings
 from pulsar.contract import telemetry_errors
+from pulsar.rules.api import engine_for
 from pulsar.rules.engine import RulesEngine
 from pulsar.readings import ASKS_READINGS, answer as read_sensors
 from pulsar.voice.pipeline import first_step, phrase, verdict_text
@@ -33,7 +35,9 @@ SCREEN_SIDE = {"home": "left", "mid_left": "left", "bottom_left": "left",
                "top_right": "right", "mid_right": "right", "bottom_right": "right", "bottom_center": "centre"}
 CLEAR_OF = {"left": "mid_right", "right": "mid_left"}  # where to go to leave a person on that screen side alone
 
-FALLBACK = {"say": "Estoy aquí si me necesitas.", "spot": "home", "reaction": "calm", "speak": True}
+SAYS = {"es": "Estoy aquí si me necesitas.", "en": "I'm here if you need me."}
+FALLBACKS = {lang: {"say": say, "spot": "home", "reaction": "calm", "speak": True} for lang, say in SAYS.items()}
+FALLBACK = FALLBACKS[settings.DEFAULT_LANG]
 SILENT = {"say": "", "spot": "", "reaction": "calm", "speak": False}  # nothing worth saying: the mascot stays as is
 
 # A line is rejected when it states numbers or sounds like a diagnosis, a judgement of health or an order.
@@ -49,17 +53,16 @@ FORBIDDEN = re.compile(
 # re-reads the whole prompt on every call (about 100 tokens a second) and writes about 8 tokens a second, so the
 # earlier 400-token prompt with a 52-token JSON answer took about 11 s. `parse` turns the line back into the
 # fields `validate` checks.
-SYSTEM = f"""\
+def system_prompt(language: str, examples: str) -> str:
+    return f"""\
 You are PULSAR, the astronaut's onboard companion: a small, warm, calm robot floating over their camera view.
 Reply with one line only: side|spot|reaction|sentence
 side: where the person is in the picture (left, right, centre, none).
 spot: where you float, away from the person ({", ".join(SPOTS)}).
 reaction: calm, or alert if something new just appeared or a health check is active.
-sentence: always in Spanish, at most 16 words, first person, a direct answer; - to stay silent.
+sentence: always in {language}, at most 16 words, first person, a direct answer; - to stay silent.
 Examples:
-centre|top_right|calm|Eso es una taza blanca en tu mano derecha.
-none|bottom_left|calm|Voy hacia abajo a la izquierda.
-centre|home|calm|-
+{examples}
 Your skills:
 ANSWER what was actually asked, from what you know and from the conversation. Say so when you do not know.
 LOOK: when it is about what is visible, answer from the camera.
@@ -68,6 +71,15 @@ CARE: you never judge health yourself. A health check, when given, comes from th
 say its first step in your own words and never contradict it.
 Never write digits. Write - when only the camera changed and it does not matter, or you would repeat yourself.
 """
+
+
+SYSTEMS = {
+    "es": system_prompt("Spanish", "centre|top_right|calm|Eso es una taza blanca en tu mano derecha.\n"
+                                   "none|bottom_left|calm|Voy hacia abajo a la izquierda.\ncentre|home|calm|-"),
+    "en": system_prompt("English", "centre|top_right|calm|That is a white mug in your right hand.\n"
+                                   "none|bottom_left|calm|I'm moving down to the left.\ncentre|home|calm|-"),
+}
+SYSTEM = SYSTEMS["es"]  # the default language's prompt
 
 LINE = re.compile(r"(left|right|centre|center|none)\s*\|\s*(\w+)\s*\|\s*(\w+)\s*\|\s*(.+)", re.I)
 
@@ -95,7 +107,9 @@ HEALTH_QUESTION = re.compile(
     r"deprim\w*|ansi\w*|fatiga\w*|médic\w*|síntoma\w*)\b",
     re.I,
 )
-NOT_MINE = "No me corresponde juzgar eso. Solo puedo decirte lo que veo."
+NOT_MINES = {"es": "No me corresponde juzgar eso. Solo puedo decirte lo que veo.",
+             "en": "It is not for me to judge that. I can only tell you what I see."}
+NOT_MINE = NOT_MINES["es"]
 
 
 def parse(content: str) -> dict:
@@ -119,6 +133,7 @@ class Scene(BaseModel):
     history: list[Annotated[str, Field(max_length=300)]] = Field(default_factory=list, max_length=12)
     # The current frame as a base64 JPEG, sent when the astronaut speaks so the answer comes from the picture itself.
     image: str = Field("", max_length=4 * MAX_IMAGE // 3 + 4, pattern=r"^(/9j/[A-Za-z0-9+/]*={0,2})?$")
+    lang: str | None = None  # the language PULSAR answers in; the server default when missing
 
 
 FILLER = {"the", "and", "you", "your", "are", "was", "has", "have", "with", "for", "that", "this",
@@ -136,17 +151,18 @@ def repeats(say: str, said: list[str]) -> bool:
     return any(mine and len(mine & words(old)) / len(mine | words(old)) >= 0.5 for old in said)
 
 
-def validate(raw: dict, said: list[str] = (), user_spoke: bool = True) -> dict:
+def validate(raw: dict, said: list[str] = (), user_spoke: bool = True, lang: str | None = None) -> dict:
     """Returns the director's decision when it is allowed, else FALLBACK (or SILENT when there is nothing new)."""
+    fallback = FALLBACKS[settings.pick_lang(lang)]
     if raw.get("speak") is False and not user_spoke:
         return SILENT
     say = str(raw.get("say", "")).strip()
     if not user_spoke and repeats(say, list(said)):
         return SILENT
     if raw.get("spot") not in SPOTS or raw.get("reaction") not in REACTIONS:
-        return FALLBACK
+        return fallback
     if not say or len(say.split()) > 20 or FORBIDDEN.search(say):
-        return FALLBACK
+        return fallback
     spot = raw["spot"]
     person = raw.get("person_side")
     if person in CLEAR_OF and SCREEN_SIDE[spot] == person:  # Gemma put the mascot over the person: move it to the free side
@@ -165,6 +181,7 @@ def compact(history: list[str]) -> list[str]:
 
 
 def direct(scene: Scene, engine: RulesEngine | None = None) -> dict:
+    lang = settings.pick_lang(scene.lang)
     if scene.user_spoke and scene.via_voice and not (scene.engaged or addressed(scene.instruction)):
         return SILENT  # talk in the room that is not for PULSAR: no answer, and no model call either
     decision = engine.evaluate(scene.telemetry) if engine and scene.telemetry else None
@@ -174,12 +191,12 @@ def direct(scene: Scene, engine: RulesEngine | None = None) -> dict:
         # The engine decides and Gemma only phrases its verdict; with no readings there is nothing to phrase.
         # While the verdict is RED this is the only thing PULSAR says, whatever it is asked: it keeps telling the
         # astronaut the step the engine requires until the readings clear, instead of helping with something else.
-        say = phrase(decision, scene.instruction, step).text if decision else NOT_MINE
+        say = phrase(decision, scene.instruction, step, lang).text if decision else NOT_MINES[lang]
         reaction = "alert" if decision and decision["status"] != "GREEN" else "calm"
         return {"say": say, "spot": scene.spot if scene.spot in SPOTS else "home", "reaction": reaction, "speak": True}
     if scene.user_spoke and ASKS_READINGS.search(scene.instruction):
         # Vitals come from the sensor MCP server (fed with the readings the HUD shows): Gemma calls its tools and phrases them.
-        say, out_of_limits = read_sensors(scene.instruction, scene.telemetry)
+        say, out_of_limits = read_sensors(scene.instruction, scene.telemetry, lang)
         return {"say": say, "spot": scene.spot if scene.spot in SPOTS else "home",
                 "reaction": "alert" if out_of_limits else "calm", "speak": True}
     facts = []
@@ -203,13 +220,13 @@ def direct(scene: Scene, engine: RulesEngine | None = None) -> dict:
         user["content"] += "\nThe current camera frame is attached."
         user["images"] = [scene.image]
     content = chat(
-        [{"role": "system", "content": SYSTEM}, user],
+        [{"role": "system", "content": SYSTEMS[lang]}, user],
         options={"temperature": 0.3, "num_predict": 48, "stop": ["\n"]},  # one line of about 20 tokens
     )
     try:
-        return validate(parse(content), scene.said, scene.user_spoke)
+        return validate(parse(content), scene.said, scene.user_spoke, lang)
     except AttributeError:
-        return FALLBACK  # the model broke the format: the mascot just stays calm
+        return FALLBACKS[lang]  # the model broke the format: the mascot just stays calm
 
 
 @router.post("/pulsar/act")
@@ -219,4 +236,4 @@ async def act(scene: Scene, request: Request) -> dict:
         raise HTTPException(400, "nothing seen or instructed")
     if scene.telemetry and telemetry_errors(scene.telemetry):
         raise HTTPException(422, "telemetry does not match the contract")
-    return await run_in_threadpool(direct, scene, request.app.state.rules_engine)
+    return await run_in_threadpool(direct, scene, engine_for(request, scene.lang))

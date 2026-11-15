@@ -14,6 +14,7 @@ import { useVerdict } from "@/modules/voice-ai/useVerdict";
 import { countermeasureSteps, listRules, telemetryFrom, type Rule } from "@/modules/voice-ai/verdictApi";
 import { GuidePanel } from "@/modules/guides/GuidePanel";
 import { MiniTwin } from "@/modules/guides/MiniTwin";
+import { RelaxDock } from "@/modules/relax/RelaxDock";
 import { HealthPanel } from "@/modules/guides/HealthPanel";
 import { HEALTH_POINTS } from "@/modules/guides/healthPoints";
 import { GUIDES, currentValue, statusOf } from "@/modules/guides/guides";
@@ -23,6 +24,8 @@ import type { Biometrics, FaceFrame } from "@/modules/vision-hud/faceWorker";
 import { DebugPanel } from "@/modules/sim-core/DebugPanel";
 import { LogPanel } from "@/modules/sim-core/LogPanel";
 import { useSimVitals, type SimMode } from "@/modules/sim-core/useSimVitals";
+import { useT } from "@/i18n";
+import { LangToggle } from "@/i18n/LangToggle";
 import { direct, frameBase64, type Direction, type Spot } from "@/modules/voice-ai/pulsarApi";
 
 // Zones Gemma can pick, as a fraction of the free screen; [0, 0] is PULSAR's home corner.
@@ -60,12 +63,12 @@ const WANDER_EVERY_MS = 20_000;
 // goes without it: on a CPU-only laptop the picture alone adds several seconds to the answer.
 const ABOUT_THE_VIEW = /\b(see|look|watch|show|camera|picture|image|view|holding|wearing|behind|colou?r|how many|who is|what is (this|that)|what am i|ves|veo|ver|mira|muestra|ense[nñ]a|c[aá]mara|imagen|foto|tengo|llevo|detr[aá]s|color|cu[aá]nt[oa]s|qui[eé]n es|qu[eé] es (esto|eso))\b/i;
 
-const CAM_LABEL: Record<CamState, string> = {
-  starting: "CÁMARA · INICIANDO",
-  live: "CÁMARA · EN DIRECTO",
-  denied: "CÁMARA · PERMISO DENEGADO",
-  unavailable: "CÁMARA · NO DISPONIBLE",
-};
+const CAM_KEY = {
+  starting: "hud.cam.starting",
+  live: "hud.cam.live",
+  denied: "hud.cam.denied",
+  unavailable: "hud.cam.unavailable",
+} as const satisfies Record<CamState, string>;
 
 function Corner({ className }: { className: string }) {
   return <span className={`absolute h-8 w-8 ${className}`} />;
@@ -73,6 +76,7 @@ function Corner({ className }: { className: string }) {
 
 /** Full-screen camera with the HUD layered on top. Every line PULSAR says comes from the rules engine or Gemma. */
 export function Hud() {
+  const t = useT();
   const { videoRef, state } = useWebcam();
   // MediaPipe runs in a worker over the live camera; it shows nothing and posts its numbers to the backend.
   const faceFrame = useRef<FaceFrame | null>(null);
@@ -98,6 +102,8 @@ export function Hud() {
     listRules().then(setRules).catch(() => undefined);
   }, []);
   const co2Limit = rules.find((rule) => rule.signal === CO2_SIGNAL)?.threshold ?? null;
+  const perclosLimit = rules.find((rule) => rule.signal === DROWSY_SIGNAL)?.threshold ?? null;
+  const fatigueLimit = rules.find((rule) => rule.signal === EXHAUSTED_SIGNAL)?.threshold ?? null;
   const radiationLimit = rules.find((rule) => rule.signal === RADIATION_SIGNAL)?.threshold ?? null;
   // The indicator guide that is open (G9), by contract signal, and the engine's status for each indicator.
   const [guideSignal, setGuideSignal] = useState<string | null>(null);
@@ -289,7 +295,7 @@ export function Hud() {
       {state === "live" && <FaceOverlay frameRef={faceFrame} videoRef={videoRef} problem={faceProblem} />}
       {state !== "live" && (
         <div className="absolute inset-0 grid place-items-center bg-[radial-gradient(ellipse_at_center,var(--color-space-lift),var(--color-space))] text-sm tracking-widest text-orbit">
-          {CAM_LABEL[state]}
+          {t(CAM_KEY[state])}
         </div>
       )}
 
@@ -326,7 +332,7 @@ export function Hud() {
       <AlertIndicator
         level={level}
         detail={
-          level === "danger" && flagged(EXHAUSTED_SIGNAL) ? "NO ES SEGURO SEGUIR DESPIERTO" : level === "danger" && radiationOnly ? "RADIACIÓN ALTA" : level === "warn" && flagged(CO2_SIGNAL) ? "CO2 ALTO EN LA CABINA" : undefined
+          level === "danger" && flagged(EXHAUSTED_SIGNAL) ? t("hud.detail.exhausted") : level === "danger" && radiationOnly ? t("hud.detail.radiation") : level === "warn" && flagged(CO2_SIGNAL) ? t("hud.detail.co2") : undefined
         }
         steps={steps}
         acknowledged={acknowledged}
@@ -338,13 +344,14 @@ export function Hud() {
       <VerdictPanel
         biometrics={reading}
         decision={decision}
-        advice={advice}
         error={error}
         simulated={!measured || simMode !== "live"}
         cabinCo2={sim.cabinCo2}
         cabinCo2Limit={co2Limit}
         radiation={sim.radiation}
         radiationLimit={radiationLimit}
+        perclosLimit={perclosLimit}
+        fatigueLimit={fatigueLimit}
         onOpenGuide={setGuideSignal}
       />
 
@@ -360,16 +367,19 @@ export function Hud() {
 
       {healthPoint && <HealthPanel key={healthPoint.id} point={healthPoint} onClose={() => setHealthId(null)} />}
 
+      <RelaxDock suggest={level === "rest"} />
+
       <SensesBar line={bubble} onInstruction={instruct} />
 
       <div className="absolute right-8 top-8 bg-space/90 px-2 py-1 text-right text-xs font-bold tracking-[0.2em] text-pulse">
-        <div className={state === "live" ? "" : "text-amber-300"}>● {CAM_LABEL[state]}</div>
-        <div className="mt-1 text-shell">SIN CONEXIÓN · SOLO LOCAL</div>
+        <div className={state === "live" ? "" : "text-amber-300"}>● {t(CAM_KEY[state])}</div>
+        <div className="mt-1 text-shell">{t("hud.offline")}</div>
+        <LangToggle className="pointer-events-auto mt-1 justify-end" />
       </div>
 
       <div className="absolute inset-x-8 bottom-8 flex items-end justify-between text-xs tracking-[0.2em] text-shell/70">
-        <span className="bg-space/90 px-2 py-1 text-shell">PULSAR HUD · v0.1</span>
-        <span className="bg-space/90 px-2 py-1 font-bold text-amber-300">NO ES UN DISPOSITIVO MÉDICO</span>
+        <span className="bg-space/90 px-2 py-1 text-shell">{t("hud.version")}</span>
+        <span className="bg-space/90 px-2 py-1 font-bold text-amber-300">{t("hud.notMedical")}</span>
       </div>
 
       {/* Stays open even if the readings flicker back to clear mid-test. */}

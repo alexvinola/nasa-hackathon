@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type MutableRefObject, type RefObject } fr
 import { createPortal } from "react-dom";
 import { HudPanel, LEFT_COLUMN_ID } from "@/modules/hud/HudPanel";
 import { FaceLandmarker } from "@mediapipe/tasks-vision";
+import { t, useT } from "@/i18n";
 import type { FaceFrame } from "./faceWorker";
 import { BLINK, MOUTH_OPEN as MOUTH } from "./thresholds";
 import { useAiCheck, type Tally } from "./useAiCheck";
@@ -37,6 +38,7 @@ export function FaceOverlay({
   /** Why there is no mesh, when the face worker failed (e.g. the model files are missing). */
   problem?: string;
 }) {
+  const t = useT();
   const canvas = useRef<HTMLCanvasElement>(null);
   const [show, setShow] = useState(true);
   // Off until asked for: each check is a Gemma call on the same frame, and on a laptop without a GPU that takes
@@ -82,33 +84,33 @@ export function FaceOverlay({
       <canvas ref={canvas} className={`pointer-events-none absolute inset-0 h-full w-full -scale-x-100 object-cover ${show ? "" : "hidden"}`} />
       {/* Joins the HUD's left column of panels. */}
       {column && createPortal(
-      <HudPanel title="COMPROBACIÓN IA · GEMMA 4" defaultOpen={false}>
+      <HudPanel title={t("vision.overlay.title")} defaultOpen={false}>
         <div className="flex flex-col gap-1">
           <button type="button" aria-pressed={show} onClick={() => setShow((s) => !s)} className="border border-pulse/50 px-2 py-1 text-left text-xs text-pulse">
-            MALLA FACIAL {show ? "SÍ" : "NO"} (M)
+            {t("vision.overlay.mesh", { state: show ? t("vision.overlay.yes") : t("vision.overlay.no") })}
           </button>
           <button type="button" aria-pressed={checking} onClick={() => setChecking((c) => !c)} className="border border-pulse/50 px-2 py-1 text-left text-xs text-pulse">
-            COMPROBACIÓN IA {checking ? "SÍ" : "NO"} (C)
+            {t("vision.overlay.check", { state: checking ? t("vision.overlay.yes") : t("vision.overlay.no") })}
           </button>
         </div>
         {problem && (
           <p role="alert" className="mt-2 border border-red-500 bg-red-600/30 p-2 normal-case tracking-normal text-white">
-            Sin malla facial: los modelos de cara no se cargaron ({problem}). Ejecuta <code>make prefetch</code> y recarga.
+            {t("vision.overlay.noMesh", { problem, command: "make prefetch" })}
           </p>
         )}
         {last ? (
           <dl className="mt-2 space-y-1">
-            <Row label="OJOS" mp={last.claim.eyes} ai={last.ai.eyes} ok={last.agrees.eyes} tally={tally.eyes} />
-            <Row label="BOCA" mp={last.claim.mouth} ai={last.ai.mouth} ok={last.agrees.mouth} tally={tally.mouth} />
-            <div className="pt-1 text-shell/70">{last.ai.person ? "CARA CONFIRMADA" : "LA IA NO VE NINGUNA CARA"} · {Math.round(last.ms)} ms</div>
+            <Row label={t("vision.overlay.eyes")} mp={last.claim.eyes} ai={last.ai.eyes} ok={last.agrees.eyes} tally={tally.eyes} />
+            <Row label={t("vision.overlay.mouth")} mp={last.claim.mouth} ai={last.ai.mouth} ok={last.agrees.mouth} tally={tally.mouth} />
+            <div className="pt-1 text-shell/70">{last.ai.person ? t("vision.overlay.faceOk") : t("vision.overlay.noFace")} · {Math.round(last.ms)} ms</div>
           </dl>
         ) : (
           <p className="mt-2 normal-case tracking-normal text-shell/70">
-            {checking ? "Primera comprobación en unos segundos." : "Comprobación IA desactivada: ralentiza la malla en un portátil sin GPU."}
+            {checking ? t("vision.overlay.firstCheck") : t("vision.overlay.off")}
           </p>
         )}
         {error && <p className="mt-1 text-red-300">{error}</p>}
-        <p className="mt-2 text-[11px] tracking-normal text-shell/70">Solo evidencia: decide el motor de reglas.</p>
+        <p className="mt-2 text-[11px] tracking-normal text-shell/70">{t("vision.overlay.evidence")}</p>
       </HudPanel>,
       column)}
     </>
@@ -122,14 +124,14 @@ function Row({ label, mp, ai, ok, tally }: { label: string; mp: string; ai: stri
     <div className="flex justify-between">
       <dt>{label}</dt>
       <dd>
-        MP {mp.toUpperCase()} · IA {ai.toUpperCase()} <span className={tone}>{mark}</span>{" "}
+        MP {mp.toUpperCase()} · {t("vision.overlay.aiShort")} {ai.toUpperCase()} <span className={tone}>{mark}</span>{" "}
         <span className="text-shell/70">{tally.total ? `${tally.agree}/${tally.total}` : ""}</span>
       </dd>
     </div>
   );
 }
 
-const MODEL_LABEL = { alert: "ALERTA", low_vigilance: "POCA VIGILANCIA", drowsy: "SOMNOLIENTO" } as const;
+const MODEL_LABEL = { alert: "vision.canvas.alert", low_vigilance: "vision.canvas.lowVigilance", drowsy: "vision.canvas.drowsy" } as const;
 
 function draw(ctx: CanvasRenderingContext2D, f: FaceFrame, fps: number) {
   const { width: w, height: h } = f;
@@ -186,20 +188,20 @@ function draw(ctx: CanvasRenderingContext2D, f: FaceFrame, fps: number) {
     ctx.stroke();
     label(ctx, ex + dir * 18 * unit, ey + 4 * unit, text, color, unit, dir);
   };
-  callout(LEFT_EYE_OUTER, `OJO I ${f.eyeLeft.toFixed(2)}${f.eyeLeft > BLINK ? " CERRADO" : ""}`, eye(f.eyeLeft));
-  callout(RIGHT_EYE_OUTER, `OJO D ${f.eyeRight.toFixed(2)}${f.eyeRight > BLINK ? " CERRADO" : ""}`, eye(f.eyeRight));
-  callout(MOUTH_CORNER, `MANDÍBULA ${f.jaw.toFixed(2)}${f.jaw > MOUTH ? " ABIERTA" : ""}`, f.jaw > MOUTH ? `rgba(${AMBER}, 0.95)` : `rgba(${PULSE}, 0.8)`);
+  callout(LEFT_EYE_OUTER, `${t("vision.canvas.eyeLeft")} ${f.eyeLeft.toFixed(2)}${f.eyeLeft > BLINK ? " " + t("vision.canvas.closed") : ""}`, eye(f.eyeLeft));
+  callout(RIGHT_EYE_OUTER, `${t("vision.canvas.eyeRight")} ${f.eyeRight.toFixed(2)}${f.eyeRight > BLINK ? " " + t("vision.canvas.closed") : ""}`, eye(f.eyeRight));
+  callout(MOUTH_CORNER, `${t("vision.canvas.jaw")} ${f.jaw.toFixed(2)}${f.jaw > MOUTH ? " " + t("vision.canvas.open") : ""}`, f.jaw > MOUTH ? `rgba(${AMBER}, 0.95)` : `rgba(${PULSE}, 0.8)`);
 
   const [fx, fy] = at(FOREHEAD);
-  label(ctx, fx, fy - 28 * unit, `CABECEO ${sign(f.pitch)}°  GUIÑADA ${sign(f.yaw)}°  ALABEO ${sign(f.roll)}°`, `rgba(${PULSE}, 0.9)`, unit, 0);
-  label(ctx, fx, fy - 44 * unit, `MALLA FACIAL · 478 PUNTOS · ${Math.round(fps)} FPS`, `rgba(${PULSE}, 0.5)`, unit, 0);
-  label(ctx, fx, fy - 58 * unit, `${f.delegate} · FACE ${f.faceMs.toFixed(0)} MS`, `rgba(${PULSE}, 0.5)`, unit, 0);
+  label(ctx, fx, fy - 28 * unit, t("vision.canvas.pose", { pitch: sign(f.pitch), yaw: sign(f.yaw), roll: sign(f.roll) }), `rgba(${PULSE}, 0.9)`, unit, 0);
+  label(ctx, fx, fy - 44 * unit, t("vision.canvas.mesh", { fps: Math.round(fps) }), `rgba(${PULSE}, 0.5)`, unit, 0);
+  label(ctx, fx, fy - 58 * unit, t("vision.canvas.face", { delegate: f.delegate, ms: f.faceMs.toFixed(0) }), `rgba(${PULSE}, 0.5)`, unit, 0);
   // The RLDD model's reading of the last minute: evidence next to the score, the rules engine does not see it.
   const drowsy = f.model?.label === "drowsy";
   const reading = f.model
-    ? `${MODEL_LABEL[f.model.label]} · PUNTUACIÓN ${f.model.score.toFixed(2)} · ${f.model.probabilities.map((p) => Math.round(p * 100)).join("/")} %`
-    : f.modelWaitS > 0 ? `FALTAN ${Math.ceil(f.modelWaitS)} S` : "MINUTO NO UTILIZABLE";
-  label(ctx, fx, fy - 72 * unit, `MODELO RLDD · ${reading}`, `rgba(${drowsy ? AMBER : ORBIT}, 0.95)`, unit, 0);
+    ? t("vision.canvas.score", { label: t(MODEL_LABEL[f.model.label]), score: f.model.score.toFixed(2), probs: f.model.probabilities.map((p) => Math.round(p * 100)).join("/") })
+    : f.modelWaitS > 0 ? t("vision.canvas.wait", { s: Math.ceil(f.modelWaitS) }) : t("vision.canvas.unusable");
+  label(ctx, fx, fy - 72 * unit, t("vision.canvas.model", { reading }), `rgba(${drowsy ? AMBER : ORBIT}, 0.95)`, unit, 0);
 
   if (f.axes) {
     const [nx, ny] = at(NOSE_TIP);

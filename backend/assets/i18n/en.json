@@ -1,0 +1,80 @@
+{
+  "$comment": "English text of the rules' messages and the countermeasures (the files next to this folder are in Spanish, the default). Same ids; only wording differs. Loaded when a request asks for lang=en.",
+  "rules": {
+    "arm-asymmetry": "One arm is moving differently from the other (asymmetry {value}, limit {threshold}).",
+    "perclos-high": "Eyes closed {value} of the time, above {threshold}.",
+    "fatigue-score-high": "Fatigue score {value}, at or above {threshold}: not safe to stay awake on task.",
+    "sleep-under-6h": "Slept {value} {unit} in the last 24 h, under {threshold} {unit}: in astronauts this went with slower reactions.",
+    "pvt-mean-slow": "Reaction test average {value} {unit}, slower than {threshold} {unit}.",
+    "mood-low": "Mood {value} out of 5, at or below {threshold}.",
+    "cabin-co2-high": "Cabin CO2 at {value} {unit}, above {threshold} {unit}.",
+    "radiation-dose-high": "Simulated radiation dose {value} {unit}, at or above {threshold} {unit}."
+  },
+  "countermeasures": {
+    "CM-MOTOR-01": {
+      "title": "One arm moving differently",
+      "steps": [
+        "Stop the current task and make it safe.",
+        "Hold still in a secure position.",
+        "Raise both arms in front of you and hold them there for a few seconds.",
+        "Tell a crew member what you notice and stay with them.",
+        "Ask the crew to contact the flight surgeon.",
+        "If you were holding something or were out of the camera view, say so: the reading may be wrong."
+      ]
+    },
+    "CM-DROWSY-01": {
+      "title": "Eyes closing often",
+      "steps": [
+        "Pause any task that needs fast reactions or fine control.",
+        "Tell a crew member you are drowsy.",
+        "Ask the crew to double-check critical steps before you continue.",
+        "Take a rest break when the schedule allows."
+      ]
+    },
+    "CM-FATIGUE-01": {
+      "title": "Short sleep or slow reactions",
+      "steps": [
+        "Avoid starting tasks that need fast reactions if they can wait.",
+        "Tell a crew member before you continue critical work.",
+        "Ask the crew to double-check critical steps.",
+        "Plan a sleep period as soon as the schedule allows.",
+        "Repeat the reaction test after resting."
+      ]
+    },
+    "CM-MOOD-01": {
+      "title": "Low mood",
+      "steps": [
+        "Take a few minutes away from the current task.",
+        "Talk to a crew member you trust.",
+        "Ask the crew to schedule a private call with the support team on the ground."
+      ]
+    },
+    "CM-CO2-01": {
+      "title": "High cabin CO2",
+      "steps": [
+        "Check the cabin CO2 reading on the vehicle display.",
+        "Report the reading to the crew.",
+        "Follow the vehicle's CO2 procedure.",
+        "Tell the crew if you feel unwell."
+      ]
+    },
+    "CM-EXHAUSTED-01": {
+      "title": "Too exhausted to stay on task",
+      "steps": [
+        "Stop what you are doing and make it safe.",
+        "Tell the crew you need to sleep now and hand over any critical task.",
+        "Go to your sleep station and rest."
+      ]
+    },
+    "CM-RAD-01": {
+      "title": "Raised radiation dose",
+      "steps": [
+        "Report the dose reading to the crew.",
+        "Follow the crew's radiation procedure, for example moving to the shielded area if instructed.",
+        "Keep your dosimeter on.",
+        "Note the time and the dose so the flight surgeon can add it to your exposure record.",
+        "Stay in the shielded area until the crew confirms the reading has dropped."
+      ]
+    }
+  }
+}

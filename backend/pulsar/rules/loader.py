@@ -86,6 +86,7 @@ def load_rule_book(
     rules_file: Path | None = None,
     countermeasures_file: Path | None = None,
     shared: SharedRegistry | None = None,
+    lang: str | None = None,
 ) -> tuple[RuleBook, CountermeasureBook]:
     rules_file = rules_file or settings.RULES_FILE
     countermeasures_file = countermeasures_file or settings.COUNTERMEASURES_FILE
@@ -94,4 +95,20 @@ def load_rule_book(
     problems = _problems(book, countermeasures, shared or registry())
     if problems:
         raise RulesFileError(f"{rules_file.name} / {countermeasures_file.name}:\n  " + "\n  ".join(problems))
-    return book, countermeasures
+    return _in_language(book, countermeasures, lang)
+
+
+def _in_language(book: RuleBook, countermeasures: CountermeasureBook, lang: str | None) -> tuple[RuleBook, CountermeasureBook]:
+    """The files are in the default language; another one only swaps the wording (messages, titles, steps) by id."""
+    lang = settings.pick_lang(lang)
+    file = settings.I18N_DIR / f"{lang}.json"
+    if not file.exists():
+        return book, countermeasures
+    text = json.loads(file.read_text(encoding="utf-8"))
+    rules = tuple(rule.model_copy(update={"message": text["rules"].get(rule.id, rule.message)}) for rule in book.rules)
+    cms = tuple(
+        cm.model_copy(update={"title": text["countermeasures"].get(cm.id, {}).get("title", cm.title),
+                              "steps": tuple(text["countermeasures"].get(cm.id, {}).get("steps", cm.steps))})
+        for cm in countermeasures.countermeasures
+    )
+    return book.model_copy(update={"rules": rules}), countermeasures.model_copy(update={"countermeasures": cms})

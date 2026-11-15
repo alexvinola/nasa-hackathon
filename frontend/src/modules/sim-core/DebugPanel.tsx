@@ -2,6 +2,7 @@
 
 import { HudPanel } from "@/modules/hud/HudPanel";
 import { useHotkey } from "@/modules/hud/useHotkey";
+import { useT } from "@/i18n";
 import type { SimMode } from "./useSimVitals";
 
 const BUTTON = "border px-2 py-1";
@@ -24,6 +25,8 @@ export function DebugPanel({
   sound: boolean;
   onSound: (on: boolean) => void;
 }) {
+  const t = useT();
+  const st = (on: boolean) => t(on ? "debug.on" : "debug.off");
   const toggle = (wanted: SimMode) => onMode(mode === wanted ? "live" : wanted);
   useHotkey("1", () => toggle("rest"));
   useHotkey("2", () => toggle("danger"));
@@ -33,25 +36,25 @@ export function DebugPanel({
   useHotkey("6", () => toggle("radiation"));
 
   return (
-    <HudPanel title="DEPURACIÓN · FALSAS ALARMAS (1-6)" defaultOpen={false}>
+    <HudPanel title={t("debug.title")} defaultOpen={false}>
       <div className="grid grid-cols-2 gap-2">
         <button type="button" aria-pressed={mode === "rest"} onClick={() => toggle("rest")} className={`${BUTTON} ${mode === "rest" ? "border-amber-400 bg-amber-400/20 text-amber-300" : OFF}`}>
-          AVISO {mode === "rest" ? "SÍ" : "NO"} (1)
+          {t("debug.warning", { state: st(mode === "rest") })}
         </button>
         <button type="button" aria-pressed={mode === "danger"} onClick={() => toggle("danger")} className={`${BUTTON} ${mode === "danger" ? "border-red-500 bg-red-600/30 text-red-200" : OFF}`}>
-          PELIGRO {mode === "danger" ? "SÍ" : "NO"} (2)
+          {t("debug.danger", { state: st(mode === "danger") })}
         </button>
         <button type="button" aria-pressed={mode === "loop"} onClick={() => toggle("loop")} className={`${BUTTON} ${mode === "loop" ? "border-pulse bg-pulse/20 text-pulse" : OFF}`}>
-          BUCLE {mode === "loop" ? "SÍ" : "NO"} (3)
+          {t("debug.loop", { state: st(mode === "loop") })}
         </button>
         <button type="button" aria-pressed={sound} onClick={() => onSound(!sound)} className={`${BUTTON} ${sound ? "border-pulse bg-pulse/20 text-pulse" : OFF}`}>
-          SONIDO {sound ? "SÍ" : "NO"} (4)
+          {t("debug.sound", { state: st(sound) })}
         </button>
         <button type="button" aria-pressed={mode === "co2"} onClick={() => toggle("co2")} className={`${BUTTON} ${mode === "co2" ? "border-amber-400 bg-amber-400/20 text-amber-300" : OFF}`}>
-          SUBIR CO2 {mode === "co2" ? "SÍ" : "NO"} (5)
+          {t("debug.co2", { state: st(mode === "co2") })}
         </button>
         <button type="button" aria-pressed={mode === "radiation"} onClick={() => toggle("radiation")} className={`${BUTTON} ${mode === "radiation" ? "border-amber-400 bg-amber-400/20 text-amber-300" : OFF}`}>
-          RADIACIÓN {mode === "radiation" ? "SÍ" : "NO"} (6)
+          {t("debug.radiation", { state: st(mode === "radiation") })}
         </button>
       </div>
     </HudPanel>
