@@ -15,6 +15,7 @@ import { useVerdict } from "@/modules/voice-ai/useVerdict";
 import { countermeasureSteps, listRules, telemetryFrom, type Rule } from "@/modules/voice-ai/verdictApi";
 import { GuidePanel } from "@/modules/guides/GuidePanel";
 import { MiniTwin } from "@/modules/guides/MiniTwin";
+import { HabitsPanel } from "@/modules/habits/HabitsPanel";
 import { RelaxDock } from "@/modules/relax/RelaxDock";
 import { HealthPanel } from "@/modules/guides/HealthPanel";
 import { HEALTH_POINTS } from "@/modules/guides/healthPoints";
@@ -95,6 +96,7 @@ export function Hud() {
   // and a pulse counted by hand replaces the simulated one.
   const [entries, setEntries] = useState<Entries>({});
   const [reporting, setReporting] = useState(false);
+  const [devTools, setDevTools] = useState(false);
   useHotkey("r", () => setReporting((was) => !was));
   const reading = useMemo<Biometrics>(() => {
     const base = measured && simMode === "live" ? { ...measured, heartRateBpm: sim.vitals.heartRateBpm, heartRateConfidence: 0 } : sim.vitals;
@@ -282,20 +284,12 @@ export function Hud() {
       {/* The left column of foldable panels, below the mascot's home corner. Declared before the camera overlay,
           whose AI-check panel joins it through a portal. */}
       {/* The column stops above the footer line and scrolls; the centred text box keeps clear of it at any width. */}
-      <div id={LEFT_COLUMN_ID} className="absolute left-8 top-60 z-[1] flex max-h-[calc(100vh-19.5rem)] w-64 flex-col gap-2 overflow-y-auto [scrollbar-color:var(--color-pulse)_transparent] [scrollbar-width:thin]">
-        <button
-          type="button"
-          data-self-report-open
-          aria-pressed={reporting}
-          onClick={() => setReporting((was) => !was)}
-          className={`pointer-events-auto border-2 px-3 py-2 text-left text-xs font-bold tracking-[0.12em] backdrop-blur ${reporting ? "border-pulse bg-pulse/25 text-pulse" : "border-pulse/60 bg-space/60 text-pulse hover:bg-pulse/15"}`}
-        >
-          {t("selfReport.open")}
-          <span className="mt-0.5 block font-normal tracking-normal text-shell/70">
-            {t("selfReport.openHint", { done: GUIDES.filter((candidate) => FIELDS[candidate.signal].every((f) => f.key in entries)).length, total: GUIDES.length })}
-          </span>
-        </button>
+      <div id={LEFT_COLUMN_ID} className="absolute bottom-20 left-8 z-[1] flex max-h-[calc(100vh-24rem)] w-64 flex-col gap-2 overflow-y-auto [scrollbar-color:var(--color-pulse)_transparent] [scrollbar-width:thin]">
         <MiniTwin
+          reporting={reporting}
+          onReport={() => setReporting((was) => !was)}
+          reportDone={GUIDES.filter((candidate) => FIELDS[candidate.signal].every((f) => f.key in entries)).length}
+          reportTotal={GUIDES.length}
           statuses={guideStatuses}
           open={guideSignal}
           onOpen={(signal) => {
@@ -308,8 +302,12 @@ export function Hud() {
             setHealthId(id);
           }}
         />
-        <DebugPanel mode={simMode} onMode={setSimMode} sound={sound} onSound={setSound} />
-        <LogPanel />
+        <HabitsPanel />
+        {/* Hidden, not unmounted, so their hotkeys keep working; right-click the version to show them. */}
+        <div className={devTools ? "contents" : "hidden"}>
+          <DebugPanel mode={simMode} onMode={setSimMode} sound={sound} onSound={setSound} />
+          <LogPanel />
+        </div>
       </div>
       {state === "live" && <FaceOverlay frameRef={faceFrame} videoRef={videoRef} problem={faceProblem} />}
       {state !== "live" && (
@@ -400,15 +398,21 @@ export function Hud() {
 
       <SensesBar line={bubble} onInstruction={instruct} />
 
-      <div className="absolute right-8 top-8 bg-space/90 px-2 py-1 text-right text-xs font-bold tracking-[0.2em] text-pulse">
-        <div className={state === "live" ? "" : "text-amber-300"}>● {t(CAM_KEY[state])}</div>
-        <div className="mt-1 text-shell">{t("hud.offline")}</div>
-        <LangToggle className="pointer-events-auto mt-1 justify-end" />
-      </div>
+      {state !== "live" && (
+        <div className="absolute right-8 top-8 bg-space/90 px-2 py-1 text-right text-xs font-bold tracking-[0.2em] text-amber-300">● {t(CAM_KEY[state])}</div>
+      )}
 
-      <div className="absolute inset-x-8 bottom-8 flex items-end justify-between text-xs tracking-[0.2em] text-shell/70">
-        <span className="bg-space/90 px-2 py-1 text-shell">{t("hud.version")}</span>
-        <span className="bg-space/90 px-2 py-1 font-bold text-amber-300">{t("hud.notMedical")}</span>
+      <div className="absolute bottom-8 left-8 flex items-center gap-3 text-xs tracking-[0.2em] text-shell/70">
+        <LangToggle className="pointer-events-auto" />
+        <span
+          className="pointer-events-auto bg-space/90 px-2 py-1 text-shell"
+          onContextMenu={(event) => {
+            event.preventDefault();
+            setDevTools((was) => !was);
+          }}
+        >
+          {t("hud.version")}
+        </span>
       </div>
 
       {/* Stays open even if the readings flicker back to clear mid-test. */}

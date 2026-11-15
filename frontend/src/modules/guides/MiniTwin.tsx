@@ -68,7 +68,16 @@ export function MiniTwin({
   onOpen,
   healthOpen,
   onOpenHealth,
+  reporting,
+  onReport,
+  reportDone,
+  reportTotal,
 }: {
+  /** The form to type measurements in: its button lives under the body, in this panel. */
+  reporting: boolean;
+  onReport: () => void;
+  reportDone: number;
+  reportTotal: number;
   statuses: Record<string, GuideStatus>;
   /** Signal of the guide currently open, if any. */
   open: string | null;
@@ -138,6 +147,16 @@ export function MiniTwin({
             />
           ))}
       </div>
+      <button
+        type="button"
+        data-self-report-open
+        aria-pressed={reporting}
+        onClick={onReport}
+        className={`pointer-events-auto mt-2 w-full border-2 px-3 py-2 text-left text-xs font-bold tracking-[0.12em] ${reporting ? "border-pulse bg-pulse/25 text-pulse" : "border-pulse/60 bg-space/60 text-pulse hover:bg-pulse/15"}`}
+      >
+        {t("selfReport.open")}
+        <span className="mt-0.5 block font-normal tracking-normal text-shell/70">{t("selfReport.openHint", { done: reportDone, total: reportTotal })}</span>
+      </button>
     </HudPanel>
   );
 }

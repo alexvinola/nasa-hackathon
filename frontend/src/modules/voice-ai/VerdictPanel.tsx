@@ -12,21 +12,12 @@ const LIGHT: Record<Status, string> = {
 };
 const ESCALATION = { SELF_CARE: "voice.verdict.selfCare", CREW: "voice.verdict.crew", FLIGHT_SURGEON: "voice.verdict.surgeon" } as const;
 
-/** A reading as a bar with the engine's limit marked on it; the bar turns amber past the limit. */
-function Gauge({ label, value, shown, limit, max, limitShown, big = false }: { label: string; value: number; shown: string; limit?: number | null; max: number; limitShown?: string; big?: boolean }) {
-  const t = useT();
-  const over = limit != null && value >= limit;
+/** One number of the drowsiness block: green while within its limit, amber past it. */
+function Figure({ label, shown, over, tone }: { label: string; shown: string; over: boolean; tone?: string }) {
   return (
-    <div className="mt-2">
-      <div className="flex items-baseline justify-between text-xs text-shell/90">
-        <span>{label}</span>
-        <span className={`${big ? "text-3xl" : "text-lg"} leading-none tracking-normal ${over ? "text-amber-300" : "text-shell"}`}>{shown}</span>
-      </div>
-      <div className="relative mt-1 h-2.5 overflow-hidden rounded bg-shell/15" role="meter" aria-label={label} aria-valuemin={0} aria-valuemax={max} aria-valuenow={Math.min(value, max)}>
-        <div className={`h-full ${over ? "bg-amber-400" : "bg-pulse"}`} style={{ width: `${Math.min(100, (value / max) * 100)}%` }} />
-        {limit != null && <div aria-hidden className="absolute inset-y-0 w-0.5 bg-shell" style={{ left: `${Math.min(100, (limit / max) * 100)}%` }} />}
-      </div>
-      {limit != null && <div className="mt-0.5 text-right text-[11px] text-shell/80">{t("voice.verdict.limit", { value: limitShown ?? limit.toFixed(2), unit: "" })}</div>}
+    <div>
+      <div className="text-[11px] text-shell/80">{label}</div>
+      <div className={`text-3xl leading-tight tracking-normal ${over ? "text-amber-300" : (tone ?? "text-emerald-300")}`}>{shown}</div>
     </div>
   );
 }
@@ -103,33 +94,12 @@ export function VerdictPanel({
 
       <div hidden={!open}>
       {biometrics && (
-        // The drowsiness block is the centre of the panel: the fatigue estimate, the share of time the eyes are closed
-        // (PERCLOS) and the yawns, each against the limit the rules engine applies (none for yawns: the engine has no rule).
-        <div data-fatigue-block className="mt-3 rounded border border-pulse/40 bg-pulse/5 p-3">
-          <div className="flex items-center justify-between text-xs text-orbit">
-            <span>{t("voice.verdict.fatigueTitle")}</span>
-            <span>{t("voice.verdict.estimate")}</span>
-          </div>
-          <Gauge
-            label={t("voice.verdict.fatigue")}
-            value={biometrics.fatigueScore}
-            shown={biometrics.fatigueScore.toFixed(2)}
-            limit={fatigueLimit}
-            max={1}
-            big
-          />
-          <Gauge
-            label={t("voice.verdict.perclos")}
-            value={biometrics.perclos}
-            shown={`${Math.round(biometrics.perclos * 100)}%`}
-            limit={perclosLimit}
-            max={Math.max(0.4, (perclosLimit ?? 0) * 2)}
-            limitShown={perclosLimit != null ? `${Math.round(perclosLimit * 100)}%` : undefined}
-          />
-          <div className="mt-2 flex items-baseline justify-between text-xs text-shell/90">
-            <span>{t("voice.verdict.yawns")}</span>
-            <span className="text-2xl leading-none tracking-normal text-shell">{biometrics.yawnsPerMin}</span>
-          </div>
+        // The drowsiness block is the centre of the panel: three numbers that turn amber past the limit the rules engine
+        // applies (the engine has no rule for yawns, so that one only changes colour when there is any).
+        <div data-fatigue-block className="mt-3 grid grid-cols-3 gap-2 rounded border border-pulse/40 bg-pulse/5 p-3 text-center">
+          <Figure label={t("voice.verdict.fatigue")} shown={biometrics.fatigueScore.toFixed(2)} over={fatigueLimit != null && biometrics.fatigueScore >= fatigueLimit} />
+          <Figure label="PERCLOS" shown={`${Math.round(biometrics.perclos * 100)}%`} over={perclosLimit != null && biometrics.perclos >= perclosLimit} />
+          <Figure label={t("voice.verdict.yawns")} shown={String(biometrics.yawnsPerMin)} over={false} tone={biometrics.yawnsPerMin > 0 ? "text-orbit" : undefined} />
         </div>
       )}
 

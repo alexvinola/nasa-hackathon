@@ -72,6 +72,7 @@ export function AlertIndicator({
   const t = useT();
   const look = LOOK[level ?? "clear"];
   useHotkey("escape", () => level && !acknowledged && !testing && onTest());
+  if (!level) return null; // nothing to report: no "all clear" badge
   return (
     <section
       data-hud-panel

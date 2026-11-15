@@ -91,7 +91,10 @@ export function ReactionTest({
 
   return (
     <div role="dialog" aria-modal="true" aria-label={t("hud.test.label")} className="fixed inset-0 z-50 flex flex-col items-center gap-6 bg-space p-8 tracking-[0.15em]">
-      <PulsarMascot message={says} mood={failed ? "alert" : "idle"} />
+      <header className="flex w-full items-center justify-between gap-8">
+        <h1 className="flex-1 text-center text-4xl font-bold leading-tight tracking-[0.2em] text-pulse">{t("hud.test.title")}</h1>
+        <PulsarMascot message={says} mood={failed ? "alert" : "idle"} />
+      </header>
 
       {phase !== "done" ? (
         <>
