@@ -1,78 +1,82 @@
 {
-  "model": "gemma4:e4b-it-qat",
-  "machine": "arm64 macOS-27.0.1-arm64-arm-64bit",
+  "model": "gemma4:e2b-it-qat",
+  "machine": "AMD64 Windows-11-10.0.26300-SP0",
   "offline": true,
   "scenario": "04-demo-emergency.json",
   "median_ms": {
-    "stt": 295.264,
-    "rules": 0.05,
-    "llm": 1236.155,
-    "tts": 161.788,
-    "total": 1681.015
+    "stt": 6058.191,
+    "rules": 0.368,
+    "llm": 20313.504,
+    "tts": 3764.668,
+    "total": 28687.528
   },
   "turns": [
     {
       "wav": "01.wav",
-      "transcript": "Pulsar, how am I doing?",
+      "transcript": "Pulsar, \u00bfHow am I doing?",
       "status": "RED",
-      "text": "One arm is moving differently from the other, and eyes are closed frequently. Contact the flight surgeon and stop the current task to make it safe.",
+      "text": "Se ha detectado una asimetr\u00eda en un brazo y una puntuaci\u00f3n de fatiga superior al l\u00edmite seguro. Contacta con el cirujano de vuelo y det\u00e9n la tarea actual para dejarla en un estado seguro.",
       "source": "llm",
       "violations": [],
-      "audio_bytes": 334892,
+      "audio_bytes": 427564,
       "ms": {
-        "stt": 311.486,
-        "rules": 0.066,
-        "llm": 962.757,
-        "tts": 139.232,
-        "total": 1413.542
+        "stt": 5324.468,
+        "rules": 0.544,
+        "llm": 15781.748,
+        "tts": 2301.014,
+        "total": 23407.774
       }
     },
     {
       "wav": "02.wav",
-      "transcript": "What should I do now?",
+      "transcript": "\u00bfQu\u00e9 puedo hacer ahora?",
       "status": "RED",
-      "text": "One arm is moving differently from the other, and eyes are closed frequently. Contact the flight surgeon and stop the current task to make it safe.",
-      "source": "llm",
-      "violations": [],
-      "audio_bytes": 334892,
+      "text": "Hay una lectura fuera de su l\u00edmite. Contacta ahora con el cirujano de vuelo.",
+      "source": "fallback",
+      "violations": [
+        "does not name the flight surgeon"
+      ],
+      "audio_bytes": 206380,
       "ms": {
-        "stt": 285.773,
-        "rules": 0.051,
-        "llm": 1170.644,
-        "tts": 167.691,
-        "total": 1624.158
+        "stt": 3186.196,
+        "rules": 0.258,
+        "llm": 18680.367,
+        "tts": 1317.178,
+        "total": 23183.999
       }
     },
     {
       "wav": "03.wav",
       "transcript": "Next step.",
       "status": "RED",
-      "text": "One arm is moving differently from the other, and eyes are closed a high percentage of the time. Contact the flight surgeon and stop the current task to make it safe.",
-      "source": "llm",
-      "violations": [],
-      "audio_bytes": 381996,
+      "text": "Hay una lectura fuera de su l\u00edmite. Contacta ahora con el cirujano de vuelo.",
+      "source": "fallback",
+      "violations": [
+        "does not name the flight surgeon"
+      ],
+      "audio_bytes": 203820,
       "ms": {
-        "stt": 278.713,
-        "rules": 0.046,
-        "llm": 1301.665,
-        "tts": 157.449,
-        "total": 1737.873
+        "stt": 6791.914,
+        "rules": 0.405,
+        "llm": 21946.641,
+        "tts": 5228.321,
+        "total": 33967.281
       }
     },
     {
       "wav": "04.wav",
-      "transcript": "Why is my status red?",
+      "transcript": "\u00bfPor qu\u00e9 es mi estatus red?",
       "status": "RED",
-      "text": "One arm is moving differently from the other, and eyes are closed a high percentage of the time. Contact the flight surgeon, stop the current task and make it safe.",
+      "text": "Se ha detectado una asimetr\u00eda en un brazo y una puntuaci\u00f3n de fatiga superior al l\u00edmite. Contacta con el cirujano de vuelo y det\u00e9n la tarea actual y d\u00e9jala en un estado seguro.",
       "source": "llm",
       "violations": [],
-      "audio_bytes": 386604,
+      "audio_bytes": 401964,
       "ms": {
-        "stt": 304.754,
-        "rules": 0.048,
-        "llm": 2094.49,
-        "tts": 166.127,
-        "total": 2565.419
+        "stt": 6851.827,
+        "rules": 0.33,
+        "llm": 24615.297,
+        "tts": 8033.502,
+        "total": 39500.957
       }
     }
   ]
