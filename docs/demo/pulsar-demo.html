@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PULSAR · Demo deck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Manrope:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  /* Seven 1920×1080 slides, one per printed page: print to PDF to get pulsar-demo.pdf. */
+  :root {
+    --space: #050e2f; --lift: #0d1a44; --pulse: #5ef2ec; --orbit: #9a8cff; --shell: #eef1fb;
+    --muted: #a9b2d6; --line: #24315f; --amber: #ffc94a; --red: #ff4d5e; --green: #3ee08f;
+  }
+  @page { size: 1920px 1080px; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--space); color: var(--shell); font-family: Manrope, system-ui, sans-serif; }
+  .slide {
+    width: 1920px; height: 1080px; position: relative; overflow: hidden; padding: 96px 120px;
+    background: radial-gradient(1100px 700px at 78% 40%, var(--lift), var(--space) 70%);
+    page-break-after: always; break-after: page; display: flex; flex-direction: column;
+  }
+  .kicker { font: 700 22px/1 "JetBrains Mono", monospace; letter-spacing: .22em; color: var(--pulse); text-transform: uppercase; }
+  h1, h2 { font-family: Unbounded, sans-serif; font-weight: 800; letter-spacing: -.02em; }
+  h2 { font-size: 68px; line-height: 1.08; margin: 28px 0 0; max-width: 1500px; }
+  h2 em, h1 em { font-style: normal; color: var(--pulse); }
+  p.lead { font-size: 30px; line-height: 1.5; color: var(--muted); margin-top: 28px; max-width: 1400px; }
+  .foot { position: absolute; left: 120px; right: 120px; bottom: 44px; display: flex; justify-content: space-between;
+          font: 500 18px/1 "JetBrains Mono", monospace; color: #6f7aa8; letter-spacing: .08em; }
+  .num { color: var(--pulse); }
+  .grid { display: grid; gap: 28px; margin-top: 56px; }
+  .card { background: rgba(13, 26, 68, .72); border: 1px solid var(--line); border-radius: 18px; padding: 34px 36px; }
+  .card h3 { font: 700 30px/1.2 Unbounded, sans-serif; margin-bottom: 14px; }
+  .card p { font-size: 24px; line-height: 1.45; color: var(--muted); }
+  .tag { font: 700 17px/1 "JetBrains Mono", monospace; letter-spacing: .14em; color: var(--orbit); text-transform: uppercase; margin-bottom: 18px; }
+  .shot { border-radius: 16px; border: 1px solid var(--line); box-shadow: 0 30px 80px rgba(0,0,0,.5); display: block; }
+  .note { font: 500 19px/1.4 "JetBrains Mono", monospace; color: #8c96c4; }
+
+  /* 1 · Title */
+  .title { flex-direction: row; align-items: center; gap: 40px; }
+  .title h1 { font-size: 150px; line-height: .95; margin-top: 30px; }
+  .title h1 span { color: var(--pulse); }
+  .title .acr { font: 500 26px/1.4 "JetBrains Mono", monospace; color: var(--orbit); margin-top: 26px; letter-spacing: .04em; }
+  .title .tagline { font-size: 44px; font-weight: 500; margin-top: 34px; line-height: 1.3; max-width: 1000px; }
+  .title .team { font-size: 24px; color: var(--muted); margin-top: 54px; line-height: 1.6; }
+  .title img { position: absolute; right: 30px; top: 50%; transform: translateY(-52%); width: 780px; }
+  .title .kicker { line-height: 1.6; }
+
+  /* 2 · Problem */
+  .hazards { grid-template-columns: repeat(3, 1fr); }
+  .quote { margin-top: 44px; border-left: 4px solid var(--amber); padding: 6px 0 6px 30px; font-size: 27px; line-height: 1.5; color: var(--shell); max-width: 1560px; }
+  .quote b { color: var(--amber); font-weight: 700; }
+
+  /* 3 · Solution */
+  .split { display: grid; grid-template-columns: 640px 1fr; gap: 60px; margin-top: 48px; align-items: start; }
+  .caps { display: grid; gap: 16px; }
+  .cap { display: flex; gap: 18px; align-items: baseline; font-size: 25px; line-height: 1.4; }
+  .cap b { font-family: Unbounded, sans-serif; font-size: 22px; color: var(--pulse); min-width: 34px; }
+  .cap span { color: var(--muted); }
+  .cap strong { color: var(--shell); }
+
+  /* 4 · How it decides */
+  .chain { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; margin-top: 64px; }
+  .step { position: relative; padding: 32px 26px; border: 1px solid var(--line); background: rgba(13,26,68,.72); }
+  .step:first-child { border-radius: 18px 0 0 18px; }
+  .step:last-child { border-radius: 0 18px 18px 0; }
+  .step.decide { background: rgba(94, 242, 236, .12); border-color: var(--pulse); }
+  .step .who { font: 700 17px/1 "JetBrains Mono", monospace; letter-spacing: .14em; color: var(--orbit); }
+  .step h3 { font: 700 30px/1.15 Unbounded, sans-serif; margin: 16px 0 14px; }
+  .step.decide h3 { color: var(--pulse); }
+  .step p { font-size: 21px; line-height: 1.45; color: var(--muted); }
+  .rules { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 60px; margin-top: 56px; font-size: 25px; line-height: 1.45; }
+  .rules div::before { content: "▸ "; color: var(--pulse); }
+
+  /* 5 · Demo */
+  .demo { display: grid; grid-template-columns: 1fr 470px; gap: 56px; margin-top: 40px; align-items: start; }
+  .demo .shot { width: 100%; }
+  .flow { display: grid; gap: 22px; }
+  .flow .card { padding: 24px 28px; }
+  .flow .card h3 { font-size: 24px; margin-bottom: 8px; }
+  .flow .card p { font-size: 21px; }
+  .dot { display: inline-block; width: 16px; height: 16px; border-radius: 50%; margin-right: 10px; vertical-align: 1px; }
+
+  /* 6 · Evidence */
+  .stats { grid-template-columns: repeat(4, 1fr); margin-top: 48px; }
+  .stat .big { font: 800 76px/1 Unbounded, sans-serif; color: var(--pulse); }
+  .stat h3 { font-size: 22px; margin: 18px 0 10px; }
+  .stat p { font-size: 20px; }
+  .nasa { margin-top: 44px; display: flex; flex-wrap: wrap; gap: 14px; }
+  .chip { font: 500 20px/1 "JetBrains Mono", monospace; padding: 14px 20px; border-radius: 999px; border: 1px solid var(--orbit); color: var(--shell); }
+
+  /* 7 · Next */
+  .next { grid-template-columns: repeat(3, 1fr); }
+  .links { margin-top: 60px; display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+  .link { border: 2px solid var(--pulse); border-radius: 18px; padding: 30px 36px; }
+  .link .tag { color: var(--pulse); }
+  .link div:last-child { font: 700 32px/1.2 "JetBrains Mono", monospace; }
+</style>
+</head>
+<body>
+
+<!-- 1 · Title and introduction -->
+<section class="slide title">
+  <div style="max-width: 1020px">
+    <div class="kicker">NASA Space Apps 2026<br>Health Monitoring Software for Astronauts</div>
+    <h1>PULSAR<span>.</span></h1>
+    <div class="acr">Personal Unit for Learning, Support, Assistance &amp; Reminders</div>
+    <div class="tagline">Your personal health companion <em style="font-style:normal;color:var(--pulse)">in space</em>. It watches, asks, decides with explicit rules and explains it out loud. On one laptop, offline.</div>
+    <div class="team">Alejandro Gimenez Garulo · Samir Ahmimoud · Alejandro Viñola Robles</div>
+  </div>
+  <img src="img/pulsar-mascot-fade.png" alt="PULSAR mascot">
+  <div class="foot"><span>PULSAR · DEMO</span><span class="num">01 / 07</span></div>
+</section>
+
+<!-- 2 · Problem -->
+<section class="slide">
+  <div class="kicker">The challenge</div>
+  <h2>On a long mission, nobody looks at your face <em>every morning.</em></h2>
+  <p class="lead">Far from Earth, messages take longer and a flight surgeon is not always on the line. The crew has to notice on their own that something is changing.</p>
+  <div class="grid hazards">
+    <div class="card"><div class="tag">HRP hazard</div><h3>Isolation and Confinement</h3><p>Months with the same people, shifting schedules, little sleep.</p></div>
+    <div class="card"><div class="tag">HRP hazard</div><h3>Distance from Earth</h3><p>The farther out, the more medical autonomy the crew needs.</p></div>
+    <div class="card"><div class="tag">HRP hazard</div><h3>Hostile/Closed Environments</h3><p>Cabin air is one more system to watch.</p></div>
+  </div>
+  <div class="quote">NASA HRP risk: <b>Performance Decrements and Adverse Health Outcomes Resulting from Sleep Loss, Circadian Desynchronization, and Work Overload.</b> Fatigue gives no warning: it shows in the eyes before it shows in the mistakes.</div>
+  <div class="foot"><span>SOURCES: NASA HRP HAZARDS AND RISKS · JONES ET AL. 2022, SLEEP</span><span class="num">02 / 07</span></div>
+</section>
+
+<!-- 3 · Solution -->
+<section class="slide">
+  <div class="kicker">The solution</div>
+  <h2>A HUD with a companion that <em>measures, asks and guides.</em></h2>
+  <div class="split">
+    <div class="caps">
+      <div class="cap"><b>01</b><span><strong>Fatigue vision.</strong> Webcam eye closure (PERCLOS), blinks and yawns. No image is kept.</span></div>
+      <div class="cap"><b>02</b><span><strong>PVT-B reaction test.</strong> The 3-minute vigilance test (Basner et al., 2011).</span></div>
+      <div class="cap"><b>03</b><span><strong>Six indicators.</strong> Heart rate, blood pressure, glucose, temperature, sleep and mood, with measuring guides on a body map.</span></div>
+      <div class="cap"><b>04</b><span><strong>Daily habits.</strong> Sleep, exercise, water, relaxation: streaks, levels, reminders.</span></div>
+      <div class="cap"><b>05</b><span><strong>Voice and chat, ES/EN.</strong> “Add glucose 95”, “help me calm down”.</span></div>
+      <div class="cap"><b>06</b><span><strong>Green · Amber · Red.</strong> Self-care, notify the crew, call the flight surgeon.</span></div>
+    </div>
+    <img class="shot" src="img/app-green.jpg" alt="PULSAR HUD in the green state" style="width:100%">
+  </div>
+  <div class="foot"><span>LIVE PROTOTYPE HUD · ENGLISH · NO CAMERA, SIMULATED READINGS</span><span class="num">03 / 07</span></div>
+</section>
+
+<!-- 4 · How it decides -->
+<section class="slide">
+  <div class="kicker">How it decides</div>
+  <h2>The rules decide. <em>The AI only gives them a voice.</em></h2>
+  <div class="chain">
+    <div class="step"><div class="who">MediaPipe</div><h3>Vision measures</h3><p>Eye openness, blinks, yawns, arm movement, in the browser.</p></div>
+    <div class="step"><div class="who">Classifier</div><h3>Fatigue estimate</h3><p>Small model trained on public drowsiness datasets.</p></div>
+    <div class="step decide"><div class="who">Rules engine</div><h3>Decides</h3><p>Explicit thresholds, each with a source or a declared assumption. Most severe status wins.</p></div>
+    <div class="step"><div class="who">Gemma 4 · local</div><h3>Phrases</h3><p>Two sentences from the verdict. Off-script? A fixed sentence replaces it.</p></div>
+    <div class="step"><div class="who">Whisper · Piper</div><h3>Speaks</h3><p>Speech in, speech out, on the same laptop.</p></div>
+  </div>
+  <div class="rules">
+    <div>The model never writes a health status or an escalation.</div>
+    <div>The HUD only accepts actions from a closed, validated list.</div>
+    <div>Every threshold is exposed by the API (GET /rules).</div>
+    <div>Runs fully offline on one laptop: no image leaves the machine.</div>
+  </div>
+  <div class="foot"><span>NOT A MEDICAL DEVICE</span><span class="num">04 / 07</span></div>
+</section>
+
+<!-- 5 · Demo -->
+<section class="slide">
+  <div class="kicker">Demo · the red path</div>
+  <h2>Fatigue crosses a threshold. <em>PULSAR escalates.</em></h2>
+  <div class="demo">
+    <img class="shot" src="img/app-red.jpg" alt="PULSAR HUD in the red state with the danger alert">
+    <div class="flow">
+      <div class="card"><h3><span class="dot" style="background:var(--red)"></span>Rules fire</h3><p>Fatigue 0.80 ≥ 0.70 and eyes closed 18% &gt; 11%. The panel shows why, reading by reading.</p></div>
+      <div class="card"><h3><span class="dot" style="background:var(--orbit)"></span>Escalation</h3><p>Status RED: contact the flight surgeon. Three concrete steps, out loud.</p></div>
+      <div class="card"><h3><span class="dot" style="background:var(--amber)"></span>No snoozing</h3><p>The alarm stops only after passing the reaction test.</p></div>
+      <div class="note">Fatigue readings injected with the HUD's debug control; no camera in this capture.</div>
+    </div>
+  </div>
+  <div class="foot"><span>SCREENSHOT OF THE LIVE PROTOTYPE · PULSAR.ALEXVINOLA.COM/PULSAR</span><span class="num">05 / 07</span></div>
+</section>
+
+<!-- 6 · Evidence and NASA data -->
+<section class="slide">
+  <div class="kicker">Measured, not promised</div>
+  <h2>Every number knows <em>where it comes from.</em></h2>
+  <div class="grid stats">
+    <div class="card stat"><div class="big">0.43</div><h3>Classifier macro-F1</h3><p>3 classes, leave-one-subject-out on RLDD. AUC 0.62. An indicative signal, not a detector.</p></div>
+    <div class="card stat"><div class="big">0.32</div><h3>Correlation with PVT</h3><p>Spearman over 36 DROZY tests, fatigue score vs reaction time. Nothing trained on DROZY.</p></div>
+    <div class="card stat"><div class="big">1.7 s</div><h3>Full voice turn</h3><p>Median, offline: speech-to-text, rules, Gemma 4 E4B and speech, on an Apple Silicon laptop.</p></div>
+    <div class="card stat"><div class="big">2 / 8</div><h3>Thresholds with a source</h3><p>The other six are declared assumptions, listed publicly.</p></div>
+  </div>
+  <div class="nasa">
+    <span class="chip">NASA HRP · 5 Hazards</span>
+    <span class="chip">NASA HRP · Risks of Human Spaceflight</span>
+    <span class="chip">OSDR OSD-569 / OSD-575 · Inspiration4</span>
+    <span class="chip">PVT on ISS · data.nasa.gov</span>
+    <span class="chip">NASA ASRS report sets</span>
+    <span class="chip">NASA-STD-3001</span>
+  </div>
+  <p class="lead">HRP names drive the body map and every rule's risk. A contract check fails the build if any value lacks a source or a declared assumption. Not a medical device: no SANS detection, no camera-based HRV.</p>
+  <div class="foot"><span>DATA/OUT/METRICS.JSON · BACKEND/BENCH/VOICE_LATENCY.JSON · SHARED/SOURCES.JSON</span><span class="num">06 / 07</span></div>
+</section>
+
+<!-- 7 · Impact and next -->
+<section class="slide">
+  <div class="kicker">Why it matters</div>
+  <h2>Built for Mars. <em>Useful wherever there is no doctor and no network.</em></h2>
+  <div class="grid next">
+    <div class="card"><div class="tag">In space</div><h3>Crew autonomy</h3><p>A station, a lunar base or a Mars transit: an auditable companion that keeps working when Earth is minutes away.</p></div>
+    <div class="card"><div class="tag">On Earth · potential</div><h3>Same signals</h3><p>Night drivers, night shifts, remote bases. Not validated for these uses: each would need its own trials.</p></div>
+    <div class="card"><div class="tag">Next</div><h3>Close the gaps</h3><p>Source the remaining thresholds, chart measured indicators over time, bring Inspiration4 reference ranges into the guides.</p></div>
+  </div>
+  <div class="links">
+    <div class="link"><div class="tag">Try it</div><div>pulsar.alexvinola.com</div></div>
+    <div class="link"><div class="tag">Code</div><div>github.com/alexvinola/nasa-hackathon</div></div>
+  </div>
+  <div class="foot"><span>PULSAR · YOUR PERSONAL HEALTH COMPANION IN SPACE</span><span class="num">07 / 07</span></div>
+</section>
+
+</body>
+</html>
