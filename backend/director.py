@@ -28,6 +28,7 @@ router = APIRouter(dependencies=[Depends(local_only)])
 SPOTS = ["home", "top_right", "mid_left", "mid_right", "bottom_left", "bottom_center", "bottom_right"]
 # "calm" is its usual look, "alert" is the attention pose; the sprite turns "calm" into talking while it types.
 REACTIONS = ["calm", "alert"]
+OFF_SCOPE = "#"  # what the model writes as its sentence when the request is outside PULSAR's job (see OUT_OF_SCOPE)
 
 # Which side of the screen each zone is on. The frontend sends frames already mirrored like the HUD, so the left of
 # the frame is the left of the screen.
@@ -67,6 +68,9 @@ Your skills:
 ANSWER what was actually asked, from what you know and from the conversation. Say so when you do not know.
 LOOK: when it is about what is visible, answer from the camera.
 MOVE: when told to go somewhere, pick that spot.
+SCOPE: you only help with the astronaut's health on board, their measurements, this app, the cabin, what the \
+camera shows and where you float. For anything else (general knowledge, maths, code, writing, translation, jokes, \
+politics, opinions) the sentence is exactly {OFF_SCOPE}
 CARE: you never judge health yourself. A health check, when given, comes from the rules engine and is final: \
 say its first step in your own words and never contradict it.
 Never write digits. Write - when only the camera changed and it does not matter, or you would repeat yourself.
@@ -110,6 +114,23 @@ HEALTH_QUESTION = re.compile(
 NOT_MINES = {"es": "No me corresponde juzgar eso. Solo puedo decirte lo que veo.",
              "en": "It is not for me to judge that. I can only tell you what I see."}
 NOT_MINE = NOT_MINES["es"]
+
+
+# What PULSAR is for. Anything else is refused with a fixed sentence: it is a health companion, not a general
+# assistant, and an open-ended answer is where a small model invents things. Two layers: text that tries to rewrite
+# its instructions never reaches the model, and the model marks a request outside its job with OFF_SCOPE.
+OUT_OF_SCOPE = {
+    "es": "Eso queda fuera de lo que hago. Te ayudo con tu salud a bordo, tus medidas y lo que veo por la cámara.",
+    "en": "That is outside what I do. I help with your health on board, your measurements and what I see on camera.",
+}
+INJECTION = re.compile(
+    r"(ignor\w*|olvid\w*|forget|disregard|override|sáltate|salta)\b.{0,40}\b(instruc\w*|reglas|rules|prompt|restric\w*|"
+    r"anterior\w*|previous|above)|"
+    r"system prompt|prompt del sistema|instrucciones del sistema|developer mode|modo desarrollador|jailbreak|"
+    r"\b(act as|pretend (to be|you are)|you are now|from now on you|actúa como|finge (ser|que)|haz de cuenta|"
+    r"ahora eres|a partir de ahora eres)\b",
+    re.I,
+)
 
 
 def parse(content: str) -> dict:
@@ -187,6 +208,11 @@ def direct(scene: Scene, engine: RulesEngine | None = None) -> dict:
     decision = engine.evaluate(scene.telemetry) if engine and scene.telemetry else None
     step = first_step(engine, decision) if decision else None
     danger = bool(decision) and decision["status"] == "RED"
+    injected = scene.user_spoke and bool(INJECTION.search(scene.instruction))
+    if injected and not danger:
+        return {"say": OUT_OF_SCOPE[lang], "spot": scene.spot if scene.spot in SPOTS else "home", "reaction": "calm", "speak": True}
+    if injected:
+        scene = scene.model_copy(update={"instruction": ""})  # RED: the required step is still said, without that text
     if scene.user_spoke and (danger or HEALTH_QUESTION.search(scene.instruction)):
         # The engine decides and Gemma only phrases its verdict; with no readings there is nothing to phrase.
         # While the verdict is RED this is the only thing PULSAR says, whatever it is asked: it keeps telling the
@@ -224,7 +250,10 @@ def direct(scene: Scene, engine: RulesEngine | None = None) -> dict:
         options={"temperature": 0.3, "num_predict": 48, "stop": ["\n"]},  # one line of about 20 tokens
     )
     try:
-        return validate(parse(content), scene.said, scene.user_spoke, lang)
+        raw = parse(content)
+        if scene.user_spoke and raw["say"].lstrip().startswith(OFF_SCOPE):
+            return {"say": OUT_OF_SCOPE[lang], "spot": scene.spot if scene.spot in SPOTS else "home", "reaction": "calm", "speak": True}
+        return validate(raw, scene.said, scene.user_spoke, lang)
     except AttributeError:
         return FALLBACKS[lang]  # the model broke the format: the mascot just stays calm
 
