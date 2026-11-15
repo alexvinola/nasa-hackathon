@@ -29,6 +29,31 @@ CORS_ORIGINS = [
     if origin.strip()
 ]
 
+
+def allowed_origins(text: str | None) -> frozenset[str]:
+    """PULSAR_ALLOWED_ORIGINS as the set of values the local-only check accepts besides this machine.
+
+    Each entry is the origin of a page the HUD is deliberately served from, e.g. `https://pulsar.example.org`.
+    Both the origin and its host are accepted, because a browser sends the first in `Origin` and a proxy passes
+    the second in `Host`. An entry without `https://` (or `http://`) and a host is a configuration error.
+    """
+    accepted: set[str] = set()
+    for entry in (text or "").split(","):
+        origin = entry.strip().rstrip("/")
+        if not origin:
+            continue
+        scheme, separator, host = origin.partition("://")
+        if scheme not in ("http", "https") or not separator or not host or "/" in host:
+            raise ValueError(f"PULSAR_ALLOWED_ORIGINS: {entry.strip()!r} is not an origin like https://pulsar.example.org")
+        accepted.update((origin, host))
+    return frozenset(accepted)
+
+
+# Pages served from somewhere other than this machine that may still use the speech, vision and director endpoints.
+# Empty by default: PULSAR is local and offline, and every laptop keeps it that way. A hosted copy names its own
+# address here, which is a deliberate exception to "nothing leaves the machine" for that server only.
+ALLOWED_ORIGINS = allowed_origins(os.environ.get("PULSAR_ALLOWED_ORIGINS"))
+
 # The language PULSAR answers in when a request does not say ("es" or "en"). The front sends its own choice.
 LANGS = ("es", "en")
 DEFAULT_LANG = os.environ.get("PULSAR_LANG", "es") if os.environ.get("PULSAR_LANG", "es") in LANGS else "es"

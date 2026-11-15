@@ -78,6 +78,13 @@ MEASURE = re.compile(
     r"\b(mide|medir\w*|mido|mides|midiendo|medici[oó]n|medidas|registr\w*|anota\w*|measure\w*|measurement\w*|log|record)\b|formulario|\bform\b",
     re.I,
 )
+# "añade glucosa", "apunta la tensión": a measurement named with no number opens its form to fill in by hand.
+ENTER = re.compile(
+    r"\b(apunt\w*|a[ñn]ad\w*|agreg\w*|anot\w*|registr\w*|pon|ponme|poner|mete|meter|m[eé]teme|introduc\w*|rellen\w*|"
+    r"add|enter|put|type|fill)\b",
+    re.I,
+)
+MOOD_WORD = re.compile(r"[aá]nimo|humor|mood", re.I)  # "me siento agobiado" is a feeling to help with, not the mood form
 # "how do I measure ...", "where do I take ...": only counts when a measurement is named too.
 HOW_TO = re.compile(
     r"c[oó]mo (me |se |te )?(mid|tom|hag|puedo|debo|pued)\w*|d[oó]nde (me |se |te )?(mid|tom|pong|puedo|debo|pued)\w*|"
@@ -463,9 +470,11 @@ def parse(text: str, lang: str | None = None, telemetry: dict[str, Any] | None =
             return _reply(lang, "relax_pick", {"type": "open_relax", "exercise": exercise}, name=names[exercise])
         return _reply(lang, "relax_menu", {"type": "open_relax", "exercise": None})
 
-    # 5. How to measure something: the panel, on the signal asked for ("cómo medir mi frecuencia cardiaca").
+    # 5. How to measure something, or a measurement to type in: the panel, on the signal asked for ("cómo medir mi
+    #    frecuencia cardiaca", "añade glucosa").
     named = next((signal for signal, words in SIGNAL_WORDS.items() if words.search(text)), None)
-    if named and (MEASURE.search(text) or HOW_TO.search(text)):
+    typed = ENTER.search(text) and (named != "selfReport.mood" or MOOD_WORD.search(text))
+    if named and (MEASURE.search(text) or HOW_TO.search(text) or typed):
         return _reply(lang, "measure_signal", {"type": "open_measure", "signal": named}, name=names[named])
     if MEASURE.search(text) or (open_verb and re.search(r"medidas|measure", text, re.I)):
         return _reply(lang, "measure_form", {"type": "open_measure", "signal": None})
