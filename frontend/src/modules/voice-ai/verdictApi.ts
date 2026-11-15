@@ -1,5 +1,6 @@
 /** The rules engine and the voice turn on the local backend (backend/pulsar). Everything stays on this machine. */
 import nominal from "../../../../shared/examples/nominal.json";
+import { withEntries, type Entries } from "@/modules/guides/selfReport";
 import type { Biometrics } from "@/modules/vision-hud/faceWorker";
 import { getLang, t } from "@/i18n";
 
@@ -19,16 +20,17 @@ export type Advice = { decision: Decision; say: string; source: "llm" | "fallbac
 export type Telemetry = typeof nominal;
 
 /**
- * The full contract the engine needs. Only `biometrics` is measured (the camera); sleep, mood, cabin and the PVT
- * keep shared/examples/nominal.json until the judge sliders (G6) and the PVT-B (G3) fill them.
+ * The full contract the engine needs. `biometrics` is measured (the camera) and `entries` are the measurements the
+ * astronaut typed in (guides/SelfReportPanel); what nobody has entered, the cabin and the PVT keep
+ * shared/examples/nominal.json until the judge sliders (G6) and the PVT-B (G3) fill them.
  */
-export function telemetryFrom(biometrics: Biometrics, cabinCo2?: number, radiation?: number): Telemetry {
+export function telemetryFrom(biometrics: Biometrics, cabinCo2?: number, radiation?: number, entries: Entries = {}): Telemetry {
   const environment = {
     ...nominal.environment,
     ...(cabinCo2 == null ? {} : { cabinCo2_mmHg: cabinCo2 }),
     ...(radiation == null ? {} : { radiation_mSv: radiation }),
   };
-  return { ...nominal, timestamp: Math.floor(Date.now() / 1000), biometrics, environment } as Telemetry;
+  return withEntries({ ...nominal, timestamp: Math.floor(Date.now() / 1000), biometrics, environment } as Telemetry, entries);
 }
 
 /** The limit the rules engine applies to one signal (GET /rules), so the HUD never hard-codes a threshold. */

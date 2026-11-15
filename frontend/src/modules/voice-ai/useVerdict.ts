@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useLang } from "@/i18n";
 import type { Biometrics } from "@/modules/vision-hud/faceWorker";
+import type { Entries } from "@/modules/guides/selfReport";
 import { advise, evaluate, telemetryFrom, type Advice, type Decision } from "./verdictApi";
 
 const EVERY_MS = 2000;
@@ -15,7 +16,9 @@ const reasonOf = (d: Decision) => `${d.status}|${d.factors.map((f) => f.signal).
  * change, it asks Gemma for the sentence that phrases the new verdict and returns it as `advice`. Requests never
  * overlap; a backend that is down leaves the last verdict on screen with `error` set.
  */
-export function useVerdict(biometrics: Biometrics | null, cabinCo2?: number, radiation?: number) {
+export function useVerdict(biometrics: Biometrics | null, cabinCo2?: number, radiation?: number, entries: Entries = {}) {
+  const typed = useRef(entries);
+  typed.current = entries;
   const co2 = useRef(cabinCo2);
   co2.current = cabinCo2;
   const dose = useRef(radiation);
@@ -36,7 +39,7 @@ export function useVerdict(biometrics: Biometrics | null, cabinCo2?: number, rad
       if (busy.current || !latest.current) return;
       busy.current = true;
       try {
-        const telemetry = telemetryFrom(latest.current, co2.current, dose.current);
+        const telemetry = telemetryFrom(latest.current, co2.current, dose.current, typed.current);
         const next = await evaluate(telemetry);
         setDecision(next);
         setError(null);

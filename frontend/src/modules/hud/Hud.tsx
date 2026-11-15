@@ -7,6 +7,7 @@ import { LEFT_COLUMN_ID } from "./HudPanel";
 import { PulsarMascot } from "./PulsarMascot";
 import { ReactionTest } from "./ReactionTest";
 import { useAlarmSound, type AlarmLevel } from "./useAlarmSound";
+import { useHotkey } from "./useHotkey";
 import { useWebcam, type CamState } from "./useWebcam";
 import { SensesBar } from "@/modules/voice-ai/SensesBar";
 import { VerdictPanel } from "@/modules/voice-ai/VerdictPanel";
@@ -18,6 +19,8 @@ import { RelaxDock } from "@/modules/relax/RelaxDock";
 import { HealthPanel } from "@/modules/guides/HealthPanel";
 import { HEALTH_POINTS } from "@/modules/guides/healthPoints";
 import { GUIDES, currentValue, statusOf } from "@/modules/guides/guides";
+import { SelfReportPanel } from "@/modules/guides/SelfReportPanel";
+import { FIELDS, type Entries } from "@/modules/guides/selfReport";
 import { useFaceMetrics } from "@/modules/vision-hud/useFaceMetrics";
 import { FaceOverlay } from "@/modules/vision-hud/FaceOverlay";
 import type { Biometrics, FaceFrame } from "@/modules/vision-hud/faceWorker";
@@ -88,14 +91,19 @@ export function Hud() {
   const sim = useSimVitals(simMode);
   // Camera readings when there is a camera and nothing is forced, simulated ones otherwise. The pulse is simulated
   // either way: nothing measures it yet.
-  const reading = useMemo<Biometrics>(
-    () => (measured && simMode === "live" ? { ...measured, heartRateBpm: sim.vitals.heartRateBpm, heartRateConfidence: 0 } : sim.vitals),
-    [measured, simMode, sim.vitals],
-  );
-  const telemetryNow = useRef(telemetryFrom(reading, sim.cabinCo2, sim.radiation));
-  telemetryNow.current = telemetryFrom(reading, sim.cabinCo2, sim.radiation);
+  // What the astronaut typed in from the devices (guides/SelfReportPanel): it replaces the example's self-report,
+  // and a pulse counted by hand replaces the simulated one.
+  const [entries, setEntries] = useState<Entries>({});
+  const [reporting, setReporting] = useState(false);
+  useHotkey("r", () => setReporting((was) => !was));
+  const reading = useMemo<Biometrics>(() => {
+    const base = measured && simMode === "live" ? { ...measured, heartRateBpm: sim.vitals.heartRateBpm, heartRateConfidence: 0 } : sim.vitals;
+    return entries.heartRateBpm == null ? base : { ...base, heartRateBpm: entries.heartRateBpm, heartRateConfidence: 1 };
+  }, [measured, simMode, sim.vitals, entries.heartRateBpm]);
+  const telemetryNow = useRef(telemetryFrom(reading, sim.cabinCo2, sim.radiation, entries));
+  telemetryNow.current = telemetryFrom(reading, sim.cabinCo2, sim.radiation, entries);
   // The rules engine decides on those readings and Gemma phrases its verdict.
-  const { decision, advice, error } = useVerdict(reading, sim.cabinCo2, sim.radiation);
+  const { decision, advice, error } = useVerdict(reading, sim.cabinCo2, sim.radiation, entries);
   // The engine's own CO2 limit, for the cabin-air gauge: the HUD never hard-codes a threshold.
   const [rules, setRules] = useState<Rule[]>([]);
   useEffect(() => {
@@ -276,6 +284,18 @@ export function Hud() {
       {/* Below xl the centred text box (42rem wide, 12.5rem off the bottom) reaches under this column, so the column
           stops above it and scrolls. shortcut: assumes the box's usual height, measure it if the box grows. */}
       <div id={LEFT_COLUMN_ID} className="absolute left-8 top-60 z-[1] flex max-h-[calc(100vh-28.5rem)] w-64 flex-col gap-2 overflow-y-auto [scrollbar-color:var(--color-pulse)_transparent] [scrollbar-width:thin] xl:max-h-[calc(100vh-18rem)]">
+        <button
+          type="button"
+          data-self-report-open
+          aria-pressed={reporting}
+          onClick={() => setReporting((was) => !was)}
+          className={`pointer-events-auto border-2 px-3 py-2 text-left text-xs font-bold tracking-[0.12em] backdrop-blur ${reporting ? "border-pulse bg-pulse/25 text-pulse" : "border-pulse/60 bg-space/60 text-pulse hover:bg-pulse/15"}`}
+        >
+          {t("selfReport.open")}
+          <span className="mt-0.5 block font-normal tracking-normal text-shell/70">
+            {t("selfReport.openHint", { done: GUIDES.filter((candidate) => FIELDS[candidate.signal].every((f) => f.key in entries)).length, total: GUIDES.length })}
+          </span>
+        </button>
         <MiniTwin
           statuses={guideStatuses}
           open={guideSignal}
@@ -355,7 +375,17 @@ export function Hud() {
         onOpenGuide={setGuideSignal}
       />
 
-      {guide && (
+      {reporting && (
+        <SelfReportPanel
+          entries={entries}
+          statuses={guideStatuses}
+          onSave={(values) => setEntries((had) => ({ ...had, ...values }))}
+          onClear={(keys) => setEntries((had) => Object.fromEntries(Object.entries(had).filter(([key]) => !keys.includes(key))))}
+          onClose={() => setReporting(false)}
+        />
+      )}
+
+      {guide && !reporting && (
         <GuidePanel
           key={guide.signal}
           guide={guide}
@@ -365,7 +395,7 @@ export function Hud() {
         />
       )}
 
-      {healthPoint && <HealthPanel key={healthPoint.id} point={healthPoint} onClose={() => setHealthId(null)} />}
+      {healthPoint && !reporting && <HealthPanel key={healthPoint.id} point={healthPoint} onClose={() => setHealthId(null)} />}
 
       <RelaxDock suggest={level === "rest"} />
 
