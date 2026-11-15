@@ -16,8 +16,8 @@ Read the generated [Next.js agent guidance](AGENTS.md) before changing framework
 - **Gear** (bottom left): click it for the developer panels: AI check with Gemma 4 (face mesh off and AI check on
   by default), debug and the backend log. The Debug and Log panels unfold upwards.
 - **RELAX** button: guided breathing, eye rest and body relaxation; finishing one counts for the relaxation habit.
-- **PULSAR as a controller**: what the astronaut says or types can open relaxation, a measurement or the habits and
-  can log a habit or a measurement. The backend returns an `action` (`src/modules/hud/hudActions.ts`); every panel
+- **PULSAR as a controller**: what the astronaut says or types can open relaxation, a measurement, a health point or the
+  habits, log a habit or a measurement, close the panels, switch language, open the developer menu and switch the face mesh or AI check. The backend returns an `action` (`src/modules/hud/hudActions.ts`); every panel
   that owns the piece listens for it and checks it again. Examples are in [the backend guide](../backend/README.md).
 
 ## Local development## Local development

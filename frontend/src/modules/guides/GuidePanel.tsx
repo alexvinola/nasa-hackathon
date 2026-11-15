@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { GuideAnimation } from "./GuideAnimation";
-import { useLang, useT } from "@/i18n";
+import { useLang, useT, type Key } from "@/i18n";
 import { localizedGuide, type Guide, type GuideStatus } from "./guides";
 
 const TONE: Record<GuideStatus, string> = {
@@ -55,7 +55,7 @@ export function GuidePanel({ guide: original, value, status, onClose }: { guide:
             <dt>{t("guides.panel.now")}</dt>
             <dd data-guide-value className="text-xl tracking-normal text-shell">{value}</dd>
             <dt className="mt-1">{t("guides.panel.engine")}</dt>
-            <dd data-guide-status className={`mt-1 inline-block border px-2 py-0.5 text-sm ${TONE[status]}`}>{status}</dd>
+            <dd data-guide-status className={`mt-1 inline-block border px-2 py-0.5 text-sm ${TONE[status]}`}>{t(`guides.verdict.${status}` as Key)}</dd>
           </dl>
         </div>
 

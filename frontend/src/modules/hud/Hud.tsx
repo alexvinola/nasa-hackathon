@@ -30,7 +30,7 @@ import type { Biometrics, FaceFrame } from "@/modules/vision-hud/faceWorker";
 import { DebugPanel } from "@/modules/sim-core/DebugPanel";
 import { LogPanel } from "@/modules/sim-core/LogPanel";
 import { useSimVitals, type SimMode } from "@/modules/sim-core/useSimVitals";
-import { useT } from "@/i18n";
+import { setLang, useT } from "@/i18n";
 import { LangToggle } from "@/i18n/LangToggle";
 import { direct, frameBase64, type Direction, type Spot } from "@/modules/voice-ai/pulsarApi";
 
@@ -97,7 +97,7 @@ export function Hud() {
   // What the astronaut typed in from the devices (guides/SelfReportPanel): it replaces the example's self-report,
   // and a pulse counted by hand replaces the simulated one.
   const [entries, setEntries] = useState<Entries>({});
-  const [reporting, setReporting] = useState(true); // the form is open from the start; R or its close button hides it
+  const [reporting, setReporting] = useState(false); // opens from a body marker, the R key, or PULSAR
   const [devTools, setDevTools] = useState(false);
   useHotkey("r", () => setReporting((was) => !was));
   const reading = useMemo<Biometrics>(() => {
@@ -140,6 +140,21 @@ export function Hud() {
       if (!fields || !fields.every((f) => isValid(f, action.values[f.key]))) return;
       setEntries((had) => ({ ...had, ...Object.fromEntries(fields.map((f) => [f.key, action.values[f.key]])) }));
       openGuide(action.signal);
+    } else if (action.type === "open_health") {
+      if (!HEALTH_POINTS.some((point) => point.id === action.id)) return;
+      setGuideSignal(null);
+      setReporting(false);
+      setHealthId(action.id);
+    } else if (action.type === "close_panels") {
+      setReporting(false);
+      setGuideSignal(null);
+      setHealthId(null);
+    } else if (action.type === "set_language") {
+      setLang(action.lang);
+    } else if (action.type === "dev_menu") {
+      setDevTools(action.open);
+    } else if (action.type === "set_overlay") {
+      setDevTools(true); // the face mesh and AI check switches live in the developer menu: show them
     }
   });
   // The SALUD point whose panel is open (id in guides/healthPoints.ts); it shares the place of the guides, so one at a time.
@@ -265,7 +280,7 @@ export function Hud() {
         moveTo(d.spot);
         setDirected(d);
         say(d.say, order);
-        if (d.action) dispatchHudAction(d.action);
+        for (const action of d.actions ?? (d.action ? [d.action] : [])) dispatchHudAction(action);
       })
       .catch(() => undefined); // backend or model down: the mascot keeps its last line
   }, [videoRef, say, moveTo]);

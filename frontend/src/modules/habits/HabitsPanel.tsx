@@ -82,14 +82,15 @@ function Expanded({ log, today, onClose }: { log: ReturnType<typeof useHabitLog>
 
   return (
     <div data-habits-expanded role="dialog" aria-modal="true" aria-label={t("habits.expanded.title")} className="pointer-events-auto fixed inset-0 z-30 grid place-items-center bg-space/40 p-4" onKeyDown={(event) => event.key === "Escape" && onClose()} onClick={(event) => event.target === event.currentTarget && onClose()}>
-      <section className="max-h-[92vh] w-[60rem] max-w-full overflow-y-auto border-2 border-pulse/60 bg-space/70 p-4 text-sm normal-case tracking-normal text-shell backdrop-blur">
-        <header className="flex items-start gap-3">
+      <section className="flex max-h-full w-[60rem] max-w-full flex-col overflow-hidden border-2 border-pulse/60 bg-space/90 text-sm normal-case tracking-normal text-shell backdrop-blur md:bg-space/70">
+        <header className="flex items-start gap-3 shrink-0 border-b border-pulse/30 px-4 py-3">
           <div>
             <h2 className="text-lg tracking-[0.18em] text-pulse">{t("habits.expanded.title")}</h2>
             <p className="mt-0.5 text-xs text-shell/60">{t("habits.rangeOf", { n, from: short(from), to: short(to) })}</p>
           </div>
           <button type="button" autoFocus onClick={onClose} aria-label={t("habits.close")} title={t("habits.close")} className="ml-auto border border-shell/40 px-2 py-1 text-xs leading-none text-shell/80 hover:border-pulse hover:text-pulse">✕</button>
         </header>
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-4">
 
         <div className="mt-4 flex flex-wrap items-center gap-2 text-xs">
           {[7, 30, 60].map((count) => (
@@ -188,6 +189,7 @@ function Expanded({ log, today, onClose }: { log: ReturnType<typeof useHabitLog>
             </div>
           </>
         )}
+        </div>
       </section>
     </div>
   );
@@ -211,6 +213,9 @@ export function HabitsPanel({ sleepHours }: { /** Hours slept, as typed in "Regi
       if (!habit || habit.fromReport || !(action.amount > 0)) return;
       logHabit(habit.id, action.amount);
       setFolded(false);
+    } else if (action.type === "close_panels") {
+      setFolded(true);
+      setExpanded(false);
     } else if (action.type === "open_habits") {
       setFolded(false);
       if (action.expand) setExpanded(true);

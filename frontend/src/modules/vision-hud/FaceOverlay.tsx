@@ -9,6 +9,7 @@ import type { FaceFrame } from "./faceWorker";
 import { BLINK, MOUTH_OPEN as MOUTH } from "./thresholds";
 import { useAiCheck, type Tally } from "./useAiCheck";
 import { useHotkey } from "@/modules/hud/useHotkey";
+import { useHudAction } from "@/modules/hud/hudActions";
 
 type Connection = { start: number; end: number };
 
@@ -48,6 +49,12 @@ export function FaceOverlay({
   // face model stutter; C turns it off.
   const [checking, setChecking] = useState(true);
   useHotkey("c", () => setChecking((c) => !c));
+  // PULSAR was asked to switch the face mesh or the AI check.
+  useHudAction((action) => {
+    if (action.type !== "set_overlay") return;
+    if (action.target === "mesh") setShow(action.on);
+    else setChecking(action.on);
+  });
   const fps = useRef({ last: 0, value: 0 });
   // Once switched on, the cross-check runs whenever there is a face, whether or not the mesh is drawn over it.
   const { last, tally, error } = useAiCheck(videoRef, frameRef, checking);

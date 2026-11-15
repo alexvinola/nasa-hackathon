@@ -126,6 +126,8 @@ export type Direction = {
   speak: boolean;
   /** Something for the HUD to do (open relaxation, log a habit...), when the astronaut asked for it. */
   action?: HudAction;
+  /** Several at once ("my pulse is 72 and my temperature 36.8"); `action` is the first of them. */
+  actions?: HudAction[];
 };
 
 /**

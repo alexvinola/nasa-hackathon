@@ -62,6 +62,11 @@ export function RelaxDock({ suggest = false }: { suggest?: boolean }) {
   useEffect(() => setColumn(document.getElementById(LEFT_COLUMN_ID)), []);
   // PULSAR was asked to open the relaxation menu, or to put one exercise on.
   useHudAction((action) => {
+    if (action.type === "close_panels") {
+      setExercise(null);
+      setOpen(false);
+      return;
+    }
     if (action.type !== "open_relax") return;
     const picked = EXERCISES.find((item) => item.id === action.exercise);
     if (picked) start(picked);

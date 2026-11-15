@@ -15,6 +15,14 @@ const TONE: Record<GuideStatus, string> = {
 };
 const STEP_EVERY_MS = 4000;
 
+/** Only digits get in (typed or pasted); a field that takes tenths also takes one decimal separator. */
+const digitsOnly = (f: Field, raw: string) => {
+  const kept = raw.replace(/[^0-9.,]/g, "");
+  if (f.step >= 1) return kept.replace(/[.,]/g, "");
+  const at = kept.search(/[.,]/);
+  return at < 0 ? kept : kept.slice(0, at + 1) + kept.slice(at + 1).replace(/[.,]/g, "");
+};
+
 const shown = (f: Field, value: number) => (f.step < 1 ? value.toFixed(1) : String(value));
 
 /**
@@ -65,22 +73,25 @@ export function SelfReportPanel({
   const fields = FIELDS[guide.signal];
   const [draft, setDraft] = useState<Record<string, string>>({});
   const [step, setStep] = useState(0);
+  const [auto, setAuto] = useState(true); // the steps loop until the astronaut picks one
+  const [info, setInfo] = useState(false); // the reference, why it matters and what to do: behind the "i" button
   const first = useRef<HTMLInputElement>(null);
 
   // A new measurement starts from what was saved for it, with the cursor in its first field.
   useEffect(() => {
     setDraft(Object.fromEntries(fields.filter((f) => f.key in entries).map((f) => [f.key, shown(f, entries[f.key])])));
     setStep(0);
+    setAuto(true);
     first.current?.focus();
     first.current?.select();
   }, [at]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // The how-to steps play in a loop beside the picture, as in the guide; never under reduced motion.
   useEffect(() => {
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!auto || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const id = setInterval(() => setStep((current) => (current + 1) % guide.how.length), STEP_EVERY_MS);
     return () => clearInterval(id);
-  }, [guide.how.length, at]);
+  }, [guide.how.length, at, auto]);
 
   const numbers = Object.fromEntries(fields.map((f) => [f.key, Number((draft[f.key] ?? "").replace(",", "."))]));
   const filled = fields.every((f) => (draft[f.key] ?? "").trim() !== "");
@@ -105,9 +116,9 @@ export function SelfReportPanel({
       data-guide={signal === guide.signal ? guide.signal : undefined}
       aria-label={t("selfReport.aria")}
       onKeyDown={(event) => event.key === "Escape" && onClose()}
-      className="absolute left-[19rem] top-24 z-10 max-h-[calc(100vh-17rem)] w-[46rem] max-w-[calc(100vw-22rem)] overflow-y-auto border-2 border-pulse/60 bg-space/80 p-4 text-sm text-shell backdrop-blur"
+      className="fixed inset-2 z-20 flex flex-col overflow-hidden border-2 border-pulse/60 bg-space/90 text-sm text-shell backdrop-blur md:absolute md:inset-auto md:left-[19rem] md:top-24 md:z-10 md:max-h-[calc(100vh-17rem)] md:w-[46rem] md:max-w-[calc(100vw-22rem)] md:bg-space/80"
     >
-      <header className="flex items-start gap-3">
+      <header className="flex items-start gap-3 shrink-0 border-b border-pulse/30 px-4 py-3">
         <div>
           <h2 className="text-lg tracking-[0.15em] text-pulse">{t("selfReport.title")}</h2>
           <p className="text-xs tracking-[0.1em] text-shell/70">
@@ -118,6 +129,7 @@ export function SelfReportPanel({
           {t("selfReport.close")}
         </button>
       </header>
+      <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-4">
 
       {/* One tab per measurement: the saved value and the engine's status for it, at a glance. */}
       <nav className="mt-3 grid grid-cols-3 gap-2" aria-label={t("selfReport.tabs")}>
@@ -144,15 +156,15 @@ export function SelfReportPanel({
         })}
       </nav>
 
-      <div className="mt-4 flex gap-4">
-        <div className="w-64 shrink-0">
+      <div className="mt-4 flex flex-col gap-4 sm:flex-row">
+        <div className="w-full shrink-0 sm:w-64">
           <GuideAnimation key={guide.signal} signal={guide.signal} focus={guide.how[Math.min(step, guide.how.length - 1)].focus} label={guide.label} />
           <p className="mt-1 text-xs tracking-[0.1em] text-shell/70">{guide.instrument}</p>
           <dl className="mt-2 text-xs tracking-[0.1em] text-shell/70">
             <dt>{t("guides.panel.now")}</dt>
             <dd data-guide-value className="text-xl tracking-normal text-shell">{valueOf?.(guide.signal)}</dd>
             <dt className="mt-1">{t("guides.panel.engine")}</dt>
-            <dd data-guide-status className={`mt-1 inline-block border px-2 py-0.5 text-sm ${TONE[statuses[guide.signal] ?? "WAITING"]}`}>{statuses[guide.signal] ?? "WAITING"}</dd>
+            <dd data-guide-status className={`mt-1 inline-block border px-2 py-0.5 text-sm ${TONE[statuses[guide.signal] ?? "WAITING"]}`}>{t(`guides.verdict.${statuses[guide.signal] ?? "WAITING"}` as Key)}</dd>
           </dl>
         </div>
 
@@ -165,7 +177,10 @@ export function SelfReportPanel({
                   type="button"
                   data-guide-step
                   aria-current={index === step ? "step" : undefined}
-                  onClick={() => setStep(index)}
+                  onClick={() => {
+                    setAuto(false);
+                    setStep(index);
+                  }}
                   className={`flex w-full gap-2 border px-2 py-0.5 text-left text-[13px] leading-snug ${index === step ? "border-pulse bg-pulse/15 text-shell" : "border-transparent text-shell/70 hover:border-shell/30"}`}
                 >
                   <span className="text-pulse">{index + 1}.</span>
@@ -199,11 +214,11 @@ export function SelfReportPanel({
                   <input
                     ref={index === 0 ? first : undefined}
                     data-self-report-field={f.key}
-                    inputMode="decimal"
+                    inputMode={f.step < 1 ? "decimal" : "numeric"}
                     autoComplete="off"
                     value={text}
                     aria-invalid={wrong}
-                    onChange={(event) => setDraft((had) => ({ ...had, [f.key]: event.target.value }))}
+                    onChange={(event) => setDraft((had) => ({ ...had, [f.key]: digitsOnly(f, event.target.value) }))}
                     onKeyDown={(event) => {
                       if (event.key === "ArrowUp" || event.key === "ArrowDown") {
                         event.preventDefault();
@@ -234,6 +249,19 @@ export function SelfReportPanel({
         </div>
       </form>
 
+      <button
+        type="button"
+        data-self-report-info
+        aria-expanded={info}
+        aria-controls="self-report-info"
+        onClick={() => setInfo((was) => !was)}
+        className="mt-3 flex items-center gap-2 text-xs tracking-[0.12em] text-pulse hover:text-shell"
+      >
+        <span aria-hidden className={`grid h-5 w-5 place-items-center rounded-full border text-[11px] font-bold italic ${info ? "border-pulse bg-pulse/20" : "border-pulse/60"}`}>i</span>
+        {t(info ? "selfReport.infoLess" : "selfReport.info")}
+      </button>
+
+      <div id="self-report-info" hidden={!info}>
       <aside data-self-report-reference className="mt-3 border border-orbit/40 bg-orbit/5 px-3 py-2 text-[13px] leading-snug">
         <h3 className="text-xs tracking-[0.15em] text-orbit">{t("selfReport.ref.title")}</h3>
         {REFERENCES[guide.signal].length === 0 && <p className="mt-1 text-shell/80">{t("selfReport.ref.none")}</p>}
@@ -258,8 +286,12 @@ export function SelfReportPanel({
 
       <p className="mt-3 border-t border-pulse/20 pt-2 text-[11px] tracking-[0.1em] text-shell/60">
         {t("selfReport.footer")} · {t("guides.panel.sources", { sources: guide.sources.join(", ") })}
-        {guide.assumption ? t("guides.panel.teamSteps") : ""} · <span className="text-orbit">NOT A MEDICAL DEVICE</span>
+        {guide.assumption ? t("guides.panel.teamSteps") : ""}
       </p>
+      </div>
+
+      <p className="mt-3 border-t border-pulse/20 pt-2 text-[11px] tracking-[0.1em] text-orbit">NOT A MEDICAL DEVICE</p>
+      </div>
     </section>
   );
 }

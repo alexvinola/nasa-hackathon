@@ -13,7 +13,12 @@ export type HudAction =
   | { type: "open_measure"; signal: string | null }
   | { type: "set_measure"; signal: string; values: Record<string, number> }
   | { type: "log_habit"; habit: string; amount: number }
-  | { type: "open_habits"; expand: boolean };
+  | { type: "open_habits"; expand: boolean }
+  | { type: "open_health"; id: string }
+  | { type: "close_panels" }
+  | { type: "set_language"; lang: "es" | "en" }
+  | { type: "dev_menu"; open: boolean }
+  | { type: "set_overlay"; target: "mesh" | "ai_check"; on: boolean };
 
 const EVENT = "pulsar:hud-action";
 
