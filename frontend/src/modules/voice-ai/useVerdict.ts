@@ -16,7 +16,14 @@ const reasonOf = (d: Decision) => `${d.status}|${d.factors.map((f) => f.signal).
  * change, it asks Gemma for the sentence that phrases the new verdict and returns it as `advice`. Requests never
  * overlap; a backend that is down leaves the last verdict on screen with `error` set.
  */
-export function useVerdict(biometrics: Biometrics | null, cabinCo2?: number, radiation?: number, entries: Entries = {}) {
+export function useVerdict(
+  biometrics: Biometrics | null,
+  cabinCo2?: number,
+  radiation?: number,
+  entries: Entries = {},
+  /** When this changes (the debug mode, say) the engine is asked at once instead of at the next 2 s tick. */
+  nudge?: unknown,
+) {
   const typed = useRef(entries);
   typed.current = entries;
   const co2 = useRef(cabinCo2);
@@ -33,9 +40,11 @@ export function useVerdict(biometrics: Biometrics | null, cabinCo2?: number, rad
   const advising = useRef(false);
   const lastReason = useRef("");
   const reasonNow = useRef("");
+  const again = useRef(false); // asked for a new evaluation while one was in flight
+  const run = useRef<() => void>(() => undefined);
 
   useEffect(() => {
-    const tick = async () => {
+    const tick = async (): Promise<void> => {
       if (busy.current || !latest.current) return;
       busy.current = true;
       try {
@@ -58,11 +67,23 @@ export function useVerdict(biometrics: Biometrics | null, cabinCo2?: number, rad
         setError(e instanceof Error ? e.message : String(e));
       } finally {
         busy.current = false;
+        if (again.current) {
+          again.current = false;
+          void tick();
+        }
       }
+    };
+    run.current = () => {
+      if (busy.current) again.current = true;
+      else void tick();
     };
     const id = setInterval(tick, EVERY_MS);
     return () => clearInterval(id);
   }, [lang]);
+
+  useEffect(() => {
+    run.current();
+  }, [nudge]);
 
   return { decision, advice, error };
 }

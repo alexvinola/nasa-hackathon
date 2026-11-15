@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import type { AlarmLevel } from "./useAlarmSound";
 import { useHotkey } from "./useHotkey";
 import { useT } from "@/i18n";
@@ -56,6 +57,7 @@ export function AlertIndicator({
   testing,
   needsTest = true,
   onTest,
+  onClose,
 }: {
   level: AlarmLevel;
   /** Appended to the label, e.g. "NO ES SEGURO SEGUIR DESPIERTO". */
@@ -68,18 +70,37 @@ export function AlertIndicator({
   needsTest?: boolean;
   /** Opens the reaction test, the way to stop the alarm. */
   onTest: () => void;
+  /** The X was pressed: the alert is hidden and the alarm counts as acknowledged. */
+  onClose?: () => void;
 }) {
   const t = useT();
   const look = LOOK[level ?? "clear"];
+  // The X hides this alert (and the parent acknowledges the alarm); a different one (another level or cause) shows again.
+  const [closedKey, setClosedKey] = useState("");
+  const key = `${level}|${detail ?? ""}|${steps.join(",")}`;
+  useEffect(() => {
+    if (closedKey && closedKey !== key) setClosedKey("");
+  }, [key, closedKey]);
   useHotkey("escape", () => level && !acknowledged && !testing && onTest());
-  if (!level) return null; // nothing to report: no "all clear" badge
+  if (!level || closedKey === key) return null; // nothing to report (no "all clear" badge), or the astronaut closed it
   return (
     <section
       data-hud-panel
       role={level ? "alert" : "status"}
       // Centred in the width left of the verdict panel (20rem wide plus its 2rem margin), so the two never overlap.
-      className={`absolute left-[calc((100vw-22rem)/2)] top-6 -translate-x-1/2 border-2 bg-space/95 px-4 py-3 text-sm tracking-[0.15em] backdrop-blur ${look.box} ${level ? "w-[min(32rem,calc(100vw-26rem))]" : ""}`}
+      className={`absolute left-[calc((100vw-22rem)/2)] top-6 -translate-x-1/2 border-2 bg-space/95 px-10 py-3 text-sm tracking-[0.15em] backdrop-blur ${look.box} ${level ? "w-[min(32rem,calc(100vw-26rem))]" : ""}`}
     >
+      <button
+        type="button"
+        onClick={() => {
+          setClosedKey(key);
+          onClose?.();
+        }}
+        aria-label={t("hud.alert.close")}
+        className="hud-btn absolute right-2 top-2 grid h-7 w-7 place-items-center text-sm"
+      >
+        ✕
+      </button>
       <header className={`flex items-center justify-center gap-3 ${level === "danger" ? "text-lg font-bold" : level ? "text-base font-bold" : ""}`}>
         <Icon level={level} />
         <span>{t(look.label)}{detail ? ` · ${detail}` : ""}</span>

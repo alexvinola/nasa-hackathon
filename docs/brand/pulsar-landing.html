@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>PULSAR · Health companion</title>
-<meta name="description" content="PULSAR: un compañero de salud personal que corre en un portátil, sin red. Diseñado para astronautas, útil en la Tierra: coches, camiones, trenes, aviones, turnos de noche y bases remotas.">
+<meta name="description" content="PULSAR: un compañero de salud personal que corre en un portátil o en la nube. Diseñado para astronautas, útil en la Tierra: coches, camiones, trenes, aviones, turnos de noche y bases remotas.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;500;700&family=Manrope:wght@400;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
 <style>
@@ -292,7 +292,7 @@ footer .fine { font: 500 11px/1.7 var(--f-mono); letter-spacing: .06em; color: v
       <button type="button" data-lang="es" aria-pressed="true">ES</button>
       <button type="button" data-lang="en" aria-pressed="false">EN</button>
     </div>
-    <a class="pill" href="pulsar-intro.html?next=/pulsar&autoplay=1" data-i="navFilm">Ver la película</a>
+    <a class="pill" href="pulsar-intro.html?next=/pulsar&autoplay=1" data-i="navFilm">Despegar</a>
   </div>
 </header>
 
@@ -304,14 +304,14 @@ footer .fine { font: 500 11px/1.7 var(--f-mono); letter-spacing: .06em; color: v
     <div>
       <p class="eyebrow" data-i="eyebrow">NASA Space Apps 2026 · Software de monitorización de salud para astronautas</p>
       <h1 data-i="h1">Tu compañero de salud personal. <em>En el espacio.</em> Y&nbsp;en&nbsp;la&nbsp;Tierra.</h1>
-      <p class="lead" data-i="heroLead">PULSAR detecta signos de fatiga con una webcam, te pregunta cómo estás, decide con reglas explícitas y te lo explica con voz. Todo en un portátil, sin internet y sin que ninguna imagen salga de la máquina.</p>
+      <p class="lead" data-i="heroLead">PULSAR detecta signos de fatiga con una webcam, te pregunta cómo estás, decide con reglas explícitas y te lo explica con voz. Todo en un portátil o en la nube, y sin que ninguna imagen salga del sistema.</p>
       <div class="ctas">
-        <a class="button" href="pulsar-intro.html?next=/pulsar&autoplay=1" data-i="ctaFilm">▶ Ver la película</a>
+        <a class="button" href="pulsar-intro.html?next=/pulsar&autoplay=1" data-i="ctaFilm">▶ Despegar</a>
         <a class="button ghost" href="/pulsar" data-i="ctaTry">▶ Probar PULSAR</a>
         <a class="button ghost" href="#como-decide" data-i="ctaHow">Cómo funciona ↓</a>
       </div>
       <div class="chips">
-        <span class="chip" data-i="chip1">100 % local, sin red</span>
+        <span class="chip" data-i="chip1">100 % local o en la nube</span>
         <span class="chip" data-i="chip2">Las reglas deciden, la IA solo habla</span>
         <span class="chip" data-i="chip3">6 indicadores de salud</span>
         <span class="chip" data-i="chip4">Español e inglés</span>
@@ -350,7 +350,7 @@ footer .fine { font: 500 11px/1.7 var(--f-mono); letter-spacing: .06em; color: v
         <span class="official">Distance from Earth</span>
         <h3 data-i="hz3">Distancia a la Tierra</h3>
         <p data-i="hz3p">Cuanto más lejos, más tarda cada mensaje y más autonomía hace falta.</p>
-        <p class="how" data-i="hz3h">Decide y responde en local: no depende de ninguna red.</p>
+        <p class="how" data-i="hz3h">Decide y responde en local o en la nube.</p>
       </article>
       <article class="card hazard rv">
         <span class="official">Gravity Fields</span>
@@ -464,7 +464,7 @@ footer .fine { font: 500 11px/1.7 var(--f-mono); letter-spacing: .06em; color: v
       <div class="step"><b data-i="s1">La visión mide</b><p data-i="s1p">Rasgos de la cara calculados en el navegador: apertura de ojos, parpadeos, bostezos, movimiento de los brazos.</p></div>
       <div class="step"><b data-i="s2">El clasificador estima</b><p data-i="s2p">Un modelo pequeño, entrenado con datasets públicos de somnolencia, convierte esos rasgos en una puntuación de fatiga.</p></div>
       <div class="step decide"><b data-i="s3">El motor de reglas decide</b><p data-i="s3p">Reglas explícitas, cada una con su umbral y su fuente. Gana el estado más grave y de él sale el escalado.</p></div>
-      <div class="step"><b data-i="s4">Gemma solo lo dice</b><p data-i="s4p">El modelo local redacta dos frases a partir del veredicto. Si falla o se sale del guion, PULSAR usa una frase fija.</p></div>
+      <div class="step"><b data-i="s4">Gemma solo lo dice</b><p data-i="s4p">El modelo (local o en la nube) redacta dos frases a partir del veredicto. Si falla o se sale del guion, PULSAR usa una frase fija.</p></div>
     </div>
     <ul class="guards rv">
       <li data-i="g1">El modelo nunca escribe un estado de salud ni un escalado.</li>
@@ -602,7 +602,6 @@ footer .fine { font: 500 11px/1.7 var(--f-mono); letter-spacing: .06em; color: v
     <div class="faq rv">
       <details><summary data-i="q1">¿Es un dispositivo médico?</summary><p data-i="a1">No. Es un prototipo de un hackathon. No diagnostica, no está validado para vuelo espacial ni para conducción, y sus avisos se presentan como señales para mirar con contexto.</p></details>
       <details><summary data-i="q2">¿Graba o envía mi cara?</summary><p data-i="a2">No. El navegador calcula rasgos como la apertura de los ojos y descarta cada fotograma. No se guarda vídeo y nada sale de la máquina.</p></details>
-      <details><summary data-i="q3">¿Necesita internet?</summary><p data-i="a3">Solo para descargar los modelos al instalarlo. Después, todo (visión, reglas, voz y lenguaje) funciona sin red.</p></details>
       <details><summary data-i="q4">¿Qué hace exactamente la IA?</summary><p data-i="a4">Dos cosas acotadas: redacta en dos frases el veredicto que ya ha tomado el motor de reglas, y, cuando una petición no coincide con ninguna frase fija, elige qué panel abrir de una lista cerrada. Nunca decide un estado, un escalado ni un número.</p></details>
       <details><summary data-i="q5">¿Y si el modelo falla o dice algo raro?</summary><p data-i="a5">Sus frases se filtran: si llevan números, palabras clínicas o se salen del formato, se sustituyen por una frase fija. El motor de reglas no depende del modelo y sigue funcionando.</p></details>
       <details><summary data-i="q6">¿Funciona con gafas o con poca luz?</summary><p data-i="a6">Aún no está evaluado. Está en la hoja de ruta, junto con la cámara infrarroja para la noche.</p></details>
@@ -618,7 +617,7 @@ footer .fine { font: 500 11px/1.7 var(--f-mono); letter-spacing: .06em; color: v
     <h2 class="rv" data-i="cl_h2">Cuidar a la tripulación es <em>cuidar la misión.</em></h2>
     <p class="lead rv" data-i="cl_lead">Y en la Tierra, la misión es llegar a casa.</p>
     <div class="ctas rv">
-      <a class="button" href="pulsar-intro.html?next=/pulsar&autoplay=1" data-i="ctaFilm2">▶ Ver la película</a>
+      <a class="button" href="pulsar-intro.html?next=/pulsar&autoplay=1" data-i="ctaFilm2">▶ Despegar</a>
       <a class="button ghost" href="/pulsar" data-i="ctaTry2">▶ Probar PULSAR</a>
       <a class="button ghost" href="#top" data-i="ctaTop">Volver arriba ↑</a>
     </div>
@@ -639,18 +638,18 @@ footer .fine { font: 500 11px/1.7 var(--f-mono); letter-spacing: .06em; color: v
   const EN = {
     navLabel: "Sections", tabsLabel: "Contexts on Earth",
     n1: "The problem", n2: "What it does", n2b: "Ask it", n3: "How it decides", n4: "On Earth", n5: "NASA data", n6: "Roadmap", n8: "Team", n7: "FAQ",
-    navFilm: "Watch the film", ctaTry: "▶ Try PULSAR", ctaTry2: "▶ Try PULSAR",
+    navFilm: "Take off", ctaTry: "▶ Try PULSAR", ctaTry2: "▶ Try PULSAR",
     eyebrow: "NASA Space Apps 2026 · Health monitoring software for astronauts",
     h1: "Your personal health companion. <em>In space.</em> And&nbsp;on&nbsp;Earth.",
-    heroLead: "PULSAR spots signs of fatigue through a webcam, asks how you are, decides with explicit rules and explains it out loud. All on one laptop, with no internet, and no image ever leaves the machine.",
-    ctaFilm: "▶ Watch the film", ctaHow: "How it works ↓",
-    chip1: "100% local, no network", chip2: "Rules decide, the AI only speaks", chip3: "6 health indicators", chip4: "Spanish and English",
+    heroLead: "PULSAR spots signs of fatigue through a webcam, asks how you are, decides with explicit rules and explains it out loud. All on one laptop or in the cloud, and no image ever leaves the system.",
+    ctaFilm: "▶ Take off", ctaHow: "How it works ↓",
+    chip1: "100% local or cloud", chip2: "Rules decide, the AI only speaks", chip3: "6 health indicators", chip4: "Spanish and English",
     k1: "01 · The problem",
     p_h2: "On a long mission, nobody looks at your face every morning.",
     p_lead: "NASA groups the hazards of human spaceflight into five. Far from Earth, the crew has to notice on their own that something is changing: messages take longer the farther out you are, and a doctor is not always on the other end right away. PULSAR is the part of the ship that looks at the person.",
     hz1: "Space radiation", hz1p: "Outside Earth's magnetic shield, the dose adds up.", hz1h: "PULSAR reads the dose (simulated in the prototype) and a rule raises it to red.",
     hz2: "Isolation and confinement", hz2p: "Months with the same people, shifting schedules, little sleep.", hz2h: "Mood, sleep, camera-based fatigue and a reaction test, with daily habits.",
-    hz3: "Distance from Earth", hz3p: "The farther away, the longer each message takes and the more autonomy is needed.", hz3h: "It decides and answers locally: no network involved.",
+    hz3: "Distance from Earth", hz3p: "The farther away, the longer each message takes and the more autonomy is needed.", hz3h: "It decides and answers locally or in the cloud.",
     hz4: "Gravity fields", hz4p: "Microgravity changes muscle, bone, fluids and balance.", hz4h: "Out of the prototype's scope: PULSAR does not measure adaptation to gravity.",
     hz5: "Hostile and closed environments", hz5p: "Cabin air is one more system to watch.", hz5h: "A rule warns when cabin CO₂ goes above its threshold.",
     qBig: "Sleep",
@@ -672,7 +671,7 @@ footer .fine { font: 500 11px/1.7 var(--f-mono); letter-spacing: .06em; color: v
     s1: "Vision measures", s1p: "Face features computed in the browser: eye openness, blinks, yawns, arm movement.",
     s2: "The classifier estimates", s2p: "A small model, trained on public drowsiness datasets, turns those features into a fatigue score.",
     s3: "The rules engine decides", s3p: "Explicit rules, each with its threshold and its source. The most severe status wins, and the escalation follows from it.",
-    s4: "Gemma only says it", s4p: "The local model phrases two sentences from the verdict. If it fails or goes off script, PULSAR uses a fixed sentence.",
+    s4: "Gemma only says it", s4p: "The model (local or cloud) phrases two sentences from the verdict. If it fails or goes off script, PULSAR uses a fixed sentence.",
     g1: "The model never writes a health status or an escalation.",
     g2: "The HUD only receives actions from a closed list, with values checked against the contract in the backend and in the browser.",
     g3: "Sentences with numbers or clinical words are rejected and replaced.",
@@ -735,14 +734,14 @@ footer .fine { font: 500 11px/1.7 var(--f-mono); letter-spacing: .06em; color: v
     k10: "10 · FAQ", q_h2: "What people usually ask.",
     q1: "Is it a medical device?", a1: "No. It is a hackathon prototype. It does not diagnose, it is not validated for spaceflight or for driving, and its warnings are presented as signals to look at in context.",
     q2: "Does it record or send my face?", a2: "No. The browser computes features such as eye openness and discards every frame. No video is stored and nothing leaves the machine.",
-    q3: "Does it need the internet?", a3: "Only to download the models when installing it. After that, everything (vision, rules, voice and language) runs with no network.",
+   
     q4: "What exactly does the AI do?", a4: "Two bounded things: it phrases, in two sentences, the verdict the rules engine has already reached, and when a request matches no fixed phrase it picks which panel to open from a closed list. It never decides a status, an escalation or a number.",
     q5: "What if the model fails or says something odd?", a5: "Its sentences are filtered: if they contain numbers or clinical words, or break the format, they are replaced by a fixed sentence. The rules engine does not depend on the model and keeps working.",
     q6: "Does it work with glasses or in low light?", a6: "Not evaluated yet. It is on the roadmap, together with an infrared camera for the night.",
     q7: "Why doesn't it measure heart-rate variability or SANS?", a7: "Because a webcam cannot measure them reliably. PULSAR would rather ask you for a value than make one up.",
     q8: "Could it go in my car?", a8: "The idea fits (same signals, no network, private), but it would need a suitable camera, trials in real driving and compliance with vehicle regulation. Today it is a potential use, not a product.",
     cl_h2: "Caring for the crew is <em>caring for the mission.</em>", cl_lead: "And on Earth, the mission is getting home.",
-    ctaFilm2: "▶ Watch the film", ctaTop: "Back to top ↑",
+    ctaFilm2: "▶ Take off", ctaTop: "Back to top ↑",
     ft1: "Prototype. Not a medical device. Not validated for spaceflight or for driving. Uses on Earth are potential.",
     ft2: "Use of AI: code written with AI assistants; in the product, Gemma phrases the sentences, Whisper transcribes and Piper synthesises the voice. Full sources in <code>docs/sources.md</code>.",
   };
@@ -785,13 +784,13 @@ footer .fine { font: 500 11px/1.7 var(--f-mono); letter-spacing: .06em; color: v
         tab: "Tren", who: "Maquinista · turnos de madrugada", title: "Avisar antes de que salte el hombre muerto.",
         text: "Las cabinas ya llevan dispositivos de vigilancia que frenan si el maquinista deja de responder. PULSAR quiere llegar antes: notar la fatiga mientras todavía hay margen, también dentro de un túnel sin cobertura.",
         say: "Llevas un rato parpadeando despacio. En la próxima parada, un descanso de ojos de menos de un minuto.",
-        mods: ["Visión de fatiga", "Funciona sin red", "Descanso de ojos", "Escalado al centro de control"],
+        mods: ["Visión de fatiga", "Local o en la nube", "Descanso de ojos", "Escalado al centro de control"],
         change: "Certificación ferroviaria, convivir con los sistemas de seguridad existentes y una cámara que vea bien con los cambios de luz." },
       en: {
         tab: "Train", who: "Train driver · early-morning shifts", title: "A warning before the dead-man's switch.",
         text: "Cabs already carry vigilance devices that brake if the driver stops responding. PULSAR wants to get there earlier: notice fatigue while there is still margin, even inside a tunnel with no coverage.",
         say: "You have been blinking slowly for a while. At the next stop, an eye rest of under a minute.",
-        mods: ["Fatigue vision", "Works with no network", "Eye rest", "Escalation to the control centre"],
+        mods: ["Fatigue vision", "Local or cloud", "Eye rest", "Escalation to the control centre"],
         change: "Railway certification, coexisting with the existing safety systems and a camera that copes with changing light." } },
     { id: "plane", es: {
         tab: "Avión", who: "Pilotos y control aéreo", title: "El informe de antes del vuelo.",
@@ -821,13 +820,13 @@ footer .fine { font: 500 11px/1.7 var(--f-mono); letter-spacing: .06em; color: v
         tab: "Base remota", who: "Antártida, plataformas, barcos, minas", title: "Lo más parecido a una misión, sin salir de la Tierra.",
         text: "Aislamiento, confinamiento, semanas con las mismas personas, conexión poco fiable y el médico lejos. Es el mismo problema para el que se diseñó PULSAR, con los seis indicadores y la guía de cómo medir cada uno.",
         say: "Tu ánimo lleva tres días bajo. Te abro la relajación; si sigue así, conviene hablarlo con el médico de la base.",
-        mods: ["Seis indicadores con guía", "Ánimo y sueño", "Sin red", "Escalado al médico"],
+        mods: ["Seis indicadores con guía", "Ánimo y sueño", "Local o en la nube", "Escalado al médico"],
         change: "Casi nada: es el entorno que más se parece al espacio. Faltaría conectar los sensores reales del lugar (aire, radiación, temperatura)." },
       en: {
         tab: "Remote base", who: "Antarctica, rigs, ships, mines", title: "The closest thing to a mission, without leaving Earth.",
         text: "Isolation, confinement, weeks with the same people, an unreliable link and a doctor far away. It is the very problem PULSAR was designed for, with the six indicators and a guide to measuring each one.",
         say: "Your mood has been low for three days. I'll open relaxation; if it stays like this, talk it over with the base doctor.",
-        mods: ["Six indicators with guides", "Mood and sleep", "No network", "Escalation to the doctor"],
+        mods: ["Six indicators with guides", "Mood and sleep", "Local or cloud", "Escalation to the doctor"],
         change: "Almost nothing: it is the environment most like space. The site's real sensors (air, radiation, temperature) would need connecting." } },
   ];
   const LABELS = { es: { say: "PULSAR", change: "Qué cambiaría" }, en: { say: "PULSAR", change: "What would change" } };
@@ -996,7 +995,7 @@ footer .fine { font: 500 11px/1.7 var(--f-mono); letter-spacing: .06em; color: v
 
   function setLang(next) {
     lang = next === "en" ? "en" : "es";
-    try { localStorage.setItem("pulsar-landing-lang", lang); } catch (_) {}
+    try { localStorage.setItem("pulsar-landing-lang", lang); localStorage.setItem("pulsar-lang", lang); /* the HUD's own key: same language when going to /pulsar */ } catch (_) {}
     applyText();
     renderAsk();
     renderTabs();
@@ -1005,7 +1004,7 @@ footer .fine { font: 500 11px/1.7 var(--f-mono); letter-spacing: .06em; color: v
   document.querySelectorAll(".lang button").forEach((b) => b.addEventListener("click", () => setLang(b.dataset.lang)));
 
   let start = new URLSearchParams(location.search).get("lang");
-  if (!start) { try { start = localStorage.getItem("pulsar-landing-lang"); } catch (_) {} }
+  if (!start) { try { start = localStorage.getItem("pulsar-lang") || localStorage.getItem("pulsar-landing-lang"); } catch (_) {} }
   setLang(start || "es");
 
   // Sections fade in as they scroll into view; without IntersectionObserver everything is simply shown.
