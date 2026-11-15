@@ -103,7 +103,7 @@ export function RelaxDock({ suggest = false }: { suggest?: boolean }) {
             data-relax-open
             aria-expanded={open}
             onClick={() => setOpen(true)}
-            className={`${BTN} pointer-events-auto order-first mt-auto block w-full shrink-0 border-pulse/60 bg-space/80 text-pulse ${suggest || reminder.due ? "animate-pulse border-amber-400 text-amber-300" : ""}`}
+            className={`${BTN} pointer-events-auto order-first mt-auto block w-full shrink-0 border-pulse/60 bg-space/60 text-pulse backdrop-blur ${suggest || reminder.due ? "animate-pulse border-amber-400 text-amber-300" : ""}`}
           >
             {t("relax.open")}
           </button>,

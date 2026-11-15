@@ -26,17 +26,30 @@ const shown = (f: Field, value: number) => (f.step < 1 ? value.toFixed(1) : Stri
 export function SelfReportPanel({
   entries,
   statuses,
+  signal,
+  onSelect,
   onSave,
   onClear,
   onClose,
 }: {
   entries: Entries;
   statuses: Record<string, GuideStatus>;
+  /** The measurement a body marker asked for; the form moves to it, and reports the tab it is on. */
+  signal?: string | null;
+  onSelect?: (signal: string) => void;
   onSave: (values: Entries) => void;
   onClear: (keys: string[]) => void;
   onClose: () => void;
 }) {
-  const [at, setAt] = useState(() => Math.max(0, GUIDES.findIndex((guide) => !entered(guide.signal, entries))));
+  const [at, setAt] = useState(() => {
+    const asked = GUIDES.findIndex((guide) => guide.signal === signal);
+    return asked >= 0 ? asked : Math.max(0, GUIDES.findIndex((guide) => !entered(guide.signal, entries)));
+  });
+  useEffect(() => {
+    const asked = GUIDES.findIndex((guide) => guide.signal === signal);
+    if (asked >= 0) setAt(asked);
+  }, [signal]);
+  useEffect(() => onSelect?.(GUIDES[at].signal), [at]); // eslint-disable-line react-hooks/exhaustive-deps
   const t = useT();
   const lang = useLang();
   const guide = localizedGuide(GUIDES[at], lang);

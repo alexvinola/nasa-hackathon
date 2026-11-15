@@ -101,7 +101,7 @@ export function LogPanel() {
 
   return (
     <>
-      <HudPanel title={`${t("debug.log.title")}${down ? t("debug.log.down") : ""}`} defaultOpen={false}>
+      <HudPanel title={`${t("debug.log.title")}${down ? t("debug.log.down") : ""}`} defaultOpen={false} up>
         {controls}
         <div className="max-h-48 overflow-y-auto">{lines}</div>
       </HudPanel>

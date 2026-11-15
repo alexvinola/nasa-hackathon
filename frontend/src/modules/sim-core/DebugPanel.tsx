@@ -36,7 +36,7 @@ export function DebugPanel({
   useHotkey("6", () => toggle("radiation"));
 
   return (
-    <HudPanel title={t("debug.title")} defaultOpen={false}>
+    <HudPanel title={t("debug.title")} defaultOpen={false} up>
       <div className="grid grid-cols-2 gap-2">
         <button type="button" aria-pressed={mode === "rest"} onClick={() => toggle("rest")} className={`${BUTTON} ${mode === "rest" ? "border-amber-400 bg-amber-400/20 text-amber-300" : OFF}`}>
           {t("debug.warning", { state: st(mode === "rest") })}

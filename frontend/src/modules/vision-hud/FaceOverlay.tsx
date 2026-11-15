@@ -32,18 +32,21 @@ export function FaceOverlay({
   frameRef,
   videoRef,
   problem,
+  menu = false,
 }: {
   frameRef: MutableRefObject<FaceFrame | null>;
   videoRef: RefObject<HTMLVideoElement | null>;
   /** Why there is no mesh, when the face worker failed (e.g. the model files are missing). */
   problem?: string;
+  /** The AI check panel lives in the hidden menu (right-click the version); the check itself runs either way. */
+  menu?: boolean;
 }) {
   const t = useT();
   const canvas = useRef<HTMLCanvasElement>(null);
-  const [show, setShow] = useState(true);
-  // Off until asked for: each check is a Gemma call on the same frame, and on a laptop without a GPU that takes
-  // the processor away from the face model, which then stutters and misses blinks.
-  const [checking, setChecking] = useState(false);
+  const [show, setShow] = useState(false); // the mesh drawing is opt-in (M)
+  // On by default, as asked: each check is a Gemma call on the same frame, so a laptop without a GPU may see the
+  // face model stutter; C turns it off.
+  const [checking, setChecking] = useState(true);
   useHotkey("c", () => setChecking((c) => !c));
   const fps = useRef({ last: 0, value: 0 });
   // Once switched on, the cross-check runs whenever there is a face, whether or not the mesh is drawn over it.
@@ -84,7 +87,8 @@ export function FaceOverlay({
       <canvas ref={canvas} className={`pointer-events-none absolute inset-0 h-full w-full -scale-x-100 object-cover ${show ? "" : "hidden"}`} />
       {/* Joins the HUD's left column of panels. */}
       {column && createPortal(
-      <HudPanel title={t("vision.overlay.title")} defaultOpen={false}>
+      <div className={menu ? "contents" : "hidden"}>
+      <HudPanel title={t("vision.overlay.title")} defaultOpen={false} up>
         <div className="flex flex-col gap-1">
           <button type="button" aria-pressed={show} onClick={() => setShow((s) => !s)} className="border border-pulse/50 px-2 py-1 text-left text-xs text-pulse">
             {t("vision.overlay.mesh", { state: show ? t("vision.overlay.yes") : t("vision.overlay.no") })}
@@ -111,7 +115,8 @@ export function FaceOverlay({
         )}
         {error && <p className="mt-1 text-red-300">{error}</p>}
         <p className="mt-2 text-[11px] tracking-normal text-shell/70">{t("vision.overlay.evidence")}</p>
-      </HudPanel>,
+      </HudPanel>
+      </div>,
       column)}
     </>
   );

@@ -21,7 +21,7 @@ import { HealthPanel } from "@/modules/guides/HealthPanel";
 import { HEALTH_POINTS } from "@/modules/guides/healthPoints";
 import { GUIDES, currentValue, statusOf } from "@/modules/guides/guides";
 import { SelfReportPanel } from "@/modules/guides/SelfReportPanel";
-import { FIELDS, type Entries } from "@/modules/guides/selfReport";
+import { type Entries } from "@/modules/guides/selfReport";
 import { useFaceMetrics } from "@/modules/vision-hud/useFaceMetrics";
 import { FaceOverlay } from "@/modules/vision-hud/FaceOverlay";
 import type { Biometrics, FaceFrame } from "@/modules/vision-hud/faceWorker";
@@ -95,7 +95,7 @@ export function Hud() {
   // What the astronaut typed in from the devices (guides/SelfReportPanel): it replaces the example's self-report,
   // and a pulse counted by hand replaces the simulated one.
   const [entries, setEntries] = useState<Entries>({});
-  const [reporting, setReporting] = useState(false);
+  const [reporting, setReporting] = useState(true); // the form is open from the start; R or its close button hides it
   const [devTools, setDevTools] = useState(false);
   useHotkey("r", () => setReporting((was) => !was));
   const reading = useMemo<Biometrics>(() => {
@@ -118,6 +118,12 @@ export function Hud() {
   // The indicator guide that is open (G9), by contract signal, and the engine's status for each indicator.
   const [guideSignal, setGuideSignal] = useState<string | null>(null);
   const guide = GUIDES.find((candidate) => candidate.signal === guideSignal);
+  // A marker (or an alarm's link) opens the measurement form on that signal: the guide and the form are one panel.
+  const openGuide = (signal: string) => {
+    setHealthId(null);
+    setGuideSignal(signal);
+    setReporting(true);
+  };
   // The SALUD point whose panel is open (id in guides/healthPoints.ts); it shares the place of the guides, so one at a time.
   const [healthId, setHealthId] = useState<string | null>(null);
   const healthPoint = HEALTH_POINTS.find((candidate) => candidate.id === healthId);
@@ -286,30 +292,24 @@ export function Hud() {
       {/* The column stops above the footer line and scrolls; the centred text box keeps clear of it at any width. */}
       <div id={LEFT_COLUMN_ID} className="absolute bottom-20 left-8 z-[1] flex max-h-[calc(100vh-24rem)] w-64 flex-col gap-2 overflow-y-auto [scrollbar-color:var(--color-pulse)_transparent] [scrollbar-width:thin]">
         <MiniTwin
-          reporting={reporting}
-          onReport={() => setReporting((was) => !was)}
-          reportDone={GUIDES.filter((candidate) => FIELDS[candidate.signal].every((f) => f.key in entries)).length}
-          reportTotal={GUIDES.length}
           statuses={guideStatuses}
           open={guideSignal}
-          onOpen={(signal) => {
-            setHealthId(null);
-            setGuideSignal(signal);
-          }}
+          onOpen={openGuide}
           healthOpen={healthId}
           onOpenHealth={(id) => {
             setGuideSignal(null);
+            setReporting(false);
             setHealthId(id);
           }}
         />
-        <HabitsPanel />
+        <HabitsPanel sleepHours={entries.sleepHoursLast24h} />
         {/* Hidden, not unmounted, so their hotkeys keep working; right-click the version to show them. */}
         <div className={devTools ? "contents" : "hidden"}>
           <DebugPanel mode={simMode} onMode={setSimMode} sound={sound} onSound={setSound} />
           <LogPanel />
         </div>
       </div>
-      {state === "live" && <FaceOverlay frameRef={faceFrame} videoRef={videoRef} problem={faceProblem} />}
+      {state === "live" && <FaceOverlay frameRef={faceFrame} videoRef={videoRef} problem={faceProblem} menu={devTools} />}
       {state !== "live" && (
         <div className="absolute inset-0 grid place-items-center bg-[radial-gradient(ellipse_at_center,var(--color-space-lift),var(--color-space))] text-sm tracking-widest text-orbit">
           {t(CAM_KEY[state])}
@@ -369,16 +369,21 @@ export function Hud() {
         radiationLimit={radiationLimit}
         perclosLimit={perclosLimit}
         fatigueLimit={fatigueLimit}
-        onOpenGuide={setGuideSignal}
+        onOpenGuide={openGuide}
       />
 
       {reporting && (
         <SelfReportPanel
           entries={entries}
           statuses={guideStatuses}
+          signal={guideSignal}
+          onSelect={setGuideSignal}
           onSave={(values) => setEntries((had) => ({ ...had, ...values }))}
           onClear={(keys) => setEntries((had) => Object.fromEntries(Object.entries(had).filter(([key]) => !keys.includes(key))))}
-          onClose={() => setReporting(false)}
+          onClose={() => {
+            setReporting(false);
+            setGuideSignal(null);
+          }}
         />
       )}
 
@@ -404,14 +409,21 @@ export function Hud() {
 
       <div className="absolute bottom-8 left-8 flex items-center gap-3 text-xs tracking-[0.2em] text-shell/70">
         <LangToggle className="pointer-events-auto" />
+        {/* A gear instead of the version text; right-click it for the developer panels. */}
         <span
-          className="pointer-events-auto bg-space/90 px-2 py-1 text-shell"
+          role="img"
+          aria-label={t("hud.version")}
+          title={t("hud.version")}
+          className={`pointer-events-auto grid h-8 w-8 place-items-center border backdrop-blur ${devTools ? "border-pulse bg-pulse/20 text-pulse" : "border-shell/40 bg-space/60 text-shell/70"} hover:text-shell`}
           onContextMenu={(event) => {
             event.preventDefault();
             setDevTools((was) => !was);
           }}
         >
-          {t("hud.version")}
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+            <circle cx="12" cy="12" r="3" />
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+          </svg>
         </span>
       </div>
 

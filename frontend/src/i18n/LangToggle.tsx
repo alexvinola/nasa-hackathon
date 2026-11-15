@@ -16,7 +16,7 @@ export function LangToggle({ className = "" }: { className?: string }) {
           lang={code}
           aria-pressed={lang === code}
           onClick={() => setLang(code)}
-          className={`border px-2 py-0.5 ${lang === code ? "border-pulse bg-pulse/20 text-pulse" : "border-shell/40 text-shell/70"}`}
+          className={`grid h-8 w-8 place-items-center border backdrop-blur ${lang === code ? "border-pulse bg-pulse/20 text-pulse" : "border-shell/40 bg-space/60 text-shell/70"}`}
         >
           {code.toUpperCase()}
         </button>
