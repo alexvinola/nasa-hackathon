@@ -452,7 +452,7 @@ body[data-presentation="deck"] { background: var(--space); }
 .pitch-close img { width: min(55vh,600px); max-width: 90%; mask-image: radial-gradient(ellipse at 50% 46%, black 35%, transparent 72%); }
 .story .pitch-close h2 { font-size: clamp(46px,8vw,110px); letter-spacing: .04em; margin-top: -2vh; }
 .pitch-close h2 span { color: var(--pulse); }
-.pitch-controls { position: fixed; z-index: 20; inset: auto 0 0; height: 48px; box-sizing: border-box; display: flex; align-items: center; justify-content: space-between; padding: 6px 20px; gap: 12px; background: #050e2ff0; border-top: 1px solid #ffffff18; backdrop-filter: blur(12px); }
+.pitch-controls { display: none !important; position: fixed; z-index: 20; inset: auto 0 0; height: 48px; box-sizing: border-box; display: flex; align-items: center; justify-content: space-between; padding: 6px 20px; gap: 12px; background: #050e2ff0; border-top: 1px solid #ffffff18; backdrop-filter: blur(12px); }
 .pitch-controls button, .pitch-dialog header button, .notes-timer-tools button { border: 0; color: #b9c5e3; background: transparent; font: 11px var(--f-mono); cursor: pointer; padding: 8px; }
 .pitch-controls button:focus-visible, .pitch-dialog button:focus-visible, .demo-phases button:focus-visible { outline: 2px solid var(--pulse); outline-offset: 2px; }
 .pitch-controls button:disabled { opacity: .2; cursor: default; }
@@ -710,43 +710,13 @@ body[data-presentation="deck"] { background: var(--space); }
 </div>
 
 <main class="story pitch-deck" id="journey">
- <section class="pitch-slide" id="human" data-label="The bottle" data-window="0:19–0:40" hidden>
-  <div class="pitch-split"><div><p class="pitch-kicker">A reminder.</p><h2>You knew.<br><em>Did you act?</em></h2></div><div class="bottle-scene" aria-hidden="true"><div class="bottle-cap"></div><div class="bottle-neck"></div><div class="bottle-body"><div class="bottle-water"></div><span>H₂O</span></div><div class="reminder-bubble">Drink water <span>✓</span></div></div></div>
- </section>
- <section class="pitch-slide pitch-active" id="response" data-label="Active supervision" data-window="0:40–0:50" hidden>
-  <p class="pitch-kicker">PULSAR</p><h2>Beyond reminders.<br><em>Active supervision.</em></h2><div class="watch-pulse" aria-hidden="true"><i></i><i></i><i></i><span>●</span></div>
- </section>
- <section class="pitch-slide pitch-acronym" id="acronym" data-label="The name and capabilities" data-window="0:35–0:50" hidden>
-  <p class="pitch-kicker">One companion. Observe, understand, act.</p>
-  <h2 class="acronym-title" aria-label="PULSAR">P<span>.</span>U<span>.</span>L<span>.</span>S<span>.</span>A<span>.</span>R<span>.</span></h2>
-  <div class="acronym-meanings"><article class="acronym-card"><h3 lang="en">Personal</h3><p>Crew first</p></article><article class="acronym-card"><h3 lang="en">Unit</h3><p>Camera + voice</p></article><article class="acronym-card"><h3 lang="en">Learning</h3><p>Understand the signals</p></article><article class="acronym-card"><h3 lang="en">Support</h3><p>Know who to alert</p></article><article class="acronym-card"><h3 lang="en">Assistance</h3><p>Get a next step</p></article><article class="acronym-card"><h3 lang="en">Reminders</h3><p>Active prompts</p></article></div>
- </section>
  <section class="pitch-slide live-slide" id="live-demo" data-label="Live demo" data-window="0:50–2:10" hidden>
   <div class="live-title-row"><h2 id="live-title">Active supervision</h2><div class="demo-phases" role="group" aria-label="Demo cues, not simulated measurements"><button type="button" data-demo-phase="measure" aria-pressed="true">1 · Measure</button><button type="button" data-demo-phase="sleep" aria-pressed="false">2 · Close my eyes</button><button type="button" data-demo-phase="alert" aria-pressed="false">3 · Real response</button></div></div>
   <div class="demo-shell" id="demo-shell">
    <div class="demo-toolbar"><span class="demo-status" id="demo-status" data-live-text role="status">Frontend is not loaded yet.</span><div class="demo-actions"><button type="button" class="demo-control" id="demo-fullscreen" data-live-text>Fullscreen</button><button type="button" class="demo-control" id="demo-stop">Stop demo</button></div></div>
    <div class="demo-stage" id="demo-stage"><div class="demo-placeholder" id="demo-placeholder"><div class="demo-orbit" aria-hidden="true">P<span>·</span></div><button type="button" class="button" id="demo-launch" data-live-text>Launch live HUD</button><small>pulsar.alexvinola.com</small></div><iframe id="demo-frame" title="PULSAR live frontend" allow="camera; microphone; autoplay; fullscreen" referrerpolicy="no-referrer" hidden></iframe></div>
-   <div class="demo-bottom"><a id="demo-open-tab" href="https://pulsar.alexvinola.com/pulsar" target="_blank" rel="noopener noreferrer">Open in a new tab ↗</a><button type="button" class="demo-control" id="demo-return">How it works →</button></div>
+   <div class="demo-bottom"><a id="demo-open-tab" href="https://pulsar.alexvinola.com/pulsar" target="_blank" rel="noopener noreferrer">Open in a new tab ↗</a></div>
   </div>
- </section>
- <section class="pitch-slide evidence-slide" id="design" data-label="AI and scientific evidence" data-window="2:10–2:30" hidden>
-  <p class="pitch-kicker">Local intelligence · traceable evidence</p>
-  <h2 id="design-title" tabindex="-1">AI + science. One laptop.</h2>
-  <div class="evidence-grid">
-   <article class="evidence-card"><h3><span>01</span> AI &amp; methodology</h3><p class="evidence-feature">Gemma 4 E4B <span>QAT</span></p><p>MediaPipe Face/Pose · Whisper int8 · Piper</p><p class="evidence-method">Reactive agent · structured JSON<br>Explicit rules + phrasing checks + fallback</p></article>
-   <article class="evidence-card"><h3><span>02</span> Official NASA sources</h3><dl><div><dt><a href="https://www.nasa.gov/hrp/risks/" target="_blank" rel="noopener noreferrer">HRP</a></dt><dd>Spaceflight hazards &amp; risks</dd></div><div><dt><a href="https://asrs.arc.nasa.gov/search/reportsets.html" target="_blank" rel="noopener noreferrer">ASRS</a></dt><dd>Aviation fatigue narratives</dd></div><div><dt><a href="https://osdr.nasa.gov/bio/repo/data/studies/OSD-575" target="_blank" rel="noopener noreferrer">OSDR 569/575</a></dt><dd>Inspiration4 · blood count + metabolic panel</dd></div></dl></article>
-   <article class="evidence-card"><h3><span>03</span> External data &amp; evaluation</h3><p><a href="https://orbi.uliege.be/handle/2268/191620" target="_blank" rel="noopener noreferrer">DROZY</a> + <a href="https://mrl.cs.vsb.cz/eyedataset.html" target="_blank" rel="noopener noreferrer">MRL Eye</a> <span class="evidence-role">Exploratory vision probes</span></p><p class="evidence-reference"><a href="https://orbi.uliege.be/handle/2268/191620" target="_blank" rel="noopener noreferrer">Massoz et al., 2016 · WACV</a></p><p><a href="https://sites.google.com/view/utarldd/home" target="_blank" rel="noopener noreferrer">RLDD</a> / <a href="https://ieee-dataport.org/open-access/yawdd-yawning-detection-dataset" target="_blank" rel="noopener noreferrer">YawDD</a> <span class="evidence-role">Training planned / reference</span></p><p class="evidence-bench"><a href="../../backend/bench/voice_latency.json" target="_blank" rel="noopener">1.68 s voice median · 4 WAV turns · 1 laptop</a></p></article>
-   <article class="evidence-card sleep-evidence"><h3><span>04</span> Sleep &amp; alertness</h3><p class="sleep-key">Little sleep leaves signs.</p>
-<div class="sleep-map" role="group" aria-label="Reported rest, observed signs and a planned attention test">
- <div class="sleep-node"><svg class="sleep-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.7 14.1A9 9 0 0 1 9.9 3.3 9 9 0 1 0 20.7 14.1Z"/></svg><strong>Rest</strong><small>Hours/24 h · self-report</small></div><span class="sleep-arrow" aria-hidden="true">→</span>
- <div class="sleep-node"><svg class="sleep-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg><strong>Visible signs</strong><small><a href="https://rosap.ntl.bts.gov/view/dot/113" target="_blank" rel="noopener noreferrer">PERCLOS</a> · <span>yawns/min · posture</span></small></div><span class="sleep-arrow" aria-hidden="true">→</span>
- <div class="sleep-node"><svg class="sleep-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="14" r="7.5"/><path d="M9 2h6M12 2v4M17.5 7.5l2-2M12 10v4l2.5 1.5"/></svg><strong>Attention</strong><small><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3197786" target="_blank" rel="noopener noreferrer">PVT-B</a> · <span>3 min · planned</span></small></div>
-</div><p class="evidence-papers"><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8919197" target="_blank" rel="noopener noreferrer">Jones 2022</a> · <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3197786" target="_blank" rel="noopener noreferrer">Basner 2011</a> · <a href="https://rosap.ntl.bts.gov/view/dot/2518" target="_blank" rel="noopener noreferrer">Dinges 1998</a><br><a href="https://rosap.ntl.bts.gov/view/dot/113" target="_blank" rel="noopener noreferrer">FMCSA 1998</a> · <a href="https://vision.fe.uni-lj.si/cvww2016/proceedings/papers/05.pdf" target="_blank" rel="noopener noreferrer">Soukupová 2016 · EAR</a></p></article>
-  </div>
-  <p class="evidence-boundary">Current fatigue score: heuristic · subject-separated training planned · no clinical validation</p>
- </section>
- <section class="pitch-slide pitch-close" id="horizon" data-label="Closing" data-window="2:30–2:50" hidden>
-  <img id="journey-mascot" alt="PULSAR"/><h2>PULSAR<span>.</span></h2>
  </section>
 </main>
 
@@ -765,12 +735,7 @@ body[data-presentation="deck"] { background: var(--space); }
     </div></details></dialog>
 <div id="pitch-note-sources" hidden>
 <div data-notes-for="film"><p class="note-window">0:00–0:19</p><h4>Say</h4><p class="spoken-note">Let the film play. This is a fictional incident, not a documented astronaut accident.</p><h4>Stage direction</h4><p>No narration. At the end, pick up the real water bottle.</p></div>
-<div data-notes-for="human"><p class="note-window">0:19–0:40</p><h4>Say</h4><p class="spoken-note">This bottle reminds me to drink water. But seeing a reminder does not mean I act on it. The same can happen when we need to rest or take a measurement.</p><h4>Stage direction</h4><p>Use your Plain bottle as the physical prop. The image on screen is a generic bottle, not a product endorsement.</p></div>
-<div data-notes-for="response"><p class="note-window">0:40–0:50</p><h4>Say</h4><p class="spoken-note">So we built PULSAR: a companion that observes signals and actively brings changes to our attention.</p><h4>Stage direction</h4><p>Move directly into the live app. Do not explain the menus.</p></div>
-<div data-notes-for="acronym"><p class="note-window">0:35–0:50 · 15 seconds</p><h4>Say</h4><p class="spoken-note">PULSAR brings three capabilities into one personal companion: observing our signals, explaining what they mean, and helping us act. Camera, voice and active prompts work together. Let me show you what happens when I start drifting off.</p><h4>Stage direction</h4><p>Use this as an alternative to Active supervision, not as an extra slide. Allow about 15 seconds and shorten the bottle segment to end at 0:35. Do not read all six letters aloud: group the capabilities as observe, understand and act. Learning means helping the person understand the signals, not an online-learning claim. Reminders refers to active prompts; scheduled reminders are not being demonstrated.</p></div>
 <div data-notes-for="live-demo"><p class="note-window">0:50–2:10</p><h4>Say</h4><p class="spoken-note">Here, the camera measures eye closures and yawns. Now imagine I start drifting off. I close my eyes, and we watch the reading change. This is the rules engine’s actual response, explained by PULSAR.</p><h4>Stage direction</h4><p>Allow camera access and keep arms relaxed and level. Show the measured indicators briefly, then keep eyes closed for about 20–25 seconds so the rolling eye-closure estimate can increase. The current eye-closure rule is AMBER, not necessarily RED. The model thresholds are prototype assumptions, not a clinical sleep detector. The cue buttons force the HUD's demo state (1 live readings, 2 drowsiness warning, 3 danger and PULSAR’s response): say that the readings are forced, not measured. If the response does not appear, state that openly and continue at 2:10. Voice defaults to English.</p></div>
-<div data-notes-for="design"><p class="note-window">2:10–2:30</p><h4>Say</h4><p class="spoken-note">We run Gemma, MediaPipe, Whisper and Piper locally or in the cloud, with explicit rules deciding the alerts. NASA grounds the context and blood-test data; DROZY and MRL support exploratory vision checks. Sleep studies and PERCLOS inform the design; PVT-B remains planned.</p><h4>Stage direction</h4><p>Use about 20 seconds and point to the four blocks; do not read every reference. The 1.68 s figure is a recorded four-WAV voice bench on one laptop, not a latency guarantee. DROZY and MRL probes do not demonstrate clinical accuracy. PERCLOS is approximated by blendshape thresholds; PVT-B has no live frontend implementation yet. Subject-separated G2 training is planned. OSDR blood-count and metabolic results are published crew measurements, not tests performed by this demo. The papers are linked; full details remain in Q&amp;A.</p><p>Hours slept in the last 24 h are self-reported; the project has a rule below 6 h citing Jones (2022). Eye closures, yawns/min and head instability are camera estimates of drowsiness signs. The camera does not measure sleep duration or sleep stages; the live HUD currently keeps sleep as nominal context.</p></div>
-<div data-notes-for="horizon"><p class="note-window">2:30–2:50</p><h4>Say</h4><p class="spoken-note">Imagine you are the one who makes that mistake. Could you forgive yourself? Vote for PULSAR: to give the crew another chance to act before it is too late.</p><h4>Stage direction</h4><p>Say the closing aloud. Keep only the mascot and name on screen. Pause after the question. Do not promise that the tool prevents every accident. Finish by 2:50 and leave ten seconds of margin.</p></div>
 </div>
 
 <script>
@@ -1573,11 +1538,6 @@ body[data-presentation="deck"] { background: var(--space); }
     } catch { setStatus('Fullscreen is unavailable. You can open the frontend in a new tab.'); }
   });
   document.addEventListener('fullscreenchange', renderLabels);
-  document.getElementById('demo-return').addEventListener('click', async () => {
-    unloadDemo();
-    if (document.fullscreenElement === shell) { try { await document.exitFullscreen(); } catch {} }
-    window.dispatchEvent(new CustomEvent('pulsar-pitch-go', { detail: 'design' }));
-  });
   document.getElementById('demo-config').addEventListener('submit', event => {
     event.preventDefault();
     const next = validateURL(input.value);
@@ -1626,7 +1586,6 @@ body[data-presentation="deck"] { background: var(--space); }
   const count = document.getElementById('pitch-count');
   const timerButton = document.getElementById('pitch-timer');
   let current = 0, elapsed = 0, startedAt = null;
-  document.getElementById('journey-mascot').src = document.querySelector('.mascot').src;
   document.body.dataset.presentation = 'deck';
   function renderNotes() {
     const source = document.querySelector(`[data-notes-for="${slides[current].id}"]`);
