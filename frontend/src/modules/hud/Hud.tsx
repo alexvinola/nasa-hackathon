@@ -126,6 +126,26 @@ export function Hud() {
     setGuideSignal(signal);
     setReporting(true);
   };
+  // The presentation (docs/brand/pulsar-intro.html) embeds this HUD and runs its three demo cues here: 1 the live
+  // readings, 2 a drowsiness warning, 3 danger and PULSAR's response. Only those three words are accepted, and only
+  // from the window that embeds the HUD. The readings are forced through the debug panel's own modes, not measured.
+  useEffect(() => {
+    const modes: Record<string, SimMode> = { measure: "live", sleep: "rest", alert: "danger" };
+    const on = (event: MessageEvent) => {
+      if (window.parent === window || event.source !== window.parent) return;
+      const language = event.data?.pulsarDemoLang;
+      if (language === "es" || language === "en") return setLang(language);
+      const phase = event.data?.pulsarDemoPhase;
+      if (typeof phase !== "string" || !Object.hasOwn(modes, phase)) return;
+      setSimMode(modes[phase]);
+      setReporting(false);
+      setGuideSignal(null);
+      setHealthId(null);
+    };
+    window.addEventListener("message", on);
+    if (window.parent !== window) window.parent.postMessage({ pulsarDemoReady: true }, "*"); // no data: it only asks for the language
+    return () => window.removeEventListener("message", on);
+  }, []);
   // PULSAR was asked, by voice or chat, to open a measurement or to type one in. The values are checked again here
   // against the contract's bounds, as if they had been typed in the form.
   useHudAction((action) => {

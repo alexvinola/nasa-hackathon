@@ -995,7 +995,7 @@ footer .fine { font: 500 11px/1.7 var(--f-mono); letter-spacing: .06em; color: v
 
   function setLang(next) {
     lang = next === "en" ? "en" : "es";
-    try { localStorage.setItem("pulsar-landing-lang", lang); } catch (_) {}
+    try { localStorage.setItem("pulsar-landing-lang", lang); localStorage.setItem("pulsar-lang", lang); /* the HUD's own key: same language when going to /pulsar */ } catch (_) {}
     applyText();
     renderAsk();
     renderTabs();
@@ -1004,7 +1004,7 @@ footer .fine { font: 500 11px/1.7 var(--f-mono); letter-spacing: .06em; color: v
   document.querySelectorAll(".lang button").forEach((b) => b.addEventListener("click", () => setLang(b.dataset.lang)));
 
   let start = new URLSearchParams(location.search).get("lang");
-  if (!start) { try { start = localStorage.getItem("pulsar-landing-lang"); } catch (_) {} }
+  if (!start) { try { start = localStorage.getItem("pulsar-lang") || localStorage.getItem("pulsar-landing-lang"); } catch (_) {} }
   setLang(start || "es");
 
   // Sections fade in as they scroll into view; without IntersectionObserver everything is simply shown.

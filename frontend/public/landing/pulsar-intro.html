@@ -725,8 +725,8 @@ body[data-presentation="deck"] { background: var(--space); }
   <div class="live-title-row"><h2 id="live-title">Active supervision</h2><div class="demo-phases" role="group" aria-label="Demo cues, not simulated measurements"><button type="button" data-demo-phase="measure" aria-pressed="true">1 · Measure</button><button type="button" data-demo-phase="sleep" aria-pressed="false">2 · Close my eyes</button><button type="button" data-demo-phase="alert" aria-pressed="false">3 · Real response</button></div></div>
   <div class="demo-shell" id="demo-shell">
    <div class="demo-toolbar"><span class="demo-status" id="demo-status" data-live-text role="status">Frontend is not loaded yet.</span><div class="demo-actions"><button type="button" class="demo-control" id="demo-fullscreen" data-live-text>Fullscreen</button><button type="button" class="demo-control" id="demo-stop">Stop demo</button></div></div>
-   <div class="demo-stage" id="demo-stage"><div class="demo-placeholder" id="demo-placeholder"><div class="demo-orbit" aria-hidden="true">P<span>·</span></div><button type="button" class="button" id="demo-launch" data-live-text>Launch live HUD</button><small>localhost:3000</small></div><iframe id="demo-frame" title="PULSAR live frontend" allow="camera; microphone; autoplay; fullscreen" referrerpolicy="no-referrer" hidden></iframe></div>
-   <div class="demo-bottom"><a id="demo-open-tab" href="http://localhost:3000/pulsar" target="_blank" rel="noopener noreferrer">Open in a new tab ↗</a><button type="button" class="demo-control" id="demo-return">How it works →</button></div>
+   <div class="demo-stage" id="demo-stage"><div class="demo-placeholder" id="demo-placeholder"><div class="demo-orbit" aria-hidden="true">P<span>·</span></div><button type="button" class="button" id="demo-launch" data-live-text>Launch live HUD</button><small>pulsar.alexvinola.com</small></div><iframe id="demo-frame" title="PULSAR live frontend" allow="camera; microphone; autoplay; fullscreen" referrerpolicy="no-referrer" hidden></iframe></div>
+   <div class="demo-bottom"><a id="demo-open-tab" href="https://pulsar.alexvinola.com/pulsar" target="_blank" rel="noopener noreferrer">Open in a new tab ↗</a><button type="button" class="demo-control" id="demo-return">How it works →</button></div>
   </div>
  </section>
  <section class="pitch-slide evidence-slide" id="design" data-label="AI and scientific evidence" data-window="2:10–2:30" hidden>
@@ -756,7 +756,7 @@ body[data-presentation="deck"] { background: var(--space); }
  <div class="pitch-tools"><button type="button" id="pitch-notes-button">Notes · N</button><button type="button" id="pitch-library-button">Q&amp;A</button></div>
 </footer>
 <dialog class="pitch-dialog" id="pitch-notes"><header><h3>Presenter notes</h3><button type="button" data-close-dialog="pitch-notes">Close ×</button></header><div id="pitch-notes-content" data-live-text></div><label class="notes-variant"><input type="checkbox" id="pitch-use-acronym"><span>Use the acronym slide instead of Active supervision</span></label><div class="notes-timer-tools"><button type="button" id="pitch-reset-timer">Reset rehearsal timer</button></div></dialog>
-<dialog class="pitch-dialog" id="pitch-library"><header><h3>Technical backup / after the pitch</h3><button type="button" data-close-dialog="pitch-library">Close ×</button></header><details class="demo-setup"><summary>Presenter setup / frontend address</summary><p>Start the frontend with “pnpm dev” in frontend/ and the API with “uv run uvicorn main:app” in backend/. Ollama and the downloaded models are needed for local AI and voice.</p><form id="demo-config"><label for="demo-url">Local frontend URL</label><div><input id="demo-url" type="url" value="http://localhost:3000/pulsar" required spellcheck="false" autocomplete="off"><button type="submit" class="demo-control">Apply address</button></div></form><p>Only localhost and loopback addresses are accepted. If embedding is blocked by the browser, use the new-tab link and return to this presentation afterwards.</p><p>Current HUD: camera indicators and rules are wired in. Sleep, mood and cabin values use nominal context; a live PVT-B screen is not included in this frontend yet.</p></details><details class="technical-appendix" id="technical-appendix"><summary><span>Open the technical appendix</span><small>Models · methodology · sources / for questions after the pitch</small></summary><div class="technical-body">
+<dialog class="pitch-dialog" id="pitch-library"><header><h3>Technical backup / after the pitch</h3><button type="button" data-close-dialog="pitch-library">Close ×</button></header><details class="demo-setup"><summary>Presenter setup / frontend address</summary><p>Start the frontend with “pnpm dev” in frontend/ and the API with “uv run uvicorn main:app” in backend/. Ollama and the downloaded models are needed for local AI and voice.</p><form id="demo-config"><label for="demo-url">Local frontend URL</label><div><input id="demo-url" type="url" value="https://pulsar.alexvinola.com/pulsar" required spellcheck="false" autocomplete="off"><button type="submit" class="demo-control">Apply address</button></div></form><p>Only pulsar.alexvinola.com, localhost and loopback addresses are accepted. If embedding is blocked by the browser, use the new-tab link and return to this presentation afterwards.</p><p>Current HUD: camera indicators and rules are wired in. Sleep, mood and cabin values use nominal context; a live PVT-B screen is not included in this frontend yet.</p></details><details class="technical-appendix" id="technical-appendix"><summary><span>Open the technical appendix</span><small>Models · methodology · sources / for questions after the pitch</small></summary><div class="technical-body">
       <p class="kicker">Models and implementation status</p><div class="tech-grid"><article class="tech-card"><span class="tag">IN CODE</span><h4>MediaPipe Face + Pose</h4><p>FaceLandmarker and PoseLandmarker Lite run in a browser Web Worker, with GPU-to-CPU fallback. Eye closures, yawns and posture feed a fixed-weight estimate.</p></article><article class="tech-card"><span class="tag">LOCAL OR CLOUD INFERENCE</span><h4>Gemma 4 E4B · QAT</h4><p>Default Ollama tag: gemma4:e4b-it-qat. Phrases the rules verdict and supports separate visual descriptions. Sampled frames stay on the laptop; visual agreement is exploratory, not ground truth.</p></article><article class="tech-card"><span class="tag">VOICE IN / OUT</span><h4>Whisper + Piper</h4><p>faster-whisper base.en uses CPU int8 for transcription. Piper en_US-lessac-medium.onnx synthesizes speech. These defaults are English; bilingual presentation text does not change the voice models.</p></article><article class="tech-card"><span class="tag">PLANNED / G2</span><h4>Trained fatigue classifier</h4><p>G2 specifies feature extraction, per-person baselines and leave-subject-out validation. No trained fatigue_model.json or G2 metrics artifact is present in this checkout. The current score is heuristic.</p></article></div>
       <h3 class="technical-heading">How we build and evaluate</h3><div class="method-grid"><article><h4>Signals are estimates.</h4><p>The current eye-closure window uses MediaPipe blendshape thresholds. It is an approximation to the PERCLOS concept, not a calibrated measurement of 80% eyelid closure.</p></article><article><h4>Rules are traceable.</h4><p>Every threshold cites a registered source or declares a team assumption. JSON Schema validates the shared telemetry contract. Scenario tests exercise the decision policy.</p></article><article><h4>Language is bounded.</h4><p>The voice pipeline checks generated phrasing for selected violations and falls back to a deterministic message when those checks fail. The rules remain responsible for the health verdict.</p></article><article><h4>Validation is separated from the demo.</h4><p>Subject-separated training is planned for G2. A recorded voice bench reports a 1.68 s median across four WAV turns on one laptop; this is not a live latency or accuracy guarantee.</p></article></div>
       <p class="technical-evidence"><a href="../../backend/bench/voice_latency.json" target="_blank" rel="noopener">Recorded voice bench ↗</a> · <a href="../../goals/G2-fatigue-model.md" target="_blank" rel="noopener">G2 validation plan ↗</a></p>
@@ -768,7 +768,7 @@ body[data-presentation="deck"] { background: var(--space); }
 <div data-notes-for="human"><p class="note-window">0:19–0:40</p><h4>Say</h4><p class="spoken-note">This bottle reminds me to drink water. But seeing a reminder does not mean I act on it. The same can happen when we need to rest or take a measurement.</p><h4>Stage direction</h4><p>Use your Plain bottle as the physical prop. The image on screen is a generic bottle, not a product endorsement.</p></div>
 <div data-notes-for="response"><p class="note-window">0:40–0:50</p><h4>Say</h4><p class="spoken-note">So we built PULSAR: a companion that observes signals and actively brings changes to our attention.</p><h4>Stage direction</h4><p>Move directly into the live app. Do not explain the menus.</p></div>
 <div data-notes-for="acronym"><p class="note-window">0:35–0:50 · 15 seconds</p><h4>Say</h4><p class="spoken-note">PULSAR brings three capabilities into one personal companion: observing our signals, explaining what they mean, and helping us act. Camera, voice and active prompts work together. Let me show you what happens when I start drifting off.</p><h4>Stage direction</h4><p>Use this as an alternative to Active supervision, not as an extra slide. Allow about 15 seconds and shorten the bottle segment to end at 0:35. Do not read all six letters aloud: group the capabilities as observe, understand and act. Learning means helping the person understand the signals, not an online-learning claim. Reminders refers to active prompts; scheduled reminders are not being demonstrated.</p></div>
-<div data-notes-for="live-demo"><p class="note-window">0:50–2:10</p><h4>Say</h4><p class="spoken-note">Here, the camera measures eye closures and yawns. Now imagine I start drifting off. I close my eyes, and we watch the reading change. This is the rules engine’s actual response, explained by PULSAR.</p><h4>Stage direction</h4><p>Allow camera access and keep arms relaxed and level. Show the measured indicators briefly, then keep eyes closed for about 20–25 seconds so the rolling eye-closure estimate can increase. The current eye-closure rule is AMBER, not necessarily RED. The model thresholds are prototype assumptions, not a clinical sleep detector. Never advance a cue and claim it triggered an alarm: these buttons only label the stage. If the response does not appear, state that openly and continue at 2:10. Voice defaults to English.</p></div>
+<div data-notes-for="live-demo"><p class="note-window">0:50–2:10</p><h4>Say</h4><p class="spoken-note">Here, the camera measures eye closures and yawns. Now imagine I start drifting off. I close my eyes, and we watch the reading change. This is the rules engine’s actual response, explained by PULSAR.</p><h4>Stage direction</h4><p>Allow camera access and keep arms relaxed and level. Show the measured indicators briefly, then keep eyes closed for about 20–25 seconds so the rolling eye-closure estimate can increase. The current eye-closure rule is AMBER, not necessarily RED. The model thresholds are prototype assumptions, not a clinical sleep detector. The cue buttons force the HUD's demo state (1 live readings, 2 drowsiness warning, 3 danger and PULSAR’s response): say that the readings are forced, not measured. If the response does not appear, state that openly and continue at 2:10. Voice defaults to English.</p></div>
 <div data-notes-for="design"><p class="note-window">2:10–2:30</p><h4>Say</h4><p class="spoken-note">We run Gemma, MediaPipe, Whisper and Piper locally or in the cloud, with explicit rules deciding the alerts. NASA grounds the context and blood-test data; DROZY and MRL support exploratory vision checks. Sleep studies and PERCLOS inform the design; PVT-B remains planned.</p><h4>Stage direction</h4><p>Use about 20 seconds and point to the four blocks; do not read every reference. The 1.68 s figure is a recorded four-WAV voice bench on one laptop, not a latency guarantee. DROZY and MRL probes do not demonstrate clinical accuracy. PERCLOS is approximated by blendshape thresholds; PVT-B has no live frontend implementation yet. Subject-separated G2 training is planned. OSDR blood-count and metabolic results are published crew measurements, not tests performed by this demo. The papers are linked; full details remain in Q&amp;A.</p><p>Hours slept in the last 24 h are self-reported; the project has a rule below 6 h citing Jones (2022). Eye closures, yawns/min and head instability are camera estimates of drowsiness signs. The camera does not measure sleep duration or sleep stages; the live HUD currently keeps sleep as nominal context.</p></div>
 <div data-notes-for="horizon"><p class="note-window">2:30–2:50</p><h4>Say</h4><p class="spoken-note">Imagine you are the one who makes that mistake. Could you forgive yourself? Vote for PULSAR: to give the crew another chance to act before it is too late.</p><h4>Stage direction</h4><p>Say the closing aloud. Keep only the mascot and name on screen. Pause after the question. Do not promise that the tool prevents every accident. Finish by 2:50 and leave ten seconds of margin.</p></div>
 </div>
@@ -956,7 +956,7 @@ body[data-presentation="deck"] { background: var(--space); }
   "Start the frontend with “pnpm dev” in frontend/ and the API with “uv run uvicorn main:app” in backend/. Ollama and the downloaded models are needed for local AI and voice.": "Inicia el frontend con «pnpm dev» en frontend/ y la API con «uv run uvicorn main:app» en backend/. Ollama y los modelos descargados son necesarios para la IA y la voz locales.",
   "Local frontend URL": "URL del frontend local",
   "Apply address": "Aplicar dirección",
-  "Only localhost and loopback addresses are accepted. If embedding is blocked by the browser, use the new-tab link and return to this presentation afterwards.": "Solo se aceptan localhost y direcciones de bucle local. Si el navegador bloquea la integración, abre la demo en otra pestaña y vuelve después a la presentación.",
+  "Only pulsar.alexvinola.com, localhost and loopback addresses are accepted. If embedding is blocked by the browser, use the new-tab link and return to this presentation afterwards.": "Solo se aceptan pulsar.alexvinola.com, localhost y direcciones de bucle local. Si el navegador bloquea la integración, abre la demo en otra pestaña y vuelve después a la presentación.",
   "Current HUD: camera indicators and rules are wired in. Sleep, mood and cabin values use nominal context; a live PVT-B screen is not included in this frontend yet.": "HUD actual: la cámara y las reglas están conectadas. Sueño, ánimo y cabina usan valores de contexto nominales; este frontend todavía no incluye una pantalla de PVT-B en directo.",
   "01 / BROWSER": "01 / NAVEGADOR",
   "Next.js + React": "Next.js + React",
@@ -1033,7 +1033,7 @@ body[data-presentation="deck"] { background: var(--space); }
   "Live frame opened. Confirm that the HUD is visible.": "Ventana en directo abierta. Comprueba que se ve el HUD.",
   "The frontend could not load. Check its address or open it in a new tab.": "No se ha podido cargar el frontend. Revisa su dirección o ábrelo en otra pestaña.",
   "Fullscreen is unavailable. You can open the frontend in a new tab.": "La pantalla completa no está disponible. Puedes abrir el frontend en otra pestaña.",
-  "Use an HTTP(S) localhost or loopback URL without credentials.": "Usa una URL HTTP(S) de localhost o bucle local sin credenciales.",
+  "Use an HTTP(S) pulsar.alexvinola.com, localhost or loopback URL without credentials.": "Usa una URL HTTP(S) de pulsar.alexvinola.com, localhost o bucle local sin credenciales.",
   "Local address saved. Launch the HUD when you are ready.": "Dirección local guardada. Abre el HUD cuando estés listo.",
   "A reminder.": "Un recordatorio.",
   "You knew.": "Lo sabías.",
@@ -1071,7 +1071,7 @@ body[data-presentation="deck"] { background: var(--space); }
   "So we built PULSAR: a companion that observes signals and actively brings changes to our attention.": "Por eso construimos PULSAR: un compañero que observa señales y nos avisa activamente cuando cambian.",
   "Move directly into the live app. Do not explain the menus.": "Pasa directamente a la app en vivo. No expliques los menús.",
   "Here, the camera measures eye closures and yawns. Now imagine I start drifting off. I close my eyes, and we watch the reading change. This is the rules engine’s actual response, explained by PULSAR.": "Aquí la cámara mide el cierre de ojos y los bostezos. Ahora imaginad que empiezo a quedarme dormido. Cierro los ojos y vemos cambiar la lectura. Esta es la respuesta real del motor de reglas, explicada por PULSAR.",
-  "Allow camera access and keep arms relaxed and level. Show the measured indicators briefly, then keep eyes closed for about 20–25 seconds so the rolling eye-closure estimate can increase. The current eye-closure rule is AMBER, not necessarily RED. The model thresholds are prototype assumptions, not a clinical sleep detector. Never advance a cue and claim it triggered an alarm: these buttons only label the stage. If the response does not appear, state that openly and continue at 2:10. Voice defaults to English.": "Permite la cámara y mantén los brazos relajados y al mismo nivel. Enseña brevemente las medidas y mantén los ojos cerrados unos 20–25 segundos para que aumente la estimación de cierre ocular. La regla actual del cierre de ojos es AMBER, no necesariamente RED. Los umbrales son hipótesis del prototipo, no un detector clínico de sueño. Los botones solo marcan la fase: no activan alarmas. Si no aparece la respuesta, dilo y continúa a las 2:10. La voz está configurada en inglés.",
+  "Allow camera access and keep arms relaxed and level. Show the measured indicators briefly, then keep eyes closed for about 20–25 seconds so the rolling eye-closure estimate can increase. The current eye-closure rule is AMBER, not necessarily RED. The model thresholds are prototype assumptions, not a clinical sleep detector. The cue buttons force the HUD's demo state (1 live readings, 2 drowsiness warning, 3 danger and PULSAR’s response): say that the readings are forced, not measured. If the response does not appear, state that openly and continue at 2:10. Voice defaults to English.": "Permite la cámara y mantén los brazos relajados y al mismo nivel. Enseña brevemente las medidas y mantén los ojos cerrados unos 20–25 segundos para que aumente la estimación de cierre ocular. La regla actual del cierre de ojos es AMBER, no necesariamente RED. Los umbrales son hipótesis del prototipo, no un detector clínico de sueño. Los botones fuerzan el estado de demo del HUD (1 lecturas en vivo, 2 aviso de somnolencia, 3 peligro y respuesta de PULSAR): di que las lecturas están forzadas, no medidas. Si no aparece la respuesta, dilo y continúa a las 2:10. La voz está configurada en inglés.",
   "MediaPipe extracts visual signals. A local reactive agent with Gemma adds context and communication; explicit rules determine the health alerts. Whisper and Piper handle voice. Everything runs on the laptop or in the cloud, using NASA references to ground the context.": "MediaPipe extrae señales visuales. Un agente reactivo local con Gemma aporta contexto y comunicación; las reglas explícitas determinan las alertas de salud. Whisper y Piper resuelven la voz. Todo funciona en el portátil o en la nube, con referencias NASA para fundamentar el contexto.",
   "Keep this to twenty seconds. The current fatigue score is heuristic. RLDD and DROZY training with subject-separated validation is planned, not a result to claim. Open Q&A only if asked about the infrastructure, benchmark or source roles.": "No superes veinte segundos. La puntuación actual de somnolencia es heurística. El entrenamiento con RLDD y DROZY y la validación por sujetos están previstos, no son resultados que podamos afirmar. Abre Preguntas solo si piden infraestructura, ensayos o el papel de las fuentes.",
   "Imagine you are the one who makes that mistake. Could you forgive yourself? Vote for PULSAR: to give the crew another chance to act before it is too late.": "Imaginad que sois vosotros quienes cometéis ese error. ¿Os perdonaríais? Votad a PULSAR: para dar a la tripulación una oportunidad más de actuar antes de que sea tarde.",
@@ -1085,7 +1085,7 @@ body[data-presentation="deck"] { background: var(--space); }
   "Skip intro →": "Saltar intro →",
   "Continue →": "Continuar →",
   "Press Enter to enter PULSAR →": "Pulsa Enter para entrar en PULSAR →",
-  "Stage cue only; does not change measurements or alerts.": "Solo marca la fase; no cambia mediciones ni alertas.",
+  "Runs this step in the live HUD: the readings are forced for the demo, not measured.": "Ejecuta este paso en el HUD en vivo: las lecturas se fuerzan para la demo, no se miden.",
   "Start rehearsal timer": "Iniciar cronómetro de ensayo",
   "Pause rehearsal timer": "Pausar cronómetro de ensayo",
   "Crew first": "La persona, primero",
@@ -1167,7 +1167,7 @@ body[data-presentation="deck"] { background: var(--space); }
     });
     languageButtons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.language === lang)));
     window.dispatchEvent(new Event('pulsar-language-change'));
-    try { localStorage.setItem('pulsar-presentation-language', lang); } catch { /* Optional in restricted/file contexts. */ }
+    try { localStorage.setItem('pulsar-presentation-language', lang); localStorage.setItem('pulsar-lang', lang); /* the HUD's own key */ } catch { /* Optional in restricted/file contexts. */ }
     if (updateURL) {
       try {
         const url = new URL(location.href);
@@ -1180,7 +1180,7 @@ body[data-presentation="deck"] { background: var(--space); }
   languageButtons.forEach(button => button.addEventListener('click', () => setLanguage(button.dataset.language)));
   const requested = new URLSearchParams(location.search).get('lang');
   let saved;
-  try { saved = localStorage.getItem('pulsar-presentation-language'); } catch { /* Use the default. */ }
+  try { saved = localStorage.getItem('pulsar-lang') || localStorage.getItem('pulsar-presentation-language'); } catch { /* Use the default. */ }
   setLanguage(['en', 'es'].includes(requested) ? requested : ['en', 'es'].includes(saved) ? saved : 'es', false);
 })();
 </script>
@@ -1524,11 +1524,11 @@ body[data-presentation="deck"] { background: var(--space); }
   function validateURL(value) {
     try {
       const url = new URL(value);
-      if (!['http:', 'https:'].includes(url.protocol) || !['localhost', '127.0.0.1', '[::1]'].includes(url.hostname) || url.username || url.password) return null;
+      if (!['http:', 'https:'].includes(url.protocol) || !['pulsar.alexvinola.com', 'localhost', '127.0.0.1', '[::1]'].includes(url.hostname) || url.username || url.password) return null;
       return url.href;
     } catch { return null; }
   }
-  let demoURL = 'http://localhost:3000/pulsar';
+  let demoURL = 'https://pulsar.alexvinola.com/pulsar';
   try { demoURL = validateURL(sessionStorage.getItem('pulsar-demo-url')) || demoURL; } catch {}
   function renderLabels() {
     status.textContent = t(statusKey);
@@ -1581,7 +1581,7 @@ body[data-presentation="deck"] { background: var(--space); }
   document.getElementById('demo-config').addEventListener('submit', event => {
     event.preventDefault();
     const next = validateURL(input.value);
-    if (!next) { setStatus('Use an HTTP(S) localhost or loopback URL without credentials.'); return; }
+    if (!next) { setStatus('Use an HTTP(S) pulsar.alexvinola.com, localhost or loopback URL without credentials.'); return; }
     unloadDemo();
     demoURL = next;
     input.value = demoURL;
@@ -1593,6 +1593,22 @@ body[data-presentation="deck"] { background: var(--space); }
   openTab.href = demoURL;
   window.addEventListener('pulsar-language-change', renderLabels);
   window.addEventListener('pulsar-demo-stop', unloadDemo);
+  // The HUD follows the presentation's EN/ES switch: it asks for the language when it is ready, and gets it on every change.
+  const sendLanguage = () => {
+    if (!active || !frame.contentWindow) return;
+    const lang = document.documentElement.lang === 'en' ? 'en' : 'es';
+    try { frame.contentWindow.postMessage({ pulsarDemoLang: lang }, new URL(demoURL).origin); } catch {}
+    // A HUD without the message receiver (an older deploy) on the same origin: press its own language button.
+    try { frame.contentDocument.querySelector(`button[lang="${lang}"][aria-pressed="false"]`)?.click(); } catch {}
+  };
+  frame.addEventListener('load', () => [500, 2000, 5000].forEach(ms => setTimeout(sendLanguage, ms)));
+  window.addEventListener('pulsar-language-change', sendLanguage);
+  window.addEventListener('message', event => { if (event.source === frame.contentWindow && event.data?.pulsarDemoReady) sendLanguage(); });
+  // The three cues run their action in the live HUD (it only accepts these three words, from its parent window).
+  window.addEventListener('pulsar-demo-phase', event => {
+    if (!active || !frame.contentWindow) return;
+    try { frame.contentWindow.postMessage({ pulsarDemoPhase: event.detail }, new URL(demoURL).origin); } catch {}
+  });
   renderLabels();
 })();
 </script>
@@ -1617,7 +1633,7 @@ body[data-presentation="deck"] { background: var(--space); }
     notesContent.innerHTML = source.innerHTML;
     if (useAcronym && slides[current].id === 'human') notesContent.querySelector('.note-window').textContent = '0:19–0:35';
     count.textContent = `${current + 1} / ${slides.length}`;
-    document.querySelectorAll('[data-demo-phase]').forEach(button => button.setAttribute('title', t('Stage cue only; does not change measurements or alerts.')));
+    document.querySelectorAll('[data-demo-phase]').forEach(button => button.setAttribute('title', t('Runs this step in the live HUD: the readings are forced for the demo, not measured.')));
   }
   function renderTimer() {
     const seconds = elapsed + (startedAt === null ? 0 : (performance.now() - startedAt) / 1000);
@@ -1682,6 +1698,7 @@ body[data-presentation="deck"] { background: var(--space); }
   document.querySelectorAll('[data-leave-film]').forEach(link => link.addEventListener('click', event => { event.preventDefault(); show(1); }));
   document.querySelectorAll('[data-demo-phase]').forEach(button => button.addEventListener('click', () => {
     document.querySelectorAll('[data-demo-phase]').forEach(other => other.setAttribute('aria-pressed', String(other === button)));
+    window.dispatchEvent(new CustomEvent('pulsar-demo-phase', { detail: button.dataset.demoPhase }));
   }));
   window.addEventListener('keydown', event => {
     if (notes.open || library.open || event.target.closest('input, select, textarea, iframe, [contenteditable="true"]') || event.ctrlKey || event.metaKey || event.altKey) return;
