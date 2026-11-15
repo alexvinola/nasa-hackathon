@@ -6,6 +6,7 @@ Tagline: *Meet P.U.L.S.A.R., your personal health companion in space.*
 | File | Use |
 |---|---|
 | `pulsar-intro.html` | Opening film (41 s, dramatization), followed by a scrollable crew journey and pitch landing page. Open it in a browser and press Play (sound is synthesised in the page, no audio files). Space pauses, ← → seek 5 s, `M` mutes, `F` fullscreen, `R` restarts while viewing the film. Single file, mascot embedded, works offline (without network the fonts fall back to the system ones). To get a video of the opening, record the screen while it plays. |
+| `pulsar-landing.html` | Long landing page: the problem (HRP hazards), the eight capabilities, what you can ask it (real phrases and the prototype's real answers, checked against `director.direct`), how it decides (with a rules playground that mirrors six rules of `backend/assets/rules.json`), uses on Earth (car, truck, train, plane, night shift, remote base), measured numbers, NASA data, roadmap, team and FAQ. It speaks of capabilities, not of the stack. Single file, mascot embedded, works offline; ES/EN selector, `?lang=en`. Earth uses are presented as potential, not validated. Keep its thresholds and figures in step with `rules.json`, `data/out/metrics.json` and `backend/bench/voice_latency.json`. |
 | `pulsar-mascot.png` | Mascot, original render (1536×1024, navy backdrop). |
 | `pulsar-mascot.webp` | Same render, compressed (68 KB) for the web. |
 

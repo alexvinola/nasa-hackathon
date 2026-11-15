@@ -55,6 +55,14 @@ Use the exact goal check, not a substitute. `make goals` runs all checks, includ
 potentially expensive model training; the harness inventory only checks prerequisites.
 The harness does not declare a goal complete or replace independent verification.
 
+## Team
+
+Built for NASA Space Apps 2026 by:
+
+- [Alejandro Gimenez Garulo](https://www.linkedin.com/in/alejandrogiga/), Portfolio Director at Plain Concepts
+- [Samir Ahmimoud](https://www.linkedin.com/in/samir-ahmimoud/), Senior Software Engineer at hiberus
+- [Alejandro Viñola Robles](https://www.linkedin.com/in/alejandrovinola/), Senior GenAI Engineer at hiberus
+
 ## Agents and documentation
 
 - [Agent entry point](AGENTS.md) and [project conventions](CLAUDE.md).
