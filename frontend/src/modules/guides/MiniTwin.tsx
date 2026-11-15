@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
+import { createRenderer, releaseRenderer } from "@/modules/hud/glRenderer";
 import { HudPanel } from "@/modules/hud/HudPanel";
 import { HEALTH_POINTS } from "./healthPoints";
 import { useLang, useT } from "@/i18n";
@@ -28,7 +29,7 @@ function Figure() {
   useEffect(() => {
     let renderer: THREE.WebGLRenderer;
     try {
-      renderer = new THREE.WebGLRenderer({ canvas: canvasRef.current!, alpha: true, antialias: true });
+      renderer = createRenderer(canvasRef.current!, true);
     } catch {
       setFailed(true); // no WebGL: the markers alone still open the guides
       return;
@@ -46,7 +47,7 @@ function Figure() {
     return () => {
       cancelAnimationFrame(raf);
       disposeScene(scene);
-      renderer.dispose();
+      releaseRenderer(renderer);
     };
   }, []);
 

@@ -17,9 +17,10 @@ from functools import cache
 from typing import Any
 
 from pulsar import settings
-from pulsar.hud_actions import NAMES, SAYS
+from pulsar.hud_actions import MAX_PER_REQUEST, NAMES, SAYS, SIGNALS, UNITS, _fits
 
 CATALOGUE = json.loads((settings.BACKEND_DIR / "assets" / "hud_skill.json").read_text(encoding="utf-8"))["actions"]
+BY_LOWER = {key.lower(): key for key in CATALOGUE}  # the answer is read in lower case
 NONE = "none"
 MAX_WORDS = 30  # a request longer than this is a conversation, not a command
 
@@ -43,7 +44,8 @@ def system_prompt() -> str:
     return (
         "You route what an astronaut says to ONE action of their health-companion screen.\n"
         "Pick the action whose description fits what they ask for or need, in any language and however they put it.\n"
-        "Answer with the action id only, nothing else. If no action fits (a question, a chat, anything else), answer "
+        "Answer with the action id only, nothing else; an action that takes numbers is answered as its id and then the "
+        "numbers, as digits, in the order its description gives (for example: log_water 3). If no action fits (a question, a chat, anything else), answer "
         f"{NONE}.\nYou never judge anyone's health: you only choose the panel that fits the request.\nActions:\n"
         + "\n".join(lines)
     )
@@ -52,16 +54,38 @@ def system_prompt() -> str:
 def pick(answer: str) -> str | None:
     """The catalogue id the model's answer names, or None (`none`, or anything not in the closed list)."""
     for word in re.findall(r"[a-z_]+", answer.lower()):
-        if word in CATALOGUE:
-            return word
+        if word in BY_LOWER:
+            return BY_LOWER[word]
     return None
 
 
-def reply(action_id: str, lang: str) -> dict[str, Any]:
+def reply(action_id: str, lang: str, answer: str = "") -> dict[str, Any] | None:
+    """The HUD action for catalogue entry `action_id`. An entry that takes numbers (a habit amount, a measurement) reads
+    them from the model's `answer` and checks them like the fixed phrases do: against the contract's bounds and the
+    habit limits. None when the numbers are missing or do not fit, so the request falls through to the usual answer."""
     entry = CATALOGUE[action_id]
-    name = NAMES[lang].get(entry.get("name", ""), "")
-    # An eye-rest exercise and "the eyes" of the health points share a word: the exercise name is the one used here.
-    return {"say": SAYS[lang][entry["say"]].format(name=name), "action": dict(entry["action"])}
+    names = NAMES[lang]
+    name = names.get(entry.get("name", ""), "")
+    action = dict(entry["action"])
+    fields: dict[str, Any] = {"name": name}
+    if entry.get("takes"):
+        numbers = [float(n.replace(",", ".")) for n in re.findall(r"\d+(?:[.,]\d+)?", answer)]
+        if len(numbers) < len(entry["takes"]):
+            return None
+        numbers = numbers[: len(entry["takes"])]
+        if action["type"] == "log_habit":
+            amount = round(numbers[0], 1)
+            if not 0 < amount <= MAX_PER_REQUEST[action["habit"]]:
+                return None
+            action["amount"] = amount
+            fields.update(amount=int(amount) if amount == int(amount) else amount, unit=names[UNITS[action["habit"]]])
+        else:
+            values = dict(zip(SIGNALS[action["signal"]], numbers))
+            if not all(_fits(key, value) for key, value in values.items()):
+                return None
+            action["values"] = values
+            fields["value"] = "/".join(str(int(v) if v == int(v) else v) for v in values.values())
+    return {"say": SAYS[lang][entry["say"]].format(**fields), "action": action}
 
 
 def choose(text: str, lang: str | None, chat: Callable[..., str]) -> dict[str, Any] | None:
@@ -71,7 +95,7 @@ def choose(text: str, lang: str | None, chat: Callable[..., str]) -> dict[str, A
     lang = settings.pick_lang(lang)
     answer = chat(
         [{"role": "system", "content": system_prompt()}, {"role": "user", "content": text}],
-        options={"temperature": 0, "num_predict": 8, "stop": ["\n"]},
+        options={"temperature": 0, "num_predict": 12, "stop": ["\n"]},
     )
     action_id = pick(answer)
-    return reply(action_id, lang) if action_id else None
+    return reply(action_id, lang, answer) if action_id else None

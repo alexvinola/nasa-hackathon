@@ -25,13 +25,14 @@ MAX_ROUNDS = 3
 
 # What makes a question one for the sensors; the rest of the director's questions never reach this module.
 ASKS_READINGS = re.compile(
-    r"pulso|pulsaci|latido|card[ií]ac|heart|pulse|bpm|co2|co₂|di[oó]xido|carbono|cabin|radiaci|radiation|dosis|msv|dos[ií]metro|constantes|vitales|vitals|lecturas",
+    r"pulso|pulsaci|latido|card[ií]ac|heart|pulse|bpm|co2|co₂|di[oó]xido|carbono|cabin|radiaci|radiation|dosis|msv|dos[ií]metro|constantes|vitales|vitals|lecturas|"
+    r"c[oó]mo (estoy|me encuentro)|c[oó]mo est[aá]n mis|mi estado|how am i\b(?! doing)|my status|my readings",
     re.I,
 )
 FOR_HEART = re.compile(r"pulso|pulsaci|latido|card[ií]ac|heart|pulse|bpm", re.I)
 FOR_CO2 = re.compile(r"co2|co₂|di[oó]xido|carbono|cabin|aire", re.I)
 FOR_RADIATION = re.compile(r"radiaci|radiation|dosis|msv|dos[ií]metro", re.I)
-FOR_VITALS = re.compile(r"constantes|vitales|vitals|lecturas", re.I)
+FOR_VITALS = re.compile(r"constantes|vitales|vitals|lecturas|c[oó]mo (estoy|me encuentro)|c[oó]mo est[aá]n mis|mi estado|how am i|my status|my readings", re.I)
 
 _SYSTEM = """You are PULSAR, the astronaut's warm, calm onboard companion. Your words are read aloud. Always answer in {language}.
 To tell a reading you MUST call the matching tool first: never guess or remember a value.

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
+import { createRenderer, releaseRenderer } from "@/modules/hud/glRenderer";
 import { useT } from "@/i18n";
 import { BLOOD, ORBIT, PULSE, SHELL, SKIN, UP, VISOR, ball, disposeScene, group, lightScene, limb, mk, rbox, ring, rod, standingFigure, type V3 } from "./mannequin";
 import { bust, forearmAndHand } from "./GuideAnimation";
@@ -357,7 +358,7 @@ export function HealthAnimation({ point, withMate, label, steps, onStep }: { poi
     let renderer: THREE.WebGLRenderer;
     try {
       if (!build) throw new Error(`no animation for ${point.id}`);
-      renderer = new THREE.WebGLRenderer({ canvas: canvasRef.current!, alpha: true, antialias: true });
+      renderer = createRenderer(canvasRef.current!, true);
     } catch {
       setFailed(true); // no WebGL: the lists beside it still carry the guide
       return;
@@ -466,7 +467,7 @@ export function HealthAnimation({ point, withMate, label, steps, onStep }: { poi
     return () => {
       cancelAnimationFrame(raf);
       disposeScene(scene);
-      renderer.dispose();
+      releaseRenderer(renderer);
     };
   }, [point, withMate, steps]);
 

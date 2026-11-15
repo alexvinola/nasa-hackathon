@@ -3,110 +3,833 @@
   "actions": {
     "relax_breathe": {
       "when": "The astronaut wants to calm down, lower stress, anxiety, nerves or worry, slow down, wind down or breathe. Slow guided breathing.",
-      "examples": ["estoy agobiado", "necesito calmarme", "tengo los nervios de punta", "quiero respirar un poco", "I feel stressed", "help me calm down"],
-      "cues": ["agobi", "nervios", "estr[eé]s", "ansied", "ansios", "calm", "tranquil", "stress", "anxi", "worr", "panic", "p[aá]nico", "desconect", "respir", "breath"],
-      "action": {"type": "open_relax", "exercise": "breathe"},
+      "examples": [
+        "estoy agobiado",
+        "necesito calmarme",
+        "tengo los nervios de punta",
+        "quiero respirar un poco",
+        "I feel stressed",
+        "help me calm down"
+      ],
+      "cues": [
+        "agobi",
+        "nervios",
+        "estr[eé]s",
+        "ansied",
+        "ansios",
+        "calm",
+        "tranquil",
+        "stress",
+        "anxi",
+        "worr",
+        "panic",
+        "p[aá]nico",
+        "desconect",
+        "respir",
+        "breath"
+      ],
+      "action": {
+        "type": "open_relax",
+        "exercise": "breathe"
+      },
       "say": "relax_exercise",
       "name": "breathe"
     },
     "relax_eyes": {
       "when": "The astronaut's eyes are tired, dry, sore or strained, from looking at screens or for a long time. Rest the eyes.",
-      "examples": ["me duelen los ojos", "tengo la vista cansada", "los ojos se me cierran", "my eyes are tired", "I need to rest my eyes"],
-      "cues": ["ojos", "vista", "mirada", "eyes", "eyesight", "screen", "pantalla"],
-      "action": {"type": "open_relax", "exercise": "eyes"},
+      "examples": [
+        "me duelen los ojos",
+        "tengo la vista cansada",
+        "los ojos se me cierran",
+        "my eyes are tired",
+        "I need to rest my eyes"
+      ],
+      "cues": [
+        "ojos",
+        "vista",
+        "mirada",
+        "eyes",
+        "eyesight",
+        "screen",
+        "pantalla"
+      ],
+      "action": {
+        "type": "open_relax",
+        "exercise": "eyes"
+      },
       "say": "relax_exercise",
       "name": "eyes"
     },
     "relax_body": {
       "when": "The astronaut feels muscle tension or stiffness in the neck, shoulders, back, jaw, arms or hands, or wants to stretch or let the tension go. Body relaxation.",
-      "examples": ["tengo el cuello cargado", "quiero soltar tensión", "me duelen los hombros", "estoy muy tenso", "my shoulders are tight", "I need to stretch"],
-      "cues": ["cuello", "hombro", "espalda", "mand[ií]bula", "contractura", "tenso", "tensa", "tensi[oó]n", "rigid", "estir", "neck", "shoulder", "back", "jaw", "stiff", "tight", "tension", "stretch", "muscul"],
-      "action": {"type": "open_relax", "exercise": "body"},
+      "examples": [
+        "tengo el cuello cargado",
+        "quiero soltar tensión",
+        "me duelen los hombros",
+        "estoy muy tenso",
+        "my shoulders are tight",
+        "I need to stretch"
+      ],
+      "cues": [
+        "cuello",
+        "hombro",
+        "espalda",
+        "mand[ií]bula",
+        "contractura",
+        "tenso",
+        "tensa",
+        "tensi[oó]n",
+        "rigid",
+        "estir",
+        "neck",
+        "shoulder",
+        "back",
+        "jaw",
+        "stiff",
+        "tight",
+        "tension",
+        "stretch",
+        "muscul"
+      ],
+      "action": {
+        "type": "open_relax",
+        "exercise": "body"
+      },
       "say": "relax_exercise",
       "name": "body"
     },
     "relax_menu": {
       "when": "The astronaut wants to relax, take a break or a pause, rest, disconnect or switch off, with no preference for which exercise. Opens the relaxation menu so they pick.",
-      "examples": ["quiero relajarme", "necesito un descanso", "una pausa por favor", "I need a break", "let me unwind"],
-      "cues": ["relaj", "descans", "pausa", "break", "rest", "unwind", "relax", "desconect"],
-      "action": {"type": "open_relax", "exercise": null},
+      "examples": [
+        "quiero relajarme",
+        "necesito un descanso",
+        "una pausa por favor",
+        "I need a break",
+        "let me unwind"
+      ],
+      "cues": [
+        "relaj",
+        "descans",
+        "pausa",
+        "break",
+        "rest",
+        "unwind",
+        "relax",
+        "desconect"
+      ],
+      "action": {
+        "type": "open_relax",
+        "exercise": null
+      },
       "say": "relax_menu"
     },
     "measure_form": {
       "when": "The astronaut wants to type in or log measurements in general, without naming which one.",
-      "examples": ["quiero apuntar mis medidas", "abre el formulario", "I want to log my readings"],
-      "cues": ["medid", "formulario", "apunt", "readings", "form"],
-      "action": {"type": "open_measure", "signal": null},
+      "examples": [
+        "quiero apuntar mis medidas",
+        "abre el formulario",
+        "I want to log my readings"
+      ],
+      "cues": [
+        "medid",
+        "formulario",
+        "apunt",
+        "readings",
+        "form"
+      ],
+      "action": {
+        "type": "open_measure",
+        "signal": null
+      },
       "say": "measure_form"
     },
     "measure_heart": {
       "when": "The astronaut asks how or where to take their pulse or heart rate, or wants that measurement panel.",
-      "examples": ["quiero tomarme el pulso", "how do I check my pulse"],
-      "cues": ["pulso", "latido", "card[ií]ac", "pulse", "heart"],
-      "action": {"type": "open_measure", "signal": "biometrics.heartRateBpm"},
+      "examples": [
+        "quiero tomarme el pulso",
+        "how do I check my pulse"
+      ],
+      "cues": [
+        "pulso",
+        "latido",
+        "card[ií]ac",
+        "pulse",
+        "heart"
+      ],
+      "action": {
+        "type": "open_measure",
+        "signal": "biometrics.heartRateBpm"
+      },
       "say": "measure_signal",
       "name": "biometrics.heartRateBpm"
     },
     "measure_pressure": {
       "when": "The astronaut asks how or where to take their blood pressure, or wants that measurement panel. Not for muscle tension.",
-      "examples": ["quiero medirme la tensión arterial", "how do I take my blood pressure"],
-      "cues": ["arterial", "presi[oó]n", "pressure", "tensi[oó]metro"],
-      "action": {"type": "open_measure", "signal": "selfReport.bloodPressure"},
+      "examples": [
+        "quiero medirme la tensión arterial",
+        "how do I take my blood pressure"
+      ],
+      "cues": [
+        "arterial",
+        "presi[oó]n",
+        "pressure",
+        "tensi[oó]metro"
+      ],
+      "action": {
+        "type": "open_measure",
+        "signal": "selfReport.bloodPressure"
+      },
       "say": "measure_signal",
       "name": "selfReport.bloodPressure"
     },
     "measure_glucose": {
       "when": "The astronaut asks about blood sugar or glucose, or how to measure it.",
-      "examples": ["cómo me mido el azúcar", "check my glucose"],
-      "cues": ["glucos", "az[uú]car", "glucose", "sugar"],
-      "action": {"type": "open_measure", "signal": "selfReport.glucoseMgDl"},
+      "examples": [
+        "cómo me mido el azúcar",
+        "check my glucose"
+      ],
+      "cues": [
+        "glucos",
+        "az[uú]car",
+        "glucose",
+        "sugar"
+      ],
+      "action": {
+        "type": "open_measure",
+        "signal": "selfReport.glucoseMgDl"
+      },
       "say": "measure_signal",
       "name": "selfReport.glucoseMgDl"
     },
     "measure_temperature": {
       "when": "The astronaut asks about body temperature or fever, or how to take it.",
-      "examples": ["creo que tengo fiebre", "cómo me tomo la temperatura", "take my temperature"],
-      "cues": ["temperatura", "fiebre", "temperature", "fever"],
-      "action": {"type": "open_measure", "signal": "selfReport.bodyTempC"},
+      "examples": [
+        "creo que tengo fiebre",
+        "cómo me tomo la temperatura",
+        "take my temperature"
+      ],
+      "cues": [
+        "temperatura",
+        "fiebre",
+        "temperature",
+        "fever"
+      ],
+      "action": {
+        "type": "open_measure",
+        "signal": "selfReport.bodyTempC"
+      },
       "say": "measure_signal",
       "name": "selfReport.bodyTempC"
     },
     "measure_sleep": {
       "when": "The astronaut asks about their sleep, hours slept, or how to log it.",
-      "examples": ["dónde apunto lo que dormí", "log my sleep"],
-      "cues": ["sue[ñn]o", "dorm", "durm", "sleep"],
-      "action": {"type": "open_measure", "signal": "selfReport.sleepHoursLast24h"},
+      "examples": [
+        "dónde apunto lo que dormí",
+        "log my sleep"
+      ],
+      "cues": [
+        "sue[ñn]o",
+        "dorm",
+        "durm",
+        "sleep"
+      ],
+      "action": {
+        "type": "open_measure",
+        "signal": "selfReport.sleepHoursLast24h"
+      },
       "say": "measure_signal",
       "name": "selfReport.sleepHoursLast24h"
     },
     "measure_mood": {
       "when": "The astronaut wants to log or check their mood or how they feel emotionally.",
-      "examples": ["quiero apuntar mi ánimo", "log my mood"],
-      "cues": ["[aá]nimo", "humor", "mood", "emocion"],
-      "action": {"type": "open_measure", "signal": "selfReport.mood"},
+      "examples": [
+        "quiero apuntar mi ánimo",
+        "log my mood"
+      ],
+      "cues": [
+        "[aá]nimo",
+        "humor",
+        "mood",
+        "emocion"
+      ],
+      "action": {
+        "type": "open_measure",
+        "signal": "selfReport.mood"
+      },
       "say": "measure_signal",
       "name": "selfReport.mood"
     },
     "habits_open": {
       "when": "The astronaut wants to see their daily habits panel: exercise, water, sleep and relaxation of today.",
-      "examples": ["quiero ver mis hábitos", "show my habits"],
-      "cues": ["h[aá]bito", "habit"],
-      "action": {"type": "open_habits", "expand": false},
+      "examples": [
+        "quiero ver mis hábitos",
+        "show my habits"
+      ],
+      "cues": [
+        "h[aá]bito",
+        "habit"
+      ],
+      "action": {
+        "type": "open_habits",
+        "expand": false
+      },
       "say": "habits_open"
     },
     "habits_history": {
       "when": "The astronaut wants the history, the month view or the charts of their habits.",
-      "examples": ["cómo ha ido el mes", "show my habit history"],
-      "cues": ["historial", "history", "mes\\b", "month", "gr[aá]fic", "chart"],
-      "action": {"type": "open_habits", "expand": true},
+      "examples": [
+        "cómo ha ido el mes",
+        "show my habit history"
+      ],
+      "cues": [
+        "historial",
+        "history",
+        "mes\\b",
+        "month",
+        "gr[aá]fic",
+        "chart"
+      ],
+      "action": {
+        "type": "open_habits",
+        "expand": true
+      },
       "say": "habits_expand"
     },
     "close_panels": {
       "when": "The astronaut wants to close, hide or clear the open windows and panels.",
-      "examples": ["quita eso de en medio", "close the windows"],
-      "cues": ["quita", "cierra", "oculta", "close", "hide", "ventana", "window"],
-      "action": {"type": "close_panels"},
+      "examples": [
+        "quita eso de en medio",
+        "close the windows"
+      ],
+      "cues": [
+        "quita",
+        "cierra",
+        "oculta",
+        "close",
+        "hide",
+        "ventana",
+        "window"
+      ],
+      "action": {
+        "type": "close_panels"
+      },
       "say": "close"
+    },
+    "lang_en": {
+      "when": "The astronaut wants the screen and PULSAR's voice in English.",
+      "examples": [
+        "háblame en inglés",
+        "switch to English"
+      ],
+      "cues": [
+        "ingl[eé]s",
+        "english"
+      ],
+      "action": {
+        "type": "set_language",
+        "lang": "en"
+      },
+      "say": "lang_en"
+    },
+    "lang_es": {
+      "when": "The astronaut wants the screen and PULSAR's voice in Spanish.",
+      "examples": [
+        "cambia a español",
+        "switch to Spanish"
+      ],
+      "cues": [
+        "espa[ñn]ol",
+        "spanish",
+        "castellano"
+      ],
+      "action": {
+        "type": "set_language",
+        "lang": "es"
+      },
+      "say": "lang_es"
+    },
+    "dev_open": {
+      "when": "The astronaut wants the developer, debug or settings menu open.",
+      "examples": [
+        "abre el menú de desarrollo",
+        "open the debug menu"
+      ],
+      "cues": [
+        "desarroll",
+        "depuraci",
+        "debug",
+        "developer",
+        "ajustes",
+        "settings",
+        "engranaje"
+      ],
+      "action": {
+        "type": "dev_menu",
+        "open": true
+      },
+      "say": "dev_open"
+    },
+    "dev_close": {
+      "when": "The astronaut wants the developer, debug or settings menu closed.",
+      "examples": [
+        "cierra el menú de desarrollo",
+        "close the debug menu"
+      ],
+      "cues": [
+        "desarroll",
+        "depuraci",
+        "debug",
+        "developer",
+        "ajustes",
+        "settings",
+        "engranaje"
+      ],
+      "action": {
+        "type": "dev_menu",
+        "open": false
+      },
+      "say": "dev_close"
+    },
+    "mesh_on": {
+      "when": "The astronaut wants the face mesh drawn over the camera.",
+      "examples": [
+        "activa la malla facial",
+        "show the face mesh"
+      ],
+      "cues": [
+        "malla",
+        "mesh",
+        "m[aá]scara",
+        "mask"
+      ],
+      "action": {
+        "type": "set_overlay",
+        "target": "mesh",
+        "on": true
+      },
+      "say": "overlay_on",
+      "name": "mesh"
+    },
+    "mesh_off": {
+      "when": "The astronaut wants the face mesh hidden.",
+      "examples": [
+        "quita la malla facial",
+        "hide the face mesh"
+      ],
+      "cues": [
+        "malla",
+        "mesh",
+        "m[aá]scara",
+        "mask"
+      ],
+      "action": {
+        "type": "set_overlay",
+        "target": "mesh",
+        "on": false
+      },
+      "say": "overlay_off",
+      "name": "mesh"
+    },
+    "ai_check_on": {
+      "when": "The astronaut wants the AI cross-check of the camera measurements switched on.",
+      "examples": [
+        "activa la comprobación de IA",
+        "turn on the AI check"
+      ],
+      "cues": [
+        "comprobaci[oó]n",
+        "verificaci[oó]n",
+        "ai check",
+        "gemma"
+      ],
+      "action": {
+        "type": "set_overlay",
+        "target": "ai_check",
+        "on": true
+      },
+      "say": "overlay_on",
+      "name": "ai_check"
+    },
+    "ai_check_off": {
+      "when": "The astronaut wants the AI cross-check of the camera measurements switched off.",
+      "examples": [
+        "apaga la comprobación de IA",
+        "turn off the AI check"
+      ],
+      "cues": [
+        "comprobaci[oó]n",
+        "verificaci[oó]n",
+        "ai check",
+        "gemma"
+      ],
+      "action": {
+        "type": "set_overlay",
+        "target": "ai_check",
+        "on": false
+      },
+      "say": "overlay_off",
+      "name": "ai_check"
+    },
+    "health_head": {
+      "when": "The astronaut asks what could be wrong with, or what to do about, the head, the mind, headaches or thinking: opens that body zone's symptoms and what-to-do panel.",
+      "examples": [
+        "síntomas de head",
+        "symptoms: head"
+      ],
+      "cues": [
+        "cabeza",
+        "mente",
+        "head",
+        "mind"
+      ],
+      "action": {
+        "type": "open_health",
+        "id": "head"
+      },
+      "say": "health_open",
+      "name": "head"
+    },
+    "health_eyes": {
+      "when": "The astronaut asks what could be wrong with, or what to do about, the eyes or sight: opens that body zone's symptoms and what-to-do panel.",
+      "examples": [
+        "síntomas de eyes",
+        "symptoms: eyes"
+      ],
+      "cues": [
+        "ojos",
+        "vista",
+        "eyes",
+        "sight"
+      ],
+      "action": {
+        "type": "open_health",
+        "id": "eyes"
+      },
+      "say": "health_open",
+      "name": "eyes_health"
+    },
+    "health_heart": {
+      "when": "The astronaut asks what could be wrong with, or what to do about, the heart or circulation: opens that body zone's symptoms and what-to-do panel.",
+      "examples": [
+        "síntomas de heart",
+        "symptoms: heart"
+      ],
+      "cues": [
+        "coraz[oó]n",
+        "heart"
+      ],
+      "action": {
+        "type": "open_health",
+        "id": "heart"
+      },
+      "say": "health_open",
+      "name": "heart"
+    },
+    "health_lungs": {
+      "when": "The astronaut asks what could be wrong with, or what to do about, the lungs or breathing difficulty: opens that body zone's symptoms and what-to-do panel.",
+      "examples": [
+        "síntomas de lungs",
+        "symptoms: lungs"
+      ],
+      "cues": [
+        "pulmon",
+        "lungs"
+      ],
+      "action": {
+        "type": "open_health",
+        "id": "lungs"
+      },
+      "say": "health_open",
+      "name": "lungs"
+    },
+    "health_gut": {
+      "when": "The astronaut asks what could be wrong with, or what to do about, the stomach or digestion: opens that body zone's symptoms and what-to-do panel.",
+      "examples": [
+        "síntomas de gut",
+        "symptoms: gut"
+      ],
+      "cues": [
+        "est[oó]mago",
+        "digest",
+        "stomach",
+        "gut"
+      ],
+      "action": {
+        "type": "open_health",
+        "id": "gut"
+      },
+      "say": "health_open",
+      "name": "gut"
+    },
+    "health_skin": {
+      "when": "The astronaut asks what could be wrong with, or what to do about, the skin: opens that body zone's symptoms and what-to-do panel.",
+      "examples": [
+        "síntomas de skin",
+        "symptoms: skin"
+      ],
+      "cues": [
+        "piel",
+        "skin"
+      ],
+      "action": {
+        "type": "open_health",
+        "id": "skin"
+      },
+      "say": "health_open",
+      "name": "skin"
+    },
+    "health_hands": {
+      "when": "The astronaut asks what could be wrong with, or what to do about, the hands: opens that body zone's symptoms and what-to-do panel.",
+      "examples": [
+        "síntomas de hands",
+        "symptoms: hands"
+      ],
+      "cues": [
+        "manos",
+        "hands"
+      ],
+      "action": {
+        "type": "open_health",
+        "id": "hands"
+      },
+      "say": "health_open",
+      "name": "hands"
+    },
+    "health_spine": {
+      "when": "The astronaut asks what could be wrong with, or what to do about, the spine or back: opens that body zone's symptoms and what-to-do panel.",
+      "examples": [
+        "síntomas de spine",
+        "symptoms: spine"
+      ],
+      "cues": [
+        "columna",
+        "spine"
+      ],
+      "action": {
+        "type": "open_health",
+        "id": "spine"
+      },
+      "say": "health_open",
+      "name": "spine"
+    },
+    "health_legs": {
+      "when": "The astronaut asks what could be wrong with, or what to do about, the legs: opens that body zone's symptoms and what-to-do panel.",
+      "examples": [
+        "síntomas de legs",
+        "symptoms: legs"
+      ],
+      "cues": [
+        "piernas",
+        "legs"
+      ],
+      "action": {
+        "type": "open_health",
+        "id": "legs"
+      },
+      "say": "health_open",
+      "name": "legs"
+    },
+    "log_exercise": {
+      "when": "The astronaut says they did some exercise or workout; the number is the minutes (write hours as minutes).",
+      "examples": [
+        "he hecho media hora de pesas",
+        "I ran for 20 minutes"
+      ],
+      "cues": [
+        "ejercici",
+        "entren",
+        "gimnasi",
+        "cardio",
+        "corr[ií]",
+        "correr",
+        "pesas",
+        "yoga",
+        "workout",
+        "exercis",
+        "gym",
+        "\bran\b"
+      ],
+      "action": {
+        "type": "log_habit",
+        "habit": "exercise"
+      },
+      "say": "habit_log",
+      "name": "exercise",
+      "takes": [
+        "amount"
+      ]
+    },
+    "log_water": {
+      "when": "The astronaut says they drank water; the number is the glasses.",
+      "examples": [
+        "me he bebido tres vasos",
+        "I had two glasses of water"
+      ],
+      "cues": [
+        "agua",
+        "vasos?\b",
+        "beb[ií]",
+        "hidrat",
+        "water",
+        "glass",
+        "drank"
+      ],
+      "action": {
+        "type": "log_habit",
+        "habit": "water"
+      },
+      "say": "habit_log",
+      "name": "water",
+      "takes": [
+        "amount"
+      ]
+    },
+    "log_relax": {
+      "when": "The astronaut says they did a relaxation or breathing session; the number is the sessions.",
+      "examples": [
+        "he hecho una sesión de relajación",
+        "I did a relaxation session"
+      ],
+      "cues": [
+        "sesi[oó]n",
+        "session"
+      ],
+      "action": {
+        "type": "log_habit",
+        "habit": "relax"
+      },
+      "say": "habit_log",
+      "name": "relax",
+      "takes": [
+        "amount"
+      ]
+    },
+    "set_heartRateBpm": {
+      "when": "The astronaut tells you a value to type in: heart rate in beats per minute. Write the id then the number(s) in that order.",
+      "examples": [
+        "mi heartRateBpm es 70"
+      ],
+      "cues": [
+        "pulso",
+        "latido",
+        "pulse",
+        "heart",
+        "bpm"
+      ],
+      "action": {
+        "type": "set_measure",
+        "signal": "biometrics.heartRateBpm"
+      },
+      "say": "measure_set",
+      "name": "biometrics.heartRateBpm",
+      "takes": [
+        "heartRateBpm"
+      ]
+    },
+    "set_bloodPressure": {
+      "when": "The astronaut tells you a value to type in: blood pressure: top number then bottom number. Write the id then the number(s) in that order.",
+      "examples": [
+        "mi bloodPressure es 70"
+      ],
+      "cues": [
+        "tensi[oó]n",
+        "presi[oó]n",
+        "pressure"
+      ],
+      "action": {
+        "type": "set_measure",
+        "signal": "selfReport.bloodPressure"
+      },
+      "say": "measure_set",
+      "name": "selfReport.bloodPressure",
+      "takes": [
+        "systolic",
+        "diastolic"
+      ]
+    },
+    "set_glucoseMgDl": {
+      "when": "The astronaut tells you a value to type in: glucose in mg/dL. Write the id then the number(s) in that order.",
+      "examples": [
+        "mi glucoseMgDl es 70"
+      ],
+      "cues": [
+        "glucos",
+        "az[uú]car",
+        "glucose",
+        "sugar"
+      ],
+      "action": {
+        "type": "set_measure",
+        "signal": "selfReport.glucoseMgDl"
+      },
+      "say": "measure_set",
+      "name": "selfReport.glucoseMgDl",
+      "takes": [
+        "glucoseMgDl"
+      ]
+    },
+    "set_bodyTempC": {
+      "when": "The astronaut tells you a value to type in: body temperature in degrees Celsius. Write the id then the number(s) in that order.",
+      "examples": [
+        "mi bodyTempC es 70"
+      ],
+      "cues": [
+        "temperatura",
+        "fiebre",
+        "temperature",
+        "fever"
+      ],
+      "action": {
+        "type": "set_measure",
+        "signal": "selfReport.bodyTempC"
+      },
+      "say": "measure_set",
+      "name": "selfReport.bodyTempC",
+      "takes": [
+        "bodyTempC"
+      ]
+    },
+    "set_sleepHoursLast24h": {
+      "when": "The astronaut tells you a value to type in: hours slept in the last 24 hours. Write the id then the number(s) in that order.",
+      "examples": [
+        "mi sleepHoursLast24h es 70"
+      ],
+      "cues": [
+        "sue[ñn]o",
+        "dorm",
+        "durm",
+        "sleep",
+        "slept"
+      ],
+      "action": {
+        "type": "set_measure",
+        "signal": "selfReport.sleepHoursLast24h"
+      },
+      "say": "measure_set",
+      "name": "selfReport.sleepHoursLast24h",
+      "takes": [
+        "sleepHoursLast24h"
+      ]
+    },
+    "set_mood": {
+      "when": "The astronaut tells you a value to type in: mood from 1 to 5. Write the id then the number(s) in that order.",
+      "examples": [
+        "mi mood es 70"
+      ],
+      "cues": [
+        "[aá]nimo",
+        "humor",
+        "mood"
+      ],
+      "action": {
+        "type": "set_measure",
+        "signal": "selfReport.mood"
+      },
+      "say": "measure_set",
+      "name": "selfReport.mood",
+      "takes": [
+        "mood"
+      ]
     }
   }
 }

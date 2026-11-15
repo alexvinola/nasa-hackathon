@@ -44,7 +44,7 @@ export function FaceOverlay({
 }) {
   const t = useT();
   const canvas = useRef<HTMLCanvasElement>(null);
-  const [show, setShow] = useState(false); // the mesh drawing is opt-in (M)
+  const [show, setShow] = useState(true); // the mesh drawing is on by default (M toggles it)
   // On by default, as asked: each check is a Gemma call on the same frame, so a laptop without a GPU may see the
   // face model stutter; C turns it off.
   const [checking, setChecking] = useState(true);

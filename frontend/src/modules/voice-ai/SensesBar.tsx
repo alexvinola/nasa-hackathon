@@ -14,7 +14,7 @@ const ON = "border-pulse bg-pulse text-space";
 /**
  * PULSAR's controls. Nothing here runs on its own: SEND answers what was typed, HOLD TO TALK records while the
  * mic button (or the space bar) is held and sends when it is released. PULSAR reads each new line of its own aloud
- * (the S key stops it or repeats it). The input, the mic and the send arrow sit on one row, like a chat.
+ * (the S key stops it or repeats it). The input, the send arrow and the mic sit on one row, like a chat.
  */
 export function SensesBar({
   line,
@@ -122,6 +122,9 @@ export function SensesBar({
             aria-label={t("voice.senses.inputLabel")}
             className="min-w-0 flex-1 border-2 border-shell bg-space/95 px-3 py-2 text-lg tracking-normal text-white outline-none placeholder:text-shell/70 focus:border-pulse"
           />
+          <button type="submit" aria-label={t("voice.senses.send")} title={t("voice.senses.send")} disabled={!typed.trim()} className={`${BUTTON} grid place-items-center px-3 ${ON}`}>
+            <svg aria-hidden viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 19V5M5 12l7-7 7 7" /></svg>
+          </button>
           <button
             type="button"
             aria-pressed={talk === "recording"}
@@ -135,9 +138,6 @@ export function SensesBar({
             className={`${BUTTON} grid place-items-center px-3 touch-none select-none ${talk === "recording" ? "animate-pulse border-red-500 bg-red-600 text-white" : OFF}`}
           >
             <svg aria-hidden viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="2" width="6" height="12" rx="3" /><path d="M5 11a7 7 0 0 0 14 0M12 18v4" /></svg>
-          </button>
-          <button type="submit" aria-label={t("voice.senses.send")} title={t("voice.senses.send")} disabled={!typed.trim()} className={`${BUTTON} grid place-items-center px-3 ${ON}`}>
-            <svg aria-hidden viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 19V5M5 12l7-7 7 7" /></svg>
           </button>
         </form>
       </div>

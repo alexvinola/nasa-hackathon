@@ -107,3 +107,8 @@ def test_advice_nobody_asked_for_is_dropped_when_all_is_within_limits(monkeypatc
     scripted(monkeypatch, ask_tool("get_radiation"),
              {"content": "La radiación es de 0.8 mSv. Estoy contigo, vamos paso a paso. Revisa el sistema de soporte vital."})
     assert readings.answer("¿Cómo está la radiación?", hud_telemetry())[0] == "La dosis de radiación es de 0.8 mSv."
+
+
+@pytest.mark.parametrize("question", ["dime cómo estoy", "¿Cómo me encuentro?", "how am I", "dime mi estado"])
+def test_how_am_i_goes_to_the_readings(question):
+    assert readings.ASKS_READINGS.search(question) and readings.FOR_VITALS.search(question)

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
+import { createRenderer, releaseRenderer } from "@/modules/hud/glRenderer";
 import { useT } from "@/i18n";
 import { BLOOD, ORBIT, PULSE, SHELL, SITE, SKIN, UP, VISOR, arc, ball, disposeScene, group, lightScene, limb, mk, ring, rbox, rod, standingFigure, type V3 } from "./mannequin";
 
@@ -269,7 +270,7 @@ export function GuideAnimation({ signal, focus, label }: { signal: string; focus
     let renderer: THREE.WebGLRenderer;
     try {
       if (!build) throw new Error(`no animation for ${signal}`);
-      renderer = new THREE.WebGLRenderer({ canvas: canvasRef.current!, alpha: true, antialias: true });
+      renderer = createRenderer(canvasRef.current!, true);
     } catch {
       setFailed(true); // no WebGL: the numbered steps still carry the guide
       return;
@@ -336,7 +337,7 @@ export function GuideAnimation({ signal, focus, label }: { signal: string; focus
     return () => {
       cancelAnimationFrame(raf);
       disposeScene(scene);
-      renderer.dispose();
+      releaseRenderer(renderer);
     };
   }, [signal]);
 

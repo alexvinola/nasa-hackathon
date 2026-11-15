@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
+import { createRenderer, releaseRenderer } from "@/modules/hud/glRenderer";
 
 export type Mood = "idle" | "talk" | "alert";
 
@@ -94,7 +95,7 @@ export function PulsarSprite3D({
   useEffect(() => {
     let renderer: THREE.WebGLRenderer;
     try {
-      renderer = new THREE.WebGLRenderer({ canvas: canvasRef.current!, alpha: true, antialias: false });
+      renderer = createRenderer(canvasRef.current!, false);
     } catch {
       setFailed(true); // no WebGL: fall back to the flat sprite
       return;
@@ -142,7 +143,7 @@ export function PulsarSprite3D({
 
     return () => {
       cancelAnimationFrame(raf);
-      renderer.dispose();
+      releaseRenderer(renderer);
     };
   }, []);
 
