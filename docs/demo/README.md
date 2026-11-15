@@ -1,20 +1,10 @@
 # Demo
 
-Space Apps accepts a demo as a deck of 7 slides or fewer (title and introduction included) or a video of 30 s or
-less. Both must be in English. This folder holds one of each.
+PULSAR's Space Apps demo is a video of 30 s or less in English, one of the two formats the rules accept (the
+other is a deck of 7 slides or fewer).
 
 Live demo: <https://pulsar-challenge.duckdns.org/> (the HUD is at `/pulsar`). It replaces `pulsar.alexvinola.com`
 in every demo material.
-
-## Deck
-
-`pulsar-demo.pdf`: 7 slides in English. `pulsar-demo.html` is its source: open it in Chromium and print to PDF
-(1920×1080, backgrounds on).
-
-The HUD screenshots in `img/` were taken from the live prototype with no camera; the red-state capture uses the
-HUD's debug control to inject fatigue readings, as slide 5 says. Slide 1 labels the mascot render as an
-AI-generated image, as the video does. Figures on slide 6 come from
-`data/out/metrics.json` and `backend/bench/voice_latency.json`.
 
 ## Video (30 s)
 
