@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { GuideAnimation } from "./GuideAnimation";
 import { GUIDES, localizedGuide, type GuideStatus } from "./guides";
 import { useLang, useT, type Key } from "@/i18n";
-import { entered, FIELDS, isValid, type Entries, type Field } from "./selfReport";
+import { entered, FIELDS, isValid, REFERENCES, type Entries, type Field } from "./selfReport";
 
 const TONE: Record<GuideStatus, string> = {
   GREEN: "border-emerald-400 text-emerald-300",
@@ -205,6 +205,19 @@ export function SelfReportPanel({
           )}
         </div>
       </form>
+
+      <aside data-self-report-reference className="mt-3 border border-orbit/40 bg-orbit/5 px-3 py-2 text-[13px] leading-snug">
+        <h3 className="text-xs tracking-[0.15em] text-orbit">{t("selfReport.ref.title")}</h3>
+        {REFERENCES[guide.signal].length === 0 && <p className="mt-1 text-shell/80">{t("selfReport.ref.none")}</p>}
+        {REFERENCES[guide.signal].map((reference) => (
+          <p key={reference.text} className="mt-1 text-shell">
+            {t(reference.text as Key)}{" "}
+            <span className="text-[11px] text-shell/60">
+              ({t(reference.flight ? "selfReport.ref.flight" : "selfReport.ref.earth")} · {reference.source})
+            </span>
+          </p>
+        ))}
+      </aside>
 
       <p className="mt-3 border-t border-pulse/20 pt-2 text-[11px] tracking-[0.1em] text-shell/60">
         {t("selfReport.footer")} · {t("guides.panel.sources", { sources: guide.sources.join(", ") })}

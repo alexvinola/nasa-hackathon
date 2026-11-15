@@ -31,6 +31,16 @@ const es = {
   "selfReport.field.mood": "Ánimo",
   "selfReport.unit.bpm": "lpm",
   "selfReport.unit.ofFive": "de 5",
+  "selfReport.ref.title": "REFERENCIA · NO ES UN VEREDICTO",
+  "selfReport.ref.flight": "NASA, vuelo espacial",
+  "selfReport.ref.earth": "adulto en tierra; no validado en vuelo",
+  "selfReport.ref.none": "No hay un rango oficial para esta escala: es el registro diario de la tripulación.",
+  "selfReport.ref.pulse": "Pulso en reposo de un adulto: 60 a 100 lpm; deportistas bien entrenados, 40 a 60.",
+  "selfReport.ref.pressure": "Tensión normal: por debajo de 120/80 mmHg. Alta: 130/80 o más la mayor parte del tiempo.",
+  "selfReport.ref.glucose": "En ayunas: 70 a 99 mg/dL. Sin ayuno depende de la última comida; casi siempre 125 o menos.",
+  "selfReport.ref.tempNasa": "La temperatura corporal normal ronda los 37 °C; hipotermia por debajo de 35 °C.",
+  "selfReport.ref.temp": "Rango habitual: 36,1 a 37,2 °C. Más de 38 °C suele ser fiebre.",
+  "selfReport.ref.sleep": "NASA recomienda planificar un periodo de sueño de 8,5 h.",
 };
 const en: Record<keyof typeof es, string> = {
   "selfReport.open": "LOG MEASUREMENTS (R)",
@@ -64,5 +74,15 @@ const en: Record<keyof typeof es, string> = {
   "selfReport.field.mood": "Mood",
   "selfReport.unit.bpm": "bpm",
   "selfReport.unit.ofFive": "of 5",
+  "selfReport.ref.title": "REFERENCE · NOT A VERDICT",
+  "selfReport.ref.flight": "NASA, spaceflight",
+  "selfReport.ref.earth": "adult on Earth; not validated in flight",
+  "selfReport.ref.none": "There is no official range for this scale: it is the crew's daily log.",
+  "selfReport.ref.pulse": "Resting heart rate of an adult: 60 to 100 bpm; well-trained athletes, 40 to 60.",
+  "selfReport.ref.pressure": "Normal blood pressure: lower than 120/80 mmHg. High: 130/80 or higher most of the time.",
+  "selfReport.ref.glucose": "Fasting: 70 to 99 mg/dL. Not fasting, it depends on the last meal; most of the time 125 or lower.",
+  "selfReport.ref.tempNasa": "Normal body temperature is around 37 °C; hypothermia below 35 °C.",
+  "selfReport.ref.temp": "Usual range: 36.1 to 37.2 °C. Over 38 °C most often means a fever.",
+  "selfReport.ref.sleep": "NASA recommends planning an 8.5 h sleep period.",
 };
 export default { es, en };

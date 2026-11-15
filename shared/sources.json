@@ -281,7 +281,8 @@
         "Wrist pulse: index and middle fingers, not the thumb, on the underside of the opposite wrist below the base of the thumb; press lightly with flat fingertips",
         "Count for one full minute, or for 30 seconds and multiply by 2",
         "For a resting heart rate, rest for at least 10 minutes first",
-        "Used by the G9 heart-rate guide for how to take the measurement, not for any range"
+        "Normal results for a resting heart rate: adults 60 to 100 beats per minute; well-trained athletes 40 to 60 (read 2026-11-15)",
+        "The G9 heart-rate guide uses it for how to take the measurement; the measurement form shows the adult range as a reference for an adult on Earth, and no rule uses it"
       ]
     },
     "cdc-blood-pressure-measure": {
@@ -346,6 +347,47 @@
         "Isolation and confinement can adversely impact individual and crew health, well-being and performance",
         "Countermeasures for exploration-class missions have not yet been developed and validated",
         "Does not describe a mood self-report: the G9 mood guide's steps are team wording"
+      ]
+    },
+    "nasa-std-3001-vol1": {
+      "type": "official",
+      "title": "NASA-STD-3001 Volume 1, Revision C (2023): NASA Space Flight Human-System Standard, Crew Health",
+      "url": "https://standards.nasa.gov/sites/default/files/standards/NASA/C//nasa-std-3001-vol-1-rev-c-signature.pdf",
+      "findings": [
+        "Section 6.1, crew schedule considerations: recommended 8.5 hr sleep period, plus 2 hrs pre-sleep and 1.5 hrs post-sleep. A planning recommendation, not an alarm threshold",
+        "Definitions (Hypothermia): normal body temperature is around 98.6 F (37 C); hypothermia occurs as body temperature falls below 95 F (35 C)",
+        "Gives no numeric range for blood pressure, heart rate or blood glucose (searched in the 87 pages on 2026-11-15)",
+        "[V1 4030] career effective dose from spaceflight radiation less than 600 mSv; [V1 4031] design reference solar particle event less than 250 mSv; [V1 4033] galactic cosmic rays less than 1.3 mSv/day in free space and 0.9 mSv/day on planetary surfaces",
+        "Shown as a reference in the measurement form (sleep, temperature); no rule uses it yet"
+      ]
+    },
+    "medlineplus-high-blood-pressure": {
+      "type": "official",
+      "title": "MedlinePlus Medical Encyclopedia (NIH National Library of Medicine): High blood pressure in adults - hypertension",
+      "url": "https://medlineplus.gov/ency/article/000468.htm",
+      "findings": [
+        "Normal blood pressure is lower than 120/80 mm Hg most of the time; high blood pressure is 130/80 mm Hg or higher most of the time. For people not taking blood pressure medicines and not ill",
+        "Adults on Earth: nothing here is about spaceflight. Shown as a reference in the measurement form; no rule uses it"
+      ]
+    },
+    "medlineplus-blood-sugar-test": {
+      "type": "official",
+      "title": "MedlinePlus Medical Encyclopedia (NIH National Library of Medicine): Blood sugar test - blood",
+      "url": "https://medlineplus.gov/ency/article/003482.htm",
+      "findings": [
+        "Fasting blood glucose: 70 to 99 mg/dL is considered normal; 100 to 125 mg/dL is impaired fasting glucose",
+        "Random (not fasting) test: a normal result depends on when you last ate; most of the time 125 mg/dL or lower",
+        "A laboratory blood test on Earth, not a fingertip meter in flight. Shown as a reference in the measurement form; no rule uses it"
+      ]
+    },
+    "medlineplus-body-temperature-norms": {
+      "type": "official",
+      "title": "MedlinePlus Medical Encyclopedia (NIH National Library of Medicine): Body temperature norms",
+      "url": "https://medlineplus.gov/ency/article/001982.htm",
+      "findings": [
+        "The average normal body temperature is generally accepted as 98.6 F (37 C); the normal range can be wide, from 97 F (36.1 C) to 99 F (37.2 C)",
+        "A temperature over 100.4 F (38 C) most often means a fever caused by an infection or illness",
+        "Shown as a reference in the measurement form; no rule uses it"
       ]
     }
   }

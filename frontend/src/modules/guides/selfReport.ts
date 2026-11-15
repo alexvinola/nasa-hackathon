@@ -40,6 +40,26 @@ export const FIELDS: Record<string, Field[]> = {
   "selfReport.mood": [field("mood", "selfReport.unit.ofFive", self.mood as Bounds, 1)],
 };
 
+/**
+ * What an official source says is usual for each measurement, shown beside the field so the astronaut has something
+ * to compare with. It is a reference, never a verdict: no rule reads it and the form does not colour a value by it.
+ * `text` is a message key (i18n/messages/selfReport.ts) that carries the numbers; `source` is an id in
+ * shared/sources.json. `flight` says whether the source is about spaceflight: NASA gives a figure for sleep and for
+ * temperature only, and the rest are adults on Earth, where microgravity may shift what is usual.
+ */
+export type Reference = { text: string; source: string; flight: boolean };
+export const REFERENCES: Record<string, Reference[]> = {
+  "biometrics.heartRateBpm": [{ text: "selfReport.ref.pulse", source: "medlineplus-pulse", flight: false }],
+  "selfReport.bloodPressure": [{ text: "selfReport.ref.pressure", source: "medlineplus-high-blood-pressure", flight: false }],
+  "selfReport.glucoseMgDl": [{ text: "selfReport.ref.glucose", source: "medlineplus-blood-sugar-test", flight: false }],
+  "selfReport.bodyTempC": [
+    { text: "selfReport.ref.tempNasa", source: "nasa-std-3001-vol1", flight: true },
+    { text: "selfReport.ref.temp", source: "medlineplus-body-temperature-norms", flight: false },
+  ],
+  "selfReport.sleepHoursLast24h": [{ text: "selfReport.ref.sleep", source: "nasa-std-3001-vol1", flight: true }],
+  "selfReport.mood": [],
+};
+
 /** What has been typed in so far: one number per field key. An indicator counts once all its fields are there. */
 export type Entries = Record<string, number>;
 

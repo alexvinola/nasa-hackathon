@@ -2,7 +2,9 @@
 import { describe, expect, it } from "vitest";
 import nominal from "../../../../shared/examples/nominal.json";
 import indicators from "../../../../shared/indicators.json";
-import { entered, FIELDS, isValid, withEntries } from "./selfReport";
+import sources from "../../../../shared/sources.json";
+import { messages } from "../../i18n/messages";
+import { entered, FIELDS, isValid, REFERENCES, withEntries } from "./selfReport";
 
 describe("the form's fields", () => {
   it("cover every indicator that has a guide, and nothing else", () => {
@@ -17,6 +19,26 @@ describe("the form's fields", () => {
     expect(isValid(glucose, Number.NaN)).toBe(false);
     const [mood] = FIELDS["selfReport.mood"];
     expect([mood.min, mood.max, mood.step]).toEqual([1, 5, 1]);
+  });
+});
+
+describe("the references shown beside the fields", () => {
+  const all = Object.values(REFERENCES).flat();
+
+  it("exist for every indicator of the form and trace back to a registered source", () => {
+    expect(Object.keys(REFERENCES).sort()).toEqual(Object.keys(FIELDS).sort());
+    for (const reference of all) expect(Object.keys(sources.sources), reference.text).toContain(reference.source);
+  });
+
+  it("have their text in both languages", () => {
+    for (const reference of all) {
+      expect(messages.es, reference.text).toHaveProperty([reference.text]);
+      expect(messages.en, reference.text).toHaveProperty([reference.text]);
+    }
+  });
+
+  it("call a source about spaceflight only when it is NASA's standard", () => {
+    expect(all.filter((reference) => reference.flight).map((reference) => reference.source)).toEqual(["nasa-std-3001-vol1", "nasa-std-3001-vol1"]);
   });
 });
 
