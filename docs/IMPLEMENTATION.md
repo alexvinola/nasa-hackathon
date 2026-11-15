@@ -49,6 +49,7 @@ claimed from this audit. Do not convert fixture presence into measured performan
 - PULSAR drives the HUD (`backend/pulsar/hud_actions.py`, `frontend/src/modules/hud/hudActions.ts`): closed action
   list, no model call, values checked against the contract on both sides. Unit tests in
   `backend/tests/unit/test_hud_actions.py`. Not exercised end to end against a restarted backend.
+- HUD skill (`backend/assets/hud_skill.json`, `pulsar/hud_skill.py`): catalogue of HUD actions for the model to choose from when no fixed phrase matches; tests in `test_hud_skill.py`; tried against gemma4:e2b-it-qat on a laptop (7 phrases, right panel each time).
 - Backend acceptance tests that call Ollama (`test_voice.py` phrasing and bench) need the local model running.
 
 ## G9 independent review limitations

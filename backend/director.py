@@ -13,7 +13,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.concurrency import run_in_threadpool
 from pydantic import BaseModel, Field
 
-from pulsar import hud_actions, settings
+from pulsar import hud_actions, hud_skill, settings
 from pulsar.contract import telemetry_errors
 from pulsar.rules.api import engine_for
 from pulsar.rules.engine import RulesEngine
@@ -233,6 +233,12 @@ def direct(scene: Scene, engine: RulesEngine | None = None) -> dict:
         say, out_of_limits = read_sensors(scene.instruction, scene.telemetry, lang)
         return {"say": say, "spot": scene.spot if scene.spot in SPOTS else "home",
                 "reaction": "alert" if out_of_limits else "calm", "speak": True}
+    if scene.user_spoke:
+        # Not a fixed phrase, but maybe a wish the catalogue of HUD actions covers ("soltar tension", "estoy agobiado"):
+        # the model only picks one id from that closed list, never writes the action. See pulsar/hud_skill.py.
+        wish = hud_skill.choose(scene.instruction, lang, chat)
+        if wish:
+            return {"spot": scene.spot if scene.spot in SPOTS else "home", "reaction": "calm", "speak": True, **wish}
     facts = []
     if decision and decision["status"] != "GREEN":
         facts.append("Health check (final):\n" + verdict_text(decision, step))
