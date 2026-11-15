@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { createRenderer, releaseRenderer } from "@/modules/hud/glRenderer";
 import { HudPanel } from "@/modules/hud/HudPanel";
+import { useHudAction } from "@/modules/hud/hudActions";
 import { HEALTH_POINTS } from "./healthPoints";
 import { useLang, useT } from "@/i18n";
 import { GUIDES, localizedGuide, type GuideStatus } from "./guides";
@@ -82,6 +83,11 @@ export function MiniTwin({
   const lang = useLang();
   // "measure": a marker where each instrument is used. "health": a marker for each body zone NASA lists risks for.
   const [tab, setTab] = useState<"measure" | "health">("measure");
+  // PULSAR was asked for symptoms or for a measurement: show the matching tab.
+  useHudAction((action) => {
+    if (action.type === "open_health") setTab("health");
+    else if (action.type === "open_measure" || action.type === "set_measure") setTab("measure");
+  });
   const TAB = "flex-1 border px-1 py-1 text-[11px] tracking-[0.08em]";
   const place = ([x, y]: V3) => ({
     left: `${((x / (FIGURE_HALF_HEIGHT * FIGURE_ASPECT) + 1) / 2) * 100}%`,

@@ -138,9 +138,10 @@ export function Hud() {
     } else if (action.type === "set_measure") {
       const fields = FIELDS[action.signal];
       if (!fields || !fields.every((f) => isValid(f, action.values[f.key]))) return;
+      // Saved straight away: PULSAR says what it logged, and the form stays closed unless it already is open.
       setEntries((had) => ({ ...had, ...Object.fromEntries(fields.map((f) => [f.key, action.values[f.key]])) }));
-      openGuide(action.signal);
     } else if (action.type === "open_health") {
+      if (action.id === null) return; // only the symptoms tab: MiniTwin switches to it
       if (!HEALTH_POINTS.some((point) => point.id === action.id)) return;
       setGuideSignal(null);
       setReporting(false);
@@ -324,8 +325,10 @@ export function Hud() {
       <video ref={videoRef} muted playsInline className="absolute inset-0 h-full w-full -scale-x-100 object-cover" />
       {/* The left column of foldable panels, below the mascot's home corner. Declared before the camera overlay,
           whose AI-check panel joins it through a portal. */}
-      {/* The column stops above the footer line and scrolls; the centred text box keeps clear of it at any width. */}
-      <div id={LEFT_COLUMN_ID} className="absolute bottom-20 left-8 z-[1] flex max-h-[calc(100vh-24rem)] w-64 flex-col gap-2 overflow-y-auto [scrollbar-color:var(--color-pulse)_transparent] [scrollbar-width:thin]">
+      {/* The column runs from the top to above the footer line and only scrolls when the panels truly do not fit. */}
+      <div id={LEFT_COLUMN_ID} className="pointer-events-none absolute bottom-20 left-8 top-8 z-[1] [&>:not(:first-child)]:pointer-events-auto flex w-64 flex-col gap-2 overflow-y-auto [scrollbar-color:var(--color-pulse)_transparent] [scrollbar-width:thin]">
+        {/* Pushes the panels to the bottom; the developer panels that open below them push them up instead of scrolling. */}
+        <div aria-hidden className="order-first flex-1" />
         <MiniTwin
           statuses={guideStatuses}
           open={guideSignal}

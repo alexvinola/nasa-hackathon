@@ -84,7 +84,9 @@ export function SensesBar({
     if (line) speak(line).catch((e) => e?.name !== "NotAllowedError" && fail(e));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [line]);
-  useHotkey(" ", press, release);
+  // Space talks from anywhere. In a text box (the chat) it is a letter of the text, so there it takes Ctrl + Space; the
+  // number boxes have no use for it and take the plain key.
+  useHotkey(" ", press, release, (field) => (field.inputMode === "numeric" || field.inputMode === "decimal" ? "free" : "ctrl"));
   useHotkey("s", speakLine);
 
   const send = (e: React.FormEvent) => {

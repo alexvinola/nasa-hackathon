@@ -35,18 +35,24 @@ def worth_asking(text: str) -> bool:
     return len(text.split()) <= MAX_WORDS and bool(cues().search(text))
 
 
-@cache
-def system_prompt() -> str:
+def matching(text: str) -> dict[str, Any]:
+    """The catalogue entries whose cue words appear in `text`: the model only chooses among those, so the prompt stays
+    small (the model's context is 2048 tokens) and the choice is easier."""
+    return {key: entry for key, entry in CATALOGUE.items() if re.search("|".join(entry["cues"]), text, re.I)}
+
+
+def system_prompt(entries: dict[str, Any] | None = None) -> str:
     lines = [
-        f"- {key}: {entry['when']} Examples: " + "; ".join(f'"{example}"' for example in entry["examples"][:3])
-        for key, entry in CATALOGUE.items()
+        f"- {key}: {entry['when']} Examples: " + "; ".join(f'"{example}"' for example in entry["examples"][:2])
+        for key, entry in (CATALOGUE if entries is None else entries).items()
     ]
     return (
         "You route what an astronaut says to ONE action of their health-companion screen.\n"
         "Pick the action whose description fits what they ask for or need, in any language and however they put it.\n"
         "Answer with the action id only, nothing else; an action that takes numbers is answered as its id and then the "
-        "numbers, as digits, in the order its description gives (for example: log_water 3). If no action fits (a question, a chat, anything else), answer "
-        f"{NONE}.\nYou never judge anyone's health: you only choose the panel that fits the request.\nActions:\n"
+        "numbers, as digits, in the order its description gives (for example: log_water 3). If no action fits (a question, "
+        f"a chat, anything else), answer {NONE}.\nYou never judge anyone's health: you only choose the panel that fits the "
+        "request.\nActions:\n"
         + "\n".join(lines)
     )
 
@@ -94,7 +100,7 @@ def choose(text: str, lang: str | None, chat: Callable[..., str]) -> dict[str, A
         return None
     lang = settings.pick_lang(lang)
     answer = chat(
-        [{"role": "system", "content": system_prompt()}, {"role": "user", "content": text}],
+        [{"role": "system", "content": system_prompt(matching(text))}, {"role": "user", "content": text}],
         options={"temperature": 0, "num_predict": 12, "stop": ["\n"]},
     )
     action_id = pick(answer)

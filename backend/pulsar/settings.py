@@ -6,6 +6,16 @@ from pathlib import Path
 BACKEND_DIR = Path(__file__).resolve().parent.parent
 ASSETS_DIR = BACKEND_DIR / "assets"
 
+# Per-developer overrides, e.g. PULSAR_LLM_MODEL=gemma4:e2b-it-qat on a laptop with under 16 GB of RAM, from the
+# repository's git-ignored `.env` (KEY=value lines). A variable already in the environment wins, and the default model
+# stays the one the team runs.
+_ENV_FILE = BACKEND_DIR.parent / ".env"
+if _ENV_FILE.is_file():
+    for _line in _ENV_FILE.read_text(encoding="utf-8").splitlines():
+        _key, _sep, _value = _line.partition("=")
+        if _sep and not _line.lstrip().startswith("#"):
+            os.environ.setdefault(_key.strip(), _value.strip().strip("\"'"))
+
 # The contract, sources and HRP names live in the repository's shared/ folder (single source of truth).
 SHARED_DIR = Path(os.environ.get("PULSAR_SHARED_DIR", BACKEND_DIR.parent / "shared")).resolve()
 

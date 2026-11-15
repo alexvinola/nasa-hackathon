@@ -8,6 +8,7 @@
 set -uo pipefail
 cd "$(dirname "$0")"
 
+[[ -f .env ]] && { set -a; . ./.env; set +a; }  # per-developer overrides (git-ignored), e.g. PULSAR_LLM_MODEL
 MODEL="${PULSAR_LLM_MODEL:-gemma4:e4b-it-qat}"
 OLLAMA_URL="${PULSAR_OLLAMA_URL:-http://127.0.0.1:11434}"
 BACKEND_URL="http://127.0.0.1:8000"

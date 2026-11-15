@@ -89,3 +89,10 @@ def test_a_measurement_the_model_reads_must_fit_the_contract():
     assert reply["action"] == {"type": "set_measure", "signal": "selfReport.bloodPressure", "values": {"systolic": 120.0, "diastolic": 80.0}}
     chat, _ = asked("set_bodyTempC 99")
     assert hud_skill.choose("tengo 99 de temperatura", "es", chat) is None
+
+
+def test_the_model_is_only_offered_the_entries_the_request_could_mean():
+    entries = hud_skill.matching("quiero soltar tensión en el cuello")
+    assert "relax_body" in entries and "lang_en" not in entries
+    prompt = hud_skill.system_prompt(entries)
+    assert len(prompt) < len(hud_skill.system_prompt()) / 3  # the model's context is 2048 tokens

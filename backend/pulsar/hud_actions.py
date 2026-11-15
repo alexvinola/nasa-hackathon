@@ -14,7 +14,7 @@ Action shapes (mirrored by `frontend/src/modules/hud/hudActions.ts`):
     {"type": "set_measure", "signal": <guide signal>, "values": {<field key>: number}}
     {"type": "log_habit", "habit": "exercise" | "water" | "relax", "amount": number}
     {"type": "open_habits", "expand": bool}
-    {"type": "open_health", "id": <health point id>}
+    {"type": "open_health", "id": <health point id> | None}  (None: only show the symptoms tab)
     {"type": "close_panels"}
     {"type": "set_language", "lang": "es" | "en"}
     {"type": "dev_menu", "open": bool}
@@ -113,6 +113,9 @@ HABITS_WORDS = re.compile(r"h[aá]bitos?|habits?|puntuaci[oó]n|score|racha|stre
 EXPAND = re.compile(r"ampli|expand|historial|history|\bmes\b|month", re.I)
 HOURS = re.compile(r"\bh\b|horas?|hours?|hrs?", re.I)
 HEALTH_WORD = re.compile(r"\bsalud\b|health", re.I)
+# "síntomas" on its own opens the symptoms tab; a complaint that names a body zone ("me duele la cabeza") opens that zone.
+SYMPTOM_WORD = re.compile(r"s[ií]ntomas?|symptoms?", re.I)
+COMPLAINT = re.compile(r"duel\w*|dolor\w*|molest\w*|\bpains?\b|\bhurts?\b|\bsore\b|\bache\w*|mare\w*|n[aá]useas?|picor|erupci[oó]n|\brash\b|\bcough", re.I)
 HEALTH_POINTS = {
     "head": re.compile(r"cabeza|head|mente|mind", re.I),
     "eyes": re.compile(r"\bojos?\b|\beyes?\b", re.I),
@@ -148,6 +151,7 @@ SAYS: dict[str, dict[str, str]] = {
         "habits_expand": "Te abro el historial de hábitos.",
         "habits_status": "Hoy llevas {score} por ciento del día: {exercise} minutos de ejercicio, {water} vasos de agua, {relax} relajaciones y {sleep} horas de sueño.",
         "health_open": "Te abro {name}.",
+        "symptoms_open": "Te abro los síntomas: toca la zona del cuerpo que te preocupa.",
         "close": "Cierro las ventanas.",
         "lang_es": "Cambio a español.",
         "lang_en": "Cambio a inglés.",
@@ -170,6 +174,7 @@ SAYS: dict[str, dict[str, str]] = {
         "habits_expand": "Opening your habit history.",
         "habits_status": "Today you are at {score} percent of the day: {exercise} minutes of exercise, {water} glasses of water, {relax} relaxations and {sleep} hours of sleep.",
         "health_open": "Opening {name}.",
+        "symptoms_open": "Opening symptoms: tap the part of the body you are worried about.",
         "close": "Closing the windows.",
         "lang_es": "Switching to Spanish.",
         "lang_en": "Switching to English.",
@@ -375,10 +380,12 @@ def _interface(text: str, lang: str) -> dict[str, Any] | None:
         shut = bool(OFF_WORDS.search(text))
         return _reply(lang, "dev_close" if shut else "dev_open", {"type": "dev_menu", "open": not shut})
     # A health point panel: "abre salud del corazón".
-    if HEALTH_WORD.search(text):
+    if HEALTH_WORD.search(text) or SYMPTOM_WORD.search(text) or COMPLAINT.search(text):
         for point, words in HEALTH_POINTS.items():
             if words.search(text):
                 return _reply(lang, "health_open", {"type": "open_health", "id": point}, name=names["eyes_health" if point == "eyes" else point])
+        if SYMPTOM_WORD.search(text) and not RELAX.search(text):
+            return _reply(lang, "symptoms_open", {"type": "open_health", "id": None})
     # Close everything.
     if CLOSE.search(text) and EVERYTHING.search(text):
         return _reply(lang, "close", {"type": "close_panels"})

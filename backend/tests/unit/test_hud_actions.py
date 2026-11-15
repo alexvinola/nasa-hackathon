@@ -176,3 +176,9 @@ def test_a_quantity_with_its_unit_is_enough_to_log_a_habit():
 )
 def test_each_kind_of_action_has_several_ways_to_ask_for_it(text, kind):
     assert action(text)["type"] == kind
+
+
+def test_symptoms_open_the_symptoms_tab_or_the_zone_named():
+    assert hud_actions.parse("quiero ver los síntomas", "es")["action"] == {"type": "open_health", "id": None}
+    assert hud_actions.parse("me duele la cabeza", "es")["action"] == {"type": "open_health", "id": "head"}
+    assert hud_actions.parse("I have a pain in my back", "en")["action"] == {"type": "open_health", "id": "spine"}

@@ -14,7 +14,7 @@ export type HudAction =
   | { type: "set_measure"; signal: string; values: Record<string, number> }
   | { type: "log_habit"; habit: string; amount: number }
   | { type: "open_habits"; expand: boolean }
-  | { type: "open_health"; id: string }
+  | { type: "open_health"; id: string | null }
   | { type: "close_panels" }
   | { type: "set_language"; lang: "es" | "en" }
   | { type: "dev_menu"; open: boolean }
