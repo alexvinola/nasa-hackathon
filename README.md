@@ -8,6 +8,8 @@ Vision measures, the fatigue classifier estimates, the rules engine decides,
 and Gemma phrases the verdict. No cloud calls during the demo.
 The internal S.Y.N.A.P.S.E. identifiers remain for compatibility.
 
+Live demo: <https://pulsar-challenge.duckdns.org/> (the HUD is at `/pulsar`).
+
 ## What exists
 
 - Shared telemetry schema, scenarios, sources and official HRP identifiers.
