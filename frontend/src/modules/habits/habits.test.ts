@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { dayKey, daysBack, dayScore, history, levelOf, pending, streak, totalXp, type Log } from "./habits";
+import { dayKey, daysBack, dayScore, history, levelOf, mockLog, pending, range, habitStats, HABITS, streak, totalXp, type Log } from "./habits";
 
 const today = new Date(2026, 10, 15, 19, 0); // 15 Nov 2026, 19:00
 const perfect = { sleep: 8.5, exercise: 120, water: 8, relax: 3 };
@@ -33,5 +33,32 @@ describe("habits", () => {
     const days = history({}, "water", today);
     expect(days).toHaveLength(7);
     expect(days[6].key).toBe("2026-11-15");
+  });
+});
+
+describe("mockLog", () => {
+  it("fills the 60 days before today with every habit and none of today", () => {
+    const today = new Date(2026, 10, 15);
+    const log = mockLog(today);
+    expect(Object.keys(log)).toHaveLength(60);
+    expect(log[dayKey(today)]).toBeUndefined();
+    expect(history(log, "exercise", daysBack(today, 1)).every((d) => d.key in log)).toBe(true);
+  });
+});
+
+describe("perfect day and ranges", () => {
+  it("scores exactly 1 when every habit reaches its target, and 0 when none does", () => {
+    const full = Object.fromEntries(HABITS.map((habit) => [habit.id, habit.target]));
+    expect(HABITS).toHaveLength(4);
+    expect(dayScore({ d: full }, "d")).toBe(1);
+    expect(dayScore({}, "d")).toBe(0);
+  });
+
+  it("summarises a range: days, average and days on target", () => {
+    const log = mockLog(today);
+    const days = range(log, daysBack(today, 30), daysBack(today, 1));
+    expect(days).toHaveLength(30);
+    const exercise = HABITS.find((habit) => habit.id === "exercise")!;
+    expect(habitStats(days, exercise).reached).toBeGreaterThan(0);
   });
 });

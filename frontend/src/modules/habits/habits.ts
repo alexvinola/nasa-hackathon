@@ -18,10 +18,12 @@ export type Habit = {
   step: number;
   /** Local hour from which a reminder is shown while the target is not reached. */
   dueHour: number;
+  /** Typed in "Registrar medidas", not here: the panel shows it and offers no "+". */
+  fromReport?: boolean;
 };
 
 export const HABITS: Habit[] = [
-  { id: "sleep", title: "habits.sleep", unit: "habits.unit.h", target: 8.5, step: 0.5, dueHour: 10 },
+  { id: "sleep", title: "habits.sleep", unit: "habits.unit.h", target: 8.5, step: 0.5, dueHour: 10, fromReport: true },
   { id: "exercise", title: "habits.exercise", unit: "habits.unit.min", target: 120, step: 30, dueHour: 18 },
   { id: "water", title: "habits.water", unit: "habits.unit.glasses", target: 8, step: 1, dueHour: 20 },
   { id: "relax", title: "habits.relax", unit: "habits.unit.times", target: 3, step: 1, dueHour: 17 },
@@ -69,6 +71,40 @@ export const history = (log: Log, id: HabitId, today: Date, n = 7) =>
     const date = daysBack(today, n - 1 - i);
     return { key: dayKey(date), date, value: log[dayKey(date)]?.[id] ?? 0 };
   });
+
+/**
+ * DEMO DATA, not measurements: the 60 days before today, so the history, the month view and the streak are not empty on
+ * a first run. A fixed pattern (a rest day every sixth day, a short night every fifth) so the charts are not flat.
+ */
+export function mockLog(today: Date): Log {
+  const log: Log = {};
+  for (let back = 1; back <= 60; back++) {
+    const rest = back % 6 === 0;
+    log[dayKey(daysBack(today, back))] = {
+      sleep: back % 5 === 0 ? 6.5 : back % 3 === 0 ? 7.5 : 8.5,
+      exercise: rest ? 0 : back % 4 === 0 ? 60 : back % 7 === 0 ? 90 : 120,
+      water: rest ? 5 : back % 4 === 0 ? 6 : 8,
+      relax: rest ? 1 : back % 4 === 0 ? 2 : 3,
+    };
+  }
+  return log;
+}
+
+/** Every day from `from` to `to` (both included, oldest first) with its score and the value of each habit. */
+export function range(log: Log, from: Date, to: Date) {
+  const days: { key: string; date: Date; score: number; values: Partial<Record<HabitId, number>> }[] = [];
+  for (let date = from; date <= to && days.length < 366; date = daysBack(date, -1)) {
+    const key = dayKey(date);
+    days.push({ key, date, score: dayScore(log, key), values: log[key] ?? {} });
+  }
+  return days;
+}
+
+/** What a range says about one habit: its average per day and on how many days the target was reached. */
+export const habitStats = (days: ReturnType<typeof range>, habit: Habit) => ({
+  average: days.length ? days.reduce((sum, day) => sum + (day.values[habit.id] ?? 0), 0) / days.length : 0,
+  reached: days.filter((day) => (day.values[habit.id] ?? 0) >= habit.target).length,
+});
 
 export const BADGES = [
   { id: "perfect", label: "habits.badge.perfect", earned: (log: Log) => Object.keys(log).some((key) => dayScore(log, key) >= 1) },

@@ -1,9 +1,9 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { dayKey, HABITS, type HabitId, type Log } from "./habits";
+import { dayKey, HABITS, mockLog, type HabitId, type Log } from "./habits";
 
-const KEY = "pulsar-habits";
+const KEY = "pulsar-habits-v2"; // v2: a fresh 60-day demo history and an empty today
 const EMPTY: Log = {};
 let log: Log | null = null;
 const listeners = new Set<() => void>();
@@ -11,11 +11,28 @@ const listeners = new Set<() => void>();
 function load(): Log {
   if (log) return log;
   try {
-    log = JSON.parse(localStorage.getItem(KEY) ?? "{}") as Log;
+    const saved = localStorage.getItem(KEY);
+    const mine = saved ? (JSON.parse(saved) as Log) : {};
+    // Demo data for the last 7 days until the astronaut has any past day of their own; their entries win.
+    log = Object.keys(mine).some((key) => key !== dayKey(new Date())) ? mine : { ...mockLog(new Date()), ...mine };
   } catch {
-    log = {}; // private window or corrupt value: start empty
+    log = mockLog(new Date()); // private window or corrupt value
   }
   return log;
+}
+
+/** Sets a habit of today to `value` (what "Registrar medidas" typed), without adding to it. */
+export function setHabit(id: HabitId, value: number, now = new Date()) {
+  const day = dayKey(now);
+  const current = load();
+  if (current[day]?.[id] === value) return;
+  log = { ...current, [day]: { ...current[day], [id]: value } };
+  try {
+    localStorage.setItem(KEY, JSON.stringify(log));
+  } catch {
+    /* kept in memory */
+  }
+  listeners.forEach((listener) => listener());
 }
 
 /** Adds `amount` to a habit of today (never below 0) and tells every panel listening. */
