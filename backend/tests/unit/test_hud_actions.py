@@ -22,6 +22,12 @@ def action(text: str, lang: str = "es", **kw):
         ("abre relajación y elige tú uno", {"type": "open_relax", "exercise": "breathe"}),
         ("quiero medir la tensión", {"type": "open_measure", "signal": "selfReport.bloodPressure"}),
         ("abre las medidas", {"type": "open_measure", "signal": None}),
+        ("añade glucosa", {"type": "open_measure", "signal": "selfReport.glucoseMgDl"}),
+        ("añade tensión", {"type": "open_measure", "signal": "selfReport.bloodPressure"}),  # the blood pressure form, not relaxation
+        ("apunta el pulso", {"type": "open_measure", "signal": "biometrics.heartRateBpm"}),  # the form, not the sensor reading
+        ("ponme algo que me siento agobiado", None),  # a feeling, left for the HUD skill (relaxation), not the mood form
+        ("apunta mi ánimo", {"type": "open_measure", "signal": "selfReport.mood"}),
+        ("añade glucosa 95", {"type": "set_measure", "signal": "selfReport.glucoseMgDl", "values": {"glucoseMgDl": 95.0}}),
         ("mi temperatura es 36,8", {"type": "set_measure", "signal": "selfReport.bodyTempC", "values": {"bodyTempC": 36.8}}),
         ("tengo 120 sobre 80 de tensión", {"type": "set_measure", "signal": "selfReport.bloodPressure", "values": {"systolic": 120.0, "diastolic": 80.0}}),
         ("he dormido 7 horas", {"type": "set_measure", "signal": "selfReport.sleepHoursLast24h", "values": {"sleepHoursLast24h": 7.0}}),
