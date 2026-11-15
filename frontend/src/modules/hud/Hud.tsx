@@ -326,9 +326,8 @@ export function Hud() {
       {/* The left column of foldable panels, below the mascot's home corner. Declared before the camera overlay,
           whose AI-check panel joins it through a portal. */}
       {/* The column runs from the top to above the footer line and only scrolls when the panels truly do not fit. */}
-      <div id={LEFT_COLUMN_ID} className="pointer-events-none absolute bottom-20 left-8 top-8 z-[1] [&>:not(:first-child)]:pointer-events-auto flex w-64 flex-col gap-2 overflow-y-auto [scrollbar-color:var(--color-pulse)_transparent] [scrollbar-width:thin]">
-        {/* Pushes the panels to the bottom; the developer panels that open below them push them up instead of scrolling. */}
-        <div aria-hidden className="order-first flex-1" />
+      <div id={LEFT_COLUMN_ID} className="pointer-events-none absolute bottom-20 left-8 top-8 z-[1] [&>*]:pointer-events-auto flex w-64 flex-col gap-2 overflow-y-auto [scrollbar-color:var(--color-pulse)_transparent] [scrollbar-width:thin]">
+        {/* Relajarse, Asistente and Hábitos stay at the top; the AI check and the debug panels (settings button) open below them. */}
         <MiniTwin
           statuses={guideStatuses}
           open={guideSignal}
