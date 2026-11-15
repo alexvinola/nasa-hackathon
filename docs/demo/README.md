@@ -12,13 +12,18 @@ in every demo material.
 (1920×1080, backgrounds on).
 
 The HUD screenshots in `img/` were taken from the live prototype with no camera; the red-state capture uses the
-HUD's debug control to inject fatigue readings, as slide 5 says. Figures on slide 6 come from
+HUD's debug control to inject fatigue readings, as slide 5 says. Slide 1 labels the mascot render as an
+AI-generated image, as the video does. Figures on slide 6 come from
 `data/out/metrics.json` and `backend/bench/voice_latency.json`.
 
 ## Video (30 s)
 
 `pulsar-demo-30s.mp4`: English captions and a procedurally synthesized soundtrack (see "Sound"). This is the
-submitted demo; a silent cut of the same picture was built for comparison and is not kept. Wording comes from the
+submitted demo; a silent cut of the same picture was built for comparison and is not kept.
+
+Public link, playable in the browser with no login:
+<https://cdn.jsdelivr.net/gh/alexvinola/nasa-hackathon@fef300869cdfee19a4d5a0f77105720d1212b5ee/docs/demo/pulsar-demo-30s.mp4>
+(jsDelivr serves this repository's file as `video/mp4`; GitHub's own file page only offers "View raw"). Wording comes from the
 [project description](../brand/PULSAR-project-description.md) and from the closing lines of the landing and the
 opening film.
 
@@ -140,7 +145,5 @@ same.
 
 ## Pending
 
-- Put the video's public link in the submission, and say in its "Use of AI" field that the soundtrack was
+- Put the video's public link (above) in the submission, and say in its "Use of AI" field that the soundtrack was
   synthesized with AI-assisted code.
-- Rebuild `pulsar-demo.pdf` with the live demo URL: slide 5 (footer) and slide 7 ("Try it") still show
-  `pulsar.alexvinola.com`.
