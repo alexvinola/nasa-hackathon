@@ -1,6 +1,6 @@
 // Messages of the "hud" slice. Same keys in both languages: the type of `en` enforces it.
 const es = {
-  "hud.bubble.close": "Cerrar el mensaje de PULSAR",
+  "hud.alert.close": "Cerrar la alerta",
   "hud.cam.starting": "CÁMARA · INICIANDO",
   "hud.cam.live": "CÁMARA · EN DIRECTO",
   "hud.cam.denied": "CÁMARA · PERMISO DENEGADO",
@@ -44,7 +44,7 @@ const es = {
   "hud.test.retry": "REINTENTAR (ENTER)",
 } as const;
 const en: Record<keyof typeof es, string> = {
-  "hud.bubble.close": "Close PULSAR's message",
+  "hud.alert.close": "Close the alert",
   "hud.cam.starting": "CAM · STARTING",
   "hud.cam.live": "CAM · LIVE",
   "hud.cam.denied": "CAM · PERMISSION DENIED",
