@@ -28,10 +28,13 @@ LOCAL = re.compile(r"(https?://)?(localhost|127\.0\.0\.1)(:\d+)?")
 
 
 def local_only(request: Request) -> None:
-    """CORS only hides answers. A browser names the calling page in Origin and, under DNS rebinding, a foreign Host."""
+    """CORS only hides answers. A browser names the calling page in Origin and, under DNS rebinding, a foreign Host.
+
+    A hosted copy lists its own address in PULSAR_ALLOWED_ORIGINS (`settings.ALLOWED_ORIGINS`, empty by default).
+    """
     for header in ("origin", "host"):
         value = request.headers.get(header)
-        if value and not LOCAL.fullmatch(value):
+        if value and not LOCAL.fullmatch(value) and value not in settings.ALLOWED_ORIGINS:
             raise HTTPException(403, "PULSAR only answers pages served from this machine")
 
 

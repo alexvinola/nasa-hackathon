@@ -22,6 +22,27 @@ def test_refuses_pages_from_elsewhere():
     assert client.post("/stt", content=b"", headers={"Origin": "http://localhost:3000"}).status_code == 400
 
 
+def test_a_hosted_copy_is_let_in_only_when_its_address_is_listed(monkeypatch):
+    from pulsar import settings
+
+    hosted = {"Origin": "https://pulsar.example.org", "Host": "pulsar.example.org"}
+    assert settings.ALLOWED_ORIGINS == frozenset()  # the default: this machine only
+    assert client.post("/stt", content=b"", headers=hosted).status_code == 403
+
+    monkeypatch.setattr(settings, "ALLOWED_ORIGINS", settings.allowed_origins("https://pulsar.example.org/"))
+    assert client.post("/stt", content=b"", headers=hosted).status_code == 400  # past the check: the body is empty
+    assert client.post("/stt", content=b"", headers={"Origin": "https://evil.example"}).status_code == 403
+    assert client.post("/stt", content=b"", headers={"Host": "pulsar.example.org.evil.example"}).status_code == 403
+    assert client.post("/stt", content=b"", headers={"Origin": "http://pulsar.example.org"}).status_code == 403  # not https
+
+    assert settings.allowed_origins(" https://a.example , http://b.example:8080 ") == {
+        "https://a.example", "a.example", "http://b.example:8080", "b.example:8080",
+    }
+    for wrong in ("pulsar.example.org", "https://", "ftp://x.example", "https://x.example/path", "*"):
+        with pytest.raises(ValueError):
+            settings.allowed_origins(wrong)
+
+
 def test_rejects_bad_input():
     assert client.post("/tts", json={"text": ""}).status_code == 422
     assert client.post("/tts", json={"text": "x" * 601}).status_code == 422
